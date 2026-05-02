@@ -10,17 +10,17 @@ Route::get('/', [SesiController::class, 'index']);
 
 Route::get('/dashboard', function() {
 
-    $role = Auth::user()->role;
+    $role = (int) Auth::user()->role_id;
 
-    if ($role === 'admin') {
+    if ($role === 1) {
         return redirect()->route('admin.dashboard');
     }
 
-    if ($role === 'siswa') {
+    if ($role === 2) {
         return redirect()->route('students.dashboard');
     }
 
-    if ($role === 'guru') {
+    if ($role === 3) {
         return redirect()->route('teacher.dashboard');
     }
     
