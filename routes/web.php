@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SesiController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\StudentController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -54,5 +55,10 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
     })->name('teacher.dashboard');
 });
 
+Route::get('/students/dashboard', [StudentController::class, 'index'])
+    ->middleware(['auth', 'checkRole:siswa']) // Pastikan middleware kamu tetap ada
+    ->name('students.dashboard');
 
+// Tambahkan di bawah rute dashboard siswa
+Route::get('/subjects/{slug}', [StudentController::class, 'show'])->name('subjects.show');
 require __DIR__.'/auth.php';
