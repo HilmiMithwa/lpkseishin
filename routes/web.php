@@ -43,9 +43,8 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 
 //Dashboard Siswa
 Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
-    Route::get('/students/dashboard', function() {
-        return view ('students.dashboard');
-    })->name('students.dashboard');
+    Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
+    Route::get('/subjects/{slug}', [StudentController::class, 'show'])->name('subjects.show');
 });
 
 //Dashboard Guru
@@ -55,10 +54,7 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
     })->name('teacher.dashboard');
 });
 
-Route::get('/students/dashboard', [StudentController::class, 'index'])
-    ->middleware(['auth', 'checkRole:siswa']) // Pastikan middleware kamu tetap ada
-    ->name('students.dashboard');
 
-// Tambahkan di bawah rute dashboard siswa
-Route::get('/subjects/{slug}', [StudentController::class, 'show'])->name('subjects.show');
+
 require __DIR__.'/auth.php';
+
