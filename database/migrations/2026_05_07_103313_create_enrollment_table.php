@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('enrollment', function (Blueprint $table) {
             $table->id('id_enrollment');
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+
+            $table->string('order_id')->unique();
+            $table->string('transaction_id')->nullable();
+            $table->integer('gross_amount');
+            
+            $table->string('snap_token')->nullable();
             $table->string('jenis_program');
-            $table->string('metode_pembaran');
+            $table->string('metode_pembayaran');
             $table->string('status_pembayaran');
             $table->date('tanggal_daftar');
-            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
