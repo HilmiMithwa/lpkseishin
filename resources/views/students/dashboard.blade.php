@@ -55,7 +55,7 @@
 
     <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#fcfaf8] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
         <div class="p-6">
-            <x-application-logo class="h-10 w-auto" />
+            <x-application-logo class="h-14 w-auto" />
         </div>
 
         <div class="px-4 mt-2 flex-1">
@@ -86,6 +86,9 @@
                 <div class="overflow-hidden">
                     <h4 class="font-bold text-[13px] text-gray-900 truncate">{{ Auth::user()->name }}</h4>
                     <p class="text-[10px] text-gray-500 truncate">Level Pra-N5</p>
+                    <p class="text-[10px] text-gray-500 truncate flex items-center gap-1">
+                        <span class="text-red-500 font-bold text-[11px]">@</span> {{ Auth::user()->email }}
+                    </p>
                 </div>
             </div>
             <form method="POST" action="{{ route('logout') }}">
@@ -110,9 +113,9 @@
 
             <div class="pt-1">
                 <h2 class="text-base lg:text-lg font-bold text-gray-900 flex items-center gap-1">
-                    こんにちわ, <span class="hidden sm:inline">{{ Auth::user()->name }}!</span>
-                    <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}!</span>
-                    <span class="w-2.5 h-4 bg-gray-800 inline-block animate-pulse"></span>
+                    こんにちわ, 
+                    <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
+                    <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
                 </h2>
                 <p id="realtime-clock" class="text-xs text-gray-500 font-medium mt-0.5">Memuat waktu...</p>
             </div>
@@ -233,12 +236,15 @@
                             
                             <div>
                                 <div class="flex items-center gap-3 sm:gap-4 mb-4">
-                                    <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-xl border border-gray-200 flex items-center justify-center text-red-600 font-bold text-base flex-shrink-0">あa</div>
-                                    <div class="text-center border border-gray-200 rounded-xl px-2.5 sm:px-3 py-1">
+                                    <div class="w-12 sm:w-14 h-12 sm:h-14 rounded-xl border border-gray-200 flex items-center justify-center text-red-600 font-bold text-base sm:text-lg flex-shrink-0">
+                                        あa
+                                    </div>
+                                    
+                                    <div class="w-12 sm:w-14 h-12 sm:h-14 flex flex-col items-center justify-center border border-gray-200 rounded-xl flex-shrink-0">
                                         <p class="text-lg sm:text-2xl font-black text-gray-900 leading-none">
                                             {{ $subject->rps?->count() ?? 0 }}
                                         </p>
-                                        <p class="text-[7px] sm:text-[8px] text-gray-500 font-bold mt-0.5 uppercase">Module</p>
+                                        <p class="text-[7px] sm:text-[8px] text-gray-500 font-bold mt-0.5 uppercase text-center">Module</p>
                                     </div>
                                 </div>
                                 <h4 class="text-sm sm:text-base font-black text-gray-900 mb-1.5 leading-snug line-clamp-2">{{ $subject->nama_mapel }}</h4>
