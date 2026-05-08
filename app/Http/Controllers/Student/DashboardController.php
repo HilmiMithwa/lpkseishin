@@ -6,13 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mapel;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
-class StudentController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
-        $subjects = Mapel::with('guru')->get();
+
+        
+        if ($user instanceof \App\Models\User) {
+            $subjects = $user->mapels()->with('guru')->get();
+        } else {
+            $subjects = collect();
+        }
 
         return view('students.dashboard', compact('subjects'));
     }

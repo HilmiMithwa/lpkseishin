@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SesiController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\DashboardController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -43,8 +43,8 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 
 //Dashboard Siswa
 Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
-    Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
-    Route::get('/subjects/{slug}', [StudentController::class, 'show'])->name('subjects.show');
+    Route::get('/students/dashboard', [DashboardController::class, 'index'])->name('students.dashboard');
+    Route::get('/subjects/{slug}', [DashboardController::class, 'show'])->name('subjects.show');
 });
 
 //Dashboard Guru

@@ -63,4 +63,9 @@ class User extends Authenticatable
         // User memiliki satu pendaftaran (One-to-One)
         return $this->hasOne(Enrollment::class, 'id_user', 'id');
     }
+
+    public function mapels() 
+    {
+        return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' );
+    }
 }

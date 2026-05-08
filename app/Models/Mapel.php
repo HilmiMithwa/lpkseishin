@@ -12,7 +12,8 @@ class Mapel extends Model
     protected $fillable = [
         'kode_mapel',
         'nama_mapel',
-        'id_guru',
+        'deskripsi_mapel',
+        'id_guru',  
         'jp',
         'jumlah_modul',
         'status'
@@ -20,6 +21,10 @@ class Mapel extends Model
 
     public function guru() {
         return $this->belongsTo(User::class, 'id_guru');
+    }
+
+    public function rps() {
+        return $this->hasMany(Rps::class, 'id_mapel', 'id_mapel');
     }
 
 }
