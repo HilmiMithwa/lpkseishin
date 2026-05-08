@@ -44,9 +44,9 @@
 <body class="bg-[#fcfaf8] text-gray-800 h-screen flex overflow-hidden">
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-red-600 text-white rounded-lg">
+    {{-- <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-red-600 text-white rounded-lg">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-    </button>
+    </button> --}}
 
     <!-- Mobile Menu Close Button -->
     <button id="mobile-menu-close" class="fixed top-4 right-4 z-40 hidden lg:hidden p-2 bg-gray-800 text-white rounded-lg">
@@ -100,29 +100,27 @@
 
     <div class="flex-1 flex flex-col overflow-hidden">
         
-        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center px-4 lg:px-8 py-4 lg:py-6 bg-transparent gap-4">
-            <div class="pt-2">
+    <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center px-4 lg:px-8 py-4 lg:py-6 bg-transparent gap-4">
+        
+        <div class="flex items-center gap-4"> <button id="mobile-menu-btn" class="lg:hidden p-2 bg-red-600 text-white rounded-xl shadow-md hover:bg-red-700 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <div class="pt-1">
                 <h2 class="text-base lg:text-lg font-bold text-gray-900 flex items-center gap-1">
-                    こんにちわ, <span class="hidden sm:inline">{{ Auth::user()->name }}!</span><span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}!</span><span class="w-2.5 h-4 bg-gray-800 inline-block animate-pulse"></span>
+                    こんにちわ, <span class="hidden sm:inline">{{ Auth::user()->name }}!</span>
+                    <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}!</span>
+                    <span class="w-2.5 h-4 bg-gray-800 inline-block animate-pulse"></span>
                 </h2>
                 <p id="realtime-clock" class="text-xs text-gray-500 font-medium mt-0.5">Memuat waktu...</p>
             </div>
-            <div class="flex items-center gap-2 lg:gap-6 w-full lg:w-auto">
-                <button class="relative text-gray-500 hover:text-gray-800 flex-shrink-0">
-                    <svg class="w-5 lg:w-6 h-5 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[7px] lg:text-[9px] font-bold px-1 lg:px-1.5 py-0.5 rounded-full border-2 border-[#fcfaf8]">27</span>
-                </button>
-                <button class="hidden sm:flex items-center gap-1 text-xs lg:text-sm font-bold text-gray-700">
-                    <svg class="w-4 lg:w-5 h-4 lg:h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    ID
-                    <svg class="w-3 lg:w-4 h-3 lg:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div class="flex items-center gap-2 lg:gap-3 pl-2 lg:pl-4 border-l border-gray-200">
-                    <span class="hidden sm:inline text-xs lg:text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=ef4444" class="w-8 lg:w-9 h-8 lg:h-9 rounded-full flex-shrink-0">
-                </div>
+        </div>
+
+        <div class="flex items-center gap-2 lg:gap-6 w-full lg:w-auto justify-end">
             </div>
-        </header>
+    </header>
 
         <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] mr-0 lg:mr-8 mb-0 lg:mb-8 overflow-y-auto shadow-sm custom-scrollbar">
             <div class="p-4 sm:p-6 lg:p-10">
