@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mapel;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        
+        $user = Auth::user();
         $subjects = Mapel::with('guru')->get();
 
         return view('students.dashboard', compact('subjects'));

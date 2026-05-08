@@ -14,11 +14,12 @@ class Mapel extends Model
         'nama_mapel',
         'id_guru',
         'jp',
+        'jumlah_modul',
         'status'
     ];
 
     public function guru() {
-        return $this->belongsTo(User::class, 'id_guru', 'id');
+        return $this->belongsTo(User::class, 'id_guru');
     }
 
 }

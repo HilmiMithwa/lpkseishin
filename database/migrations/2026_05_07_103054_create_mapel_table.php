@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id('id_mapel');
             $table->string('kode_mapel')->unique();
             $table->string('nama_mapel');
+            $table->string('deskripsi_mapel');
             $table->foreignId('id_guru')->constrained('users')->onDelete('cascade');
+            $table->integer('jumlah_modul');
             $table->integer('jp');
             $table->string('status');
             $table->timestamps();

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->text('text_content')->nullable();
             $table->string('file_path')->nullable();
             $table->timestamp('submitted_at');
-            $table->string('status');
+            $table->enum('status', ['dikirim', 'dinilai', 'terlambat']);
+            $table->decimal('nilai', 5,2)->nullable();
             $table->foreignId('id_tugas')->constrained('tugas','id_tugas')->onDelete('cascade');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
