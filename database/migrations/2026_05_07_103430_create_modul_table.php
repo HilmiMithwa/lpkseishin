@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('materi_pembelajaran');
             $table->text('kegiatan_pembelajaran');
             $table->text('penilaian');
+            $table->foreignId('id_mapel')->constrained('mapel', 'id_mapel')->onDelete('cascade');
             $table->foreignId('id_rps')->constrained('rps','id_rps')->onDelete('cascade');
             $table->timestamps();
         });

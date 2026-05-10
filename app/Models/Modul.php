@@ -7,4 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Modul extends Model
 {
     //
+
+    protected $table = 'modul';
+    protected $primaryKey = 'id_modul';
+
+    protected $fillable = [
+        'nama_modul',
+        'tujuan_pembelajaran',
+        'materi_pembelajaran',
+        'kegiatan_pembelajaran',
+        'penilaian',
+        'id_mapel',
+        'id_rps'
+    ];
+
+    public function mapel() {
+        return $this->belongsTo(Mapel::class, 'id_mapel');
+    }
+
+    public function rps() {
+        return $this->belongsTo(Rps::class, 'id_rps');
+    }
 }
