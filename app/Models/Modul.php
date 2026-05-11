@@ -22,10 +22,10 @@ class Modul extends Model
     ];
 
     public function mapel() {
-        return $this->belongsTo(Mapel::class, 'id_mapel');
+        return $this->belongsTo(Mapel::class, 'id_mapel', 'id_mapel');
     }
 
     public function rps() {
-        return $this->belongsTo(Rps::class, 'id_rps');
+        return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
     }
 }
