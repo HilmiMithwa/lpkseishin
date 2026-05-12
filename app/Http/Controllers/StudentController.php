@@ -14,21 +14,21 @@ class StudentController extends Controller
         $subjects = \App\Models\Mapel::with('guru')->get();
 
         // Mengambil data pendaftaran siswa yang sedang login
-        $enrollment = Auth::user()->enrollment; 
+        $enrollment = Auth::user()->enrollment;
 
         return view('students.dashboard', compact('subjects', 'enrollment'));
 
         // Tambahkan 'rps' ke dalam fungsi with()
         $subjects = \App\Models\Mapel::with(['guru', 'rps'])->get();
 
-        $enrollment = auth()->user()->enrollment; 
+        $enrollment = auth()->user()->enrollment;
 
         return view('students.dashboard', compact('subjects', 'enrollment'));
     }
+    
     public function show($slug)
-{
-    // Untuk sementara kita tampilkan teks saja
-    return "Halaman Modul untuk: " . $slug;
-}
-
+    {
+        // Untuk sementara kita tampilkan teks saja
+        return "Halaman Modul untuk: " . $slug;
+    }
 }
