@@ -64,6 +64,7 @@ class User extends Authenticatable
         return $this->hasOne(Enrollment::class, 'id_user', 'id');
     }
 
+    //biar user punya data masing-masing
     public function mapels() 
     {
         return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' )->withTimestamps();
