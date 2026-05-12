@@ -66,6 +66,12 @@ class User extends Authenticatable
 
     public function mapels() 
     {
-        return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' );
+        return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' )->withTimestamps();
     }
+
+    public function moduls()
+    {
+        return $this->belongsToMany(Modul::class, 'enrollment_list', 'id_user', 'id_modul')->withTimestamps();
+    }
+
 }

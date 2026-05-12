@@ -236,7 +236,7 @@
                                     <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-xl border border-gray-200 flex items-center justify-center text-red-600 font-bold text-base flex-shrink-0">あa</div>
                                     <div class="text-center border border-gray-200 rounded-xl px-2.5 sm:px-3 py-1">
                                         <p class="text-lg sm:text-2xl font-black text-gray-900 leading-none">
-                                            {{ $subject->rps?->count() ?? 0 }}
+                                            {{ $subject->modul_count ?? 0 }}
                                         </p>
                                         <p class="text-[7px] sm:text-[8px] text-gray-500 font-bold mt-0.5 uppercase">Module</p>
                                     </div>

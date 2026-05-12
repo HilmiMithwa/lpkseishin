@@ -16,7 +16,7 @@ class DashboardController extends Controller
 
         
         if ($user instanceof \App\Models\User) {
-            $subjects = $user->mapels()->with('guru')->get();
+            $subjects = $user->mapels()->with('guru')->withCount('modul')->get();
         } else {
             $subjects = collect();
         }
@@ -32,4 +32,6 @@ class DashboardController extends Controller
 
         return "Halaman Modul untuk: " . $id;
     }
+
+    
 }

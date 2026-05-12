@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('id_enrollment');
             $table->timestamps();
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
-            $table->foreignId('id_mapel')->constrained('mapel', 'id_mapel')->onDelete('cascade');
+            $table->foreignId('id_mapel')->nullable()->constrained('mapel', 'id_mapel')->onDelete('cascade');
+            $table->foreignId('id_modul')->nullable()->constrained('modul', 'id_modul')->onDelete('cascade');
         });
     }
 
