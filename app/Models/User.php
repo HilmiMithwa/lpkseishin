@@ -75,4 +75,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Modul::class, 'enrollment_list', 'id_user', 'id_modul')->withTimestamps();
     }
 
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'id_guru', 'id_user')->withTimeStamps();
+    }
+
 }

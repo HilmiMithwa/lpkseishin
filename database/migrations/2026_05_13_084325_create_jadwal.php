@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jadwal', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_jadwal');
             $table->timestamps();
             $table->string('judul_pertemuan');
             $table->time('start_time');
             $table->time('end_time');
-            $table->string('Lokasi Pertemuan');
+            $table->string('lokasi_pertemuan');
+            $table->foreignId('id_guru')->constrained('users')->onDelete('cascade');
         });
     }
 
