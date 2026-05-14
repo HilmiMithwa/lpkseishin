@@ -44,7 +44,8 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 //Dashboard Siswa
 Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
-    Route::get('/subjects/{slug}', [StudentController::class, 'show'])->name('subjects.show');
+    
+    Route::get('/subjects/{id}', [StudentController::class, 'show'])->name('subjects.show');
 });
 
 //Dashboard Guru

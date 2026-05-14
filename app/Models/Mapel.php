@@ -18,5 +18,8 @@ class Mapel extends Model
     public function guru() {
         return $this->belongsTo(User::class, 'id_guru', 'id');
     }
+    public function rps() {
+        return $this->hasMany(Rps::class, 'id_mapel', 'id_mapel');
+    }
 
 }
