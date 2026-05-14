@@ -63,4 +63,21 @@ class User extends Authenticatable
         // User memiliki satu pendaftaran (One-to-One)
         return $this->hasOne(Enrollment::class, 'id_user', 'id');
     }
+
+    //biar user punya data masing-masing
+    public function mapels() 
+    {
+        return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' )->withTimestamps();
+    }
+
+    public function moduls()
+    {
+        return $this->belongsToMany(Modul::class, 'enrollment_list', 'id_user', 'id_modul')->withTimestamps();
+    }
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'id_guru', 'id_user')->withTimeStamps();
+    }
+
 }

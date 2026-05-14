@@ -242,7 +242,7 @@
                                     
                                     <div class="w-12 sm:w-14 h-12 sm:h-14 flex flex-col items-center justify-center border border-gray-200 rounded-xl flex-shrink-0">
                                         <p class="text-lg sm:text-2xl font-black text-gray-900 leading-none">
-                                            {{ $subject->rps?->count() ?? 0 }}
+                                            {{ $subject->modul_count ?? 0 }}
                                         </p>
                                         <p class="text-[7px] sm:text-[8px] text-gray-500 font-bold mt-0.5 uppercase text-center">Module</p>
                                     </div>
