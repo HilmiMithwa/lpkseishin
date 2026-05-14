@@ -26,10 +26,6 @@ class Mapel extends Model
         return $this->hasMany(Rps::class, 'id_mapel', 'id_mapel');
     }
 
-    public function rps() {
-        return $this->hasMany(Rps::class, 'id_mapel', 'id_mapel');
-    }
-
     public function modul() {
         return $this->hasMany(Modul::class, 'id_mapel', 'id_mapel');
     }
