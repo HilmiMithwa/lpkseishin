@@ -16,8 +16,9 @@ class StudentController extends Controller
     {
         // 1. Gabungkan pengambilan relasi guru dan hitung modul dalam satu query
         // Ini akan mengisi variabel $subject->modul_count secara otomatis
-        $subjects = Mapel::with(['guru'])
-            ->withCount('modul') 
+        $subjects = Auth::user()->mapels()
+            ->with(['guru'])
+            ->withCount('modul')
             ->get();
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
@@ -39,7 +40,15 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        // Gunakan findOrFail agar otomatis 404 jika ID tidak ada
+        // 1. Cek apakah user yang login benar-benar terdaftar di mapel ini
+        $isEnrolled = Auth::user()->mapels()->where('mapel.id_mapel', $id)->exists();
+
+        if (!$isEnrolled) {
+            // Jika tidak terdaftar, lempar error 403 (Forbidden)
+            abort(403, 'Gak boleh intip-intip! Kamu belum daftar di kelas ini.');
+        }
+
+        // 2. Jika lolos pengecekan, baru ambil datanya
         $subject = Mapel::with(['guru', 'rps'])->findOrFail($id);
         
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
