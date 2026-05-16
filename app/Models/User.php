@@ -67,12 +67,12 @@ class User extends Authenticatable
     //biar user punya data masing-masing
     public function mapels() 
     {
-        return $this->belongsToMany(Mapel::class, 'enrollment_list', 'id_user', 'id_mapel' )->withTimestamps();
+        return $this->belongsToMany(Mapel::class, 'enrollment_access', 'id_user', 'id_mapel' )->withTimestamps();
     }
 
     public function moduls()
     {
-        return $this->belongsToMany(Modul::class, 'enrollment_list', 'id_user', 'id_modul')->withTimestamps();
+        return $this->belongsToMany(Modul::class, 'enrollment_access', 'id_user', 'id_modul')->withTimestamps();
     }
 
     public function jadwal()
