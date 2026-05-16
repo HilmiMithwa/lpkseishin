@@ -41,7 +41,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
     </style>
 </head>
-<body class="bg-[#fcfaf8] text-gray-800 h-screen flex overflow-hidden">
+<body class="bg-[#FFF9F4] text-gray-800 h-screen flex overflow-hidden">
 
     <!-- Mobile Menu Button -->
     {{-- <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-red-600 text-white rounded-lg">
@@ -53,7 +53,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
 
-    <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#fcfaf8] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
+    <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
         <div class="p-6">
             <x-application-logo class="h-14 w-auto" />
         </div>
