@@ -56,7 +56,22 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('yussar123'),
                 'role_id' => 2
             ],
-            
+
+            // User testing
+            [ 
+                'name' => 'User N3N4',
+                'email' => 'n3n4@gmail.com',
+                'password' => bcrypt('password'),
+                'role_id' => 2, // Role Siswa
+            ],
+
+            [
+                'name' => 'User N4N5',
+                'email' => 'n4n5@gmail.com',
+                'password' => bcrypt('password'),
+                'role_id' => 2, // Role Siswa
+            ]
+
         ];
 
         foreach ($userData as $user) {

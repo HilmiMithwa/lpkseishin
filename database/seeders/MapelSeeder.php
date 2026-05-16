@@ -64,6 +64,25 @@ class MapelSeeder extends Seeder
             };
 
 
+            // User testing untuk kontrak mapel
+            $userN3N4 = User::where('email', 'n3n4@gmail.com')->first();
+            $userN4N5 = User::where('email', 'n4n5@gmail.com')->first();
+
+            $mapelN5 = Mapel::where('kode_mapel', 'N590')->first();
+            $mapelN4 = Mapel::where('kode_mapel', 'N591')->first();
+            $mapelN3 = Mapel::where('kode_mapel', 'N592')->first();
+
+            // Skenario 1: User mengontrak N3 dan N4
+            if ($userN3N4 && $mapelN3 && $mapelN4) {
+                $userN3N4->mapels()->attach([$mapelN3->id_mapel, $mapelN4->id_mapel]);
+            }
+
+            // Skenario 2: User mengontrak N4 dan N5
+            if ($userN4N5 && $mapelN4 && $mapelN5) {
+                $userN4N5->mapels()->attach([$mapelN4->id_mapel, $mapelN5->id_mapel]);
+            }
+
+
         }
     }
 }
