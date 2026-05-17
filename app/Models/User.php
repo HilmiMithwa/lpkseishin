@@ -80,4 +80,9 @@ class User extends Authenticatable
         return $this->hasMany(Jadwal::class, 'id_guru', 'id_user')->withTimeStamps();
     }
 
+    public function program()
+    {
+        return $this->hasOne(Enrollment_List::class, 'id_user', 'id');
+    }
+
 }

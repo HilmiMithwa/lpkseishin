@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enrollment_list', function (Blueprint $table) {
-            $table->id('id_enrollment');
+            $table->id('id_enrollment_access');
             $table->timestamps();
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->foreignId('id_mapel')->nullable()->constrained('mapel', 'id_mapel')->onDelete('cascade');

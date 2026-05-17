@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('modul', function (Blueprint $table) {
             $table->id('id_modul');
             $table->string('nama_modul');
-            $table->text('tujuan_pembelajaran');
-            $table->text('materi_pembelajaran');
-            $table->text('kegiatan_pembelajaran');
-            $table->text('penilaian');
+            $table->text('kode_modul')->unique();
+            $table->integer('teori');
+            $table->integer('praktik');
+            $table->string('module_description');
             $table->foreignId('id_mapel')->constrained('mapel', 'id_mapel')->onDelete('cascade');
             $table->foreignId('id_rps')->nullable()->constrained('rps','id_rps')->onDelete('set null');
             $table->timestamps();
