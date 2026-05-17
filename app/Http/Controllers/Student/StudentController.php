@@ -9,17 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
+
 
 class StudentController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         // 1. Gabungkan pengambilan relasi guru dan hitung modul dalam satu query
         // Ini akan mengisi variabel $subject->modul_count secara otomatis
-        $subjects = Auth::user()->mapels()
-            ->with(['guru'])
-            ->withCount('modul')
-            ->get();
+        $subjects = $user->mapels()->with('guru')->withCount('modul')->get();
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
@@ -40,8 +41,10 @@ class StudentController extends Controller
 
     public function show($id)
     {
+        /** @var \App\Models\User $user */
         // 1. Cek apakah user yang login benar-benar terdaftar di mapel ini
-        $isEnrolled = Auth::user()->mapels()->where('mapel.id_mapel', $id)->exists();
+        $user = Auth::user();
+        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id)->exists();
 
         if (!$isEnrolled) {
             // Jika tidak terdaftar, lempar error 403 (Forbidden)
@@ -49,9 +52,7 @@ class StudentController extends Controller
         }
 
         // 2. Jika lolos pengecekan, baru ambil datanya
-        $subject = Mapel::with(['guru', 'rps', 'modul'])->findOrFail($id)
-            ->withCount('modul')
-            ->findOrFail($id);
+        $subject = Mapel::with(['guru', 'rps', 'modul'])->withCount('modul')->findOrFail($id);
         
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
 
