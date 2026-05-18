@@ -55,7 +55,7 @@ class StudentController extends Controller
         }
 
         // 2. Jika lolos pengecekan, baru ambil datanya
-        $subject = Mapel::with(['guru', 'rps', 'modul'])->withCount('modul')->findOrFail($id);
+        $subject = Mapel::with(['guru', 'rps', 'modul'])->withCount('modul')->findOrFail($id_mapel);
 
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
 
