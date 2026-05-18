@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
 use Illuminate\Support\Facades\Schema;
+use App\Models\Modul;
 use App\Models\User;
 use App\Models\VocabProgress;
 use Illuminate\Support\Facades\Http;
@@ -41,16 +42,16 @@ class StudentController extends Controller
         ));
     }
 
-    public function show($id)
+    public function show($id_mapel)
     {
         /** @var \App\Models\User $user */
         // 1. Cek apakah user yang login benar-benar terdaftar di mapel ini
         $user = Auth::user();
-        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id)->exists();
+        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
 
         if (!$isEnrolled) {
             // Jika tidak terdaftar, lempar error 403 (Forbidden)
-            abort(403, 'Gak boleh intip-intip! Kamu belum daftar di kelas ini.');
+            abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');
         }
 
         // 2. Jika lolos pengecekan, baru ambil datanya
