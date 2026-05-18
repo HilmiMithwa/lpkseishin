@@ -15,7 +15,9 @@ class Rps extends Model
     protected $fillable = [
         'pertemuan',
         'deskripsi_rps',
-        'kode_kelas',
+        'certification_target',
+        'schedule',
+        'total_duration',
         'id_mapel'
     ];
 

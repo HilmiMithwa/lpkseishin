@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id('id_rps');
             $table->integer('pertemuan');
             $table->text('deskripsi_rps');
-            $table->string('kode_kelas');
+            $table->text('certification_target');
+            $table->text('schedule');
+            $table->integer('total_duration');
             $table->foreignId('id_mapel')->constrained('mapel','id_mapel')->onDelete('cascade');
             $table->timestamps();
         });

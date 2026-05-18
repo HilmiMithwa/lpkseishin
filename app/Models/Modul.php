@@ -13,10 +13,10 @@ class Modul extends Model
 
     protected $fillable = [
         'nama_modul',
-        'tujuan_pembelajaran',
-        'materi_pembelajaran',
-        'kegiatan_pembelajaran',
-        'penilaian',
+        'kode_modul',
+        'teori',
+        'praktik',
+        'module_description',
         'id_mapel',
         'id_rps'
     ];

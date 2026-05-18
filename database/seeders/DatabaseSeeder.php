@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         TugasSeeder::class,
         EnrollmentListSeeder::class,
         JadwalSeeder::class,
+        DailyWordSeeder::class
     ]);
 
         User::factory()->create([
