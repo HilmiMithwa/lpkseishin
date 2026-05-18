@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
 use Illuminate\Support\Facades\Schema;
 use App\Models\User;
+use App\Models\VocabProgress;
+use Illuminate\Support\Facades\Http;
 
 
 class StudentController extends Controller
@@ -57,5 +59,32 @@ class StudentController extends Controller
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
 
         return view('students.class-detail', compact('subject', 'enrollment'));
+    }
+
+    public function getVocabulary()
+    {
+        $response = Http::get('https://jlpt-vocab-api.vercel.app/api/words/all');
+
+        if ($response->successful()) {
+            $vocabList = $response->json()['data'] ?? [];
+
+            $memorizedID = VocabProgress::where('id_user', Auth::id())->where('is_memorized', true)->pluck('vocabulary_id')->toArray();
+
+            return view('student.vocabulary', [ //sok ini sesuaikan aja buat nama view bladenya sama kamu 
+                'vocabList' => $vocabList,
+                'memorizedID' => $memorizedID,
+            ]);
+        }
+
+        return abort(500, 'Gagal mengambil data dari API');
+    }
+
+    public function saveProgress(Request $request)
+    {
+        $request->validate([
+            'vocabulary_id' => 'required'
+        ]);
+
+        
     }
 }

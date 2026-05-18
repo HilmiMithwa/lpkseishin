@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
         RoleSeeder::class,
         UserSeeder::class,
-        MapelSeeder::class,
-        RpsSeeder::class,
-        ModulSeeder::class,
-        TugasSeeder::class,
-        EnrollmentListSeeder::class,
-        JadwalSeeder::class,
+        //MapelSeeder::class,
+        //RpsSeeder::class,
+        //ModulSeeder::class,
+        //TugasSeeder::class,
+        //EnrollmentListSeeder::class,
+        //JadwalSeeder::class,
         DailyWordSeeder::class
     ]);
 
