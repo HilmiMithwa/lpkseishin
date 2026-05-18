@@ -136,14 +136,20 @@
                                         <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm mb-3 last:mb-0 gap-3">
                                             <div class="flex items-center gap-3 min-w-0">
                                                 @if($material->is_completed ?? true)
-                                                    <div class="w-6 h-6 bg-green-50 rounded-full flex items-center justify-center text-green-600 flex-shrink-0">
-                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                                    <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#30CD30] flex-shrink-0">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
                                                     </div>
                                                 @else
-                                                    <div class="w-6 h-6 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-600 flex-shrink-0">
-                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+                                                    <div class="w-12 h-12 bg-[#FFFADD] rounded-2xl flex items-center justify-center text-[#FFA100] flex-shrink-0">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24">
+                                                            <path d="M12 3a9 9 0 0 1 0 18" />
+                                                            <path d="M12 21a9 9 0 0 1 0-18" stroke-dasharray="1 6.2" />
+                                                        </svg>
                                                     </div>
                                                 @endif
+                                                
                                                 <div class="min-w-0">
                                                     <p class="text-xs font-bold text-[#222222] truncate">{{ $material->title }}</p>
                                                     <p class="text-[10px] text-[#444444] font-medium truncate">{{ $material->type ?? 'Theory' }}</p>
@@ -169,9 +175,12 @@
                                     @isset($currentModul->evaluation)
                                         <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm gap-3">
                                             <div class="flex items-center gap-3 min-w-0">
-                                                <div class="w-8 h-8 bg-[#FFDBDB] rounded-xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="3 3"></circle></svg>
-                                                </div>
+                                                    <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24">
+                                                            <path d="M12 3a9 9 0 0 1 0 18" />
+                                                            <path d="M12 21a9 9 0 0 1 0-18" stroke-dasharray="1 6.2" />
+                                                        </svg>
+                                                    </div>
                                                 <div class="min-w-0">
                                                     <p class="text-xs font-bold text-[#222222] truncate">{{ $currentModul->evaluation->title }}</p>
                                                     <p class="text-[10px] text-[#444444] font-medium truncate">
@@ -198,34 +207,52 @@
                                 <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Task</h3>
                             </div>
 
-                            <div class="bg-white border border-gray-100 rounded-[24px] p-5 shadow-sm">
+                            <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm">
                                 @forelse($currentModul->tasks ?? [] as $task)
-                                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white border border-gray-50 rounded-2xl shadow-sm mb-3 last:mb-0 gap-4">
+                                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-white border border-gray-100 rounded-[24px] shadow-sm mb-4 last:mb-0 gap-4 relative">
+                                        
                                         <div class="flex items-center gap-4 min-w-0">
-                                            <div class="w-10 h-10 bg-[#FFDBDB] rounded-xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            <div class="w-14 h-14 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h4"></path>
+                                                </svg>
                                             </div>
-                                            <div class="min-w-0">
-                                                <h4 class="text-sm font-bold text-[#222222] truncate">{{ $task->title }}</h4>
-                                                <span class="inline-block bg-orange-50 text-orange-600 text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1">Due: {{ $task->due_date }}</span>
+                                            
+                                            <div class="space-y-1.5 min-w-0">
+                                                <h4 class="text-base font-bold text-[#222222] truncate tracking-tight">
+                                                    {{ $task->title }}
+                                                </h4>
+                                                <span class="inline-block bg-[#FFF3CD] text-[#856404] text-[11px] font-bold px-3 py-1 rounded-lg">
+                                                    Due: {{ $task->due_date }}
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end flex-shrink-0">
-                                            <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{{ $task->status ?? 'Incompleted' }}</span>
-                                            <a href="{{ route('tasks.show', $task->id) }}" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 transition shadow-sm">
-                                                Open Task <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+
+                                        <div class="flex flex-col items-end justify-between sm:h-20 w-full sm:w-auto self-stretch flex-shrink-0 gap-2">
+                                            <span class="text-xs font-semibold text-gray-500 tracking-wide">
+                                                {{ $task->status ?? 'Incompleted' }}
+                                            </span>
+                                            
+                                            <a href="#" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition duration-200 shadow-sm w-full sm:w-auto justify-center">
+                                                <span>Open Task</span>
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                                    <path d="M19 12a7 7 0 0 1-7 7" class="opacity-20" />
+                                                </svg>
                                             </a>
                                         </div>
+
                                     </div>
                                 @empty
                                     <div class="text-center py-12 flex flex-col items-center justify-center">
-<div class="w-16 h-16 bg-[#FFDBDB] rounded-full flex items-center justify-center text-[#DB2A2A] mb-4 shadow-sm animate-bounce-short">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-            <path d="m9 13 2 2 4-4" />
-        </svg>
-    </div>
+                                        <div class="w-16 h-16 bg-[#FFDBDB] rounded-full flex items-center justify-center text-[#DB2A2A] mb-4 shadow-sm">
+                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                                                <path d="m9 13 2 2 4-4" />
+                                            </svg>
+                                        </div>
                                         <p class="text-sm font-bold text-[#222222]">Hooray! There's no task in this module.</p>
                                     </div>
                                 @endforelse
@@ -245,11 +272,11 @@
                                         $isActive = $modul->id_modul === $currentModul->id_modul;
                                     @endphp
                                     
-                                    <a href="{{ route('modules.show', $modul->id_mapel) }}" 
-                                       class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
-                                              {{ $isActive 
-                                                 ? 'bg-[#DB2A2A] text-white shadow-md' 
-                                                 : 'bg-white hover:bg-gray-50 text-[#222222] border border-gray-50' }}">
+                                    <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
+                                    class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
+                                            {{ $modul->id_modul === $currentModul->id_modul 
+                                                ? 'bg-[#DB2A2A] text-white shadow-md' 
+                                                : 'bg-white hover:bg-gray-50 text-[#222222] border border-gray-50' }}">
                                         <span>Module {{ $index + 1 }}</span>
                                     </a>
                                 @endforeach

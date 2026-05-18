@@ -46,9 +46,13 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
     
-    Route::get('/students/subjects/{id}', [StudentController::class, 'show'])->name('subjects.show');
+    Route::get('/students/subjects/{id_mapel}', [StudentController::class, 'show'])->name('subjects.show');
 
-    Route::get('/students/modules/{id_modul}', [StudentController::class, 'showModule'])->name('modules.show');
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}', [StudentController::class, 'showModule'])->name('modules.show');
+
+    //RUTE DUMMY INI UNTUK TESTING VISUAL
+    Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
+    Route::get('/students/tasks/{id}', function() { return 'Rute Tugas'; })->name('tasks.show');
 });
 
 //Dashboard Guru
