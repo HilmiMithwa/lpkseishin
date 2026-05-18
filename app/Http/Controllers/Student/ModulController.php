@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Mapel;
 use App\Models\Modul;
 
-
+//Nunggu dashboard guru keluar
 class ModulController extends Controller
 {
-    public function index()
+    public function store(Request $request)
     {
-        $moduls = Modul::with('mapel')->latest()->get();
+        
     }
 }
