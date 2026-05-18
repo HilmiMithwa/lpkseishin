@@ -62,7 +62,7 @@ class StudentController extends Controller
         return view('students.class-detail', compact('subject', 'enrollment'));
     }
 
-        public function showModule($id_mapel, $id_modul)
+    public function showModule($id_mapel, $id_modul)
     {
         // 1. Ambil data modul dasarnya berdasarkan ID modul yang benar
         $currentModul = Modul::findOrFail($id_modul);
@@ -73,6 +73,7 @@ class StudentController extends Controller
         }
 
         // 3. BARIKADE KEAMANAN (IDOR): Cek kontrak belajar siswa pada kelas ini
+        /** @var User $user */
         $user = Auth::user();
         $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
 
@@ -95,19 +96,18 @@ class StudentController extends Controller
 
             // Jalankan query hanya dengan relasi yang sudah terbukti ada
             $currentModul = Modul::with($safeRelations)->findOrFail($id_modul);
-
         } catch (\Exception $e) {
             // Error Handler Fallback: Jika ada error database lain, tetap muat modul secara aman
             $currentModul = Modul::findOrFail($id_modul);
         }
-        
+
         // Ambil data mapel menggunakan $id_mapel dari URL untuk navigasi sidebar kanan
         $subject = Mapel::with('modul')->findOrFail($id_mapel);
 
         // ====================================================================
         // BARKODE MOCK DATA (DUMMY) UNTUK TESTING LAYOUT FIGMA
         // ====================================================================
-        
+
         // 1. Memaksa isi Teaching Materials muncul (2 Data: 1 Sukses, 1 Progress)
         $currentModul->materials = collect([
             (object)[
@@ -148,7 +148,7 @@ class StudentController extends Controller
                 'status' => 'Incompleted'
             ]
         ]);
-        
+
         // ====================================================================
 
         return view('students.module-detail', compact('currentModul', 'subject'));
