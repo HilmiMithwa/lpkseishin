@@ -48,15 +48,16 @@ class ModulSeeder extends Seeder
      */
     private function createModulData($idMapel, $titles, $level)
     {
-        foreach ($titles as $title) {
+        // Ditambahkan $index untuk membuat kode_modul unik otomatis (cth: MDL-N5-01)
+        foreach ($titles as $index => $title) {
             Modul::create([
-                'nama_modul'            => $title,
-                'tujuan_pembelajaran'   => "Siswa menguasai kompetensi $title untuk level $level.",
-                'materi_pembelajaran'   => "Materi lengkap mengenai konsep dan penggunaan $title.",
-                'kegiatan_pembelajaran' => "Latihan menulis, membaca, dan simulasi percakapan $level.",
-                'penilaian'             => "Tes unit $title (Tertulis & Lisan)",
-                'id_mapel'              => $idMapel,
-                'id_rps'                => null, // Bisa diisi jika Seeder RPS sudah ada
+                'nama_modul'         => $title,
+                'kode_modul'         => 'MDL-' . $level . '-' . str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                'teori'              => 12, // Nilai dummy jam pelajaran teori
+                'praktik'            => 24, // Nilai dummy jam pelajaran praktik
+                'module_description' => "Materi lengkap mengenai konsep dan penggunaan $title untuk level $level.",
+                'id_mapel'           => $idMapel,
+                'id_rps'             => null, 
             ]);
         }
     }
