@@ -29,14 +29,14 @@ class StudentController extends Controller
 
         // 3. Fitur Yumegatari: Ambil satu kata secara acak dari database
         // Pastikan temanmu sudah membuat tabel 'daily_words'
-        $dailyWord = Schema::hasTable('daily_words') 
-            ? DB::table('daily_words')->inRandomOrder()->first() 
+        $dailyWord = Schema::hasTable('daily_words')
+            ? DB::table('daily_words')->inRandomOrder()->first()
             : null;
 
         // 4. Kirim semua variabel ke view dashboard
         return view('students.dashboard', compact(
-            'subjects', 
-            'enrollment', 
+            'subjects',
+            'enrollment',
             'dailyWord'
         ));
     }
@@ -55,7 +55,7 @@ class StudentController extends Controller
 
         // 2. Jika lolos pengecekan, baru ambil datanya
         $subject = Mapel::with(['guru', 'rps', 'modul'])->withCount('modul')->findOrFail($id);
-        
+
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
 
         return view('students.class-detail', compact('subject', 'enrollment'));
@@ -85,6 +85,16 @@ class StudentController extends Controller
             'vocabulary_id' => 'required'
         ]);
 
-        
+        VocabProgress::updateOrCreate(
+            [
+                'id_user' => Auth::id(),
+                'vocabulary_id' => $request->vocabulary_id,
+            ],
+            [
+                'is_memorized' => true
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
 }
