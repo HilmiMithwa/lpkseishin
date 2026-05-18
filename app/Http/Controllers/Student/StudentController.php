@@ -190,4 +190,48 @@ class StudentController extends Controller
 
         return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
+
+    // Detail material
+    public function showMaterial($id_mapel, $id_modul, $id_materi)
+    {
+        // 1. Ambil data induk untuk kebutuhan Breadcrumbs & Navigasi Sidebar
+        $subject = Mapel::find($id_mapel);
+        $currentModul = Modul::find($id_modul);
+        
+        // 2. Cari data materi di database (mengembalikan null jika tidak ada, agar ditangani Blade)
+        $material = null;
+        try {
+                $material = \App\Models\BahanAjar::find($id_materi);
+        } catch (\Throwable $e) {
+            // Jika ada error database apapun, kunci variabel menjadi null agar placeholder aktif
+            $material = null;
+        }
+
+        // 3. Logika Otomatis URL Tombol Pembuka Materi Sebelumnya & Selanjutnya
+        // (Asumsi testing sementara batas maksimal ada 3 materi)
+        $previousMaterialUrl = ($id_materi > 1) 
+            ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $id_materi - 1]) 
+            : null;
+
+        $nextMaterialUrl = ($id_materi < 3) 
+            ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $id_materi + 1]) 
+            : null;
+
+        // 4. Kirim data ke View
+        return view('students.material-detail', compact(
+            'subject', 
+            'currentModul', 
+            'material', 
+            'previousMaterialUrl', 
+            'nextMaterialUrl'
+        ));
+    }
+
+    // Mark materi sebagai selesai (update progress)
+    public function completeMaterial($id_materi)
+    {
+        // Sementara kembalikan ke halaman semula, logic database diserahkan ke backend
+        return back();
+    }
+
 }

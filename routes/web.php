@@ -53,6 +53,12 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     //RUTE DUMMY INI UNTUK TESTING VISUAL
     Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
     Route::get('/students/tasks/{id}', function() { return 'Rute Tugas'; })->name('tasks.show');
+
+    // rute detail materi
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [StudentController::class, 'showMaterial'])->name('materials.show');
+
+    //mark materi sebagai selesai (update progress)
+    Route::post('/students/materials/{id_materi}/complete', [StudentController::class, 'completeMaterial'])->name('materials.complete');
 });
 
 //Dashboard Guru
