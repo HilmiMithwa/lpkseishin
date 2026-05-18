@@ -63,6 +63,9 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
 });
 
 
+//buat ngetes API
+Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
+
 
 require __DIR__.'/auth.php';
 
