@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
 use Illuminate\Support\Facades\Schema;
+use App\Models\Modul;
 
 class StudentController extends Controller
 {
@@ -56,5 +57,35 @@ class StudentController extends Controller
         $enrollment = Enrollment::where('id_user', Auth::id())->first();
 
         return view('students.class-detail', compact('subject', 'enrollment'));
+    }
+
+    public function showModule($id_modul)
+    {
+        try {
+            // 1. Daftar relasi yang ingin kita panggil jika sudah siap di backend
+            $potentialRelations = ['materials', 'tasks'];
+            $safeRelations = [];
+
+            // 2. Safety Check: Cek apakah method relasi tersebut sudah ada di model Modul
+            $modulModel = new Modul();
+            foreach ($potentialRelations as $relation) {
+                if (method_exists($modulModel, $relation)) {
+                    $safeRelations[] = $relation;
+                }
+            }
+
+            // 3. Jalankan query hanya dengan relasi yang sudah terbukti ada
+            $currentModul = Modul::with($safeRelations)->findOrFail($id_modul);
+
+        } catch (\Exception $e) {
+            // 4. Error Handler Fallback: Jika ada error database lain, tetap muat modul secara aman
+            $currentModul = Modul::findOrFail($id_modul);
+        }
+        
+        // Ambil data mapel untuk navigasi sidebar
+        $subject = Mapel::with('modul')->findOrFail($currentModul->id_mapel);
+
+        // 5. Kirim ke view (Blade kamu sudah aman karena menggunakan operator ?? [])
+        return view('students.module-detail', compact('currentModul', 'subject'));
     }
 }

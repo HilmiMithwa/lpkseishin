@@ -47,6 +47,8 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
     
     Route::get('/students/subjects/{id}', [StudentController::class, 'show'])->name('subjects.show');
+
+    Route::get('/students/modules/{id_modul}', [StudentController::class, 'showModule'])->name('modules.show');
 });
 
 //Dashboard Guru
