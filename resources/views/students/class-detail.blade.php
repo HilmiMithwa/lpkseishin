@@ -206,7 +206,6 @@
                                 @forelse($subject->modul as $modul)
                                     @php
                                         // Logika otomatis mendeteksi tipe modul berdasarkan kata kunci di namanya
-                                        // Nanti teman backend-mu tinggal menambahkan kolom asli seperti $modul->tipe_modul ('intro', 'materi', 'test')
                                         $namaModulKecil = strtolower($modul->nama_modul);
                                         
                                         if (str_contains($namaModulKecil, 'intro') || str_contains($namaModulKecil, 'kanji')) {
@@ -218,8 +217,8 @@
                                         }
                                     @endphp
 
-                                    <div class="bg-white border border-gray-100 p-5 rounded-[24px] shadow-sm">
-                                        
+                                    <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
+                                    class="block bg-white border border-gray-100 p-5 rounded-[24px] shadow-sm hover:border-red-200 hover:shadow-md transition duration-200 cursor-pointer">                                        
                                         <div class="flex gap-4 items-start mb-4">
                                             
                                             <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
@@ -268,7 +267,7 @@
                                             </span>
                                         </div>
 
-                                    </div>
+                                    </a>
                                 @empty
                                     <p class="text-[#444444] italic text-sm text-center py-10">Belum ada modul untuk kelas ini.</p>
                                 @endforelse

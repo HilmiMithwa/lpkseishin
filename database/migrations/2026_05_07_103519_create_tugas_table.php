@@ -18,6 +18,7 @@ return new class extends Migration
             $table->datetime('waktu_pengumpulan');
             $table->string('status_tugas');
             $table->foreignId('id_rps')->constrained('rps','id_rps')->onDelete('cascade');
+            $table->foreignId('id_modul')->constrained('modul', 'id_modul')->onDelete('cascade');
             $table->timestamps();
         });
     }
