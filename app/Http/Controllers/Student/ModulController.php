@@ -27,4 +27,6 @@ class ModulController extends Controller
         Modul::create($request->validated());
         return redirect()->route('teacher.dashboardmodul')->with('success', 'Modul Berhasil ditambahkan!'); //buat routingan dashboard guru ini aku serahin lagi ke kamu zan. Ini sebagai contoh doang
     }
+
+    
 }
