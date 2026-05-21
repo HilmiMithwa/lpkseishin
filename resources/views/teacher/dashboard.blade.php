@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Sensei - LPK Seishin</title>
-    {{@vite(['resources/css/app.css', 'resources/js/app.js'])}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -43,12 +43,12 @@
 </head>
 <body class="bg-[#FFF9F4] text-gray-800 h-screen flex overflow-hidden">
 
-    {{ Mobile Menu Button }}
-    {{{{ <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-red-600 text-white rounded-lg">
+    {{-- Mobile Menu Button --}}
+    {{-- <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-red-600 text-white rounded-lg">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-    </button> }}}}
+    </button> --}}
 
-    {{ Mobile Menu Close Button }}
+    {{-- Mobile Menu Close Button --}}
     <button id="mobile-menu-close" class="fixed top-4 right-4 z-40 hidden lg:hidden p-2 bg-gray-800 text-white rounded-lg">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
@@ -84,7 +84,7 @@
             </nav>
         </div>
 
-        {{ User Profile }}
+        {{-- User Profile --}}
         <div class="p-4">
             <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm mb-3">
                 <img src="https://ui-avatars.com/api/?name=<! urlencode(Auth::user()->name) >&background=f3f4f6&color=ef4444" class="w-10 h-10 rounded-full">
@@ -116,12 +116,12 @@
                     </svg>
                 </button>
 
-                {{ Greetings }}
+                {{-- Greetings --}}
                 <div class="pt-1">
                     <h2 class="text-base lg:text-lg font-bold text-gray-900 flex items-center gap-1">
                         こんにちわ, 
-                        <span class="hidden sm:inline"><! Auth::user()->name >! 👋</span>
-                        <span class="sm:hidden"><! substr(Auth::user()->name, 0, 10) >! 👋</span>
+                        <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
+                        <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
                     </h2>
                     <p id="realtime-clock" class="text-xs text-gray-500 font-medium mt-0.5">Memuat waktu...</p>
                 </div>
@@ -145,7 +145,7 @@
                     <div class="relative z-10 bg-white rounded-2xl p-4 sm:p-6 text-center shadow-lg w-full sm:w-64 flex-shrink-0">
                         <h3 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-widest mb-1 leading-tight">
                             @isset($dailyWord->kanji)
-                                <! $dailyWord->kanji >
+                                {{ $dailyWord->kanji }}
                             @else
                                 <span class="text-xs text-gray-400 font-medium">[Data: dailyWord.kanji]</span>
                             @endisset
@@ -153,20 +153,20 @@
 
                         <p class="text-xs sm:text-sm font-bold text-gray-800">
                             @isset($dailyWord->romaji)
-                                <! $dailyWord->romaji >
+                                {{ $dailyWord->romaji }}
                             @else
                                 <span class="text-[9px] text-gray-400 font-medium">[Data: dailyWord.romaji]</span>
                             @endisset
                         </p>
                         <div class="text-[9px] sm:text-[10px] text-gray-500 mt-2 font-medium leading-relaxed">
                             @isset($dailyWord->meaning_en)
-                                <! $dailyWord->meaning_en >
+                                {{ $dailyWord->meaning_en }}
                             @else
                                 <span class="text-[8px] text-gray-400 block">[Data: dailyWord.meaning_en]</span>
                             @endisset
 
                             @isset($dailyWord->meaning_id)
-                                <! $dailyWord->meaning_id >
+                                {{ $dailyWord->meaning_id }}
                             @else
                                 <span class="text-[8px] text-gray-400 block">[Data: dailyWord.meaning_id]</span>
                             @endisset
@@ -176,11 +176,11 @@
 
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 py-4">
 
-                    {{ Card 1: Total Siswa Aktif }}
+                    {{-- Card 1: Total Siswa Aktif --}}
                     <div class="bg-white border border-rose-200 rounded-2xl px-4 py-4 flex items-start justify-between gap-2">
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Total Siswa Aktif</p>
-                            <p class="text-2xl font-semibold text-gray-800">{{<! $totalSiswa >}}13</p>
+                            <p class="text-2xl font-semibold text-gray-800">{{--<! $totalSiswa >--}}13</p>
                         </div>
                         <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-rose-50 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="#be123c">
@@ -189,11 +189,11 @@
                         </div>
                     </div>
                 
-                    {{ Card 2: Tugas Perlu Dinilai }}
+                    {{-- Card 2: Tugas Perlu Dinilai --}}
                     <div class="bg-white border border-rose-200 rounded-2xl px-4 py-4 flex items-start justify-between gap-2">
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Tugas Perlu Dinilai</p>
-                            <p class="text-2xl font-semibold text-gray-800">{{<! $TugasDinilai >}}13</p>
+                            <p class="text-2xl font-semibold text-gray-800">{{--<! $TugasDinilai >--}}13</p>
                         </div>
                         <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-rose-50 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="#be123c">
@@ -202,11 +202,11 @@
                         </div>
                     </div>
                 
-                    {{ Card 3: Rata-Rata Skor }}
+                    {{-- Card 3: Rata-Rata Skor --}}
                     <div class="bg-white border border-rose-200 rounded-2xl px-4 py-4 flex items-start justify-between gap-2">
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Rata - Rata Skor</p>
-                            <p class="text-2xl font-semibold text-gray-800">{{<! number_format($rataRataSkor, 1) >}}13</p>
+                            <p class="text-2xl font-semibold text-gray-800">{{--<! number_format($rataRataSkor, 1) >--}}13</p>
                         </div>
                         <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-rose-50 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="#be123c">
@@ -215,12 +215,12 @@
                         </div>
                     </div>
                 
-                    {{Card 4: Jadwal Terdekat}} 
+                    {{--Card 4: Jadwal Terdekat--}} 
                     <div class="bg-white border border-rose-200 rounded-2xl px-4 py-4 flex items-start justify-between gap-2">
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Jadwal Terdekat</p>
-                            <p class="text-sm font-semibold text-gray-800">{{<! $jadwalNama >}}JLPT N3 Prep</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{<! $jadwalLokasi >}}Ruang A, 14.30</p>
+                            <p class="text-sm font-semibold text-gray-800">{{--<! $jadwalNama >--}}JLPT N3 Prep</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{--<! $jadwalLokasi >--}}Ruang A, 14.30</p>
                         </div>
                         <div class="w-9 h-9 flex-shrink-0 rounded-lg bg-rose-50 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="#be123c">
@@ -232,7 +232,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    {{ ===== KIRI: Tugas Menunggu Penilaian ===== }}
+                    {{-- ===== KIRI: Tugas Menunggu Penilaian ===== --}}
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-base font-semibold text-gray-800">Tugas Menunggu Penilaian</h2>
@@ -240,20 +240,20 @@
                         </div>
                     
                         <div class="flex flex-col gap-3">
-                            @foreach ($tugasMenunggu as $tugas)
+                            {{--@foreach ($tugasMenunggu as $tugas)--}}
                             <div class="bg-white border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3">
-                                {{ Avatar }}
+                                {{-- Avatar --}}
                                 <img src="<! $tugas->siswa->foto ?? asset('images/default-avatar.png') >"
                                      alt="<! $tugas->siswa->nama >"
                                      class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                             
-                                {{ Info }}
+                                {{-- Info --}}
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-gray-800 truncate"><! $tugas->siswa->nama ></p>
                                     <p class="text-xs text-gray-500 truncate"><! $tugas->judul ></p>
                                 </div>
                             
-                                {{ Waktu }}
+                                {{-- Waktu --}}
                                 <div class="text-right flex-shrink-0 mr-2">
                                     <p class="text-xs text-gray-400">Dikirim</p>
                                     <p class="text-sm font-semibold text-gray-800">
@@ -261,17 +261,17 @@
                                     </p>
                                 </div>
                             
-                                {{ Tombol }}
+                                {{-- Tombol --}}
                                 <a href="<! route('tugas.nilai', $tugas->id) >"
                                    class="flex-shrink-0 bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
                                     Nilai Sekarang
                                 </a>
                             </div>
-                            @endforeach
+                            {{--@endforeach==}}
                         </div>
                     </div>
                 
-                    {{ ===== KANAN: Jadwal Hari Ini ===== }}
+                    {{-- ===== KANAN: Jadwal Hari Ini ===== --}}
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-base font-semibold text-gray-800">Jadwal Hari Ini</h2>
@@ -280,33 +280,33 @@
                             </span>
                         </div>
                     
-                        {{ Timeline }}
+                        {{-- Timeline --}}
                         <div class="relative pl-6">
-                            {{ Garis vertikal }}
+                            {{-- Garis vertikal --}}
                             <div class="absolute left-[7px] top-3 bottom-3 w-0.5 bg-rose-200"></div>
                         
                             <div class="flex flex-col gap-3">
-                                @foreach ($jadwalHariIni as $jadwal)
+                                {{--@foreach ($jadwalHariIni as $jadwal)--}}
                                 <div class="relative">
-                                    {{ Dot }}
-                                    @if ($jadwal->status === 'berlangsung')
+                                    {{-- Dot --}}
+                                    {{--@if ($jadwal->status === 'berlangsung')--}}
                                         <div class="absolute -left-[19px] top-3 w-3.5 h-3.5 rounded-full bg-red-600 ring-2 ring-white ring-offset-1 ring-offset-red-600"></div>
-                                    @else
+                                    {{--@else--}}
                                         <div class="absolute -left-[19px] top-3 w-3.5 h-3.5 rounded-full bg-rose-300 ring-2 ring-white"></div>
-                                    @endif
+                                    {{--@endif--}}
                                 
-                                    {{ Card }}
+                                    {{-- Card --}}
                                     <div class="bg-white border border-gray-200 rounded-xl px-4 py-3">
-                                        {{ Badge status }}
-                                        @if ($jadwal->status === 'berlangsung')
+                                        {{-- Badge status --}}
+                                        {{--@if ($jadwal->status === 'berlangsung')--}}
                                             <span class="text-[10px] font-bold uppercase tracking-wide bg-red-50 text-red-600 px-2 py-0.5 rounded">
                                                 Sedang Berlangsung
                                             </span>
-                                        @else
+                                        {{--@else--}}
                                             <span class="text-[10px] font-bold uppercase tracking-wide bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded">
                                                 Akan Datang
                                             </span>
-                                        @endif
+                                        {{--@endif--}}
                                         
                                         <p class="text-sm font-bold text-gray-800 mt-2 mb-1.5"><! $jadwal->nama ></p>
                                         
@@ -325,7 +325,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endforeach
+                                {{--@endforeach--}}
                             </div>
                         </div>
                     </div>
