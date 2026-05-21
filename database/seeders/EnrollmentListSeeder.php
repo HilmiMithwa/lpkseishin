@@ -25,7 +25,7 @@ class EnrollmentListSeeder extends Seeder
 
         // Masukkan data hanya jika User dan Mapel ditemukan
         if ($hilmi && $mapelN4) {
-            DB::table('enrollment_list')->insert([
+            DB::table('enrollment_access')->insert([
                 'id_user' => $hilmi->id,
                 'id_mapel' => $mapelN4->id_mapel,
                 'created_at' => now(),
@@ -34,7 +34,7 @@ class EnrollmentListSeeder extends Seeder
         }
 
         if ($yussar && $mapelN4 && $mapelN3) {
-            DB::table('enrollment_list')->insert([
+            DB::table('enrollment_access')->insert([
                 [
                     'id_user' => $yussar->id,
                     'id_mapel' => $mapelN4->id_mapel,

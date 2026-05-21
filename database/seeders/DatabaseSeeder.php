@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
         RoleSeeder::class,
         UserSeeder::class,
         MapelSeeder::class,
-        //RpsSeeder::class,
+        RpsSeeder::class,
         ModulSeeder::class,
-        //TugasSeeder::class,
-        //EnrollmentListSeeder::class,
-        //JadwalSeeder::class,
+        TugasSeeder::class,
+        EnrollmentListSeeder::class,
+        JadwalSeeder::class,
         DailyWordSeeder::class
     ]);
 

@@ -174,7 +174,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
-                    <div class="col-span-1 rounded-2xl lg:rounded-3xl overflow-hidden relative group min-h-[240px] sm:min-h-[260px]">
+                    <div class="col-span-1 rounded-2xl lg:rounded-3xl overflow-hidden relative group min-h-[240px] sm:min-  h-[260px]">
                         <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                         <div class="relative z-10 p-4 sm:p-6 flex flex-col h-full justify-between">
