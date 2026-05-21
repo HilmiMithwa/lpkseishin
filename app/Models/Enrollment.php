@@ -16,7 +16,7 @@ class Enrollment extends Model
         'gross_amount',
         'snap_token',
         'jenis_program',
-        'meotde_pembayaran',
+        'metode_pembayaran',
         'status_pembayaran',
         'tanggal_daftar'
     ];

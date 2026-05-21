@@ -32,6 +32,33 @@ class JadwalSeeder extends Seeder
                     'id_guru' => $guru->id,
                     'created_at' => now(),
                     'updated_at' => now(),
+                ],
+                [
+                    'judul_pertemuan' => 'Kelas Intensif N5 - Hiragana',
+                    'start_time' => '08:00:00',
+                    'end_time' => '10:00:00',
+                    'lokasi_pertemuan' => 'Ruang Kelas 101',
+                    'id_guru' => $guru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'judul_pertemuan' => 'Sesi Tanya Jawab N3',
+                    'start_time' => '14:00:00',
+                    'end_time' => '16:00:00',
+                    'lokasi_pertemuan' => 'Google Meet B',
+                    'id_guru' => $guru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'judul_pertemuan' => 'Simulasi Ujian JLPT N4',
+                    'start_time' => '09:00:00',
+                    'end_time' => '12:00:00',
+                    'lokasi_pertemuan' => 'Zoom Meeting C',
+                    'id_guru' => $guru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]
             ]);
         }

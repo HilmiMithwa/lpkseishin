@@ -23,7 +23,9 @@ class ModulSeeder extends Seeder
             $this->createModulData($mapelN5->id_mapel, [
                 'Dasar Hiragana & Katakana',
                 'Partikel Dasar (Wa, Ni, De)',
-                'Kata Kerja Bentuk Masu'
+                'Kata Kerja Bentuk Masu','Kosakata Sehari-hari (N5)',
+                'Angka, Waktu, dan Tanggal',
+                'Ekspresi Salam dan Perkenalan'
             ], 'N5');
         }
 
@@ -31,14 +33,20 @@ class ModulSeeder extends Seeder
         if ($mapelN4) {
             $this->createModulData($mapelN4->id_mapel, [
                 'Bentuk Te (Menghubungkan Kalimat)',
-                'Keigo Dasar dalam Pekerjaan'
+                'Keigo Dasar dalam Pekerjaan',
+                'Kata Kerja Potensial (Bisa/Tidak Bisa)',
+                'Ekspresi Pengandaian (Kalau / Jika)',
+                'Kosakata Tempat Kerja'
             ], 'N4');
         }
 
         // Seed Modul untuk N3
         if ($mapelN3) {
             $this->createModulData($mapelN3->id_mapel, [
-                'Pemahaman Dokkai Level Menengah'
+                'Pemahaman Dokkai Level Menengah',
+                'Tata Bahasa Formal vs Kasual',
+                'Membaca Artikel Berita Pendek',
+                'Ungkapan Perasaan dan Opini'
             ], 'N3');
         }
     }
