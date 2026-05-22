@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\ModulController;
+use App\Http\Controllers\Student\BahanAjarController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -55,10 +56,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
 
     // rute detail materi
-    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [StudentController::class, 'showMaterial'])->name('materials.show');
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [BahanAjarController::class, 'showMaterial'])->name('materials.show');
 
     //mark materi sebagai selesai (update progress)
-    Route::post('/students/materials/{id_materi}/complete', [StudentController::class, 'completeMaterial'])->name('materials.complete');
+    Route::post('/students/materials/{id_materi}/complete', [BahanAjarController::class, 'completeMaterial'])->name('materials.complete');
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
 

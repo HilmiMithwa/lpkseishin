@@ -115,7 +115,7 @@
                     <div class="lg:col-span-8 space-y-6">
                         
                         <h1 class="text-2xl sm:text-3xl font-black text-[#222222] tracking-tight">
-                            {{ $modul->nama_modul }}
+                            {{ $currentModul->nama_modul }}
                         </h1>
 
                         <div class="bg-white border border-gray-100 rounded-[24px] p-6 shadow-sm">

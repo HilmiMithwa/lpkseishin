@@ -63,91 +63,37 @@ class StudentController extends Controller
         return view('students.class-detail', compact('subject', 'enrollment'));
     }
 
-    public function showModule($id_mapel, $id_modul)
+    
+    public function showTask($id_mapel, $id_modul, $id_tugas)
     {
-        // 1. Ambil data modul dasarnya berdasarkan ID modul yang benar
-        $currentModul = Modul::findOrFail($id_modul);
+        // 1. Ambil data tugas berdasarkan ID Tugas dan ID Modul (menjaga hirarki)
+        $task = DB::table('tugas')
+            ->where('id_tugas', $id_tugas)
+            ->where('id_modul', $id_modul)
+            ->first();
 
-        // 2. VALIDASI SILANG: Pastikan modul ini memang bagian dari mata pelajaran di URL
-        if ($currentModul->id_mapel != $id_mapel) {
-            abort(404, 'Modul tidak ditemukan di dalam mata pelajaran ini.');
+        if (!$task) {
+            abort(404, 'Tugas tidak ditemukan di dalam modul ini');
         }
 
-        // 3. BARIKADE KEAMANAN (IDOR): Cek kontrak belajar siswa pada kelas ini
-        /** @var User $user */
-        $user = Auth::user();
-        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
+        // 2. Ambil Modul terkait
+        $currentModul = DB::table('modul')->where('id_modul', $id_modul)->first();
 
-        if (!$isEnrolled) {
-            abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');
-        }
+        // 3. Ambil Mata Pelajaran terkait
+        $subject = DB::table('mapel')->where('id_mapel', $id_mapel)->first();
 
-        try {
-            // 4. Ambil data bahan_ajar dari database
-            $currentModul->materials = DB::table('bahan_ajar')
-                ->where('id_modul', $id_modul)
-                ->get();
-                
-            // 5. AMBIL DATA TUGAS ASLI DB + JOIN STATUS PENGIRIMAN SISWA YANG LOGIN
-            $currentModul->tasks = DB::table('tugas')
-                ->leftJoin('pengiriman_tugas', function($join) {
-                    $join->on('tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
-                         ->where('pengiriman_tugas.id_user', '=', Auth::id());
-                })
-                ->where('tugas.id_modul', $id_modul)
-                ->select('tugas.*', 'pengiriman_tugas.status as submission_status')
-                ->get();
-                
-        } catch (\Exception $e) {
-            // Fallback jika terjadi kendala struktural database
-            $currentModul->materials = collect([]);
-            $currentModul->tasks = collect([]);
-        }
+        //Cari nama asli guru ke tabel users menggunakan ID angka tadi
+        $guru = DB::table('users')->where('id', $subject->id_guru)->first();
 
-        // 6. Memaksa dummy data Evaluation muncul untuk mockup layout figma
-        $currentModul->evaluation = (object)[
-            'id' => 1,
-            'title' => 'N4 and Kanji Evaluation',
-            'type' => 'Test',
-            'date' => '21 May 2026',
-            'duration' => 60
-        ];
+        // 4. Ambil status pengumpulan tugas milik siswa yang sedang login
+        $submission = DB::table('pengiriman_tugas')
+            ->where('id_tugas', $id_tugas)
+            ->where('id_user', Auth::id())
+            ->first();
 
-        // Ambil data mapel untuk navigasi sidebar kanan
-        $subject = Mapel::with('modul')->findOrFail($id_mapel);
-
-        return view('students.module-detail', compact('currentModul', 'subject'));
+        // 5. Lempar semua data beserta ID parameter untuk form action di Blade
+        return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru'));
     }
-        public function showTask($id_mapel, $id_modul, $id_tugas)
-        {
-            // 1. Ambil data tugas berdasarkan ID Tugas dan ID Modul (menjaga hirarki)
-            $task = DB::table('tugas')
-                ->where('id_tugas', $id_tugas)
-                ->where('id_modul', $id_modul)
-                ->first();
-
-            if (!$task) {
-                abort(404, 'Tugas tidak ditemukan di dalam modul ini');
-            }
-
-            // 2. Ambil Modul terkait
-            $currentModul = DB::table('modul')->where('id_modul', $id_modul)->first();
-
-            // 3. Ambil Mata Pelajaran terkait
-            $subject = DB::table('mapel')->where('id_mapel', $id_mapel)->first();
-
-            //Cari nama asli guru ke tabel users menggunakan ID angka tadi
-            $guru = DB::table('users')->where('id', $subject->id_guru)->first();
-
-            // 4. Ambil status pengumpulan tugas milik siswa yang sedang login
-            $submission = DB::table('pengiriman_tugas')
-                ->where('id_tugas', $id_tugas)
-                ->where('id_user', Auth::id())
-                ->first();
-
-            // 5. Lempar semua data beserta ID parameter untuk form action di Blade
-            return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru'));
-        }
     public function getVocabulary()
     {
         $response = Http::get('https://jlpt-vocab-api.vercel.app/api/words/all');
@@ -191,7 +137,7 @@ class StudentController extends Controller
         // 1. Ambil data induk untuk kebutuhan Breadcrumbs & Navigasi Sidebar
         $subject = Mapel::find($id_mapel);
         $currentModul = Modul::find($id_modul);
-        
+
         // 2. Cari data materi di database (mengembalikan null jika tidak ada, agar ditangani Blade)
         $material = null;
         try {
@@ -221,45 +167,44 @@ class StudentController extends Controller
                 ->first();
 
             // Susun rute URL jika record materi pendukungnya ditemukan
-            $previousMaterialUrl = $previousMaterial 
-                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $previousMaterial->id_bahan_ajar]) 
+            $previousMaterialUrl = $previousMaterial
+                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $previousMaterial->id_bahan_ajar])
                 : null;
 
-            $nextMaterialUrl = $nextMaterial 
-                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $nextMaterial->id_bahan_ajar]) 
+            $nextMaterialUrl = $nextMaterial
+                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $nextMaterial->id_bahan_ajar])
                 : null;
         }
 
         // 4. Kirim data ke View
         return view('students.material-detail', compact(
-            'subject', 
-            'currentModul', 
-            'material', 
-            'previousMaterialUrl', 
+            'subject',
+            'currentModul',
+            'material',
+            'previousMaterialUrl',
             'nextMaterialUrl'
         ));
     }
 
-    
+
 
     // Mark materi sebagai selesai (update progress)
     public function completeMaterial($id_materi)
     {
         try {
-                // 1. Cari data materi berdasarkan Primary Key aslinya
-                $material = BahanAjar::find($id_materi);
+            // 1. Cari data materi berdasarkan Primary Key aslinya
+            $material = BahanAjar::find($id_materi);
 
-                if ($material) {
-                    // 2. Ubah kolom is_complete menjadi 1 (true / selesai)
-                    $material->is_complete = 1;
-                    $material->save();
-                }
-            } catch (\Throwable $e) {
-                // Jika database belum siap/error, tetap biarkan halaman melakukan refresh tanpa crash
+            if ($material) {
+                // 2. Ubah kolom is_complete menjadi 1 (true / selesai)
+                $material->is_complete = 1;
+                $material->save();
             }
+        } catch (\Throwable $e) {
+            // Jika database belum siap/error, tetap biarkan halaman melakukan refresh tanpa crash
+        }
 
-            // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate
-            return back();
+        // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate
+        return back();
     }
-
 }
