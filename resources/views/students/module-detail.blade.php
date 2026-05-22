@@ -121,7 +121,7 @@
                         <div class="bg-white border border-gray-100 rounded-[24px] p-6 shadow-sm">
                             <h3 class="text-sm font-bold text-[#222222] mb-3">Module Description</h3>
                             <p class="text-xs sm:text-sm text-[#444444] leading-relaxed font-medium">
-                                {{ $currentModul->deskripsi ?? '[Data: modul.deskripsi]' }}
+                                {{ $currentModul->module_description ?? '[Data: modul.deskripsi]' }}
                             </p>
                         </div>
 
@@ -214,9 +214,16 @@
                             <div class="flex items-center gap-2 border-l-2 border-[#DB2A2A] pl-2">
                                 <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Task</h3>
                             </div>
-
                             <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm">
                                 @forelse($currentModul->tasks ?? [] as $task)
+                                    @php
+                                        // Menentukan teks status secara dinamis berdasarkan data tabel pengiriman_tugas
+                                        $displayStatus = 'Incompleted';
+                                        if (!empty($task->submission_status)) {
+                                            $displayStatus = $task->submission_status === 'terlambat' ? 'Submitted Late' : 'Completed';
+                                        }
+                                    @endphp
+                                    
                                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-white border border-gray-100 rounded-[24px] shadow-sm mb-4 last:mb-0 gap-4 relative">
                                         
                                         <div class="flex items-center gap-4 min-w-0">
@@ -227,32 +234,30 @@
                                                 </svg>
                                             </div>
                                             
-                                            <div class="space-y-1.5 min-w-0">
+                                            <div class="space-y-1.5 min-w-0 text-left">
                                                 <h4 class="text-base font-bold text-[#222222] truncate tracking-tight">
-                                                    {{ $task->title }}
+                                                    {{ $task->judul_tugas }}
                                                 </h4>
                                                 <span class="inline-block bg-[#FFF3CD] text-[#856404] text-[11px] font-bold px-3 py-1 rounded-lg">
-                                                    Due: {{ $task->due_date }}
+                                                    Due: {{ \Carbon\Carbon::parse($task->waktu_pengumpulan)->format('d M Y, H:i') }}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-col items-end justify-between sm:h-20 w-full sm:w-auto self-stretch flex-shrink-0 gap-2">
-                                            <span class="text-xs font-semibold text-gray-500 tracking-wide">
-                                                {{ $task->status ?? 'Incompleted' }}
+                                        <div class="flex flex-col items-end justify-between sm:h-20 w-full sm:w-auto self-stretch flex-shrink-0 gap-2 text-right">
+                                            <span class="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+                                                {{ $displayStatus }}
                                             </span>
                                             
-                                            <a href="#" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition duration-200 shadow-sm w-full sm:w-auto justify-center">
+                                            <a href="{{ route('tasks.show', ['id' => $task->id_tugas]) }}" 
+                                                class="bg-[#DB2A2A] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition duration-200 shadow-sm w-full sm:w-auto justify-center">
                                                 <span>Open Task</span>
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                                                     <path d="M5 12h14M12 5l7 7-7 7" />
-                                                    <path d="M19 12a7 7 0 0 1-7 7" class="opacity-20" />
                                                 </svg>
                                             </a>
-                                        </div>
-
-                                    </div>
-                                @empty
+                                        </div> </div> @empty
+                                    {{-- Tampilan Placeholder Kosong --}}
                                     <div class="text-center py-12 flex flex-col items-center justify-center">
                                         <div class="w-16 h-16 bg-[#FFDBDB] rounded-full flex items-center justify-center text-[#DB2A2A] mb-4 shadow-sm">
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -265,9 +270,8 @@
                                     </div>
                                 @endforelse
                             </div>
-                        </div>
-
-                    </div>
+                            </div>
+                            </div>
 
                     <div class="lg:col-span-4">
                         <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm sticky top-6">

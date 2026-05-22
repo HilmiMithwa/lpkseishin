@@ -64,71 +64,81 @@ class StudentController extends Controller
     }
 
     public function showModule($id_mapel, $id_modul)
-        {
-            // 1. Ambil data modul dasarnya berdasarkan ID modul yang benar
-            $currentModul = Modul::findOrFail($id_modul);
+    {
+        // 1. Ambil data modul dasarnya berdasarkan ID modul yang benar
+        $currentModul = Modul::findOrFail($id_modul);
 
-            // 2. VALIDASI SILANG: Pastikan modul ini memang bagian dari mata pelajaran di URL
-            if ($currentModul->id_mapel != $id_mapel) {
-                abort(404, 'Modul tidak ditemukan di dalam mata pelajaran ini.');
-            }
-
-            // 3. BARIKADE KEAMANAN (IDOR): Cek kontrak belajar siswa pada kelas ini
-            /** @var User $user */
-            $user = Auth::user();
-            $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
-
-            if (!$isEnrolled) {
-                abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');
-            }
-
-            try {
-                // Ambil data bahan_ajar langsung dari table menggunakan DB builder agar aman dari error Model missing
-                $currentModul->materials = DB::table('bahan_ajar')
-                    ->where('id_modul', $id_modul)
-                    ->get();
-                    
-            } catch (\Exception $e) {
-                // Fallback kosong jika terjadi masalah structural pada database
-                $currentModul->materials = collect([]);
-            }
-
-            // Ambil data mapel menggunakan $id_mapel dari URL untuk navigasi sidebar kanan
-            $subject = Mapel::with('modul')->findOrFail($id_mapel);
-
-            // ====================================================================
-            // BARKODE MOCK DATA (DUMMY) UNTUK TESTING LAYOUT FIGMA
-            // ====================================================================
-            
-            // 2. Memaksa isi Evaluation muncul
-            $currentModul->evaluation = (object)[
-                'id' => 1,
-                'title' => 'N4 and Kanji Evaluation',
-                'type' => 'Test',
-                'date' => '21 May 2026',
-                'duration' => 60
-            ];
-
-            // 3. Memaksa isi Task muncul (2 baris tugas)
-            $currentModul->tasks = collect([
-                (object)[
-                    'id' => 1,
-                    'title' => 'N4 Exercise',
-                    'due_date' => '8 Mei 2026, 23:59',
-                    'status' => 'Completed'
-                ],
-                (object)[
-                    'id' => 2,
-                    'title' => 'Kanji Writing Exercise',
-                    'due_date' => '9 Mei 2026, 23:59',
-                    'status' => 'Incompleted'
-                ]
-            ]);
-            // ====================================================================
-
-            return view('students.module-detail', compact('currentModul', 'subject'));
+        // 2. VALIDASI SILANG: Pastikan modul ini memang bagian dari mata pelajaran di URL
+        if ($currentModul->id_mapel != $id_mapel) {
+            abort(404, 'Modul tidak ditemukan di dalam mata pelajaran ini.');
         }
 
+        // 3. BARIKADE KEAMANAN (IDOR): Cek kontrak belajar siswa pada kelas ini
+        /** @var User $user */
+        $user = Auth::user();
+        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
+
+        if (!$isEnrolled) {
+            abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');
+        }
+
+        try {
+            // 4. Ambil data bahan_ajar dari database
+            $currentModul->materials = DB::table('bahan_ajar')
+                ->where('id_modul', $id_modul)
+                ->get();
+                
+            // 5. AMBIL DATA TUGAS ASLI DB + JOIN STATUS PENGIRIMAN SISWA YANG LOGIN
+            $currentModul->tasks = DB::table('tugas')
+                ->leftJoin('pengiriman_tugas', function($join) {
+                    $join->on('tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
+                         ->where('pengiriman_tugas.id_user', '=', Auth::id());
+                })
+                ->where('tugas.id_modul', $id_modul)
+                ->select('tugas.*', 'pengiriman_tugas.status as submission_status')
+                ->get();
+                
+        } catch (\Exception $e) {
+            // Fallback jika terjadi kendala struktural database
+            $currentModul->materials = collect([]);
+            $currentModul->tasks = collect([]);
+        }
+
+        // 6. Memaksa dummy data Evaluation muncul untuk mockup layout figma
+        $currentModul->evaluation = (object)[
+            'id' => 1,
+            'title' => 'N4 and Kanji Evaluation',
+            'type' => 'Test',
+            'date' => '21 May 2026',
+            'duration' => 60
+        ];
+
+        // Ambil data mapel untuk navigasi sidebar kanan
+        $subject = Mapel::with('modul')->findOrFail($id_mapel);
+
+        return view('students.module-detail', compact('currentModul', 'subject'));
+    }
+    public function showTask($id)
+    {
+        // 1. Ambil data tugas spesifik berdasarkan table 'tugas' asli di DB
+        $task = DB::table('tugas')->where('id_tugas', $id)->first();
+        if (!$task) {
+            abort(404, 'Data tugas tidak ditemukan.');
+        }
+
+        // 2. Backtrack otomatis mencari Modul & Mapel terkait induknya menggunakan FK id_modul
+        $currentModul = Modul::findOrFail($task->id_modul);
+        $subject = Mapel::findOrFail($currentModul->id_mapel);
+
+        // 3. Ambil data pengiriman tugas milik siswa yang sedang login (jika ada)
+        $submission = DB::table('pengiriman_tugas')
+            ->where('id_tugas', $id)
+            ->where('id_user', Auth::id())
+            ->first();
+
+        // 4. Kirim data terikat menuju view task-detail
+        return view('students.task-detail', compact('subject', 'currentModul', 'task', 'submission'));
+    }
     public function getVocabulary()
     {
         $response = Http::get('https://jlpt-vocab-api.vercel.app/api/words/all');
