@@ -53,7 +53,26 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     //RUTE DUMMY INI UNTUK TESTING VISUAL
     Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
-    Route::get('/students/tasks/{id}', function() { return 'Rute Tugas'; })->name('tasks.show');
+
+    // rute detail materi
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [StudentController::class, 'showMaterial'])->name('materials.show');
+
+    //mark materi sebagai selesai (update progress)
+    Route::post('/students/materials/{id_materi}/complete', [StudentController::class, 'completeMaterial'])->name('materials.complete');
+
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
+
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', function($id_mapel, $id_modul, $id_tugas) {
+        session(['mock_uploaded_task_' . $id_tugas => true]);
+        session()->save(); // Kunci session ke dalam memori browser
+        return back();
+    })->name('tasks.submit');
+
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', function($id_mapel, $id_modul, $id_tugas) {
+        session()->forget('mock_uploaded_task_' . $id_tugas);
+        session()->save(); // Kunci penghapusan session
+        return back();
+    })->name('tasks.cancel');
 });
 
 //Dashboard Guru
@@ -67,6 +86,6 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
 //buat ngetes API
 Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
-
 require __DIR__.'/auth.php';
+
 
