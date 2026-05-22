@@ -150,7 +150,10 @@
                                     <button type="submit" class="px-4 py-2 border border-[#DB2A2A] text-[#DB2A2A] text-xs font-bold rounded-xl hover:bg-red-50 transition duration-200">Mark as Complete</button>
                                 </form>
                                 <div class="w-8 h-8 flex items-center justify-center text-gray-300">
-                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                                   <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" stroke-dasharray="4 4" class="animate-[spin_20s_linear_infinite] origin-center" />
+                                        <path d="M8.5 12.5l2.5 2.5l5-5" stroke-width="3" />
+                                    </svg>
                                 </div>
                             @endif
                         </div>
@@ -256,6 +259,51 @@
                                 <span class="material-symbols-outlined text-2xl select-none">download</span>
                                 Download
                             </a>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if(!empty($material->practical_task_title))
+                    <div class="space-y-3 mb-6 text-left">
+                        <h3 class="text-sm font-bold text-[#222222] uppercase tracking-wider">Practical Task</h3>
+                        
+                        <div class="max-w-xl flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl shadow-sm gap-4">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#DB2A2A] flex-shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h4"></path>
+                                    </svg>
+                                </div>
+                                
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-bold text-[#222222] truncate tracking-tight">
+                                        {{ $material->practical_task_title }}
+                                    </h4>
+                                    @if(!empty($material->practical_task_due_date))
+                                    <div class="mt-1.5">
+                                        <span class="inline-block bg-[#FFF3CD] text-[#856404] text-[10px] font-bold px-2.5 py-0.5 rounded-lg">
+                                            Due: {{ $material->practical_task_due_date }}
+                                        </span>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                                @php
+                                    $isTaskDone = strtolower($material->practical_task_status ?? '') === 'completed';
+                                @endphp
+                                <span class="text-[10px] font-bold {{ $isTaskDone ? 'text-green-500' : 'text-gray-400' }} uppercase tracking-wide">
+                                    {{ $material->practical_task_status ?? 'Incompleted' }}
+                                </span>
+                                <a href="{{ $material->practical_task_url ?? '#' }}" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-[11px] font-bold py-2 px-4 rounded-xl flex items-center gap-1.5 transition duration-200 shadow-sm">
+                                    <span>Open Task</span>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     @endif
