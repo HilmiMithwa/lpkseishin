@@ -136,6 +136,9 @@ class StudentController extends Controller
             // 3. Ambil Mata Pelajaran terkait
             $subject = DB::table('mapel')->where('id_mapel', $id_mapel)->first();
 
+            //Cari nama asli guru ke tabel users menggunakan ID angka tadi
+            $guru = DB::table('users')->where('id', $subject->id_guru)->first();
+
             // 4. Ambil status pengumpulan tugas milik siswa yang sedang login
             $submission = DB::table('pengiriman_tugas')
                 ->where('id_tugas', $id_tugas)
@@ -143,7 +146,7 @@ class StudentController extends Controller
                 ->first();
 
             // 5. Lempar semua data beserta ID parameter untuk form action di Blade
-            return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas'));
+            return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru'));
         }
     public function getVocabulary()
     {

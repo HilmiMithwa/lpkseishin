@@ -58,6 +58,20 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     //mark materi sebagai selesai (update progress)
     Route::post('/students/materials/{id_materi}/complete', [StudentController::class, 'completeMaterial'])->name('materials.complete');
+
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
+
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', function($id_mapel, $id_modul, $id_tugas) {
+        session(['mock_uploaded_task_' . $id_tugas => true]);
+        session()->save(); // Kunci session ke dalam memori browser
+        return back();
+    })->name('tasks.submit');
+
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', function($id_mapel, $id_modul, $id_tugas) {
+        session()->forget('mock_uploaded_task_' . $id_tugas);
+        session()->save(); // Kunci penghapusan session
+        return back();
+    })->name('tasks.cancel');
 });
 
 //Dashboard Guru
@@ -70,16 +84,6 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
 
 //buat ngetes API
 Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
-
-
-// Tugas detail
-Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
-
-// Aksi tugas (submit & cancel) 
-Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', [StudentController::class, 'submitTask'])->name('tasks.submit');
-Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [StudentController::class, 'cancelTask'])->name('tasks.cancel');
-
-
 
 require __DIR__.'/auth.php';
 
