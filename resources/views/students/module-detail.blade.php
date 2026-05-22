@@ -115,7 +115,7 @@
                     <div class="lg:col-span-8 space-y-6">
                         
                         <h1 class="text-2xl sm:text-3xl font-black text-[#222222] tracking-tight">
-                            {{ $currentModul->nama_modul }}
+                            {{ $modul->nama_modul }}
                         </h1>
 
                         <div class="bg-white border border-gray-100 rounded-[24px] p-6 shadow-sm">
@@ -281,12 +281,12 @@
                                 @foreach($subject->modul as $index => $modul)
                                     @php
                                         // Checker active state menyesuaikan ID modul yang sedang dibuka
-                                        $isActive = $modul->id_modul === $currentModul->id_modul;
+                                        $isActive = $modul->id_modul === $modul->id_modul;
                                     @endphp
                                     
                                     <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
                                     class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
-                                            {{ $modul->id_modul === $currentModul->id_modul 
+                                            {{ $modul->id_modul === $modul->id_modul 
                                                 ? 'bg-[#DB2A2A] text-white shadow-md' 
                                                 : 'bg-white hover:bg-gray-50 text-[#222222] border border-gray-50' }}">
                                         <span>Module {{ $index + 1 }}</span>

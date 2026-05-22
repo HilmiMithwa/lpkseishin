@@ -6,6 +6,7 @@ use App\Http\Controllers\SesiController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\ModulController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -48,7 +49,7 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     
     Route::get('/students/subjects/{id_mapel}', [StudentController::class, 'show'])->name('subjects.show');
 
-    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}', [StudentController::class, 'showModule'])->name('modules.show');
+    Route::get('/students/subjects/{id_mapel}/modules/{id_modul}', [ModulController::class, 'showModule'])->name('modules.show');
 
     //RUTE DUMMY INI UNTUK TESTING VISUAL
     Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
