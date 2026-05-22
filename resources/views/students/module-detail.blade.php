@@ -249,7 +249,7 @@
                                                 {{ $displayStatus }}
                                             </span>
                                             
-                                            <a href="{{ route('tasks.show', ['id' => $task->id_tugas]) }}" 
+                                            <a href="{{ route('tasks.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id_tugas' => $task->id_tugas]) }}" 
                                                 class="bg-[#DB2A2A] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition duration-200 shadow-sm w-full sm:w-auto justify-center">
                                                 <span>Open Task</span>
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">

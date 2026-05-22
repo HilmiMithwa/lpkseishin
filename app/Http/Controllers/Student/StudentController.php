@@ -118,27 +118,33 @@ class StudentController extends Controller
 
         return view('students.module-detail', compact('currentModul', 'subject'));
     }
-    public function showTask($id)
-    {
-        // 1. Ambil data tugas spesifik berdasarkan table 'tugas' asli di DB
-        $task = DB::table('tugas')->where('id_tugas', $id)->first();
-        if (!$task) {
-            abort(404, 'Data tugas tidak ditemukan.');
+        public function showTask($id_mapel, $id_modul, $id_tugas)
+        {
+            // 1. Ambil data tugas berdasarkan ID Tugas dan ID Modul (menjaga hirarki)
+            $task = DB::table('tugas')
+                ->where('id_tugas', $id_tugas)
+                ->where('id_modul', $id_modul)
+                ->first();
+
+            if (!$task) {
+                abort(404, 'Tugas tidak ditemukan di dalam modul ini');
+            }
+
+            // 2. Ambil Modul terkait
+            $currentModul = DB::table('modul')->where('id_modul', $id_modul)->first();
+
+            // 3. Ambil Mata Pelajaran terkait
+            $subject = DB::table('mapel')->where('id_mapel', $id_mapel)->first();
+
+            // 4. Ambil status pengumpulan tugas milik siswa yang sedang login
+            $submission = DB::table('pengiriman_tugas')
+                ->where('id_tugas', $id_tugas)
+                ->where('id_user', Auth::id())
+                ->first();
+
+            // 5. Lempar semua data beserta ID parameter untuk form action di Blade
+            return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas'));
         }
-
-        // 2. Backtrack otomatis mencari Modul & Mapel terkait induknya menggunakan FK id_modul
-        $currentModul = Modul::findOrFail($task->id_modul);
-        $subject = Mapel::findOrFail($currentModul->id_mapel);
-
-        // 3. Ambil data pengiriman tugas milik siswa yang sedang login (jika ada)
-        $submission = DB::table('pengiriman_tugas')
-            ->where('id_tugas', $id)
-            ->where('id_user', Auth::id())
-            ->first();
-
-        // 4. Kirim data terikat menuju view task-detail
-        return view('students.task-detail', compact('subject', 'currentModul', 'task', 'submission'));
-    }
     public function getVocabulary()
     {
         $response = Http::get('https://jlpt-vocab-api.vercel.app/api/words/all');

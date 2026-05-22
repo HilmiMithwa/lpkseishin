@@ -52,7 +52,6 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     //RUTE DUMMY INI UNTUK TESTING VISUAL
     Route::get('/students/evaluations/{id}/start', function() { return 'Rute Ujian'; })->name('evaluations.start');
-    Route::get('/students/tasks/{id}', function() { return 'Rute Tugas'; })->name('tasks.show');
 
     // rute detail materi
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [StudentController::class, 'showMaterial'])->name('materials.show');
@@ -73,5 +72,15 @@ Route::middleware(['auth', 'checkRole:guru'])->group(function () {
 Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
 
+// Tugas detail
+Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
+
+// Aksi tugas (submit & cancel) 
+Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', [StudentController::class, 'submitTask'])->name('tasks.submit');
+Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [StudentController::class, 'cancelTask'])->name('tasks.cancel');
+
+
+
 require __DIR__.'/auth.php';
+
 
