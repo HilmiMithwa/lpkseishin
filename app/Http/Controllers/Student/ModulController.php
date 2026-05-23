@@ -9,6 +9,8 @@ use App\Models\Mapel;
 use App\Models\Modul;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
+use App\Models\BahanAjar;
+use App\Models\Tugas;
 
 
 //Nunggu dashboard guru keluar
@@ -44,14 +46,13 @@ class ModulController extends Controller
         }
 
         try {
-            // 4. Ambil data bahan_ajar dari database tes
-            $currentModul->materials = DB::table('bahan_ajar')
-                ->where('id_modul', $id_modul)
-                ->get();
+            // 4. Ambil data bahan_ajar dari database
+            $currentModul->materials = BahanAjar::where('id_modul', $id_modul)->get();
+                
 
             // 5. AMBIL DATA TUGAS ASLI DB + JOIN STATUS PENGIRIMAN SISWA YANG LOGIN
-            $currentModul->tasks = DB::table('tugas')
-                ->leftJoin('pengiriman_tugas', function ($join) {
+            $currentModul->tasks = Tugas::
+                leftJoin('pengiriman_tugas', function ($join) {
                     $join->on('tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
                         ->where('pengiriman_tugas.id_user', '=', Auth::id());
                 })
