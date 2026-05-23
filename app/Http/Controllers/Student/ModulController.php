@@ -44,7 +44,7 @@ class ModulController extends Controller
         }
 
         try {
-            // 4. Ambil data bahan_ajar dari database
+            // 4. Ambil data bahan_ajar dari database tes
             $currentModul->materials = DB::table('bahan_ajar')
                 ->where('id_modul', $id_modul)
                 ->get();
