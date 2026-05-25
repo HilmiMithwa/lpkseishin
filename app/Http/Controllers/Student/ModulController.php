@@ -65,14 +65,7 @@ class ModulController extends Controller
             $currentModul->tasks = collect([]);
         }
 
-        // 6. Memaksa dummy data Evaluation muncul untuk mockup layout figma
-        //$currentModul->evaluation = (object)[
-        //    'id' => 1,
-        //    'title' => 'N4 and Kanji Evaluation',
-        //    'type' => 'Test',
-        //    'date' => '21 May 2026',
-        //    'duration' => 60
-        //];
+        
 
         // Ambil data mapel untuk navigasi sidebar kanan
         $subject = Mapel::with('modul')->findOrFail($id_mapel);

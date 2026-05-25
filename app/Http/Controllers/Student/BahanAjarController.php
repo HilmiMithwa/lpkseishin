@@ -32,7 +32,6 @@ class BahanAjarController extends Controller
         $previousMaterialUrl = null;
         $nextMaterialUrl = null;
 
-        // 3. 🌟 LOGIKA UTAMAKAN KUNCI PAGINATION PER MODUL 🌟
         if ($material) {
             // Cari materi SEBELUMNYA yang mutlak berada di dalam id_modul yang sama
             $previousMaterial = BahanAjar::where('id_modul', $id_modul)
