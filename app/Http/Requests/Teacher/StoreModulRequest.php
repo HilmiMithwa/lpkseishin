@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Student;
+namespace App\Http\Requests\Teacher;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,8 +28,8 @@ class StoreModulRequest extends FormRequest
             'teori' => 'required|integer',
             'praktik' => 'required|integer',
             'module_description' => 'nullable|max:100',
-            'id_mapel' => 'required|exists:mapel, id_mapel',
-            'id_rps' => 'required|exists:rps, id_rps'
+            'id_mapel' => 'required|exists:mapel,id_mapel',
+            'id_rps' => 'required|exists:rps,id_rps'
         ];
     }
 
