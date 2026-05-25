@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('id_product')->constrained('products', 'id_product')->onDelete('cascade');
 
             $table->string('order_id')->unique();
-            $table->decimal('gross_amount');
+            $table->decimal('gross_amount', 15,2);
             $table->string('snap_token')->nullable();
             $table->string('jenis_program');
             $table->string('metode_pembayaran');

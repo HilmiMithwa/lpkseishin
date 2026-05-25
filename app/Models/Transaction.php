@@ -22,6 +22,8 @@ class Transaction extends Model
         'tanggal_daftar'
     ];
 
+    
+
     public function user() {
         return $this->belongsTo(User::class, 'id_user');
     }
