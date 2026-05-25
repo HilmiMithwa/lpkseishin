@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mapel', function (Blueprint $table) {
             $table->id('id_mapel');
-            $table->foreignId('id_batch')->constrained('batch')->onDelete('cascade');
+            $table->foreignId('id_batch')->constrained('batch', 'id_batch')->onDelete('cascade');
             $table->string('kode_mapel')->unique();
             $table->string('nama_mapel');
             $table->string('deskripsi_mapel');
