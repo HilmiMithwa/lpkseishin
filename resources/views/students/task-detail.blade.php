@@ -80,7 +80,7 @@
 
                 <div class="pt-1">
                     <h2 class="text-base lg:text-lg font-bold text-[#222222] flex items-center gap-1">
-                        こんにちわ, 
+                        こんにchwa, 
                         <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
                         <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
                     </h2>
@@ -138,11 +138,9 @@
                         </div>
                         @if(!empty($task->resource_file_name))
                             @php
-                                // 1. Tentukan jalur file fisik di dalam storage
                                 $filePath = 'resources/' . $task->resource_file_name;
                                 $exists = Illuminate\Support\Facades\Storage::disk('public')->exists($filePath);
                                 
-                                // 2. Hitung ukuran file secara dinamis
                                 $fileSize = '0 KB';
                                 if ($exists) {
                                     $bytes = Illuminate\Support\Facades\Storage::disk('public')->size($filePath);
@@ -154,8 +152,6 @@
                                         $fileSize = $bytes . ' Bytes';
                                     }
                                 }
-                                
-                                // 3. Ambil ekstensi file secara dinamis untuk label ikon
                                 $extension = strtoupper(pathinfo($task->resource_file_name, PATHINFO_EXTENSION));
                             @endphp
 
@@ -192,64 +188,73 @@
 
                     <div class="lg:col-span-4 space-y-6">
                         
-                    <div class="p-6 bg-white border border-gray-100 rounded-[20px] shadow-sm space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold text-[#222222]">Your Work</h3>
-                            
-                            @php
-                                // 🌟 SINKRONISASI UTAMA: Deteksi data asli DB ATAU session simulasi palsu
-                                $hasSubmitted = $submission || session('mock_uploaded_task_' . $task->id_tugas);
-                            @endphp
+                        <div class="p-6 bg-white border border-gray-100 rounded-[28px] shadow-sm space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold text-[#222222]">Your Work</h3>
+                                
+                                <span class="text-[10px] font-bold uppercase tracking-wider {{ $submission ? 'text-green-500' : 'text-gray-400' }}" id="badge-status-top">
+                                    {{ $submission ? 'Submitted' : 'Incompleted' }}
+                                </span>
+                            </div>
 
-                            <span class="text-[10px] font-bold uppercase tracking-wider {{ $hasSubmitted ? 'text-green-500' : 'text-gray-400' }}" id="badge-status-top">
-                                {{ $hasSubmitted ? 'Submitted' : 'Incompleted' }}
-                            </span>
+                            <div id="file-list-container" class="space-y-3">
+                                @if($submission && $submission->file_path)
+                                    <div class="p-3 bg-white border border-gray-100 rounded-xl flex items-center justify-between gap-3 shadow-sm">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <div class="w-9 h-9 bg-red-50 text-[#DB2A2A] rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-[10px]">FILE</div>
+                                            <p class="text-xs font-bold text-gray-700 truncate">{{ basename($submission->file_path) }}</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <form id="multi-upload-form" action="{{ route('tasks.submit', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                                @csrf
+                                
+                                @if(!$submission)
+                                    <div class="w-full">
+                                        <textarea 
+                                            name="text_content" 
+                                            id="task-text-input" 
+                                            rows="4" 
+                                            class="w-full p-4 border border-gray-100 rounded-[20px] text-xs font-medium text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#DB2A2A] focus:ring-1 focus:ring-[#DB2A2A] resize-none bg-white transition custom-scrollbar" 
+                                            placeholder="Write your answer here..."
+                                            oninput="handleTextInputChange()"></textarea>
+                                    </div>
+
+                                    <div class="flex items-center justify-center my-1">
+                                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">OR</span>
+                                    </div>
+
+                                    <input type="file" id="task-file-input" name="task_files[]" class="hidden" multiple onchange="renderSelectedFiles(this)">
+
+                                    <label for="task-file-input" class="w-full h-12 border border-[#DB2A2A] hover:bg-red-50/50 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-[#DB2A2A] cursor-pointer transition bg-white shadow-sm">
+                                        <span class="text-sm font-semibold mb-[2px]">+</span>
+                                        <span>Add File or Link</span>
+                                    </label>
+
+                                    <button type="submit" id="main-submit-btn" class="w-full bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition duration-200">
+                                        Mark as Done
+                                    </button>
+                                @else
+                                    @if($submission->text_content)
+                                        <div class="w-full">
+                                            <div class="w-full p-4 border border-gray-50 rounded-[20px] text-xs font-medium text-gray-700 bg-gray-50/70 select-none text-left italic">
+                                                {{ $submission->text_content }}
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <button type="button" onclick="document.getElementById('cancel-form').submit()" class="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 rounded-xl text-xs shadow-sm transition duration-200">
+                                        Cancel Submit
+                                    </button>
+                                @endif
+                            </form>
                         </div>
 
-                        <div id="file-list-container" class="space-y-3">
-                            @if($submission)
-                                <div class="p-3 bg-white border border-gray-100 rounded-xl flex items-center justify-between gap-3 shadow-sm">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <div class="w-9 h-9 bg-red-50 text-[#DB2A2A] rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-[10px]">PDF</div>
-                                        <p class="text-xs font-bold text-gray-700 truncate">{{ basename($submission->file_path) }}</p>
-                                    </div>
-                                </div>
-                            @elseif(session('mock_uploaded_task_' . $task->id_tugas))
-                                <div class="p-3 bg-white border border-gray-100 rounded-xl flex items-center justify-between gap-3 shadow-sm">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <div class="w-9 h-9 bg-red-50 text-[#DB2A2A] rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-[10px]">PDF</div>
-                                        <p class="text-xs font-bold text-gray-700 truncate">Simulasi_File_Tugas_Siswa.pdf</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-
-                        <form id="multi-upload-form" action="{{ route('tasks.submit', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        <form id="cancel-form" action="{{ route('tasks.cancel', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" class="hidden">
                             @csrf
-                            <input type="file" id="task-file-input" name="task_files[]" class="hidden" multiple onchange="renderSelectedFiles(this)">
-
-                            @if(!$hasSubmitted)
-                                <label for="task-file-input" class="w-full h-12 border border-[#DB2A2A] hover:bg-red-50/50 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-[#DB2A2A] cursor-pointer transition bg-white shadow-sm">
-                                    <svg class="w-4 h-4 text-[#DB2A2A]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0016.5 4.5H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z"/>
-                                    </svg>
-                                    <span>Upload File</span>
-                                </label>
-
-                                <button type="button" id="main-submit-btn" onclick="handleMainButtonClick()" class="w-full bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition duration-200">
-                                    Mark as Done
-                                </button>
-                            @else
-                                <button type="button" onclick="triggerCancelSubmit()" class="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 rounded-xl text-xs shadow-sm transition duration-200">
-                                    Cancel Submit
-                                </button>
-                            @endif
                         </form>
-                    </div>
-
-                    <form id="cancel-form" action="{{ route('tasks.cancel', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" class="hidden">
-                        @csrf
-                    </form>
 
                         <div class="bg-white border border-gray-100 rounded-[24px] p-4 px-6 shadow-sm flex items-center justify-between">
                             <h3 class="text-sm font-bold text-[#222222]">Score</h3>
@@ -337,9 +342,27 @@
     updateClock();
 
     // ==========================================
-    // 3. Multi-File Listing Engine (Figma Baru)
+    // 3. Multi-File & Text Input UI Controller
     // ==========================================
     let selectedFilesArray = [];
+
+    // Dinamis merubah teks tombol saat textarea diinput sesuatu
+    function handleTextInputChange() {
+        const textInput = document.getElementById('task-text-input');
+        const mainBtn = document.getElementById('main-submit-btn');
+        if (!textInput || !mainBtn) return;
+
+        if (selectedFilesArray.length > 0) {
+            mainBtn.innerText = 'Submit';
+            return;
+        }
+
+        if (textInput.value.trim().length > 0) {
+            mainBtn.innerText = 'Submit';
+        } else {
+            mainBtn.innerText = 'Mark as Done';
+        }
+    }
 
     function renderSelectedFiles(input) {
         const container = document.getElementById('file-list-container');
@@ -364,8 +387,12 @@
             `;
         });
 
-        // Jika ada file terdeteksi, ubah teks menjadi Submit
-        if (selectedFilesArray.length > 0) {
+        // Setel DataTransfer agar file sungguhan ikut terkirim di tag <input file> bawaan HTML
+        const dataTransfer = new DataTransfer();
+        selectedFilesArray.forEach(f => dataTransfer.items.add(f));
+        document.getElementById('task-file-input').files = dataTransfer.files;
+
+        if (selectedFilesArray.length > 0 || document.getElementById('task-text-input').value.trim().length > 0) {
             mainBtn.innerText = 'Submit';
         }
     }
@@ -375,34 +402,15 @@
         selectedFilesArray.splice(index, 1);
         
         const mockInput = { files: selectedFilesArray };
-        renderSelectedFiles(mockInput);
+        renderSelectedFiles(mockInput); // Render ulang yang memicu set ulang DataTransfer
 
-        if (selectedFilesArray.length === 0 && mainBtn) {
+        const textInput = document.getElementById('task-text-input');
+        const textLength = textInput ? textInput.value.trim().length : 0;
+
+        if (selectedFilesArray.length === 0 && textLength === 0 && mainBtn) {
             mainBtn.innerText = 'Mark as Done';
         }
     }
-
-    // 🌟 TAMBAHKAN FUNGSI BARU INI: Mengatur kapan form boleh dikirim ke session/backend
-    function handleMainButtonClick() {
-        const form = document.getElementById('multi-upload-form');
-        const mainBtn = document.getElementById('main-submit-btn');
-        
-        if (!form || !mainBtn) return;
-
-        // Mengubah teks menjadi huruf kecil semua saat dicek, menghindari error typo 'as' vs 'As'
-        const buttonText = mainBtn.innerText.trim().toLowerCase();
-
-        if (buttonText === 'mark as done' || buttonText === 'submit') {
-            form.submit(); // Kirim form ke rute simulasi web.php
-        }
-    }
-
-        function triggerCancelSubmit() {
-            const cancelForm = document.getElementById('cancel-form');
-            if (cancelForm && confirm('Apakah Anda ingin membatalkan pengiriman tugas ini?')) {
-                cancelForm.submit();
-            }
-        }
 </script>
 </body>
 </html>
