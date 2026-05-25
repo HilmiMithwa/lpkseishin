@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mapel;
-use App\Models\Enrollment;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
@@ -27,7 +27,7 @@ class StudentController extends Controller
         $subjects = $user->mapels()->with('guru')->withCount('modul')->get();
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
-        $enrollment = Enrollment::where('id_user', Auth::id())->first();
+        $enrollment = Transaction::where('id_user', Auth::id())->first();
 
         // 3. Fitur Yumegatari: Ambil satu kata secara acak dari database
         // Pastikan temanmu sudah membuat tabel 'daily_words'
@@ -58,7 +58,7 @@ class StudentController extends Controller
         // 2. Jika lolos pengecekan, baru ambil datanya
         $subject = Mapel::with(['guru', 'rps', 'modul'])->withCount('modul')->findOrFail($id_mapel);
 
-        $enrollment = Enrollment::where('id_user', Auth::id())->first();
+        $enrollment = Transaction::where('id_user', Auth::id())->first();
 
         return view('students.class-detail', compact('subject', 'enrollment'));
     }
@@ -131,80 +131,6 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
 
-    // Detail material
-    public function showMaterial($id_mapel, $id_modul, $id_materi)
-    {
-        // 1. Ambil data induk untuk kebutuhan Breadcrumbs & Navigasi Sidebar
-        $subject = Mapel::find($id_mapel);
-        $currentModul = Modul::find($id_modul);
-
-        // 2. Cari data materi di database (mengembalikan null jika tidak ada, agar ditangani Blade)
-        $material = null;
-        try {
-            $material = BahanAjar::find($id_materi);
-        } catch (\Throwable $e) {
-            $material = null;
-        }
-
-        // Inisialisasi default URL pagination
-        $previousMaterialUrl = null;
-        $nextMaterialUrl = null;
-
-        // 3. 🌟 LOGIKA UTAMAKAN KUNCI PAGINATION PER MODUL 🌟
-        if ($material) {
-            // Cari materi SEBELUMNYA yang mutlak berada di dalam id_modul yang sama
-            $previousMaterial = DB::table('bahan_ajar')
-                ->where('id_modul', $id_modul)
-                ->where('id_bahan_ajar', '<', $material->id_bahan_ajar)
-                ->orderBy('id_bahan_ajar', 'desc')
-                ->first();
-
-            // Cari materi SELANJUTNYA yang mutlak berada di dalam id_modul yang sama
-            $nextMaterial = DB::table('bahan_ajar')
-                ->where('id_modul', $id_modul)
-                ->where('id_bahan_ajar', '>', $material->id_bahan_ajar)
-                ->orderBy('id_bahan_ajar', 'asc')
-                ->first();
-
-            // Susun rute URL jika record materi pendukungnya ditemukan
-            $previousMaterialUrl = $previousMaterial
-                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $previousMaterial->id_bahan_ajar])
-                : null;
-
-            $nextMaterialUrl = $nextMaterial
-                ? route('materials.show', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_materi' => $nextMaterial->id_bahan_ajar])
-                : null;
-        }
-
-        // 4. Kirim data ke View
-        return view('students.material-detail', compact(
-            'subject',
-            'currentModul',
-            'material',
-            'previousMaterialUrl',
-            'nextMaterialUrl'
-        ));
-    }
-
-
-
-    // Mark materi sebagai selesai (update progress)
-    public function completeMaterial($id_materi)
-    {
-        try {
-            // 1. Cari data materi berdasarkan Primary Key aslinya
-            $material = BahanAjar::find($id_materi);
-
-            if ($material) {
-                // 2. Ubah kolom is_complete menjadi 1 (true / selesai)
-                $material->is_complete = 1;
-                $material->save();
-            }
-        } catch (\Throwable $e) {
-            // Jika database belum siap/error, tetap biarkan halaman melakukan refresh tanpa crash
-        }
-
-        // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate
-        return back();
-    }
+    
+    
 }
