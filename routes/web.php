@@ -8,6 +8,7 @@ use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\ModulController;
 use App\Http\Controllers\Student\BahanAjarController;
+use App\Http\Controllers\Student\PengirimanTugasController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -63,17 +64,9 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
 
-    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', function($id_mapel, $id_modul, $id_tugas) {
-        session(['mock_uploaded_task_' . $id_tugas => true]);
-        session()->save(); // Kunci session ke dalam memori browser
-        return back();
-    })->name('tasks.submit');
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', [PengirimanTugasController::class, 'store'])->name('tasks.submit');
 
-    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', function($id_mapel, $id_modul, $id_tugas) {
-        session()->forget('mock_uploaded_task_' . $id_tugas);
-        session()->save(); // Kunci penghapusan session
-        return back();
-    })->name('tasks.cancel');
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 });
 
 //Dashboard Guru
