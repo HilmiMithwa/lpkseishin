@@ -12,7 +12,7 @@ class SubmitPengirimanTugasRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -46,11 +46,10 @@ class SubmitPengirimanTugasRequest extends FormRequest
                     }
                 }
             ],
-            'submitted_at' => 'required|date',
+            
             'status' => 'required|in:submitted,graded',
             'nilai' => 'nullable|numeric|min:0|max:100',
             'id_tugas' => 'required|exists:tugas,id_tugas',
-            'id_user' => 'required|exists:users,id_user'
         ];
     }
 
