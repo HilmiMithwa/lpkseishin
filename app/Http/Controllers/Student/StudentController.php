@@ -131,6 +131,45 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
 
+
+    // DUMMY EVALUATION
+    public function showEvaluation($id)
+    {
+        // 1. Ambil data mapel pertama milik user sebagai data perwakilan Sidebar & Breadcrumbs
+        $user = Auth::user();
+        $subject = $user->mapels()->first();
+        $currentModul = (object)[
+            'id_modul' => 6,
+            'nama_modul' => 'Module 6'
+        ];
+
+        // 2. Buat Dummy Data Informasi Evaluasi
+        $evaluation = (object)[
+            'id' => $id,
+            'title' => 'Final Competency Test & Mock Interview',
+            'type' => 'Multiple Choice',
+            'duration' => 120, // Dalam Menit
+            'total_questions' => 50,
+            'language' => 'Japanese N4',
+            'time_left' => '12:45'
+        ];
+
+        // 3. Buat Dummy Data Soal (Kita set berada di nomor 12 seperti Figma)
+        $question = (object)[
+            'number' => 12,
+            'text' => 'きぼうさんはきのう、かのじょさん<span class="inline-block w-24 border-b border-gray-400 mx-2 align-baseline"></span>かいものにいきました。',
+            'options' => [
+                (object)['id' => 'a', 'value' => 'に'],
+                (object)['id' => 'b', 'value' => 'と'],
+                (object)['id' => 'c', 'value' => 'が'],
+                (object)['id' => 'd', 'value' => 'は']
+            ],
+            'selected_option' => 'b' // Opsi B dipilih
+        ];
+
+        return view('students.evaluation-detail', compact('subject', 'currentModul', 'evaluation', 'question'));
+    }
+
     
     
 }

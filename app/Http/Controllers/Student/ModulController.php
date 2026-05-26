@@ -59,6 +59,15 @@ class ModulController extends Controller
                 ->where('tugas.id_modul', $id_modul)
                 ->select('tugas.*', 'pengiriman_tugas.status as submission_status')
                 ->get();
+
+                // Dummy Evaluasi
+                $currentModul->evaluation = (object)[
+                'id' => 1, // ID dummy untuk rute
+                'title' => 'Final Competency Test',
+                'type' => 'Multiple Choice',
+                'date' => date('d M Y'), 
+                'duration' => 120
+            ];
         } catch (\Exception $e) {
             // Fallback jika terjadi kendala struktural database
             $currentModul->materials = collect([]);
