@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('student_list_batch', function (Blueprint $table) {
             $table->id('id_studentbatch');
-            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('id_batch')->constrained('batch', 'id_batch')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
             $table->date('register_date');
             $table->integer('average_score')->nullable();
             $table->enum('status', ['Active', 'Inactive', 'Completed'])->default('Active');

@@ -19,6 +19,7 @@ class MapelSeeder extends Seeder
         if ($guru) {
             $mapelData = [
                 [
+                    'id_batch' => 1,
                     'kode_mapel' => 'N590',
                     'nama_mapel' => 'N5 Mastering',
                     'deskripsi_mapel' => 'Program intensif 3 bulan (396 JP) dengan fokus praktik. Mencakup 8 unit kompetensi dasar bahasa Jepang hingga persiapan ujian level N5.',
@@ -27,6 +28,7 @@ class MapelSeeder extends Seeder
                     'status' => 'Aktif'
                 ],
                 [
+                    'id_batch' => 2,
                     'kode_mapel' => 'N591',
                     'nama_mapel' => 'N4 Mastering',
                     'deskripsi_mapel' => 'Program lanjutan 2 bulan (264 JP) dengan fokus praktik. Mencakup 7 unit kompetensi bahasa Jepang hingga persiapan ujian level N4.',
@@ -35,6 +37,7 @@ class MapelSeeder extends Seeder
                     'status' => 'Aktif'
                 ],
                 [
+                    'id_batch' => 1,
                     'kode_mapel' => 'N592',
                     'nama_mapel' => 'N3 Mastering',
                     'deskripsi_mapel' => 'Program lanjutan 2 bulan (264 JP) dengan fokus praktik. Mencakup 7 unit kompetensi bahasa Jepang hingga persiapan ujian level N3.',

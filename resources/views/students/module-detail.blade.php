@@ -196,7 +196,7 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <a href="{{ route('evaluations.start', $currentModul->evaluation->id) }}" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
+                                            <a href="{{ route('evaluations.start', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $currentModul->evaluation->id]) }}" class="bg-[#DB2A2A] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
                                                 Start <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                             </a>
                                         </div>
@@ -281,12 +281,12 @@
                                 @foreach($subject->modul as $index => $modul)
                                     @php
                                         // Checker active state menyesuaikan ID modul yang sedang dibuka
-                                        $isActive = $modul->id_modul === $modul->id_modul;
+                                        $isActive = $modul->id_modul === $currentModul->id_modul;
                                     @endphp
                                     
                                     <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
                                     class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
-                                            {{ $modul->id_modul === $modul->id_modul 
+                                            {{ $modul->id_modul === $currentModul->id_modul 
                                                 ? 'bg-[#DB2A2A] text-white shadow-md' 
                                                 : 'bg-white hover:bg-gray-50 text-[#222222] border border-gray-50' }}">
                                         <span>Module {{ $index + 1 }}</span>

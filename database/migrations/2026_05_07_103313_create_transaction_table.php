@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollment', function (Blueprint $table) {
-            $table->id('id_enrollment');
+        Schema::create('transaction', function (Blueprint $table) {
+            $table->id('id_transaction');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_product')->constrained('products', 'id_product')->onDelete('cascade');
 
             $table->string('order_id')->unique();
-            $table->string('transaction_id')->nullable();
-            $table->integer('gross_amount');
-            
+            $table->decimal('gross_amount', 15,2);
             $table->string('snap_token')->nullable();
             $table->string('jenis_program');
             $table->string('metode_pembayaran');
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollment');
+        Schema::dropIfExists('transaction');
     }
 };
