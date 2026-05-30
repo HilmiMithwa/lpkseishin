@@ -16,7 +16,9 @@ class Mapel extends Model
         'id_guru',  
         'jp',
         'jumlah_modul',
-        'status'
+        'status',
+        'target',
+        'jadwal'
     ];
 
     public function guru() {

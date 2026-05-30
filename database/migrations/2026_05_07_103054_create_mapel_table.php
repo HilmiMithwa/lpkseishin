@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('id_guru')->constrained('users')->onDelete('cascade');
             $table->integer('jp');
             $table->string('status');
+            $table->string('target');
+            $table->string('jadwal');
             $table->timestamps();
         });
     }
