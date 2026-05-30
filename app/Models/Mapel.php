@@ -16,7 +16,9 @@ class Mapel extends Model
         'id_guru',  
         'jp',
         'jumlah_modul',
-        'status'
+        'status',
+        'target',
+        'jadwal'
     ];
 
     public function guru() {
@@ -30,6 +32,8 @@ class Mapel extends Model
         return $this->hasMany(Modul::class, 'id_mapel', 'id_mapel');
     }
 
-    
+    public function announcements() {
+        return $this->hasMany(Announcement::class, 'id_mapel', 'id_mapel');
+    }
 
 }

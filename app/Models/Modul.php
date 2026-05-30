@@ -14,8 +14,8 @@ class Modul extends Model
     protected $fillable = [
         'nama_modul',
         'kode_modul',
-        'teori',
-        'praktik',
+        'jp_teori',
+        'jp_praktik',
         'module_description',
         'id_mapel',
         'id_rps'

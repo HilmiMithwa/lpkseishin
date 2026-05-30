@@ -85,4 +85,9 @@ class User extends Authenticatable
         return $this->hasOne(Enrollment_List::class, 'id_user', 'id');
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'id_guru', 'id');
+    }
+
 }
