@@ -54,6 +54,6 @@ class AnnouncementSeeder extends Seeder
         ];
 
         DB::table('announcement')->insert($announcements);
-        $this->command->info('AnnouncementSeeder berhasil dijalankan!');
+        
     }
 }

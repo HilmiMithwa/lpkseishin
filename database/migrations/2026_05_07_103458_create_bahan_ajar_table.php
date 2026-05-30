@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_bahan_ajar');
             $table->string('nama_bahan_ajar'); 
             $table->enum('type', ['practice', 'theory'])->default('theory');
-            $table->boolean('is_complete')->default(false);
+            
 
             $table->string('video_title')->nullable();
             $table->string('video_url')->nullable();

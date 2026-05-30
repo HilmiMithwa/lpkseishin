@@ -8,6 +8,7 @@ use App\Models\Mapel;
 use App\Models\Modul;
 use App\Models\BahanAjar;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -20,14 +21,19 @@ class BahanAjarController extends Controller
         $subject = Mapel::find($id_mapel);
         $currentModul = Modul::find($id_modul);
 
-        // 2. Cari data materi di database (mengembalikan null jika tidak ada, agar ditangani Blade)
-        $material = null;
         try {
-            $material = BahanAjar::find($id_materi);
+            $material= BahanAjar::find($id_materi);
+             $material->is_complete = DB::table('bahan_ajar_progress')
+            ->where('id_user', auth()->id())
+            ->where('id_bahan_ajar', $id_materi)
+            ->value('is_complete') ?? 0;
         } catch (\Throwable $e) {
             $material = null;
         }
-
+        
+        // 2. Cari data materi di database (mengembalikan null jika tidak ada, agar ditangani Blade)
+        
+        
         // Inisialisasi default URL pagination
         $previousMaterialUrl = null;
         $nextMaterialUrl = null;
@@ -68,16 +74,19 @@ class BahanAjarController extends Controller
     public function completeMaterial($id_materi)
     {
         try {
-            // 1. Cari data materi berdasarkan Primary Key aslinya
-            $material = BahanAjar::find($id_materi);
+            $userId = Auth::id();
+            DB::table('bahan_ajar_progress')->updateOrInsert(
+                [
+                    'id_user' => $userId,
+                    'id_bahan_ajar' => $id_materi
+                ],
+                [
+                    'is_complete' => true,
+                    'updated_at' => now()
+                ]
+            );
+        } catch (\Exception $e) {
 
-            if ($material) {
-                // 2. Ubah kolom is_complete menjadi 1 (true / selesai)
-                $material->is_complete = 1;
-                $material->save();
-            }
-        } catch (\Throwable $e) {
-            // Jika database belum siap/error, tetap biarkan halaman melakukan refresh tanpa crash
         }
 
         // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate

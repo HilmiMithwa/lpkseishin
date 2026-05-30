@@ -18,16 +18,7 @@ use App\Models\Announcement;
 class ModulController extends Controller
 {
 
-    public function index() 
-    {
-        //ini buat ditunjukin ke siswanya 
-
-        $modul = Modul::with(['mapel', 'rps'])->get();
-         
-
-        return view('students.module-detail', compact('modul'));
-    }
-
+    
     public function showModule($id_mapel, $id_modul)
     {
         // 1. Ambil data modul dasarnya berdasarkan ID modul yang benar
@@ -49,7 +40,13 @@ class ModulController extends Controller
 
         try {
             // 4. Ambil data bahan_ajar dari database
-            $currentModul->materials = BahanAjar::where('id_modul', $id_modul)->get();
+            $currentModul->materials = BahanAjar::leftJoin('bahan_ajar_progress', function ($join) {
+                    $join->on('bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
+                        ->where('bahan_ajar_progress.id_user', '=', Auth::id());
+                })
+                ->where('bahan_ajar.id_modul', $id_modul)
+                ->select('bahan_ajar.*', 'bahan_ajar_progress.is_complete as is_complete')
+                ->get();
                 
 
             // 5. AMBIL DATA TUGAS ASLI DB + JOIN STATUS PENGIRIMAN SISWA YANG LOGIN
@@ -76,7 +73,14 @@ class ModulController extends Controller
             $currentModul->tasks = collect([]);
         }
 
-        
+        //Function utnuk completedModulesCount
+        $allModulesinMapel = Modul::where('id_mapel', $id_mapel)->get();
+        $completedModulesCount = 0;
+
+        foreach ($allModulesinMapel as $modul) {
+
+        }
+
 
         // Ambil data mapel dan announcements untuk navigasi sidebar kanan
         $subject = Mapel::with(['modul', 'announcements'])->findOrFail($id_mapel);
