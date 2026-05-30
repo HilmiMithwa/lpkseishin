@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Models\BahanAjar;
 use App\Models\Tugas;
+use App\Models\Announcement;
 
 
 //Nunggu dashboard guru keluar
@@ -22,6 +23,7 @@ class ModulController extends Controller
         //ini buat ditunjukin ke siswanya 
 
         $modul = Modul::with(['mapel', 'rps'])->get();
+         
 
         return view('students.module-detail', compact('modul'));
     }
@@ -76,10 +78,11 @@ class ModulController extends Controller
 
         
 
-        // Ambil data mapel untuk navigasi sidebar kanan
-        $subject = Mapel::with('modul')->findOrFail($id_mapel);
+        // Ambil data mapel dan announcements untuk navigasi sidebar kanan
+        $subject = Mapel::with(['modul', 'announcements'])->findOrFail($id_mapel);
+        
 
-        return view('students.module-detail', compact('currentModul', 'subject'));
+        return view('students.module-detail', compact('currentModul', 'subject', 'announcement'));
     }
 
     

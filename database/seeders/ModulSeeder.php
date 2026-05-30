@@ -61,8 +61,8 @@ class ModulSeeder extends Seeder
             Modul::create([
                 'nama_modul'         => $title,
                 'kode_modul'         => 'MDL-' . $level . '-' . str_pad($index + 1, 2, '0', STR_PAD_LEFT),
-                'teori'              => 12, // Nilai dummy jam pelajaran teori
-                'praktik'            => 24, // Nilai dummy jam pelajaran praktik
+                'jp_teori'              => 12, // Nilai dummy jam pelajaran teori
+                'jp_praktik'            => 24, // Nilai dummy jam pelajaran praktik
                 'module_description' => "Materi lengkap mengenai konsep dan penggunaan $title untuk level $level.",
                 'id_mapel'           => $idMapel,
                 'id_rps'             => null, 

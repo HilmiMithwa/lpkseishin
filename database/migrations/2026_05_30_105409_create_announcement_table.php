@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modul', function (Blueprint $table) {
-            $table->id('id_modul');
-            $table->string('nama_modul');
-            $table->text('kode_modul')->unique();
-            $table->integer('jp_teori');
-            $table->integer('jp_praktik');
-            $table->string('module_description');
+        Schema::create('announcement', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->date('date_formatted');
             $table->foreignId('id_mapel')->constrained('mapel', 'id_mapel')->onDelete('cascade');
-            $table->foreignId('id_rps')->nullable()->constrained('rps','id_rps')->onDelete('set null');
+            $table->foreignId('id_guru')->constrained('users', 'id')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modul');
+        Schema::dropIfExists('announcement');
     }
 };

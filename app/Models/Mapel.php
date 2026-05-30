@@ -32,6 +32,8 @@ class Mapel extends Model
         return $this->hasMany(Modul::class, 'id_mapel', 'id_mapel');
     }
 
-    
+    public function announcements() {
+        return $this->hasMany(Announcement::class, 'id_mapel', 'id_mapel');
+    }
 
 }
