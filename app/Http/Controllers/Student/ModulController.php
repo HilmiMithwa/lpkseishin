@@ -32,6 +32,7 @@ class ModulController extends Controller
         // 3. BARIKADE KEAMANAN (IDOR): Cek kontrak belajar siswa pada kelas ini
         /** @var User $user */
         $user = Auth::user();
+        $userId = $user->id;
         $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
 
         if (!$isEnrolled) {
@@ -40,9 +41,9 @@ class ModulController extends Controller
 
         try {
             // 4. Ambil data bahan_ajar dari database
-            $currentModul->materials = BahanAjar::leftJoin('bahan_ajar_progress', function ($join) {
+            $currentModul->materials = BahanAjar::leftJoin('bahan_ajar_progress', function ($join) use ($userId){
                     $join->on('bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
-                        ->where('bahan_ajar_progress.id_user', '=', Auth::id());
+                        ->where('bahan_ajar_progress.id_user', '=', $userId);
                 })
                 ->where('bahan_ajar.id_modul', $id_modul)
                 ->select('bahan_ajar.*', 'bahan_ajar_progress.is_complete as is_complete')
@@ -51,10 +52,11 @@ class ModulController extends Controller
 
             // 5. AMBIL DATA TUGAS ASLI DB + JOIN STATUS PENGIRIMAN SISWA YANG LOGIN
             $currentModul->tasks = Tugas::
-                leftJoin('pengiriman_tugas', function ($join) {
+                leftJoin('pengiriman_tugas', function ($join) use ($userId) {
                     $join->on('tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
-                        ->where('pengiriman_tugas.id_user', '=', Auth::id());
+                        ->where('pengiriman_tugas.id_user', '=', $userId);
                 })
+
                 ->where('tugas.id_modul', $id_modul)
                 ->select('tugas.*', 'pengiriman_tugas.status as submission_status')
                 ->get();
@@ -77,9 +79,35 @@ class ModulController extends Controller
         $allModulesinMapel = Modul::where('id_mapel', $id_mapel)->get();
         $completedModulesCount = 0;
 
-        foreach ($allModulesinMapel as $modul) {
+        foreach($allModulesinMapel as $modul) 
+            {
+                $totalMaterial = BahanAjar::where('id_modul', $modul->id_modul)->count();
 
-        }
+                $completedMaterial = DB::table('bahan_ajar')
+                    ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
+                    ->where('bahan_ajar.id_modul', $modul->id_modul)
+                    ->where('bahan_ajar_progress.id_user', $userId)
+                    ->where('bahan_ajar_progress.is_complete', true)
+                    ->count();
+                
+                $materialClear = ($totalMaterial == $completedMaterial);
+
+                $totalTask = Tugas::where('id_modul', $modul->id_modul)->count();
+
+                $completedTask = Tugas::join('pengiriman_tugas','tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
+                    ->where('tugas.id_modul', $modul->id_modul)
+                    ->where('pengiriman_tugas.id_user', $userId)
+                    ->where('pengiriman_tugas.status', 'dikirim')
+                    ->count();
+
+                $taskClear = ($totalTask == $completedTask);
+
+                if ($totalMaterial == 0 && $totalTask == 0) {
+                    $completedModulesCount++;
+                } elseif($materialClear && $taskClear) {
+                    $completedModulesCount++;
+                }
+            }
 
 
         // Ambil data mapel dan announcements untuk navigasi sidebar kanan
