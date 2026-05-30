@@ -82,7 +82,7 @@ class ModulController extends Controller
         $subject = Mapel::with(['modul', 'announcements'])->findOrFail($id_mapel);
         
 
-        return view('students.module-detail', compact('currentModul', 'subject', 'announcement'));
+        return view('students.module-detail', compact('currentModul', 'subject'));
     }
 
     
