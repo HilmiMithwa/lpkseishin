@@ -17,11 +17,11 @@
 
     // 3. Array List Level Flashcard Module
     $flashcardLevels = [
-        (object)['level' => 1, 'total' => 104, 'mastered' => 104, 'status' => 'Completed', 'badge_color' => 'bg-green-100 text-green-600', 'updated' => '2 Days Ago'],
-        (object)['level' => 2, 'total' => 104, 'mastered' => 104, 'status' => 'Completed', 'badge_color' => 'bg-green-100 text-green-600', 'updated' => '2 Days Ago'],
-        (object)['level' => 3, 'total' => 104, 'mastered' => 45,  'status' => 'Progress', 'badge_color' => 'bg-amber-100 text-amber-600', 'updated' => '2 Days Ago'],
-        (object)['level' => 4, 'total' => 104, 'mastered' => 0,   'status' => 'Progress', 'badge_color' => 'bg-amber-100 text-amber-600', 'updated' => '2 Days Ago'],
-        (object)['level' => 5, 'total' => 104, 'mastered' => 0,   'status' => 'Progress', 'badge_color' => 'bg-amber-100 text-amber-600', 'updated' => '2 Days Ago'],
+        (object)['level' => 1, 'total' => 104, 'mastered' => 104, 'status' => 'Completed', 'updated' => '2 Days Ago'],
+        (object)['level' => 2, 'total' => 104, 'mastered' => 104, 'status' => 'Completed', 'updated' => '2 Days Ago'],
+        (object)['level' => 3, 'total' => 104, 'mastered' => 45,  'status' => 'Progress', 'updated' => '2 Days Ago'],
+        (object)['level' => 4, 'total' => 104, 'mastered' => 0,   'status' => 'Progress', 'updated' => '2 Days Ago'],
+        (object)['level' => 5, 'total' => 104, 'mastered' => 0,   'status' => 'Progress', 'updated' => '2 Days Ago'],
     ];
 
     // Data User Keamanan
@@ -79,11 +79,7 @@
 
     <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
         <div class="p-6">
-            @if(View::exists('components.application-logo'))
-                <x-application-logo class="h-14 w-auto" />
-            @else
-                <div class="text-[#DB2A2A] font-extrabold text-xl tracking-wider">SEISHIN</div>
-            @endif
+            <x-application-logo class="h-14 w-auto" />
         </div>
 
         <div class="px-4 mt-2 flex-1">
@@ -97,11 +93,11 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     Enrolled
                 </a>
-                <a href="#" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3  text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                     My Task
                 </a>
-                <a href="{{ route('students.vocabulary-mastery') }}" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
+                <a href="#" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                     Vocabulary Mastery
                 </a>
@@ -110,12 +106,22 @@
 
         <div class="p-4">
             <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm mb-3">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($userName) }}&background=f3f4f6&color=ef4444" class="w-10 h-10 rounded-full">
-                <div class="overflow-hidden text-left">
-                    <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ $userName }}</h4>
-                    <p class="text-[10px] text-[#444444] truncate">{{ $userLevel }}</p>
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=ef4444" class="w-10 h-10 rounded-full">
+                <div class="overflow-hidden">
+                    <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name }}</h4>
+                    <p class="text-[10px] text-[#444444] truncate">{{ Auth::user()->level ?? '[Data: user.level]'}}</p>
+                    <p class="text-[10px] text-[#444444] truncate flex items-center gap-1">
+                        <span class="text-[#DB2A2A] font-bold text-[11px]">@</span> {{ Auth::user()->email }}
+                    </p>
                 </div>
             </div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full flex items-center px-5 py-2.5 gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-red-50 rounded-xl font-bold text-sm transition justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -138,7 +144,7 @@
                 
                 <div class="text-left">
                     <h1 class="text-2xl lg:text-3xl font-black text-[#222222] tracking-tight">Vocabulary Mastery</h1>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Vocabulary Mastery</p>
+                    <p class="text-xs font-bold text-[#666666] uppercase tracking-wider mt-1">Vocabulary Mastery</p>
                 </div>
 
                 <div class="w-full banner-red rounded-[32px] p-6 lg:p-10 text-white flex flex-col md:flex-row justify-between items-center relative shadow-sm min-h-[180px]">
@@ -163,18 +169,18 @@
                     </div>
 <div class="mt-6 md:mt-0 flex flex-col items-end gap-2.5 z-10 w-full md:w-52 flex-shrink-0 animate-[fadeIn_0.2s_ease-out]">
     
-    <button class="w-10 h-10 bg-white text-gray-400 hover:text-amber-500 rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-200 text-lg border border-gray-100/50">
+    <button class="w-10 h-10 bg-white text-[#666666] hover:text-amber-500 rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-200 text-lg border border-gray-100/50">
         ★
     </button>
 
     <div class="bg-white rounded-[24px] py-4 px-5 text-center text-gray-800 shadow-sm w-full flex flex-col justify-center items-center min-h-[96px] border border-gray-50 select-none h-auto">
-        <p class="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest">Translation</p>
+        <p class="text-[9px] font-extrabold text-[#666666] uppercase tracking-widest">Translation</p>
         
         <h3 class="text-sm font-extrabold text-[#222222] mt-1.5 leading-snug tracking-tight max-w-full break-words">
             {{ $dailyMeaningEn }}
         </h3>
         
-        <p class="text-xs font-medium text-gray-500 mt-1 max-w-full break-words">
+        <p class="text-xs font-medium text-[#444444] mt-1 max-w-full break-words">
             {{ $dailyMeaningId }}
         </p>
     </div>
@@ -190,7 +196,7 @@
                 <div class="w-5 h-5 rounded-full border border-[#DB2A2A] flex items-center justify-center text-[#DB2A2A]">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <p class="text-[11px] font-bold text-gray-500 capitalize tracking-wide">Mastered</p>
+                <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Mastered</p>
             </div>
             <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statMastered }} Word</h2>
         </div>
@@ -210,7 +216,7 @@
                 <div class="w-5 h-5 rounded-full border border-[#DB2A2A] flex items-center justify-center text-[#DB2A2A]">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                 </div>
-                <p class="text-[11px] font-bold text-gray-500 capitalize tracking-wide">Learning</p>
+                <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Learning</p>
             </div>
             <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statLearning }} Word</h2>
         </div>
@@ -222,7 +228,7 @@
                 <div class="w-5 h-5 rounded-full border border-[#DB2A2A] flex items-center justify-center text-[#DB2A2A]">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                 </div>
-                <p class="text-[11px] font-bold text-gray-500 capitalize tracking-wide">Favourite</p>
+                <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Favourite</p>
             </div>
             <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statFavourite }} Word</h2>
         </div>
@@ -240,29 +246,48 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         @foreach($flashcardLevels as $lvl)
-                            <div class="bg-white border border-gray-100 rounded-[28px] p-6 shadow-sm flex flex-col justify-between space-y-6 hover:shadow-md transition duration-200">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-red-50 text-[#DB2A2A] rounded-xl flex items-center justify-center font-bold text-sm select-none">
+                            <div class="bg-white border border-gray-100 rounded-[28px] p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-200 min-h-[220px]">
+                                
+                                <div class="flex items-start justify-between mb-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-[52px] h-[52px] bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-[#DB2A2A] font-medium text-2xl shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] select-none">
                                             あa
                                         </div>
-                                        <h3 class="text-base font-black text-[#222222]">Level {{ $lvl->level }}</h3>
+                                        <h3 class="text-[28px] font-black text-[#222222] tracking-tight">Level {{ $lvl->level }}</h3>
                                     </div>
-                                    <span class="text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md {{ $lvl->badge_color }}">
+                                    
+                                    <span class="text-[11px] font-bold capitalize px-3 py-1.5 rounded-lg {{ $lvl->status === 'Completed' ? 'bg-[#22c55e] text-white' : 'bg-[#eab308] text-white' }}">
                                         {{ $lvl->status }}
                                     </span>
                                 </div>
 
-                                <div class="space-y-1 text-left text-xs font-medium text-gray-400 tracking-wide">
-                                    <p>Total Word : <span class="text-gray-700 font-semibold ml-1">{{ $lvl->total }} Word</span></p>
-                                    <p>Mastered : <span class="text-gray-700 font-semibold ml-1">{{ $lvl->mastered }} Word</span></p>
-                                    <p>Updated : <span class="text-gray-400/80 font-normal ml-1">{{ $lvl->updated }}</span></p>
+                                <div class="space-y-2.5 text-[13px] tracking-wide mb-6">
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-gray-500 font-medium">Total Word</span>
+                                        <span class="w-4 text-gray-800 font-bold">:</span>
+                                        <span class="text-gray-700 font-bold">{{ $lvl->total }} Word</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-gray-500 font-medium">Mastered</span>
+                                        <span class="w-4 text-gray-800 font-bold">:</span>
+                                        <span class="text-gray-700 font-bold">{{ $lvl->mastered }} Word</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-gray-500 font-medium">Updated</span>
+                                        <span class="w-4 text-gray-800 font-bold">:</span>
+                                        <span class="text-gray-700 font-bold">{{ $lvl->updated }}</span>
+                                    </div>
                                 </div>
 
-                                <button class="w-full bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition duration-200 flex items-center justify-center gap-1.5">
-                                    <span>Open Flashcard</span>
-                                    <span class="text-sm">➔</span>
-                                </button>
+                                <div class="flex justify-end mt-auto">
+                                    <button class="bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm shadow-sm transition duration-200 flex items-center gap-2" onclick="window.location.href='{{ route('students.vocabulary-level', ['id' => $lvl->level]) }}'">
+                                        Open Flashcard
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
                             </div>
                         @endforeach
                     </div>

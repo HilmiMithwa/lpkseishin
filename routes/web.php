@@ -79,6 +79,14 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
         // Kirim data dailyWord asli hasil query ke dalam view agar dibaca oleh Blade
         return view('students.vocabulary-mastery', compact('dailyWord'));
     })->name('students.vocabulary-mastery');
+
+    Route::get('/students/vocabulary-mastery/level/{id}', function ($id) {
+        return view('students.vocabulary-level', ['level_id' => $id]);
+    })->name('students.vocabulary-level');
+
+    Route::get('/students/profile', function () {
+        return view('students.profile');
+    })->name('students.profile');
 });
 
 //Dashboard Guru
