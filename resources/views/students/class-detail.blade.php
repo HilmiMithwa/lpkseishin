@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Detail - LPK Seishin</title>
+    <title>Detail Kelas - LPK Seishin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
-        /* Gradasi dari merah utama ke merah gelap di sisi kanan */
         .banner-red {
             background: linear-gradient(90deg, #d62828 0%, #d62828 50%, #8b1a1a 100%);
             position: relative;
             overflow: hidden;
         }
-        
-        /* Mempercantik Scrollbar pada konten utama */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
@@ -35,26 +31,37 @@
         </div>
 
         <div class="px-4 mt-2 flex-1">
-            <p class="text-xs font-bold text-[#444444] mb-3 px-2 tracking-wider">OVERVIEW</p>
+            <p class="text-xs font-bold text-[#444444] mb-3 px-2 tracking-wider">RINGKASAN</p>
             <nav class="space-y-1">
-                <a href="{{ route('students.dashboard') }}" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.dashboard') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Dashboard
+                    Beranda
                 </a>
-                <a href="#" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
+                <a href="#" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Enrolled
+                    Terdaftar
                 </a>
-                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    My Task
+                    Tugas Saya
                 </a>
-                <a href="#" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.vocabulary-mastery') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    Vocabulary Mastery
+                    Penguasaan Kosakata
                 </a>
             </nav>
-        </div>
+
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider mt-6">SISTEM</p>
+            <nav class="space-y-1">
+                <a href="{{ route('students.profile') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Profil
+                </a>
+                <a href="{{ route('students.payment') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Pembayaran
+                </a>
+            </nav>
 
         <div class="p-4">
             <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm mb-3">
@@ -71,7 +78,7 @@
                 @csrf
                 <button type="submit" class="w-full flex items-center gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-red-50 px-5 py-2.5 rounded-xl font-bold text-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Logout
+                    Keluar
                 </button>
             </form>
         </div>
@@ -96,16 +103,13 @@
                 <p id="realtime-clock" class="text-xs text-[#444444] font-medium mt-0.5">Memuat waktu...</p>
             </div>
         </div>
-
-        <div class="flex items-center gap-2 lg:gap-6 w-full lg:w-auto justify-end">
-            </div>
     </header>
 
         <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] mr-0 lg:mr-8 mb-0 lg:mb-8 overflow-y-auto shadow-sm custom-scrollbar">
             <div class="p-4 sm:p-6 lg:p-10">
                 
                 <nav class="text-xs font-bold text-[#444444] mb-6 uppercase tracking-widest">
-                    ENROLLED <span class="mx-2">></span> 
+                    Terdaftar <span class="mx-2">></span> 
                     <span class="text-[#222222]">
                         {{ $subject->nama_mapel ?? '[Data: mapel.nama_mapel]' }}
                     </span>
@@ -131,7 +135,7 @@
 
                     <div class="xl:col-span-3 bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm">
                         
-                        <h3 class="text-lg font-bold text-[#222222] mb-6">Targets and Qualifications</h3>
+                        <h3 class="text-lg font-bold text-[#222222] mb-6">Target dan Kualifikasi</h3>
                         
                         <div class="grid grid-cols-2 gap-4">
                             
@@ -145,7 +149,7 @@
                                     </svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Certification Target</p>
+                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Target Sertifikasi</p>
                                     <p class="font-bold text-[#222222] truncate">{{ $subject->target ?? '[Data: mapel.target]' }}</p>
                                 </div>
                             </div>
@@ -158,7 +162,7 @@
                                     </svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Total Duration</p>
+                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Total Durasi</p>
                                     <p class="font-bold text-[#222222] truncate">{{ $subject->jp ?? '[Data: mapel.jp]' }} JP</p>
                                 </div>
                             </div>
@@ -173,7 +177,7 @@
                                     </svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Schedule</p>
+                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider truncate">Jadwal</p>
                                     <p class="font-bold text-[#222222] truncate">{{ $subject->jadwal ?? '[Data: mapel.jadwal]' }}</p>
                                 </div>
                             </div>
@@ -188,7 +192,7 @@
                                     </svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider">Pass Requirement</p>
+                                    <p class="text-[10px] text-[#444444] font-bold uppercase tracking-wider">Syarat Kelulusan</p>
                                     <p class="font-bold text-[#222222] truncate">
                                         Min. Skor {{ $subject->min_score ?? '[Data: min_score]' }}
                                     </p>
@@ -200,7 +204,7 @@
                 </div>
 
                         <div class="space-y-4">
-                            <h3 class="text-xl font-black text-[#222222] mb-6">Syllabus and Modules</h3>
+                            <h3 class="text-xl font-black text-[#222222] mb-6">Silabus dan Modul</h3>
                             
                             <div class="space-y-4">
                                 @forelse($subject->modul as $modul)
@@ -252,7 +256,7 @@
                                         </div>
 
                                         <div class="flex items-center gap-3 text-[11px] font-bold">
-                                            <span class="text-[#444444] font-semibold">Progress</span>
+                                            <span class="text-[#444444] font-semibold">Progres</span>
                                             <div class="flex-1 bg-[#FFDBDB] h-2 rounded-full overflow-hidden">
                                                 <div class="bg-[#DB2A2A] h-2 rounded-full transition-all" 
                                                     style="width: {{ $modul->progress ?? '50' }}%">
@@ -278,7 +282,7 @@
                     <div class="lg:col-span-4 space-y-8">
                         
                     <div class="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm">
-                        <h3 class="text-lg font-bold text-[#222222] mb-6">Overall Class Progress</h3>
+                        <h3 class="text-lg font-bold text-[#222222] mb-6">Progres Kelas Keseluruhan</h3>
                         
                         <div class="flex items-center gap-6">
                             <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
@@ -301,15 +305,15 @@
 
                             <div class="space-y-3">
                                 <div class="leading-tight">
-                                    <p class="text-[11px] font-semibold text-[#444444]">Completed:</p>
+                                    <p class="text-[11px] font-semibold text-[#444444]">Selesai:</p>
                                     <p class="text-sm font-bold text-[#222222]">
-                                        {{ $completedModulesCount ?? '[Data: completedModulesCount]' }} / {{ $modul_count }} Modules
+                                        {{ $completedModulesCount ?? '[Data: completedModulesCount]' }} / {{ $modul_count }} Modul
                                     </p>
                                 </div>
                                 <div class="leading-tight">
-                                    <p class="text-[11px] font-semibold text-[#444444]">Remaining:</p>
+                                    <p class="text-[11px] font-semibold text-[#444444]">Tersisa:</p>
                                     <p class="text-sm font-bold text-[#222222]">
-                                        {{ $remainingModulesCount ?? '[Data: remainingModulesCount]' }} Modules
+                                        {{ $remainingModulesCount ?? '[Data: remainingModulesCount]' }} Modul
                                     </p>
                                 </div>
                             </div>
@@ -347,7 +351,7 @@
                             <a href="{{ isset($subject->guru->no_wa) ? 'https://wa.me/' . $subject->guru->no_wa : '#[Data: guru.no_wa]' }}" 
                             target="_blank" 
                             class="flex-1 bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
-                                <span>Contact Sensei</span>
+                                <span>Hubungi Sensei</span>
                                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.481 5.229 3.481 8.405c0 6.555-5.332 11.89-11.888 11.89-2.014 0-3.991-.511-5.741-1.482l-6.243 1.636zm6.323-3.61c1.558.924 3.125 1.411 4.757 1.411 5.424 0 9.841-4.415 9.841-9.84 0-5.424-4.417-9.84-9.841-9.84-5.424 0-9.84 4.416-9.84 9.84 0 2.001.602 3.864 1.741 5.437l-1.011 3.693 3.791-1.127zm10.741-7.07c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.966-.941 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
                                 </svg>
@@ -363,7 +367,7 @@
                     </div>
 
                     <div class="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm">
-                        <h3 class="text-lg font-bold text-[#222222] mb-6 text-left">Announcements</h3>
+                        <h3 class="text-lg font-bold text-[#222222] mb-6 text-left">Pengumuman</h3>
                         
                         <div class="space-y-0">
                             @forelse($subject->announcements ?? [] as $announcement)
@@ -385,7 +389,7 @@
 
                         <div class="flex justify-end mt-4">
                             <button class="text-xs font-bold text-[#DB2A2A] hover:underline transition tracking-wide">
-                                Load More
+                                Muat Lebih Banyak
                             </button>
                         </div>
                     </div>

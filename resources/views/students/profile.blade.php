@@ -7,7 +7,7 @@
         'level' => 'Pra-N5',
         'email' => 'madd.hdyt@gmail.com',
         'phone' => '+62 0831 9210 3301',
-        'dob' => '04 July 2004',
+        'dob' => '04 Juli 2004',
         'education' => 'SMA/SMK',
         'height_weight' => '160 cm / 59 kg',
         'emergency_name' => 'Muria Mardika',
@@ -26,7 +26,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - LPK Seishin</title>
+    <title>Profil - LPK Seishin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -39,6 +39,14 @@
 </head>
 <body class="bg-[#FFF9F4] text-[#444444] h-screen flex overflow-hidden">
 
+    <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#DB2A2A] text-white rounded-xl shadow-md hover:bg-red-700 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+
+    <button id="mobile-menu-close" class="fixed top-4 right-4 z-40 hidden lg:hidden p-2 bg-[#222222] text-white rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
     <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
         <div class="p-6">
             @if(View::exists('components.application-logo'))
@@ -49,35 +57,35 @@
         </div>
 
         <div class="px-4 mt-2 flex-1">
-            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">OVERVIEW</p>
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">RINGKASAN</p>
             <nav class="space-y-1 mb-6">
                 <a href="{{ route('students.dashboard') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Dashboard
+                    Beranda
                 </a>
                 <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Enrolled
+                    Terdaftar
                 </a>
                 <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    My Task
+                    Tugas Saya
                 </a>
                 <a href="{{ route('students.vocabulary-mastery') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    Vocabulary Mastery
+                    Penguasaan Kosakata
                 </a>
             </nav>
 
-            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">SYSTEM</p>
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">SISTEM</p>
             <nav class="space-y-1">
                 <a href="{{ route('students.profile') }}" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profile
+                    Profil
                 </a>
-                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Setting
+                <a href="{{ route('students.payment') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Pembayaran
                 </a>
             </nav>
         </div>
@@ -92,7 +100,7 @@
             </div>
             <button class="w-full flex items-center justify-center gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-[#FFDBDB] py-2.5 rounded-xl font-bold text-sm transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                Logout
+                Keluar
             </button>
         </div>
     </aside>
@@ -111,7 +119,7 @@
                 </button>
                 <div class="flex items-center gap-1.5 text-sm font-bold text-[#444444] cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    EN ▾
+                    ID ▾
                 </div>
             </div>
         </header>
@@ -120,8 +128,8 @@
             <div class="p-6 lg:p-10">
                 
                 <div class="mb-8 text-left">
-                    <h1 class="text-3xl lg:text-4xl font-black text-[#444444] tracking-tight">Profile</h1>
-                    <p class="text-xs lg:text-sm font-bold text-[#666666] mt-2">Manage your personal information and account settings.</p>
+                    <h1 class="text-3xl lg:text-4xl font-black text-[#444444] tracking-tight">Profil</h1>
+                    <p class="text-xs lg:text-sm font-bold text-[#666666] mt-2">Kelola informasi pribadi dan pengaturan akun Anda.</p>
                 </div>
                 <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
                     
@@ -142,7 +150,7 @@
                                 <span class="text-[#666666]">{{ $userData->id_number }}</span>
                             </div>
                             <div class="flex items-center">
-                                <span class="w-14">Batch</span>
+                                <span class="w-14">Angkatan</span>
                                 <span class="w-6 text-center">:</span>
                                 <span class="text-[#444444]">{{ $userData->batch }}</span>
                             </div>
@@ -159,11 +167,11 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     
                     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col justify-between">
-                        <h3 class="text-lg font-black text-[#444444] mb-6">Personal Details</h3>
+                        <h3 class="text-lg font-black text-[#444444] mb-6">Detail Pribadi</h3>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Full Name:</label>
+                                <label class="text-xs font-bold text-[#666666]">Nama Lengkap:</label>
                                 <input type="text" value="{{ $userData->name }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                             </div>
                             <div class="space-y-1.5">
@@ -171,46 +179,46 @@
                                 <input type="email" value="{{ $userData->email }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Phone Number:</label>
+                                <label class="text-xs font-bold text-[#666666]">Nomor Telepon:</label>
                                 <input type="text" value="{{ $userData->phone }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Date of Birth:</label>
+                                <label class="text-xs font-bold text-[#666666]">Tanggal Lahir:</label>
                                 <input type="text" value="{{ $userData->dob }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                             </div>
                         </div>
 
                         <div class="flex justify-end">
                             <button class="bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
-                                Save Changes
+                                Simpan Perubahan
                             </button>
                         </div>
                     </div>
 
                     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col">
-                        <h3 class="text-lg font-black text-[#444444] mb-6">LPK Requirements</h3>
+                        <h3 class="text-lg font-black text-[#444444] mb-6">Persyaratan LPK</h3>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Education Level:</label>
+                                <label class="text-xs font-bold text-[#666666]">Tingkat Pendidikan:</label>
                                 <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
                                     {{ $userData->education }}
                                 </div>
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Height / Weight:</label>
+                                <label class="text-xs font-bold text-[#666666]">Tinggi / Berat Badan:</label>
                                 <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
                                     {{ $userData->height_weight }}
                                 </div>
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Emergency Contact Name:</label>
+                                <label class="text-xs font-bold text-[#666666]">Nama Kontak Darurat:</label>
                                 <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
                                     {{ $userData->emergency_name }}
                                 </div>
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-xs font-bold text-[#666666]">Emergency Contact Phone:</label>
+                                <label class="text-xs font-bold text-[#666666]">Telepon Kontak Darurat:</label>
                                 <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
                                     {{ $userData->emergency_phone }}
                                 </div>
@@ -221,24 +229,24 @@
                 </div>
 
                 <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-                    <h3 class="text-lg font-black text-[#444444] mb-6">Change Password</h3>
+                    <h3 class="text-lg font-black text-[#444444] mb-6">Ubah Kata Sandi</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-[#666666]">Current Password</label>
+                                <label class="text-xs font-bold text-[#666666]">Kata Sandi Saat Ini</label>
                             <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-[#666666]">New Password</label>
+                                <label class="text-xs font-bold text-[#666666]">Kata Sandi Baru</label>
                             <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-bold text-[#666666]">Confirm Password</label>
+                                <label class="text-xs font-bold text-[#666666]">Konfirmasi Kata Sandi</label>
                             <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#DB2A2A] transition">
                         </div>
                         <div>
                             <button class="w-full bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
-                                Update Password
+                                Perbarui Kata Sandi
                             </button>
                         </div>
                     </div>
@@ -253,7 +261,7 @@
             const clockElement = document.getElementById('realtime-clock');
             if (!clockElement) return;
             const now = new Date();
-            const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const dateString = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -261,6 +269,22 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (mobileMenuBtn && mobileMenuClose && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+                mobileMenuClose.classList.remove('hidden');
+            });
+            
+            mobileMenuClose.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                mobileMenuClose.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Task Space - LPK Seishin</title>
+    <title>Ruang Tugas Saya - LPK Seishin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,29 +16,45 @@
 </head>
 <body class="bg-[#FFF9F4] text-[#222222] h-screen flex overflow-hidden">
 
+    <button id="mobile-menu-close" class="fixed top-4 right-4 z-40 hidden lg:hidden p-2 bg-[#222222] text-white rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
     <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
         <div class="p-6">
             <x-application-logo class="h-14 w-auto" />
         </div>
 
         <div class="px-4 mt-2 flex-1">
-            <p class="text-xs font-bold text-[#444444] mb-3 px-2 tracking-wider">OVERVIEW</p>
+            <p class="text-xs font-bold text-[#444444] mb-3 px-2 tracking-wider">RINGKASAN</p>
             <nav class="space-y-1">
                 <a href="{{ route('students.dashboard') }}" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Dashboard
+                    Beranda
                 </a>
-                <a href="#" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Enrolled
+                    Terdaftar
                 </a>
-                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    My Task
+                    Tugas Saya
                 </a>
-                <a href="#" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('students.vocabulary-mastery') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    Vocabulary Mastery
+                    Penguasaan Kosakata
+                </a>
+            </nav>
+
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider mt-6">SISTEM</p>
+            <nav class="space-y-1">
+                <a href="{{ route('students.profile') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Profil
+                </a>
+                <a href="{{ route('students.payment') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Pembayaran
                 </a>
             </nav>
         </div>
@@ -58,7 +74,7 @@
                 @csrf
                 <button type="submit" class="w-full flex items-center px-5 py-2.5 gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-red-50 rounded-xl font-bold text-sm transition justify-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Logout
+                    Keluar
                 </button>
             </form>
         </div>
@@ -66,20 +82,27 @@
 
     <div class="flex-1 flex flex-col overflow-hidden">
         
-        <header class="flex justify-between items-center px-8 py-5 bg-transparent border-b border-gray-100/50">
-            <div>
-                <h2 class="text-lg font-bold text-[#222222]">こんにちわ, {{ explode(' ', Auth::user()->name)[0] }}! 👋</h2>
-                <p id="realtime-clock" class="text-xs text-gray-400 font-medium mt-0.5">Memuat waktu...</p>
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center px-4 lg:px-8 py-4 lg:py-6 bg-transparent gap-4">
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 bg-[#DB2A2A] text-white rounded-xl shadow-md hover:bg-red-700 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <div class="pt-1">
+                    <h2 class="text-base lg:text-lg font-bold text-[#222222] flex items-center gap-1">
+                        こんにちわ,
+                        <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
+                        <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
+                    </h2>
+                    <p id="realtime-clock" class="text-xs text-[#666666] font-medium mt-0.5">Memuat waktu...</p>
+                </div>
             </div>
-            <div class="flex items-center gap-5">
-                <button class="relative text-gray-400 hover:text-gray-600 transition">
+            <div class="flex items-center gap-4">
+                <button class="relative text-[#666666] hover:text-[#444444] transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                     <span class="absolute -top-1 -right-1 bg-[#DB2A2A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">27</span>
                 </button>
-                <div class="flex items-center gap-1 text-sm font-bold text-[#222222] cursor-pointer">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    EN
-                </div>
             </div>
         </header>
 
@@ -88,11 +111,11 @@
                 
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl lg:text-3xl font-black text-[#222222] tracking-tight">My Task</h1>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Task Space</p>
+                        <h1 class="text-2xl lg:text-3xl font-black text-[#222222] tracking-tight">Tugas Saya</h1>
+                        <p class="text-xs font-bold text-[#666666] uppercase tracking-wider mt-1">Ruang Tugas</p>
                     </div>
-                    <button class="flex items-center gap-2 border border-gray-100 rounded-xl px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-50 transition shadow-sm">
-                        Filter 
+                    <button class="flex items-center gap-2 border border-gray-100 rounded-xl px-4 py-2 text-xs font-bold text-[#444444] hover:bg-gray-50 transition shadow-sm">
+                        Saring 
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                     </button>
                 </div>
@@ -100,18 +123,17 @@
                 <div class="space-y-4">
                     @forelse($tasks as $task)
                         @php
-                            // Logika Penentuan Badge Status Dinamis Otomatis
                             $isSubmitted = !is_null($task->id_pengiriman);
                             $isOverdue = \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($task->waktu_pengumpulan));
 
                             if ($isSubmitted) {
-                                $statusText = 'Submitted';
+                                $statusText = 'Terkirim';
                                 $statusClass = 'text-green-500';
                             } elseif ($isOverdue) {
-                                $statusText = 'Missing';
+                                $statusText = 'Terlewat';
                                 $statusClass = 'text-red-500';
                             } else {
-                                $statusText = 'Incompleted';
+                                $statusText = 'Belum Selesai';
                                 $statusClass = 'text-gray-400';
                             }
                         @endphp
@@ -127,7 +149,7 @@
                                     <h3 class="text-sm lg:text-base font-bold text-[#222222] truncate">{{ $task->judul_tugas }}</h3>
                                     <div class="inline-block bg-amber-50 rounded-lg px-2.5 py-1 mt-1.5">
                                         <p class="text-[10px] font-bold text-amber-600 tracking-wide">
-                                            Due: {{ \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y, H:i') }}
+                                            Tenggat: {{ \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y, H:i') }}
                                         </p>
                                     </div>
                                 </div>
@@ -140,7 +162,7 @@
 
                                 <a href="{{ route('tasks.show', ['id_mapel' => $task->id_mapel, 'id_modul' => $task->id_modul, 'id_tugas' => $task->id_tugas]) }}" 
                                    class="bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow-sm transition duration-200 flex items-center gap-1.5">
-                                    <span>Open Task</span>
+                                    <span>Buka Tugas</span>
                                     <svg class="w-3.5 h-3.5 mt-[0.5px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </a>
                             </div>
@@ -175,6 +197,22 @@
 
         setInterval(updateClock, 1000);
         updateClock();
+        
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (mobileMenuBtn && mobileMenuClose && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+                mobileMenuClose.classList.remove('hidden');
+            });
+            
+            mobileMenuClose.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                mobileMenuClose.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 </html>
