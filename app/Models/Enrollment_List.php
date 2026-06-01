@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Enrollment_List extends Model
 {
-    protected $table = 'enrollment_list';
-    protected $primaryKey = 'id_enrollment_list';
+    protected $table = 'enrollment_access';
+    protected $primaryKey = 'id_enrollment_access';
 
     protected $fillable = [
         'jenis_program',

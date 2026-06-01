@@ -24,6 +24,12 @@ class Mapel extends Model
     public function guru() {
         return $this->belongsTo(User::class, 'id_guru');
     }
+
+    public function batch()
+    {
+        return $this->belongsTo(\App\Models\Batch::class, 'id_batch', 'id_batch');
+    }
+    
     public function rps() {
         return $this->hasMany(Rps::class, 'id_mapel', 'id_mapel');
     }
@@ -34,6 +40,11 @@ class Mapel extends Model
 
     public function announcements() {
         return $this->hasMany(Announcement::class, 'id_mapel', 'id_mapel');
+    }
+
+    public function enrollmentAccess()
+    {
+        return $this->hasMany(Enrollment_List::class, 'id_mapel', 'id_mapel');
     }
 
 }
