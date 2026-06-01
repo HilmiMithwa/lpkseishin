@@ -13,7 +13,9 @@ class BahanAjarSeeder extends Seeder
     public function run(): void
     {
         // Bersihkan data lama agar fresh saat running ulang
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         DB::table('bahan_ajar')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         DB::table('bahan_ajar')->insert([
             

@@ -13,7 +13,9 @@ class ProgressBahanAjarSeeder extends Seeder
     public function run(): void
     {
         // Bersihkan data lama agar fresh saat running ulang
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         DB::table('bahan_ajar_progress')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // Skenario: Ambil ID semua bahan ajar yang sukses dibuat dari BahanAjarSeeder
         $allBahanAjarIds = DB::table('bahan_ajar')->pluck('id_bahan_ajar')->toArray();
