@@ -131,44 +131,78 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
 
+// ======================================
+// ======================================
+// // DUMMY EVALUATION
 
-    // DUMMY EVALUATION
-    public function showEvaluation($id)
+    public function showEvaluation($id_mapel, $id_modul, $id)
     {
-        // 1. Ambil data mapel pertama milik user sebagai data perwakilan Sidebar & Breadcrumbs
-        $user = Auth::user();
-        $subject = $user->mapels()->first();
-        $currentModul = (object)[
-            'id_modul' => 6,
-            'nama_modul' => 'Module 6'
-        ];
+        // 1. Ambil data mapel asli dari database berdasarkan id_mapel di URL
+        $subject = Mapel::findOrFail($id_mapel);
+        
+        // 2. Ambil data modul asli dari database berdasarkan id_modul di URL (Bukan dummy lagi!)
+        $currentModul = Modul::findOrFail($id_modul);
 
-        // 2. Buat Dummy Data Informasi Evaluasi
+        // 3. Buat Dummy Data Informasi Evaluasi (Sambil menunggu tabel evaluasi asli selesai)
         $evaluation = (object)[
             'id' => $id,
             'title' => 'Final Competency Test & Mock Interview',
             'type' => 'Multiple Choice',
-            'duration' => 120, // Dalam Menit
+            'duration' => 120, 
             'total_questions' => 50,
             'language' => 'Japanese N4',
-            'time_left' => '12:45'
+            'time_left_seconds' => 15 
         ];
 
-        // 3. Buat Dummy Data Soal (Kita set berada di nomor 12 seperti Figma)
-        $question = (object)[
-            'number' => 12,
-            'text' => 'きぼうさんはきのう、かのじょさん<span class="inline-block w-24 border-b border-gray-400 mx-2 align-baseline"></span>かいものにいきました。',
-            'options' => [
-                (object)['id' => 'a', 'value' => 'に'],
-                (object)['id' => 'b', 'value' => 'と'],
-                (object)['id' => 'c', 'value' => 'が'],
-                (object)['id' => 'd', 'value' => 'は']
-            ],
-            'selected_option' => 'b' // Opsi B dipilih
-        ];
+        // 4. GENERATOR 50 SOAL DUMMY (AUTO-INCREMENT)
+        $questions = [];
+        for ($i = 1; $i <= $evaluation->total_questions; $i++) {
+            $questions[] = [
+                'number' => $i,
+                'text' => 'Ini adalah simulasi teks soal untuk <b>Pertanyaan Nomor ' . $i . '</b> pada ' . $currentModul->nama_modul . '. Silakan pilih satu jawaban yang menurut Anda paling tepat untuk melanjutkan.',
+                'options' => [
+                    ['id' => 'a', 'value' => 'Pilihan A soal ' . $i],
+                    ['id' => 'b', 'value' => 'Pilihan B soal ' . $i],
+                    ['id' => 'c', 'value' => 'Pilihan C soal ' . $i],
+                    ['id' => 'd', 'value' => 'Pilihan D soal ' . $i]
+                ]
+            ];
+        }
 
-        return view('students.evaluation-detail', compact('subject', 'currentModul', 'evaluation', 'question'));
+        return view('students.evaluation-detail', compact('subject', 'currentModul', 'evaluation', 'questions'));
     }
+
+    // Fungsi page MY TASKS
+    public function myTasks()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // 1. Dapatkan daftar ID mata pelajaran yang dikontrak oleh siswa aktif
+        $enrolledMapelIds = $user->mapels()->pluck('mapel.id_mapel')->toArray();
+
+        // 2. Tarik semua tugas dari hirarki mapel -> modul -> tugas
+        $tasks = DB::table('tugas')
+            ->join('modul', 'tugas.id_modul', '=', 'modul.id_modul')
+            ->join('mapel', 'modul.id_mapel', '=', 'mapel.id_mapel')
+            ->leftJoin('pengiriman_tugas', function ($join) use ($user) {
+                $join->on('tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
+                     ->where('pengiriman_tugas.id_user', '=', $user->id);
+            })
+            ->whereIn('mapel.id_mapel', $enrolledMapelIds)
+            ->select(
+                'tugas.*',
+                'modul.id_modul',
+                'mapel.id_mapel',
+                'pengiriman_tugas.id_pengiriman_tugas as id_pengiriman', // 
+                'pengiriman_tugas.status as submission_status'
+            )
+            ->orderBy('tugas.waktu_pengumpulan', 'asc')
+            ->get();
+
+        return view('students.my-tasks', compact('tasks'));
+    }
+// ======================================
 
     
     
