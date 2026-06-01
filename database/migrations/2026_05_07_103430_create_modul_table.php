@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('modul', function (Blueprint $table) {
             $table->id('id_modul');
             $table->string('nama_modul');
-            $table->text('kode_modul')->unique();
+            $table->string('kode_modul')->unique();
             $table->integer('jp_teori');
             $table->integer('jp_praktik');
             $table->string('module_description');
