@@ -25,4 +25,8 @@ class Rps extends Model
         return $this->belongsTo(Mapel::class, 'id_mapel', 'id_mapel');
     }
 
+    public function modul()
+    {
+        return $this->hasMany(Modul::class, 'id_rps', 'id_rps');
+    }
 }

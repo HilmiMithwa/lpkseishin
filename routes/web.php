@@ -10,6 +10,7 @@ use App\Http\Controllers\Student\ModulController;
 use App\Http\Controllers\Student\BahanAjarController;
 use App\Http\Controllers\Student\PengirimanTugasController;
 use App\Http\Controllers\Student\MapelController;
+use App\Http\Controllers\Teacher\TeacherDashboardController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -95,10 +96,16 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 });
 
 //Dashboard Guru
-Route::middleware(['auth', 'checkRole:guru'])->group(function () {
-    Route::get('/teacher/dashboard', function() {
-        return view ('teacher.dashboard');
-    })->name('teacher.dashboard');
+Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/subjects/{id_mapel}', function ($id_mapel) {
+        abort(501, 'Halaman ini belum selesai dibuat.');
+    })->name('subjects.show');
+
+    Route::get('/tasks/{id_tugas}/review', function ($id_tugas) {
+        abort(501, 'Halaman ini belum selesai dibuat.');
+    })->name('tasks.review');
 });
 
 

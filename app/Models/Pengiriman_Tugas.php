@@ -9,6 +9,10 @@ class Pengiriman_Tugas extends Model
     protected $table = 'pengiriman_tugas';
     protected $primaryKey = 'id_pengiriman_tugas';
 
+    protected $casts = [
+        'submitted_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'text_content',
         'file_path',
