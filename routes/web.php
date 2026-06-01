@@ -87,6 +87,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/profile', function () {
         return view('students.profile');
     })->name('students.profile');
+
+    Route::get('/students/payment', function () {
+        return view('students.payment');
+    })->name('students.payment');
 });
 
 //Dashboard Guru

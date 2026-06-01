@@ -123,26 +123,34 @@
                     <h1 class="text-3xl lg:text-4xl font-black text-[#444444] tracking-tight">Profile</h1>
                     <p class="text-xs lg:text-sm font-bold text-[#666666] mt-2">Manage your personal information and account settings.</p>
                 </div>
-
-                <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center gap-6 relative">
+                <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
                     
-                    <div class="relative flex-shrink-0">
-                        <img src="{{ $userData->avatar_url }}" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover border-4 border-white shadow-md">
-                        <button class="absolute top-1 right-1 w-8 h-8 bg-white border border-gray-100 text-[#DB2A2A] rounded-full shadow-sm flex items-center justify-center hover:bg-gray-50 transition">
+                    <div class="relative flex-shrink-0 mt-2 sm:mt-0">
+                        <img src="{{ $userData->avatar_url }}" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm">
+                        <button class="absolute top-1 right-1 w-8 h-8 bg-white border border-gray-100 text-[#DB2A2A] rounded-full shadow-sm flex items-center justify-center hover:bg-gray-50 transition transform translate-x-2 -translate-y-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                         </button>
                     </div>
 
-                    <div class="flex-1 text-center sm:text-left space-y-1">
-                        <h2 class="text-2xl lg:text-3xl font-black text-[#444444] tracking-tight">{{ $userData->name }}</h2>
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 text-sm font-bold text-[#666666]">
-                            <p>ID <span class="mx-2">:</span> {{ $userData->id_number }}</p>
-                            <p>Batch <span class="mx-2">:</span> {{ $userData->batch }}</p>
+                    <div class="flex-1 text-center sm:text-left space-y-2 lg:pt-2">
+                        <h2 class="text-3xl lg:text-[32px] font-black text-[#444444] tracking-tight">{{ $userData->name }}</h2>
+                        
+                        <div class="text-[15px] font-bold text-[#666666] space-y-1.5 mx-auto sm:mx-0 w-fit sm:w-auto text-left">
+                            <div class="flex items-center">
+                                <span class="w-14">ID</span>
+                                <span class="w-6 text-center">:</span>
+                                <span class="text-[#666666]">{{ $userData->id_number }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-14">Batch</span>
+                                <span class="w-6 text-center">:</span>
+                                <span class="text-[#444444]">{{ $userData->batch }}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="sm:absolute sm:right-8 sm:top-1/2 sm:-translate-y-1/2">
-                        <span class="bg-[#DB2A2A] text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-sm">
+                    <div class="sm:absolute sm:right-8 sm:top-1/2 sm:-translate-y-1/2 mt-4 sm:mt-0">
+                        <span class="bg-[#DB2A2A] text-white text-sm font-bold px-6 py-2.5 rounded-full shadow-sm">
                             Level: {{ $userData->level }}
                         </span>
                     </div>

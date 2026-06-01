@@ -1,0 +1,239 @@
+@php
+    // 🌟 FRONTEND STATE: Data Dummy Payment
+    $isFullyPaid = false; // Ubah ke true untuk melihat state "All Bills are Fully Paid!"
+
+    // Data Tagihan Aktif
+    $activeBill = (object) [
+        'total' => 'Rp 1.299.000',
+        'due_date' => '31 May 2026',
+        'description' => 'Total Bill SPP May 2026'
+    ];
+
+    // Data Riwayat Transaksi
+    $paymentHistory = [
+        (object)['period' => 'Mei 2026', 'date' => '10 Apr 2026', 'no_trans' => 'SSN26042101', 'amount' => 'Rp 2.500.000', 'status' => 'Success'],
+        (object)['period' => 'Juni 2026', 'date' => '15 Mei 2026', 'no_trans' => 'SSN26051502', 'amount' => 'Rp 3.750.000', 'status' => 'Pending'],
+        (object)['period' => 'Juli 2026', 'date' => '20 Jun 2026', 'no_trans' => 'SSN26062003', 'amount' => 'Rp 1.200.000', 'status' => 'Failed'],
+        (object)['period' => 'Agustus 2026', 'date' => '05 Jul 2026', 'no_trans' => 'SSN26070504', 'amount' => 'Rp 4.000.000', 'status' => 'Success'],
+        (object)['period' => 'September 2026', 'date' => '12 Agu 2026', 'no_trans' => 'SSN26081205', 'amount' => 'Rp 2.850.000', 'status' => 'Success'],
+        (object)['period' => 'Oktober 2026', 'date' => '22 Sep 2026', 'no_trans' => 'SSN26092206', 'amount' => 'Rp 3.100.000', 'status' => 'Pending'],
+    ];
+
+    $userName = Auth::user() ? Auth::user()->name : 'Ahmad Hidayat';
+    $userLevel = Auth::user() && isset(Auth::user()->level) ? Auth::user()->level : 'Level Pra-N5';
+@endphp
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - LPK Seishin</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
+    </style>
+</head>
+<body class="bg-[#FFF9F4] text-[#444444] h-screen flex overflow-hidden">
+
+    <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
+        <div class="p-6">
+            @if(View::exists('components.application-logo'))
+                <x-application-logo class="h-14 w-auto" />
+            @else
+                <div class="text-[#DB2A2A] font-extrabold text-xl tracking-wider">SEISHIN</div>
+            @endif
+        </div>
+
+        <div class="px-4 mt-2 flex-1 overflow-y-auto custom-scrollbar">
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">OVERVIEW</p>
+            <nav class="space-y-1 mb-6">
+                <a href="{{ route('students.dashboard') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Enrolled
+                </a>
+                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    My Task
+                </a>
+                <a href="{{ route('students.vocabulary-mastery') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                    Vocabulary Mastery
+                </a>
+            </nav>
+
+            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider">SYSTEM</p>
+            <nav class="space-y-1">
+                <a href="{{ route('students.payment') }}" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Payment
+                </a>
+                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4">
+            <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm mb-3">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode($userName) }}&background=f3f4f6&color=DB2A2A" class="w-10 h-10 rounded-full">
+                <div class="overflow-hidden text-left">
+                    <h4 class="font-bold text-[13px] text-[#444444] truncate">{{ $userName }}</h4>
+                    <p class="text-[10px] text-[#666666] truncate">{{ $userLevel }}</p>
+                </div>
+            </div>
+            <button class="w-full flex items-center justify-center gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-[#FFDBDB] py-2.5 rounded-xl font-bold text-sm transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden relative">
+        
+        <header class="flex justify-between items-center px-4 lg:px-8 py-4 lg:py-6 bg-transparent">
+            <div>
+                <h2 class="text-base lg:text-lg font-bold text-[#444444]">こんにちわ, {{ explode(' ', $userName)[0] }}! 👋</h2>
+                <p id="realtime-clock" class="text-xs text-[#666666] font-medium mt-0.5">Memuat waktu...</p>
+            </div>
+            <div class="flex items-center gap-4 hidden sm:flex">
+                <button class="text-[#666666] hover:text-[#444444] relative transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <span class="absolute -top-1 -right-1 bg-[#DB2A2A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">27</span>
+                </button>
+                <div class="flex items-center gap-1.5 text-sm font-bold text-[#444444] cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                    EN ▾
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] mr-0 lg:mr-8 mb-0 lg:mb-8 overflow-y-auto shadow-sm custom-scrollbar relative flex flex-col">
+            <div class="p-6 lg:p-10">
+                
+                <div class="mb-8 text-left">
+                    <h1 class="text-3xl lg:text-4xl font-black text-[#444444] tracking-tight">Payment</h1>
+                    <p class="text-xs lg:text-sm font-bold text-[#666666] mt-2">Manage your SPP billing, payment methods, and transaction history.</p>
+                </div>
+
+                @if(!$isFullyPaid)
+                    <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-10 flex flex-col gap-4 lg:gap-6">
+                        
+                        <div class="flex justify-between items-center w-full">
+                            <h3 class="text-sm font-black text-[#444444]">Billing Summary</h3>
+                            <span class="text-sm font-black text-[#DB2A2A]">Due Date: {{ $activeBill->due_date }}</span>
+                        </div>
+                        
+                        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 w-full">
+                            <div>
+                                <h2 class="text-3xl lg:text-[32px] font-black text-[#222222] tracking-tight">Total Bill: {{ $activeBill->total }}</h2>
+                                <p class="text-sm font-semibold text-[#666666] mt-1">{{ $activeBill->description }}</p>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                                <button class="bg-white border border-gray-200 text-[#444444] hover:bg-gray-50 font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                                    <svg class="w-5 h-5 text-[#DB2A2A]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                                    Download Invoice
+                                </button>
+                                <button class="bg-[#DB2A2A] hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition shadow-sm">
+                                    Pay Now
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                @else
+                <div class="bg-white border border-gray-100 rounded-[32px] p-10 lg:p-14 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-10 flex flex-col items-center justify-center text-center">
+                        <div class="w-20 h-20 mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-[0_8px_16px_rgba(34,197,94,0.3)]">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h2 class="text-2xl font-black text-[#222222] mb-2">All Bills are Fully Paid!</h2>
+                        <p class="text-sm font-medium text-[#666666]">Thank you, {{ explode(' ', $userName)[0] }}'s tuition payments are up to date.</p>
+                    </div>
+                @endif
+
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-1 h-5 bg-[#DB2A2A] rounded-full"></div>
+                        <h3 class="text-lg font-black text-[#222222]">Payment History</h3>
+                    </div>
+
+                    <div class="overflow-x-auto bg-white border border-gray-100 rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)]">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                                <tr class="bg-[#F9FAFB] border-b border-gray-100">
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">Period/Month</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">Payment Date</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">No. Transaction</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">Jumlah</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">Status</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-[#444444]">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                @foreach($paymentHistory as $history)
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-4 px-6 text-sm font-medium text-[#666666]">{{ $history->period }}</td>
+                                        <td class="py-4 px-6 text-sm font-medium text-[#666666]">{{ $history->date }}</td>
+                                        <td class="py-4 px-6 text-sm font-medium text-[#666666]">{{ $history->no_trans }}</td>
+                                        <td class="py-4 px-6 text-sm font-medium text-[#666666]">{{ $history->amount }}</td>
+                                        
+                                        <td class="py-4 px-6">
+                                            <span class="px-3 py-1 text-xs font-bold rounded-md 
+                                                {{ match($history->status) {
+                                                    'Success' => 'bg-green-100 text-green-700',
+                                                    'Pending' => 'bg-orange-100 text-orange-500',
+                                                    'Failed' => 'bg-red-100 text-red-600',
+                                                    default => 'bg-gray-100 text-gray-600'
+                                                } }}">
+                                                {{ $history->status }}
+                                            </span>
+                                        </td>
+                                        
+                                        <td class="py-4 px-6">
+                                            @if($history->status === 'Success')
+                                                <button class="flex items-center gap-2 text-xs font-bold text-[#DB2A2A] hover:text-red-700 transition">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                                                    Download Receipt
+                                                </button>
+                                            @else
+                                                <span class="text-gray-400 font-bold ml-4">-</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function updateClock() {
+            const clockElement = document.getElementById('realtime-clock');
+            if (!clockElement) return;
+            const now = new Date();
+            const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clockElement.innerText = `${dateString} • ${hours}.${minutes}.${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
