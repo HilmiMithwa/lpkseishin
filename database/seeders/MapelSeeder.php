@@ -25,7 +25,9 @@ class MapelSeeder extends Seeder
                     'deskripsi_mapel' => 'Program intensif 3 bulan (396 JP) dengan fokus praktik. Mencakup 8 unit kompetensi dasar bahasa Jepang hingga persiapan ujian level N5.',
                     'id_guru' => $guru->id,
                     'jp' => 30,
-                    'status' => 'Aktif'
+                    'status' => 'Aktif',
+                    'target' => 'JLPT N5',
+                    'jadwal' => 'Senin - Kamis'
                 ],
                 [
                     'id_batch' => 2,
@@ -34,7 +36,9 @@ class MapelSeeder extends Seeder
                     'deskripsi_mapel' => 'Program lanjutan 2 bulan (264 JP) dengan fokus praktik. Mencakup 7 unit kompetensi bahasa Jepang hingga persiapan ujian level N4.',
                     'id_guru' => $guru->id,
                     'jp' => 30,
-                    'status' => 'Aktif'
+                    'status' => 'Aktif',
+                    'target' => 'JLPT N4',
+                    'jadwal' => 'Rabu - Jumat'
                 ],
                 [
                     'id_batch' => 1,
@@ -43,7 +47,9 @@ class MapelSeeder extends Seeder
                     'deskripsi_mapel' => 'Program lanjutan 2 bulan (264 JP) dengan fokus praktik. Mencakup 7 unit kompetensi bahasa Jepang hingga persiapan ujian level N3.',
                     'id_guru' => $guru->id,
                     'jp' => 30,
-                    'status' => 'Aktif'
+                    'status' => 'Aktif',
+                    'target' => 'JLPT N3',
+                    'jadwal' => 'Selasa - Kamis'
                 ]
             ];
 

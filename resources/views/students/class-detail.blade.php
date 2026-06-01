@@ -303,7 +303,7 @@
                                 <div class="leading-tight">
                                     <p class="text-[11px] font-semibold text-[#444444]">Completed:</p>
                                     <p class="text-sm font-bold text-[#222222]">
-                                        {{ $completedModulesCount ?? '[Data: completedModulesCount]' }} / {{ $subject->modul_count ?? '[Data: modul_count]' }} Modules
+                                        {{ $completedModulesCount ?? '[Data: completedModulesCount]' }} / {{ $modul_count }} Modules
                                     </p>
                                 </div>
                                 <div class="leading-tight">

@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         JadwalSeeder::class,
         DailyWordSeeder::class,
         BahanAjarSeeder::class,
+        AnnouncementSeeder::class,
+        ProgressBahanAjarSeeder::class,
     ]);
 
         User::factory()->create([

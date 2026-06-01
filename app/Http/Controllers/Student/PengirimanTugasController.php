@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Student\SubmitPengirimanTugasRequest;
 use App\Models\Pengiriman_Tugas;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -26,7 +25,7 @@ class PengirimanTugasController extends Controller
             return back()->with('error', 'Kamu sudah mengumpulkan tugas ini.');
         }
 
-        $tugas = \DB::table('tugas')->where('id_tugas', $id_tugas)->first();
+        $modul = Pengiriman_Tugas::with(['tugas', 'id_tugas'])->get();
         $status = 'dikirim';
         if($tugas && Carbon::now()->greaterThan(Carbon::parse($tugas->waktu_pengumpulan))) 
         {

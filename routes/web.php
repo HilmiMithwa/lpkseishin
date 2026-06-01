@@ -9,6 +9,7 @@ use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\ModulController;
 use App\Http\Controllers\Student\BahanAjarController;
 use App\Http\Controllers\Student\PengirimanTugasController;
+use App\Http\Controllers\Student\MapelController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'checkRole:admin'])->group(function () {
 Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/dashboard', [StudentController::class, 'index'])->name('students.dashboard');
     
-    Route::get('/students/subjects/{id_mapel}', [StudentController::class, 'show'])->name('subjects.show');
+    Route::get('/students/subjects/{id_mapel}', [MapelController::class, 'showProgress'])->name('subjects.show');
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}', [ModulController::class, 'showModule'])->name('modules.show');
 
