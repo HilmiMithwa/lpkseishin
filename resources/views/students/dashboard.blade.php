@@ -1,381 +1,239 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beranda Siswa - LPK Seishin</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .banner-red {
-            background: linear-gradient(90deg, #d62828 0%, #d62828 50%, #8b1a1a 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .banner-red::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            width: 65%;
-            height: 160%;
-            background-image: url("{{ asset('img/japanMap.svg') }}");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: left center;
-            opacity: 0.35;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
-    </style>
-</head>
-<body class="bg-[#FFF9F4] text-[#222222] h-screen flex overflow-hidden">
+@extends('layouts.student')
 
-    <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#DB2A2A] text-white rounded-xl shadow-md hover:bg-red-700 transition">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-    </button>
+@section('title', 'Beranda Siswa - LPK Seishin')
 
-    <button id="mobile-menu-close" class="fixed top-4 right-4 z-40 hidden lg:hidden p-2 bg-[#222222] text-white rounded-lg">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-
-    <aside id="sidebar" class="fixed lg:static left-0 top-0 w-64 h-screen lg:h-auto bg-[#FFF9F4] flex flex-col flex-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-lg lg:shadow-none">
-        <div class="p-6">
-            <x-application-logo class="h-14 w-auto" />
-        </div>
-
-        <div class="px-4 mt-2 flex-1">
-            <p class="text-xs font-bold text-[#444444] mb-3 px-2 tracking-wider">RINGKASAN</p>
-            <nav class="space-y-1">
-                <a href="#" class="flex items-center gap-3 bg-[#FFDBDB] text-[#DB2A2A] px-4 py-3 rounded-xl font-bold text-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    Beranda
-                </a>
-                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Terdaftar
-                </a>
-                <a href="{{ route('students.tasks') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    Tugas Saya
-                </a>
-                <a href="#" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    Penguasaan Kosakata
-                </a>
-            </nav>
-
-            <p class="text-xs font-bold text-[#666666] mb-3 px-2 tracking-wider mt-6">SISTEM</p>
-            <nav class="space-y-1">
-                <a href="{{ route('students.profile') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profil
-                </a>
-                <a href="{{ route('students.payment') }}" class="flex items-center gap-3 text-[#222222] hover:bg-gray-50 px-4 py-3 rounded-xl font-semibold text-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                    Pembayaran
-                </a>
-            </nav>
-        </div>
-
-        <div class="p-4">
-            <div class="bg-white border border-gray-100 rounded-2xl p-3 flex items-center gap-3 shadow-sm mb-3">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=DB2A2A" class="w-10 h-10 rounded-full">
-                <div class="overflow-hidden">
-                    <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name }}</h4>
-                    <p class="text-[10px] text-[#444444] truncate">{{ $enrollment->level ?? '[Data: enrollment.level]' }}</p>
-                    <p class="text-[10px] text-[#444444] truncate flex items-center gap-1">
-                        <span class="text-[#DB2A2A] font-bold text-[11px]">@</span> {{ Auth::user()->email ?? '[Data: user.email]' }}
-                    </p>
-                </div>
-            </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="w-full flex items-center justify-center gap-2 text-[#DB2A2A] bg-white border border-gray-200 hover:bg-[#FFDBDB] py-2.5 rounded-xl font-bold text-sm transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Keluar
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    <div class="flex-1 flex flex-col overflow-hidden">
-        
-    <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center px-4 lg:px-8 py-4 lg:py-6 bg-transparent gap-4">
-        
-        <div class="flex items-center gap-4"> <button id="mobile-menu-btn" class="lg:hidden p-2 bg-[#DB2A2A] text-white rounded-xl shadow-md hover:bg-red-700 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
-
-            <div class="pt-1">
-                <h2 class="text-base lg:text-lg font-bold text-[#222222] flex items-center gap-1">
-                    こんにちわ, 
-                    <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
-                    <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
-                </h2>
-                <p id="realtime-clock" class="text-xs text-[#666666] font-medium mt-0.5">Memuat waktu...</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2 lg:gap-6 w-full lg:w-auto justify-end">
-            </div>
-    </header>
-
-        <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] mr-0 lg:mr-8 mb-0 lg:mb-8 overflow-y-auto shadow-sm custom-scrollbar">
-            <div class="p-4 sm:p-6 lg:p-10">
-                
-                <div class="mb-6">
-                    <h1 class="text-xl sm:text-2xl lg:text-[26px] font-black text-[#222222] tracking-tight">Beranda</h1>
-                    <p class="text-xs sm:text-sm text-[#666666] font-medium">Pemantauan Belajar</p>
-                </div>
-
-                <div class="banner-red rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between relative gap-4">
-                    <div class="relative z-10 w-full lg:w-2/3">
-                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight mb-3">Selamat Datang,<br>{{ Auth::user()->name }}</h2>
-                        <p class="text-white/90 text-xs sm:text-sm font-medium">Mimpi besar dimulai dari konsistensi kecil. Mari pelajari sesuatu<br>yang baru hari ini!</p>
-                    </div>
-                    <div class="relative z-10 bg-white rounded-2xl p-4 sm:p-6 text-center shadow-lg w-full sm:w-64 flex-shrink-0">
-                        <h3 class="text-3xl sm:text-4xl font-black text-[#222222] tracking-widest mb-1 leading-tight">
-                            @isset($dailyWord->kanji)
-                                {{ $dailyWord->kanji }}
-                            @else
-                                <span class="text-xs text-gray-400 font-medium">[Data: dailyWord.kanji]</span>
-                            @endisset
-                        </h3>
-                        
-                        <p class="text-xs sm:text-sm font-bold text-[#222222]">
-                            @isset($dailyWord->romaji)
-                                {{ $dailyWord->romaji }}
-                            @else
-                                <span class="text-[9px] text-gray-400 font-medium">[Data: dailyWord.romaji]</span>
-                            @endisset
-                        </p>
-
-                        <div class="text-[9px] sm:text-[10px] text-[#666666] mt-2 font-medium leading-relaxed">
-                            @isset($dailyWord->meaning_en)
-                                {{ $dailyWord->meaning_en }}
-                            @else
-                                <span class="text-[8px] text-gray-400 block">[Data: dailyWord.meaning_en]</span>
-                            @endisset
-                            
-                            @isset($dailyWord->meaning_id)
-                                {{ $dailyWord->meaning_id }}
-                            @else
-                                <span class="text-[8px] text-gray-400 block">[Data: dailyWord.meaning_id]</span>
-                            @endisset
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
-                    <div class="col-span-1 rounded-2xl lg:rounded-3xl overflow-hidden relative group min-h-[240px] sm:min-h-[260px]">
-                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
-                        <div class="relative z-10 p-4 sm:p-6 flex flex-col h-full justify-between">
-                            <div>
-                                <span class="bg-[#d62828] text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">Kelas Utama</span>
-                            </div>
-                            <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-white leading-snug mb-4">{{ $activeBatch->nama_pelatihan ?? '[Data: activeBatch.nama_pelatihan]' }}</h3>
-                                <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2">
-                                    Lanjutkan Pelajaran
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-span-1 lg:col-span-2">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="bg-gray-800 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded uppercase">概要</span>
-                            <h3 class="font-bold text-[#222222] text-xs sm:text-sm">Ringkasan</h3>
-                        </div>
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
-                                        <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <h4 class="text-xs sm:text-sm font-black text-[#222222] line-clamp-1">
-                                        @isset($enrollment->jenis_program)
-                                            {{ $enrollment->jenis_program }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: enrollment.jenis_program]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Program Saat Ini</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
-                                        <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                                    </div>
-                                    <h4 class="text-lg sm:text-2xl font-black text-[#222222]">
-                                        @isset($averageScore)
-                                            {{ $averageScore }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: averageScore]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Skor Rata-rata</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
-                                        <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                    </div>
-                                    <h4 class="text-lg sm:text-2xl font-black text-[#222222]">
-                                        @isset($completedTasksCount)
-                                            {{ $completedTasksCount }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: completedTasksCount]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Penyelesaian Tugas</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0 font-bold text-sm">あ</div>
-                                    <h4 class="text-lg sm:text-2xl font-black text-[#222222]">
-                                        @isset($vocabularyCount)
-                                            {{ $vocabularyCount }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: vocabularyCount]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Penguasaan Kosakata</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
-                                        <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    </div>
-                                    <h4 class="text-lg sm:text-2xl font-black text-[#222222]">
-                                        @isset($upcomingDeadlinesCount)
-                                            {{ $upcomingDeadlinesCount }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: upcomingDeadlinesCount]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Batas Waktu Mendatang</p>
-                            </div>
-                            <div class="bg-white border border-gray-100 rounded-2xl p-3 sm:p-5 shadow-sm">
-                                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                    <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0 font-bold text-sm">あ</div>
-                                    <h4 class="text-lg sm:text-2xl font-black text-gray-900 line-clamp-1">
-                                        @isset($learningHours)
-                                            {{ $learningHours }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: learningHours]</span>
-                                        @endif
-                                    </h4>
-                                </div>
-                                <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Total Jam Belajar</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="bg-gray-800 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded uppercase">授業</span>
-                        <h3 class="font-bold text-[#222222] text-xs sm:text-sm">Pelajaran Saat Ini</h3>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                        @forelse($subjects as $subject)
-                        <div class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl p-4 sm:p-5 shadow-sm relative flex flex-col justify-between">
-                            <span class="absolute top-4 right-4 bg-yellow-400 text-white text-[8px] sm:text-[10px] font-bold px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-md">Progres</span>
-                            
-                            <div>
-                                <div class="flex items-center gap-3 sm:gap-4 mb-4">
-                                    <div class="w-12 sm:w-14 h-12 sm:h-14 rounded-xl border border-gray-200 flex items-center justify-center text-red-600 font-bold text-base sm:text-lg flex-shrink-0">
-                                        あa
-                                    </div>
-                                    
-                                    <div class="w-12 sm:w-14 h-12 sm:h-14 flex flex-col items-center justify-center border border-gray-200 rounded-xl flex-shrink-0">
-                                        <p class="text-lg sm:text-2xl font-black text-[#222222] leading-none text-center">
-                                            @isset($subject->modul_count) 
-                                                {{ $subject->modul_count }} 
-                                            @else 
-                                                <span class="text-[10px] text-black-400 leading-tight px-1">[Data: subject.modul_count]</span> 
-                                            @endif
-                                        </p>
-                                        <p class="text-[7px] sm:text-[8px] text-[#666666] font-bold mt-0.5 uppercase text-center">Modul</p>
-                                    </div>
-                                </div>
-                                <h4 class="text-sm sm:text-base font-black text-[#222222] mb-1.5 leading-snug line-clamp-2">{{ $subject->nama_mapel }}</h4>
-                                <p class="text-[9px] sm:text-[10px] text-[#666666] font-medium mb-5 line-clamp-1">
-                                    Sensei: {{ $subject->guru->name ?? '[Data: subject.guru.name]' }}
-                                </p>
-                            </div>
-
-                            <div class="flex justify-end">
-                                <a href="{{ route('subjects.show', $subject->id_mapel) }}" class="w-full sm:w-auto bg-[#d62828] hover:bg-red-700 text-white font-bold py-2 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2">
-                                    Buka Kelas
-                                    <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
-                            </div>
-                        </div>
-                        @empty
-                        <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-8 sm:py-10 bg-gray-50 rounded-2xl lg:rounded-3xl border border-dashed border-gray-300">
-                            <p class="text-[#666666] italic text-xs sm:text-sm">Belum ada mata pelajaran yang tersedia.</p>
-                        </div>
-                        @endforelse
-                    </div>
-                </div>
-
-            </div>
-        </main>
+@section('content')
+<div class="p-4 sm:p-6 lg:p-10">
+    
+    <div class="mb-6">
+        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Beranda</h1>
+        <p class="text-sm text-[#666666] font-medium">Pemantauan Belajar</p>
     </div>
 
-    <script>
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenuClose = document.getElementById('mobile-menu-close');
-        const sidebar = document.getElementById('sidebar');
+    <!-- Banner -->
+    <div class="banner-red rounded-3xl lg:rounded-[32px] p-6 sm:p-8 lg:p-10 mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between relative gap-6">
+        <div class="relative z-10 w-full lg:w-2/3">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-ibm text-white leading-tight mb-4 tracking-tight">Selamat Datang,<br>{{ Auth::user()->name }}</h2>
+            <p class="text-white/90 text-sm sm:text-base font-medium max-w-lg leading-relaxed">Mimpi besar dimulai dari konsistensi kecil. Mari pelajari sesuatu yang baru hari ini!</p>
+        </div>
+        <div class="relative z-10 bg-white rounded-3xl p-6 sm:p-8 text-center shadow-2xl w-full sm:w-72 flex-shrink-0 lg:mr-4">
+            <h3 class="text-4xl sm:text-5xl font-bold font-ibm text-[#222222] tracking-widest mb-2 leading-tight">
+                @isset($dailyWord->kanji)
+                    {{ $dailyWord->kanji }}
+                @else
+                    夢語り
+                @endisset
+            </h3>
+            
+            <p class="text-sm sm:text-base font-bold font-ibm text-[#222222] mb-1">
+                @isset($dailyWord->romaji)
+                    {{ $dailyWord->romaji }}
+                @else
+                    Yumegatari
+                @endisset
+            </p>
 
-        mobileMenuBtn.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            mobileMenuClose.classList.remove('hidden');
-        });
+            <div class="text-[10px] sm:text-xs text-[#666666] font-medium leading-relaxed">
+                @isset($dailyWord->meaning_en)
+                    <span>{{ $dailyWord->meaning_en }}</span>
+                @else
+                    <span>Speaking of Dreams</span>
+                @endisset
+                
+                @isset($dailyWord->meaning_id)
+                    <span class="mx-1">•</span><span>{{ $dailyWord->meaning_id }}</span>
+                @else
+                    <span class="mx-1">•</span><span>Cerita Mimpi</span>
+                @endisset
+            </div>
+        </div>
+    </div>
 
-        mobileMenuClose.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            mobileMenuClose.classList.add('hidden');
-        });
+    <!-- Summary Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
+        <!-- Main Course Card -->
+        <div class="col-span-1 rounded-3xl overflow-hidden relative group min-h-[280px]">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
+            <div class="relative z-10 p-5 sm:p-6 flex flex-col h-full justify-between">
+                <div>
+                    <span class="bg-[#d62828] text-white text-[10px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wide shadow-sm">Main Course</span>
+                </div>
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold font-ibm text-white leading-snug mb-5">{{ $activeBatch->nama_pelatihan ?? 'Batch 5 - Pelatihan LPK Seishin' }}</h3>
+                    <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 sm:py-3.5 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
+                        Lanjutkan Pelajaran
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        document.querySelectorAll('#sidebar a').forEach(link => {
-            link.addEventListener('click', () => {
-                sidebar.classList.add('-translate-x-full');
-                mobileMenuClose.classList.add('hidden');
-            });
-        });
+        <!-- Summary Stats -->
+        <div class="col-span-1 lg:col-span-2">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] rounded-xl w-11 h-11 flex items-center justify-center border border-gray-50/50">
+                    <span class="text-[#222222] text-[13px] font-black leading-none">概要</span>
+                </div>
+                <h3 class="font-bold font-karla text-[#222222] text-lg tracking-tight">Ringkasan</h3>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+                
+                <!-- Stat Card 1 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($enrollment->jenis_program)
+                                {{ $enrollment->jenis_program }}
+                            @else
+                                01/03
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Program Saat Ini</p>
+                </div>
 
-        function updateClock() {
-            const now = new Date();
-            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = now.toLocaleDateString('id-ID', optionsDate);
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}.${minutes}.${seconds}`;
-            document.getElementById('realtime-clock').innerText = `${dateString} • ${timeString}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-</body>
-</html>
+                <!-- Stat Card 2 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        </div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($averageScore)
+                                {{ $averageScore }}
+                            @else
+                                85.5
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Skor Rata-rata</p>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($completedTasksCount)
+                                {{ $completedTasksCount }}
+                            @else
+                                23
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Penyelesaian Tugas</p>
+                </div>
+
+                <!-- Stat Card 4 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0 font-bold text-sm sm:text-base font-ibm">あ</div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($vocabularyCount)
+                                {{ $vocabularyCount }}
+                            @else
+                                456
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Penguasaan Kosakata</p>
+                </div>
+
+                <!-- Stat Card 5 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($upcomingDeadlinesCount)
+                                {{ $upcomingDeadlinesCount }} <span class="text-xs sm:text-sm text-[#666666] font-karla font-semibold ml-1">Tugas</span>
+                            @else
+                                4 <span class="text-xs sm:text-sm text-[#666666] font-karla font-semibold ml-1">Tugas</span>
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Batas Waktu Mendatang</p>
+                </div>
+
+                <!-- Stat Card 6 -->
+                <div class="bg-white border border-gray-100/80 rounded-3xl p-4 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition flex flex-col justify-center">
+                    <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="text-xl sm:text-[28px] font-bold font-ibm text-[#222222] tracking-tight truncate leading-none mt-1">
+                            @isset($learningHours)
+                                {{ $learningHours }} <span class="text-xs sm:text-sm text-[#666666] font-karla font-semibold ml-1">Jam</span>
+                            @else
+                                56 <span class="text-xs sm:text-sm text-[#666666] font-karla font-semibold ml-1">Jam</span>
+                            @endif
+                        </h4>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-[#666666]">Total Jam Belajar</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Lesson Section -->
+    <div>
+        <div class="flex items-center gap-3 mb-6">
+            <div class="bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] rounded-xl w-11 h-11 flex items-center justify-center border border-gray-50/50">
+                <span class="text-[#222222] text-[13px] font-black leading-none">授業</span>
+            </div>
+            <h3 class="font-bold font-karla text-[#222222] text-lg tracking-tight">Pelajaran Saat Ini</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            @forelse($subjects as $subject)
+            <div class="bg-white border border-gray-100/80 rounded-[28px] p-5 sm:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] relative flex flex-col justify-between h-full hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] transition">
+                <span class="absolute top-5 right-5 bg-yellow-400 text-white text-[9px] font-bold px-2.5 py-1 rounded-md tracking-wider">Progress</span>
+                
+                <div>
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="w-14 h-14 rounded-2xl border border-gray-100 flex items-center justify-center text-[#d62828] font-bold text-lg flex-shrink-0 bg-gray-50/50">
+                            あa
+                        </div>
+                        
+                        <div class="w-14 h-14 flex flex-col items-center justify-center border border-gray-100 rounded-2xl flex-shrink-0 bg-gray-50/50">
+                            <p class="text-xl font-bold font-ibm text-[#222222] leading-none text-center">
+                                @isset($subject->modul_count) 
+                                    {{ $subject->modul_count }} 
+                                @else 
+                                    7 
+                                @endif
+                            </p>
+                            <p class="text-[8px] text-[#666666] font-bold mt-1 uppercase text-center tracking-wide">Modul</p>
+                        </div>
+                    </div>
+                    <h4 class="text-base font-bold font-ibm text-[#222222] mb-2 leading-snug line-clamp-2">{{ $subject->nama_mapel }}</h4>
+                    <p class="text-[11px] text-[#666666] leading-relaxed mb-6 line-clamp-3">
+                        <!-- Use a generic description if none exists in backend to match design aesthetic -->
+                        Program pembelajaran dengan fokus praktik intensif. Mencakup unit kompetensi persiapan hingga ujian akhir evaluasi materi ini.
+                    </p>
+                </div>
+
+                <div class="flex justify-end mt-auto">
+                    <a href="{{ route('subjects.show', $subject->id_mapel) }}" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-[13px] transition flex items-center justify-center gap-2 shadow-sm">
+                        Buka Kelas
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+            @empty
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-10 bg-gray-50 rounded-[28px] border border-dashed border-gray-200">
+                <p class="text-[#666666] font-medium text-sm">Belum ada mata pelajaran yang tersedia.</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+@endsection

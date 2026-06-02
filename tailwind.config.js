@@ -12,8 +12,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Karla', ...defaultTheme.fontFamily.sans],
+                karla: ['Karla', ...defaultTheme.fontFamily.sans],
+                ibm: ['IBM Plex Sans', ...defaultTheme.fontFamily.sans],
+                'google-sans': ['Google Sans Flex', ...defaultTheme.fontFamily.sans],
             },
+
         },
     },
 

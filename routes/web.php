@@ -58,6 +58,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/evaluations/{id}/start', [StudentController::class, 'showEvaluation'])->name('evaluations.start');
 
+    Route::get('/students/evaluations/result', function () {
+        return view('students.evaluation-result');
+    })->name('students.evaluation-result');
+
     // rute detail materi
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [BahanAjarController::class, 'showMaterial'])->name('materials.show');
 
@@ -69,6 +73,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/submit', [PengirimanTugasController::class, 'store'])->name('tasks.submit');
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
+
+    Route::get('/students/enrolled', function () {
+        return view('students.enrolled');
+    })->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
