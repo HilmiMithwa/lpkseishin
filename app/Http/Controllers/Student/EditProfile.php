@@ -9,10 +9,16 @@ use App\Http\Requests\Student\EditProfileRequest;
 
 class EditProfile extends Controller
 {
-    public function index(EditProfileRequest $request) 
+    
+
+    public function update(EditProfileRequest $request) 
     {
         $user = Auth::user();
-        return view('students.profile');
+
+        $validatedData = $request->validated();
+        $user->update($validatedData);
+
+        return view('student.profile')->with('success', 'Profil berhasil diperbarui');
     }
 
 
