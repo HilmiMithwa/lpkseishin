@@ -64,18 +64,18 @@
         
         <div class="space-y-2 z-10 flex flex-col justify-center items-center">
             <div>
-                <span class="text-sm font-semibold tracking-wide text-white/90 select-none">
+                <span class="text-base font-semibold tracking-wide text-white/90 select-none">
                     Kata Hari Ini
                 </span>
             </div>
             <div class="pt-0.5 text-center">
-                <p class="text-xs font-medium text-red-200/90 italic tracking-wider">{{ $dailyFurigana ?? "[Data: dailyWord->furigana]" }}</p>
+                <p class="text-sm font-medium text-red-200/90 italic tracking-wider">{{ $dailyFurigana ?? "[Data: dailyWord->furigana]" }}</p>
                 
-                <h2 class="text-4xl lg:text-5xl font-black tracking-tight text-white mt-0.5">
+                <h2 class="text-6xl lg:text-8xl font-bold tracking-tight text-white mt-0.5">
                     {{ $dailyKanji }}
                 </h2>
                 
-                <p class="text-sm font-bold text-red-100/90 tracking-wide mt-1">
+                <p class="text-base font-bold text-red-100/90 tracking-wide mt-1">
                     {{ $dailyRomaji }}
                 </p>
             </div>
@@ -87,9 +87,9 @@
             </button>
 
             <div class="bg-white rounded-[24px] py-4 px-5 text-center text-gray-800 shadow-sm w-full flex flex-col justify-center items-center min-h-[96px] border border-gray-50 select-none h-auto">
-                <p class="text-[9px] font-extrabold text-[#666666] uppercase tracking-widest">Terjemahan</p>
+                <p class="text-[9px] font-bold text-[#666666] uppercase tracking-widest">Terjemahan</p>
                 
-                <h3 class="text-sm font-extrabold text-[#222222] mt-1.5 leading-snug tracking-tight max-w-full break-words">
+                <h3 class="text-sm font-bold text-[#222222] mt-1.5 leading-snug tracking-tight max-w-full break-words">
                     {{ $dailyMeaningId }}
                 </h3>
                 
@@ -109,9 +109,9 @@
                     <div class="w-5 h-5 rounded-full border border-[#d62828] flex items-center justify-center text-[#d62828]">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Dikuasai</p>
+                    <p class="text-xs font-bold text-[#444444] capitalize tracking-wide">Dikuasai</p>
                 </div>
-                <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statMastered }} Kata</h2>
+                <h2 class="text-3xl font-bold text-[#222222] tracking-tight">{{ $statMastered }} Kata</h2>
             </div>
             
             <div class="relative w-[70px] h-[70px] flex items-center justify-center flex-shrink-0">
@@ -129,9 +129,9 @@
                     <div class="w-5 h-5 rounded-full border border-[#d62828] flex items-center justify-center text-[#d62828]">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </div>
-                    <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Dipelajari</p>
+                    <p class="text-xs font-bold text-[#444444] capitalize tracking-wide">Dipelajari</p>
                 </div>
-                <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statLearning }} Kata</h2>
+                <h2 class="text-3xl font-bold text-[#222222] tracking-tight">{{ $statLearning }} Kata</h2>
             </div>
         </div>
 
@@ -141,9 +141,9 @@
                     <div class="w-5 h-5 rounded-full border border-[#d62828] flex items-center justify-center text-[#d62828]">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                     </div>
-                    <p class="text-[11px] font-bold text-[#444444] capitalize tracking-wide">Favorit</p>
+                    <p class="text-xs font-bold text-[#444444] capitalize tracking-wide">Favorit</p>
                 </div>
-                <h2 class="text-3xl font-black text-[#222222] tracking-tight">{{ $statFavourite }} Kata</h2>
+                <h2 class="text-3xl font-bold text-[#222222] tracking-tight">{{ $statFavourite }} Kata</h2>
             </div>
             <button class="w-12 h-12 bg-[#d62828] hover:bg-red-700 text-white rounded-full flex items-center justify-center transition shadow-sm hover:-translate-y-0.5 duration-200 flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -154,7 +154,7 @@
 
     <div class="space-y-4">
         <div class="flex items-center gap-2 border-l-2 border-[#d62828] pl-2 text-left">
-            <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Modul Flashcard</h3>
+            <h3 class="text-sm font-bold text-[#222222]">Modul Flashcard</h3>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -166,7 +166,7 @@
                             <div class="w-[52px] h-[52px] bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-[#d62828] font-medium text-2xl shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] select-none">
                                 あa
                             </div>
-                            <h3 class="text-[28px] font-black text-[#222222] tracking-tight">Level {{ $lvl->level }}</h3>
+                            <h3 class="text-xl font-bold text-[#222222] tracking-tight">Level {{ $lvl->level }}</h3>
                         </div>
                         
                         <span class="text-[11px] font-bold capitalize px-3 py-1.5 rounded-lg {{ $lvl->status === 'Selesai' ? 'bg-[#22c55e] text-white' : 'bg-[#eab308] text-white' }}">
