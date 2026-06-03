@@ -43,7 +43,7 @@
         </div>
 
         <div class="flex-1 text-center sm:text-left space-y-2 lg:pt-2">
-            <h2 class="text-3xl lg:text-[32px] font-black text-[#444444] tracking-tight">{{ $userData->name }}</h2>
+            <h2 class="text-3xl lg:text-[32px] font-bold text-[#222222] tracking-tight">{{ $userData->name }}</h2>
             
             <div class="text-[15px] font-bold text-[#666666] space-y-1.5 mx-auto sm:mx-0 w-fit sm:w-auto text-left">
                 <div class="flex items-center">
@@ -52,7 +52,7 @@
                     <span class="text-[#666666]">{{ $userData->id_number }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="w-14">Angkatan</span>
+                    <span class="w-14">Batch</span>
                     <span class="w-6 text-center">:</span>
                     <span class="text-[#444444]">{{ $userData->batch }}</span>
                 </div>
@@ -69,24 +69,24 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         
         <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col justify-between">
-            <h3 class="text-lg font-black text-[#444444] mb-6">Detail Pribadi</h3>
+            <h3 class="text-lg font-bold text-[#222222] mb-6">Detail Pribadi</h3>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Nama Lengkap:</label>
-                    <input type="text" value="{{ $userData->name }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Nama Lengkap:</label>
+                    <input type="text" value="{{ $userData->name }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Email:</label>
-                    <input type="email" value="{{ $userData->email }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Email:</label>
+                    <input type="email" value="{{ $userData->email }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Nomor Telepon:</label>
-                    <input type="text" value="{{ $userData->phone }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Nomor Telepon:</label>
+                    <input type="text" value="{{ $userData->phone }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Tanggal Lahir:</label>
-                    <input type="text" value="{{ $userData->dob }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Tanggal Lahir:</label>
+                    <input type="text" value="{{ $userData->dob }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
                 </div>
             </div>
 
@@ -98,30 +98,30 @@
         </div>
 
         <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col">
-            <h3 class="text-lg font-black text-[#444444] mb-6">Persyaratan LPK</h3>
+            <h3 class="text-lg font-bold text-[#222222] mb-6">Persyaratan LPK</h3>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Tingkat Pendidikan:</label>
-                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
+                    <label class="text-sm font-bold text-[#666666]">Tingkat Pendidikan:</label>
+                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->education }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Tinggi / Berat Badan:</label>
-                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
+                    <label class="text-sm font-bold text-[#666666]">Tinggi / Berat Badan:</label>
+                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->height_weight }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Nama Kontak Darurat:</label>
-                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
+                    <label class="text-sm font-bold text-[#666666]">Nama Kontak Darurat:</label>
+                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->emergency_name }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Telepon Kontak Darurat:</label>
-                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#666666] select-none cursor-not-allowed">
+                    <label class="text-sm font-bold text-[#666666]">Telepon Kontak Darurat:</label>
+                    <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->emergency_phone }}
                     </div>
                 </div>
@@ -131,20 +131,20 @@
     </div>
 
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-        <h3 class="text-lg font-black text-[#444444] mb-6">Ubah Kata Sandi</h3>
+        <h3 class="text-lg font-bold text-[#222222] mb-6">Ubah Kata Sandi</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
             <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Kata Sandi Saat Ini</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Kata Sandi Saat Ini</label>
+                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
             </div>
             <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Kata Sandi Baru</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Kata Sandi Baru</label>
+                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
             </div>
             <div class="space-y-1.5 text-left">
-                    <label class="text-xs font-bold text-[#666666]">Konfirmasi Kata Sandi</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] focus:outline-none focus:border-[#d62828] transition">
+                    <label class="text-sm font-bold text-[#666666]">Konfirmasi Kata Sandi</label>
+                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
             </div>
             <div>
                 <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
