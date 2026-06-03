@@ -184,7 +184,7 @@
                                 <span class="bg-[#d62828] text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">Kelas Utama</span>
                             </div>
                             <div>
-                                <h3 class="text-lg sm:text-xl font-bold text-white leading-snug mb-4">{{ $activeBatch->nama_pelatihan ?? '[Data: activeBatch.nama_pelatihan]' }}</h3>
+                                <h3 class="text-lg sm:text-xl font-bold text-white leading-snug mb-4">{{ $activeBatch->nama_program ?? '[-]' }}</h3>
                                 <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2">
                                     Lanjutkan Pelajaran
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -204,12 +204,8 @@
                                     <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
                                         <svg class="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     </div>
-                                    <h4 class="text-xs sm:text-sm font-black text-[#222222] line-clamp-1">
-                                        @isset($enrollment->jenis_program)
-                                            {{ $enrollment->jenis_program }}
-                                        @else
-                                            <span class="text-[12px] text-black-400 leading-tight px-1">[Data: enrollment.jenis_program]</span>
-                                        @endif
+                                    <h4 class="text-lg sm:text-2xl font-black text-[#222222]">
+                                        {{ $completedSubjects ?? 0 }}/{{ $totalSubjects ?? 0 }}
                                     </h4>
                                 </div>
                                 <p class="text-[9px] sm:text-[11px] font-bold text-[#666666]">Program Saat Ini</p>
