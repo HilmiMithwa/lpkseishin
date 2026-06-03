@@ -142,7 +142,7 @@
 
 @push('modals')
     <!-- Modal Selesai Ujian -->
-    <div id="evaluation-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center">
+    <div id="evaluation-modal" class="fixed inset-0 z-[100] hidden items-center justify-center">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"></div>
         <div class="bg-white rounded-[32px] p-8 lg:p-10 shadow-2xl relative z-10 w-[90%] max-w-md text-center transform scale-95 opacity-0 transition-all duration-300" id="evaluation-modal-content">
             
@@ -228,6 +228,7 @@
         }
         
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
         
         // Animasi masuk
         setTimeout(() => {
@@ -288,7 +289,7 @@
         
         for(let i = 0; i < totalQuestions; i++) {
             const qNum = i + 1;
-            let btnClass = 'bg-white border border-gray-200 text-gray-500 hover:border-[#d62828] hover:text-[#d62828]'; 
+            let btnClass = 'border border-gray-200 text-gray-500 hover:border-[#d62828] hover:text-[#d62828]'; 
 
             if (i === currentIndex) {
                 btnClass = 'bg-[#FACC15] text-white shadow-md ring-2 ring-[#FACC15] ring-offset-1'; 
