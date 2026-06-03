@@ -28,6 +28,12 @@ class StudentController extends Controller
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
         $enrollment = Transaction::where('id_user', Auth::id())->first();
+        $activeBatch = DB::table('student_list_batch')
+            ->join('batch', 'student_list_batch.id_batch', '=', 'batch.id_batch')
+            ->where('student_list_batch.user_id', $user->id)
+            ->where('student_list_batch.status', 'Active')
+            ->select('batch.*', 'student_list_batch.status as batch_status')
+            ->first();
 
         // 3. Fitur Yumegatari: Ambil satu kata secara acak dari database
         // Pastikan temanmu sudah membuat tabel 'daily_words'
@@ -35,11 +41,89 @@ class StudentController extends Controller
             ? DB::table('daily_words')->inRandomOrder()->first()
             : null;
 
-        // 4. Kirim semua variabel ke view dashboard
+        // 4. Ringkasan (Summary Stat)
+         // Ambil semua id_mapel yang diikuti siswa ini
+        $mapelIds = $subjects->pluck('id_mapel');
+
+        $totalSubjects = $subjects->count();
+        $completedSubjects = $subjects->filter(function ($subject) use ($user) {
+            $totalModul = $subject->modul_count;
+            if ($totalModul === 0) return false;
+
+            $completedModul = DB::table('bahan_ajar_progress')
+                ->join('bahan_ajar', 'bahan_ajar_progress.id_bahan_ajar', '=', 'bahan_ajar.id_bahan_ajar')
+                ->join('modul', 'bahan_ajar.id_modul', '=', 'modul.id_modul')
+                ->where('modul.id_mapel', $subject->id_mapel)
+                ->where('bahan_ajar_progress.id_user', $user->id)
+                ->where('bahan_ajar_progress.is_complete', true)
+                ->distinct('bahan_ajar.id_modul')
+                ->count('bahan_ajar.id_modul');
+
+            return $completedModul >= $totalModul;
+        })->count();
+ 
+        // Ambil semua id_tugas dari mapel-mapel tersebut
+        $tugasIds = DB::table('tugas')
+            ->join('rps', 'tugas.id_rps', '=', 'rps.id_rps')
+            ->join('modul', 'rps.id_mapel', '=', 'modul.id_mapel')
+            ->whereIn('modul.id_mapel', $mapelIds)
+            ->pluck('tugas.id_tugas');
+ 
+        // Tugas yang sudah selesai dinilai milik siswa ini
+        $completedTasksCount = DB::table('pengiriman_tugas')
+            ->where('id_user', $user->id)
+            ->where('status', 'dinilai')
+            ->whereIn('id_tugas', $tugasIds)
+            ->count();
+ 
+        // Rata-rata nilai dari tugas yang sudah dinilai
+        $averageScore = DB::table('pengiriman_tugas')
+            ->where('id_user', $user->id)
+            ->where('status', 'dinilai')
+            ->whereIn('id_tugas', $tugasIds)
+            ->whereNotNull('nilai')
+            ->avg('nilai');
+        $averageScore = $averageScore ? round($averageScore, 1) : 0;
+ 
+        // Jumlah deadline tugas yang akan datang (dalam 7 hari ke depan)
+        // Gunakan kolom created_at tugas sebagai proxy deadline jika tidak ada kolom deadline
+        $upcomingDeadlinesCount = DB::table('tugas')
+            ->join('rps', 'tugas.id_rps', '=', 'rps.id_rps')
+            ->join('modul', 'rps.id_mapel', '=', 'modul.id_mapel')
+            ->whereIn('modul.id_mapel', $mapelIds)
+            ->whereNotIn('tugas.id_tugas', function ($q) use ($user) {
+                $q->select('id_tugas')
+                  ->from('pengiriman_tugas')
+                  ->where('id_user', $user->id);
+            })
+            ->count();
+ 
+        // Jumlah kosakata yang sudah dihafal
+        $vocabularyCount = VocabProgress::where('id_user', $user->id)
+            ->where('is_memorized', true)
+            ->count();
+ 
+        // Estimasi jam belajar: hitung bahan ajar yang sudah selesai
+        // Asumsi rata-rata 15 menit per bahan ajar
+        $completedMaterialsCount = DB::table('bahan_ajar_progress')
+            ->where('id_user', $user->id)
+            ->where('is_complete', true)
+            ->count();
+        $learningHours = round(($completedMaterialsCount * 15) / 60, 1);
+
+        // 5. Kirim semua variabel ke view dashboard
         return view('students.dashboard', compact(
             'subjects',
             'enrollment',
-            'dailyWord'
+            'dailyWord',
+            'completedTasksCount',
+            'averageScore',
+            'upcomingDeadlinesCount',
+            'vocabularyCount',
+            'learningHours',
+            'activeBatch',
+            'totalSubjects',
+            'completedSubjects'
         ));
     }
 
