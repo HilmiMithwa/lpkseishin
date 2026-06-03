@@ -49,17 +49,50 @@
 
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-wrap items-center gap-3">
-            <div class="text-sm font-black text-[#444444] mr-2">Daftar Flashcard</div>
+            <div class="text-sm font-bold text-[#444444] mr-2">Daftar Flashcard</div>
             <div class="relative">
                 <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#666666]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 <input type="text" placeholder="Cari kata..." class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-[#444444] focus:outline-none focus:border-gray-400 w-48 sm:w-64 transition-colors">
             </div>
-            <button class="bg-[#d62828] hover:bg-red-700 text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-sm transition">
-                Saring
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-            </button>
+            <div class="flex items-center gap-2">
+                <div class="relative dropdown-container">
+                    <button id="filter-toggle-btn" type="button" class="dropdown-btn bg-white text-[#d62828] border border-[#d62828] hover:bg-red-50 px-4 h-[38px] rounded-full text-xs font-bold flex items-center gap-2 shadow-sm transition active:scale-95 focus:outline-none">
+                        Filter
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    </button>
+                    
+                    <!-- Dropdown Menu Filter -->
+                    <div class="dropdown-menu absolute left-0 sm:left-auto sm:right-0 top-[calc(100%+0.5rem)] w-56 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-left sm:origin-top-right z-50 overflow-hidden">
+                        <div class="px-5 py-4 border-b border-gray-100 bg-white">
+                            <h3 class="text-[11px] font-bold text-[#666666] uppercase tracking-wider">Filter Berdasarkan</h3>
+                        </div>
+                        <div class="p-3 flex flex-col gap-1.5">
+                        <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
+                            <input type="radio" name="filter_status" value="semua" class="w-4 h-4 text-[#d62828] border-gray-300 focus:ring-[#d62828]" checked>
+                            <span class="text-sm font-semibold text-slate-700 group-hover:text-[#d62828] transition-colors">Semua Kosakata</span>
+                        </label>
+                        <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
+                            <input type="radio" name="filter_status" value="dikuasai" class="w-4 h-4 text-[#d62828] border-gray-300 focus:ring-[#d62828]">
+                            <span class="text-sm font-semibold text-slate-700 group-hover:text-[#d62828] transition-colors">Sudah Dikuasai</span>
+                        </label>
+                        <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
+                            <input type="radio" name="filter_status" value="belum" class="w-4 h-4 text-[#d62828] border-gray-300 focus:ring-[#d62828]">
+                            <span class="text-sm font-semibold text-slate-700 group-hover:text-[#d62828] transition-colors">Belum Dikuasai</span>
+                        </label>
+                        <div class="h-px bg-gray-100 my-1 mx-2"></div>
+                        <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
+                            <input type="checkbox" name="filter_fav" class="w-4 h-4 text-[#FFB700] border-gray-300 focus:ring-[#FFB700] rounded">
+                            <span class="text-sm font-semibold text-slate-700 group-hover:text-[#FFB700] transition-colors">Hanya Favorit</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- Active Filter Tags Container -->
+            <div id="active-filters-container" class="flex items-center gap-2 hidden">
+            </div>
         </div>
-        <div class="text-sm font-black text-[#d62828]">
+        </div>
+        <div class="text-sm font-bold text-[#d62828]">
             Total: {{ $totalWords }} Kata
         </div>
     </div>
@@ -74,6 +107,11 @@
 
 </div>
 
+</div>
+
+@endsection
+
+@push('modals')
 <!-- Flashcard Modal -->
 <div id="flashcard-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
     <div id="modal-backdrop" onclick="closeFlashcardModal()" class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
@@ -81,7 +119,7 @@
     <div id="modal-content" class="bg-white rounded-[32px] w-full max-w-4xl p-8 lg:p-10 shadow-2xl relative z-[101] transform scale-95 opacity-0 transition-all duration-300">
         
         <div class="flex items-center justify-between mb-8">
-            <h2 class="text-xl font-black text-[#444444] tracking-tight" id="modal-title">Detail Kata: -- (--)</h2>
+            <h2 class="text-xl font-bold text-[#444444] tracking-tight" id="modal-title">Detail Kata: -- (--)</h2>
             <button onclick="closeFlashcardModal()" class="w-8 h-8 rounded-full bg-[#FFDBDB] hover:bg-red-200 text-[#d62828] flex items-center justify-center transition focus:outline-none">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -98,22 +136,22 @@
                 </div>
 
                 <div class="text-center flex-1 flex flex-col items-center justify-center mt-6">
-                    <h1 id="modal-kanji" class="text-6xl font-black text-[#444444] tracking-tight mb-3">--</h1>
+                    <h1 id="modal-kanji" class="text-6xl font-bold text-[#444444] tracking-tight mb-3">--</h1>
                     <p id="modal-furigana" class="text-lg font-bold text-[#444444]">--</p>
                 </div>
 
                 <div class="space-y-3 mt-8">
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-[#666666] font-bold uppercase tracking-wider text-[11px]">JP</span>
-                        <span id="modal-romaji" class="text-[#444444] font-black">--</span>
+                        <span id="modal-romaji" class="text-[#444444] font-bold">--</span>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-[#666666] font-bold uppercase tracking-wider text-[11px]">EN</span>
-                        <span id="modal-en" class="text-[#444444] font-black">--</span>
+                        <span id="modal-en" class="text-[#444444] font-bold">--</span>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-[#666666] font-bold uppercase tracking-wider text-[11px]">ID</span>
-                        <span id="modal-id" class="text-[#444444] font-black">--</span>
+                        <span id="modal-id" class="text-[#444444] font-bold">--</span>
                     </div>
                 </div>
             </div>
@@ -122,24 +160,24 @@
                 <div class="space-y-6 text-left">
                     
                     <div>
-                        <p class="text-[10px] font-extrabold text-[#666666] uppercase tracking-widest mb-1">Definisi</p>
-                        <p id="modal-definition" class="text-sm font-black text-[#222222] leading-snug">--</p>
+                        <p class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Definisi</p>
+                        <p id="modal-definition" class="text-sm font-bold text-[#222222] leading-snug">--</p>
                     </div>
                     
                     <div>
-                        <p class="text-[10px] font-extrabold text-[#666666] uppercase tracking-widest mb-1.5">Penggunaan Kontekstual (oleh Sensei)</p>
-                        <p id="modal-usage-jp" class="text-sm font-black text-[#222222] mb-1 leading-snug tracking-tight">--</p>
+                        <p class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1.5">Penggunaan Kontekstual (oleh Sensei)</p>
+                        <p id="modal-usage-jp" class="text-sm font-bold text-[#222222] mb-1 leading-snug tracking-tight">--</p>
                         <p id="modal-usage-en" class="text-xs font-semibold text-[#666666] leading-snug">--</p>
                     </div>
                     
                     <div>
-                        <p class="text-[10px] font-extrabold text-[#666666] uppercase tracking-widest mb-1">Progres Kartu</p>
-                        <p id="modal-progress" class="text-sm font-black text-[#222222]">--</p>
+                        <p class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Progres Kartu</p>
+                        <p id="modal-progress" class="text-sm font-bold text-[#222222]">--</p>
                     </div>
                     
                     <div>
-                        <p class="text-[10px] font-extrabold text-[#666666] uppercase tracking-widest mb-1">Status</p>
-                        <p id="modal-status" class="text-sm font-black text-[#222222]">--</p>
+                        <p class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Status</p>
+                        <p id="modal-status" class="text-sm font-bold text-[#222222]">--</p>
                     </div>
 
                 </div>
@@ -156,8 +194,7 @@
         </div>
     </div>
 </div>
-
-@endsection
+@endpush
 
 @push('scripts')
 <script>
@@ -295,5 +332,68 @@
     }
 
     renderGrid(1);
+
+    // Filter Interaction Logic
+    const filterBtn = document.getElementById('filter-toggle-btn');
+    const filterRadios = document.querySelectorAll('input[name="filter_status"]');
+    const filterFav = document.querySelector('input[name="filter_fav"]');
+    const activeFiltersContainer = document.getElementById('active-filters-container');
+
+    function updateFilterState() {
+        let activeFilters = [];
+        let hasActiveFilter = false;
+
+        filterRadios.forEach(radio => {
+            if (radio.checked && radio.value !== 'semua') {
+                hasActiveFilter = true;
+                const label = radio.nextElementSibling.innerText;
+                activeFilters.push({ id: 'status', label: label });
+            }
+        });
+
+        if (filterFav.checked) {
+            hasActiveFilter = true;
+            activeFilters.push({ id: 'fav', label: 'Hanya Favorit' });
+        }
+
+        // Update button appearance
+        if (hasActiveFilter) {
+            filterBtn.classList.remove('bg-white', 'text-[#d62828]', 'hover:bg-red-50');
+            filterBtn.classList.add('bg-[#d62828]', 'text-white', 'hover:bg-red-700', 'border-transparent');
+        } else {
+            filterBtn.classList.add('bg-white', 'text-[#d62828]', 'hover:bg-red-50');
+            filterBtn.classList.remove('bg-[#d62828]', 'text-white', 'hover:bg-red-700', 'border-transparent');
+        }
+
+        // Render active tags
+        if (activeFilters.length > 0) {
+            activeFiltersContainer.classList.remove('hidden');
+            activeFiltersContainer.innerHTML = activeFilters.map(filter => `
+                <button onclick="removeFilter('${filter.id}')" class="flex items-center gap-1.5 text-sm font-semibold text-[#444444] hover:text-[#d62828] transition bg-transparent h-[38px] px-1">
+                    <svg class="w-4 h-4 text-[#d62828]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    ${filter.label}
+                </button>
+            `).join('');
+        } else {
+            activeFiltersContainer.classList.add('hidden');
+            activeFiltersContainer.innerHTML = '';
+        }
+    }
+
+    // Attach global window function for removing filter
+    window.removeFilter = function(id) {
+        if (id === 'status') {
+            document.querySelector('input[name="filter_status"][value="semua"]').checked = true;
+        } else if (id === 'fav') {
+            filterFav.checked = false;
+        }
+        updateFilterState();
+    };
+
+    filterRadios.forEach(radio => radio.addEventListener('change', updateFilterState));
+    filterFav.addEventListener('change', updateFilterState);
+
+    // Initial check
+    updateFilterState();
 </script>
 @endpush
