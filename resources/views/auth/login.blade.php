@@ -17,7 +17,7 @@
         <div>
             <input 
                 id="email" 
-                class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 focus:bg-white transition-all duration-200 placeholder-gray-400 @error('email') border-red-400 bg-red-50 @enderror" 
+                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}" 
                 type="email" 
                 name="email" 
                 :value="old('email')" 
@@ -38,7 +38,7 @@
         <div class="relative">
             <input 
                 id="password" 
-                class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 focus:bg-white transition-all duration-200 placeholder-gray-400 pr-12 @error('password') border-red-400 bg-red-50 @enderror"
+                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 pr-12 border {{ $errors->has('password') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}"
                 type="password"
                 name="password"
                 required 

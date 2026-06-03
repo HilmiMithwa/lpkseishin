@@ -13,7 +13,7 @@
             <label for="email" class="block text-sm font-semibold text-gray-800 mb-1.5">Email</label>
             <input 
                 id="email" 
-                class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all duration-200 placeholder-gray-400 @error('email') border-red-400 bg-red-50 @enderror" 
+                class="block w-full px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 transition-all duration-200 placeholder-gray-400 border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-red-500' }}" 
                 type="email" 
                 name="email" 
                 :value="old('email', $request->email)" 
@@ -35,7 +35,7 @@
             <label for="password" class="block text-sm font-semibold text-gray-800 mb-1.5">Password Baru</label>
             <input 
                 id="password" 
-                class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all duration-200 placeholder-gray-400 @error('password') border-red-400 bg-red-50 @enderror"
+                class="block w-full px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 transition-all duration-200 placeholder-gray-400 border {{ $errors->has('password') ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-red-500' }}"
                 type="password"
                 name="password"
                 required 
