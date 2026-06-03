@@ -172,16 +172,9 @@
                         <p class="text-white/90 text-xs sm:text-sm font-medium">Below is a summary of the classes and assignments that need<br class="hidden sm:block"> you to tackle today.</p>
                     </div>
                     <div class="relative z-10 bg-white rounded-2xl p-4 sm:p-6 text-center shadow-lg w-full sm:w-52 flex-shrink-0">
-                        <p class="text-[10px] sm:text-xs text-gray-500 font-semibold mb-1">
-                            @php
-                                $days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                                $months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-                                $now = now();
-                            @endphp
-                            {{ $days[$now->dayOfWeek] }}, {{ $now->day }} {{ $months[$now->month - 1] }} {{ $now->year }}
-                        </p>
-                        <h3 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-widest leading-tight">
-                            {{ $now->format('H.i') }}
+                        <h3 id="banner-clock"
+                            class="text-3xl sm:text-4xl font-black text-gray-900 tracking-widest leading-tight">
+                            Memuat...
                         </h3>
                         <p class="text-[9px] sm:text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wider">WIB</p>
                     </div>
@@ -454,6 +447,7 @@
             const timeString = `${hours}.${minutes}.${seconds}`;
 
             document.getElementById('realtime-clock').innerText = `${dateString} • ${timeString}`;
+            document.getElementById('banner-clock').innerText = `${hours}.${minutes}`;
         }
 
         setInterval(updateClock, 1000);
