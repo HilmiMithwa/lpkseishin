@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Student\SubmitPengirimanTugasRequest;
 use App\Models\Pengiriman_Tugas;
+use App\Models\Tugas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -15,28 +16,25 @@ class PengirimanTugasController extends Controller
 {
     public function store(SubmitPengirimanTugasRequest $request, $id_mapel, $id_modul, $id_tugas)
     {
-        
-
         $alreadySubmitted = Pengiriman_Tugas::where('id_tugas', $id_tugas)
-        ->where('id_user', Auth::id())
-        ->exists();
+            ->where('id_user', Auth::id())
+            ->exists();
 
-        if($alreadySubmitted) {
+        if ($alreadySubmitted) {
             return back()->with('error', 'Kamu sudah mengumpulkan tugas ini.');
         }
 
-        $modul = Pengiriman_Tugas::with(['tugas', 'id_tugas'])->get();
+        $task = Tugas::find($id_tugas);
         $status = 'dikirim';
-        if($tugas && Carbon::now()->greaterThan(Carbon::parse($tugas->waktu_pengumpulan))) 
-        {
+
+        if ($task && Carbon::now()->greaterThan(Carbon::parse($task->waktu_pengumpulan))) {
             $status = 'terlambat';
         }
 
         $filePath = null;
-        if($request->hasFile('task_files'))
-        {
+        if ($request->hasFile('task_files')) {
             $file = $request->file('task_files')[0];
-            $filePath = $file->store('submissions/'. $id_tugas, 'public');
+            $filePath = $file->store('submissions/' . $id_tugas, 'public');
         }
 
         Pengiriman_Tugas::create([
@@ -60,6 +58,11 @@ class PengirimanTugasController extends Controller
 
         if (!$submission) {
             return back()->with('error', 'Tidak ada pengiriman tugas yang ditemukan untuk dibatalkan.');
+        }
+
+        // Hapus file dari storage jika ada
+        if ($submission->file_path) {
+            Storage::disk('public')->delete($submission->file_path);
         }
 
         $submission->delete();
