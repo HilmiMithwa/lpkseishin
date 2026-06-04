@@ -94,14 +94,14 @@
             <div class="p-4 sm:p-6 lg:p-10">
 
                 <div class="mb-6">
-                    <h1 class="text-xl sm:text-2xl lg:text-[26px] font-bold text-gray-900 tracking-tight">Beranda</h1>
+                    <h1 class="text-xl sm:text-2xl lg:text-[26px] font-bold font-ibm text-gray-900 tracking-tight">Beranda</h1>
                     <p class="text-xs sm:text-sm text-gray-500 font-medium">Pemantauan Belajar</p>
                 </div>
 
                 {{-- Banner --}}
                 <div class="banner-red rounded-3xl lg:rounded-[32px] py-8 sm:py-10 lg:py-12 px-6 sm:px-8 lg:px-10 mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between relative gap-6">
                     <div class="relative z-10 w-full lg:w-2/3">
-                        <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white leading-normal lg:leading-[52px] mb-3" style="font-family: 'IBM Plex Sans', sans-serif;">Welcome Back,<br>{{ Auth::user()->name }} Sensei</h2>
+                        <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-bold font-ibm text-white leading-normal lg:leading-[52px] mb-3">Welcome Back,<br>{{ Auth::user()->name }} Sensei</h2>
                         <p class="text-white/90 text-xs sm:text-sm font-medium">Berikut adalah ringkasan kelas dan tugas yang perlu<br class="hidden sm:block"> Anda tangani hari ini.</p>
                     </div>
                     <div class="relative z-10 bg-white/10 border border-white/20 rounded-2xl p-5 sm:p-6 text-center shadow-lg w-full sm:w-52 flex-shrink-0">
@@ -190,7 +190,7 @@
                                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                                 <h3 class="font-bold text-gray-800 text-sm">Kelas Saya</h3>
                             </div>
-                            <a href="#" class="text-red-500 text-xs font-bold flex items-center gap-1 hover:text-red-700 transition">
+                            <a href="{{ route('teacher.classes') }}" class="text-red-500 text-xs font-bold flex items-center gap-1 hover:text-red-700 transition">
                                 Lihat Semua Kelas
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
@@ -212,7 +212,7 @@
                                         </div>
                                     </div>
                                     <div class="bg-white border border-gray-100 shadow-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full">
-                                        <span class="text-[9px] sm:text-[10px] font-semibold text-gray-500 whitespace-nowrap">{{ $subject->batch->nama_batch ?? 'Batch' }}</span>
+                                        <span class="text-[10px] md:text-[12px] font-semibold text-gray-500 whitespace-nowrap">{{ $subject->batch->nama_batch ?? 'Batch' }}</span>
                                     </div>
                                 </div>
                                 
@@ -287,8 +287,7 @@
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tl-xl">Siswa</th>
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Angkatan</th>
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Modul Tugas</th>
-                                        <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Dikirim</th>
-                                        <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tr-xl">Aksi</th>
+                                        <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tr-xl">Dikirim</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
@@ -306,16 +305,10 @@
                                         <td class="px-4 sm:px-6 py-3 sm:py-4">
                                             <span class="text-xs sm:text-sm text-gray-500">{{ $task->submitted_at ? $task->submitted_at->diffForHumans() : '[Data: submitted_at]' }}</span>
                                         </td>
-                                        <td class="px-4 sm:px-6 py-3 sm:py-4">
-                                            <a href="{{ route('teacher.tasks.review', $task->id_tugas ?? 0) }}" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-1.5 sm:py-2 px-4 sm:px-5 rounded-lg text-[10px] sm:text-xs transition shadow-sm flex items-center gap-1 w-fit">
-                                                Periksa
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                            </a>
-                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-8 sm:py-10 text-gray-500 italic text-xs sm:text-sm">
+                                        <td colspan="4" class="text-center py-8 sm:py-10 text-gray-500 italic text-xs sm:text-sm">
                                             Tidak ada tugas yang perlu direview.
                                         </td>
                                     </tr>
@@ -327,6 +320,8 @@
                 </div>
 
             </div>
+
+
 
             @push('scripts')
             <script>

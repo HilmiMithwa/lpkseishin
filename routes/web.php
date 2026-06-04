@@ -109,13 +109,37 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/classes', function () {
+        return view('teacher.classes');
+    })->name('classes');
+
+    Route::get('/classes/{id_batch}', function ($id_batch) {
+        return view('teacher.batch-detail');
+    })->name('batch.show');
+
     Route::get('/subjects/{id_mapel}', function ($id_mapel) {
-        abort(501, 'Halaman ini belum selesai dibuat.');
+        return view('teacher.class-detail');
     })->name('subjects.show');
 
-    Route::get('/tasks/{id_tugas}/review', function ($id_tugas) {
-        abort(501, 'Halaman ini belum selesai dibuat.');
-    })->name('tasks.review');
+    Route::get('/modules/{id_modul}', function ($id_modul) {
+        return view('teacher.module-detail');
+    })->name('modules.show');
+
+    Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
+        return view('teacher.material-create', ['currentModuleId' => $id_modul]);
+    })->name('materials.create');
+
+    Route::get('/modules/{id_modul}/evaluations/create', function ($id_modul) {
+        return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
+    })->name('evaluations.create');
+
+    Route::get('/modules/{id_modul}/tasks/create', function ($id_modul) {
+        return view('teacher.task-create', ['currentModuleId' => $id_modul]);
+    })->name('tasks.create');
+
+    Route::get('/modules/{id_modul}/tasks/{id_tugas}', function ($id_modul, $id_tugas) {
+        return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
+    })->name('tasks.show');
 });
 
 
