@@ -11,7 +11,8 @@ class RpsSeeder extends Seeder
     public function run(): void
     {
         // ===================== N4 =====================
-        $mapelN4 = Mapel::where('kode_mapel', 'N591')->first();
+        // SINKRONISASI: Cari berdasarkan nama_mapel yang valid dari MapelSeeder
+        $mapelN4 = Mapel::where('nama_mapel', 'N4 Mastering')->first();
 
         $rpsN4 = [
             [
@@ -72,7 +73,8 @@ class RpsSeeder extends Seeder
         }
 
         // ===================== N5 =====================
-        $mapelN5 = Mapel::where('kode_mapel', 'N590')->first();
+        // SINKRONISASI: Cari berdasarkan nama_mapel yang valid dari MapelSeeder
+        $mapelN5 = Mapel::where('nama_mapel', 'N5 Mastering')->first();
 
         $rpsN5 = [
             [
@@ -140,7 +142,8 @@ class RpsSeeder extends Seeder
         }
 
         // ===================== N3 =====================
-        $mapelN3 = Mapel::where('kode_mapel', 'N592')->first();
+        // SINKRONISASI: Cari berdasarkan nama_mapel yang valid dari MapelSeeder
+        $mapelN3 = Mapel::where('nama_mapel', 'N3 Mastering')->first();
 
         $rpsN3 = [
             [

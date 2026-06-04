@@ -7,6 +7,8 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+
 /**
  * @property int $role_id
  */
@@ -25,6 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'nomor_telepon',
+        'tanggal_lahir',
     ];
 
     public function role()
@@ -58,11 +62,7 @@ class User extends Authenticatable
     /**
      * Relasi ke tabel enrollment
      */
-    public function enrollment()
-    {
-        // User memiliki satu pendaftaran (One-to-One)
-        return $this->hasOne(Enrollment::class, 'id_user', 'id');
-    }
+
 
     //biar user punya data masing-masing
     public function mapels() 

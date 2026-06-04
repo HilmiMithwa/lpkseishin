@@ -10,6 +10,7 @@ use App\Http\Controllers\Student\ModulController;
 use App\Http\Controllers\Student\BahanAjarController;
 use App\Http\Controllers\Student\PengirimanTugasController;
 use App\Http\Controllers\Student\MapelController;
+use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 
 
@@ -55,7 +56,6 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}', [ModulController::class, 'showModule'])->name('modules.show');
 
-
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/evaluations/{id}/start', [StudentController::class, 'showEvaluation'])->name('evaluations.start');
 
     Route::get('/students/evaluations/result', function () {
@@ -95,8 +95,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     })->name('students.vocabulary-level');
 
     Route::get('/students/profile', function () {
-        return view('students.profile');
+        return view('students.profile', ['userData' => auth()->user()]);
     })->name('students.profile');
+
+    Route::patch('/students/profile', [EditProfile::class, 'update'])->name('students.profile.update');
 
     Route::get('/students/payment', function () {
         return view('students.payment');

@@ -14,14 +14,14 @@ class EnrollmentListSeeder extends Seeder
      */
     public function run(): void
     {
-        // Cari User secara dinamis berdasarkan email atau nama
+        // Cari User secara dinamis berdasarkan email atau nama (Sudah Benar)
         $hilmi = User::where('email', 'hilmi@gmail.com')->first();
         $yussar = User::where('email', 'yussar@gmail.com')->first();
 
-        // Cari Mapel secara dinamis berdasarkan kode_mapel
-        $mapelN5 = Mapel::where('kode_mapel', 'N590')->first();
-        $mapelN4 = Mapel::where('kode_mapel', 'N591')->first();
-        $mapelN3 = Mapel::where('kode_mapel', 'N592')->first();
+        // SINKRONISASI: Ubah pencarian dari 'kode_mapel' menjadi 'nama_mapel'
+        $mapelN5 = Mapel::where('nama_mapel', 'N5 Mastering')->first();
+        $mapelN4 = Mapel::where('nama_mapel', 'N4 Mastering')->first();
+        $mapelN3 = Mapel::where('nama_mapel', 'N3 Mastering')->first();
 
         // Masukkan data hanya jika User dan Mapel ditemukan
         if ($hilmi && $mapelN4) {
