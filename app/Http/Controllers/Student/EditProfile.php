@@ -16,10 +16,17 @@ class EditProfile extends Controller
         $user = Auth::user();
 
         $validatedData = $request->validated();
+
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($request->password);
+        }
+
+        if ($request->filled('nomor_telepon')) {
+            $validatedData['nomor_telepon'] = preg_replace('/[^0-9]/', '', $request->nomor_telepon);
+        }
+
         $user->update($validatedData);
 
-        return view('student.profile')->with('success', 'Profil berhasil diperbarui');
+        return redirect()->route('students.profile')->with('success', 'Profil berhasil diperbarui');
     }
-
-
 }

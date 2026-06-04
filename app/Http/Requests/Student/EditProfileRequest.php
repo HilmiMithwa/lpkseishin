@@ -12,7 +12,7 @@ class EditProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,17 @@ class EditProfileRequest extends FormRequest
         return [
             'name'=>'required|string|max:50',
             'email'=>'required|email|unique:users,email,'.auth()->id(),
-            
+            'nomor_telepon'=>'nullable|numeric|digits_between:10,15',
+            'tanggal_lahir'=>'nullable|date',
         ];
     }
-}
+
+    public function messages(): array
+    {
+        return 
+        [
+            'nomor_telepon.numeric' => 'Nomor telepon tidak valid!',
+            'nomor_telepon.digits_between' => 'Nomor telepon harus antara 10 hingga 15 digit!'
+        ];
+    }
+} 
