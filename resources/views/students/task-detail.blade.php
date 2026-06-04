@@ -7,16 +7,21 @@
     
     <!-- Header -->
     <div class="mb-8">
-        <h1 class="text-2xl sm:text-3xl lg:text-[32px] font-bold font-ibm text-[#222222] tracking-tight mb-3 text-left">
-            {{ $task->judul_tugas ?? 'Latihan N4' }}
-        </h1>
-        <nav class="flex items-center gap-2 text-[13px] font-bold text-[#666666] text-left">
+        <div class="flex items-center gap-3 mb-2">
+            <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul]) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
+            <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight text-left">
+                {{ $task->judul_tugas ?? 'Latihan N4' }}
+            </h1>
+        </div>
+        <nav class="flex flex-wrap items-center gap-2 text-[13px] font-bold text-[#666666] text-left">
             <a href="{{ route('students.enrolled') }}" class="hover:text-[#d62828] transition">Terdaftar</a> 
-            <span class="mx-1 text-gray-300">›</span> 
+            <span class="mx-1 text-gray-300">></span> 
             <a href="{{ route('subjects.show', $subject->id_mapel) }}" class="hover:text-[#d62828] transition">{{ $subject->nama_mapel }}</a> 
-            <span class="mx-1 text-gray-300">›</span> 
+            <span class="mx-1 text-gray-300">></span> 
             <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul]) }}" class="hover:text-[#d62828] transition">{{ $currentModul->nama_modul }}</a> 
-            <span class="mx-1 text-gray-300">›</span> 
+            <span class="mx-1 text-gray-300">></span> 
             <span class="text-[#d62828]">{{ $task->judul_tugas }}</span>
         </nav>
     </div>

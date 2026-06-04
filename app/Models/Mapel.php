@@ -10,15 +10,15 @@ class Mapel extends Model
     protected $primaryKey = 'id_mapel';
 
     protected $fillable = [
-        'kode_mapel',
+        'id_batch',
         'nama_mapel',
         'deskripsi_mapel',
         'id_guru',  
         'jp',
-        'jumlah_modul',
         'status',
         'target',
-        'jadwal'
+        'jadwal',
+        'min_score'
     ];
 
     public function guru() {

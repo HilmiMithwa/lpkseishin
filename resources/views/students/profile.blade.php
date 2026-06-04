@@ -7,9 +7,9 @@
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10">
     
-    <div class="mb-6 text-left">
-        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Profil</h1>
-        <p class="text-sm text-[#666666] font-medium">Kelola informasi pribadi dan pengaturan akun Anda.</p>
+    <div class="mb-8 text-left">
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Profil</h1>
+        <p class="text-sm text-[#666666] font-medium mt-2">Kelola informasi pribadi dan pengaturan akun Anda.</p>
     </div>
     
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
