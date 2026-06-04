@@ -24,32 +24,8 @@ class SubmitPengirimanTugasRequest extends FormRequest
     {
         return [
             'text_content' => 'nullable|string',
-            'file_path' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (request()->hasFile('file_path')) {
-                        $allowedExtensions = ['pdf', 'docx', 'xlsx', 'xls', 'pptx', 'txt'];
-                        $file = request()->file('file_path');
-                        $extension = strtolower($file->getClientOriginalExtension());
-
-                        if (!in_array($extension, $allowedExtensions)) {
-                            $fail('File harus berupa PDF, DOCX, XLSX, XLS, PPTX, atau TXT.');
-                        }
-
-                        if ($file->getSize() > 20480 * 1024) {
-                            $fail('Ukuran file tidak boleh lebih dari 20MB.');
-                        }
-                    } else if (is_string($value)) {
-                        if (!filter_var($value, FILTER_VALIDATE_URL)) {
-                            $fail('File path harus berupa URL yang valid.');
-                        }
-                    }
-                }
-            ],
-            
-            'status' => 'required|in:submitted,graded',
-            'nilai' => 'nullable|numeric|min:0|max:100',
-            'id_tugas' => 'required|exists:tugas,id_tugas',
+            'task_files' => 'nullable|array',
+            'task_files.*' => 'file|mimes:pdf,docx,xlsx,xls,pptx,txt|max:20480',
         ];
     }
 

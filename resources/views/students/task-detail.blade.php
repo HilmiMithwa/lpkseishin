@@ -101,10 +101,10 @@
                     </span>
                 </div>
 
-                <form id="multi-upload-form" action="{{ route('tasks.submit', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    
-                    @if(!$submission)
+                @if(!$submission)
+                    <form id="multi-upload-form" action="{{ route('tasks.submit', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $task->id_tugas]) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
                         <div class="mb-5">
                             <textarea name="text_content" id="task-text-input" rows="4" class="w-full p-4 bg-gray-50/30 border border-gray-100 rounded-[16px] text-[13px] font-medium text-[#444444] placeholder-gray-400 focus:outline-none focus:border-[#d62828] focus:bg-white focus:ring-1 focus:ring-[#d62828] resize-none transition custom-scrollbar" placeholder="Tulis jawaban Anda di sini..." oninput="checkInputState()"></textarea>
                         </div>
@@ -156,33 +156,40 @@
                         <button type="submit" id="submit-btn" class="w-full h-[46px] bg-[#d62828] hover:bg-red-700 text-white rounded-[12px] flex items-center justify-center text-[13px] font-bold transition shadow-sm">
                             Tandai Selesai
                         </button>
-                    @else
-                        <!-- Submitted State -->
+                    </form>
+                @else
+                    <!-- Submitted State -->
+                    <div class="mb-5">
+                        <textarea disabled rows="4" class="w-full p-4 bg-gray-50/80 border border-gray-100 rounded-[16px] text-[13px] font-medium text-gray-500 resize-none">{{ optional($submission)->text_content ?? '' }}</textarea>
+                    </div>
+                    
+                    @if(optional($submission)->file_path)
+                        @php
+                            $submissionFileUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($submission->file_path);
+                        @endphp
                         <div class="mb-5">
-                            <textarea disabled rows="4" class="w-full p-4 bg-gray-50/80 border border-gray-100 rounded-[16px] text-[13px] font-medium text-gray-500 resize-none">{{ $submission->teks_jawaban ?? '' }}</textarea>
-                        </div>
-                        
-                        @if($submission->file_path)
-                        <div class="mb-5">
-                            <div class="p-3 bg-white border border-gray-100 rounded-2xl flex items-center justify-between shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-                                <div class="flex items-center gap-3 min-w-0">
+                            <div class="p-3 bg-white border border-gray-100 rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+                                <div class="flex items-center justify-between gap-3">
                                     <div class="min-w-0">
                                         <p class="text-[12px] font-bold text-[#222222] truncate">{{ basename($submission->file_path) }}</p>
                                         <p class="text-[9px] text-gray-400 font-bold uppercase mt-0.5">PDF</p>
                                     </div>
-                                </div>
-                                <div class="p-1.5 text-gray-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    <a href="{{ $submissionFileUrl }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#d62828] text-[#d62828] text-[12px] font-bold hover:bg-red-50 transition">
+                                        Buka File
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        @endif
+                    @endif
 
-                        <button type="button" class="w-full h-[46px] bg-white border border-[#d62828] text-[#d62828] hover:bg-red-50 rounded-[12px] flex items-center justify-center text-[13px] font-bold transition shadow-sm">
+                    <form action="{{ route('tasks.cancel', ['id_mapel' => $id_mapel, 'id_modul' => $id_modul, 'id_tugas' => $id_tugas]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full h-[46px] bg-white border border-[#d62828] text-[#d62828] hover:bg-red-50 rounded-[12px] flex items-center justify-center text-[13px] font-bold transition shadow-sm">
                             Batal Kirim
                         </button>
-                    @endif
-                </form>
+                    </form>
+                @endif
             </div>
 
             <!-- Score Block -->
@@ -204,7 +211,7 @@
                     </div>
                 </div>
                 <div class="w-full p-4 bg-gray-50/80 border border-gray-100 rounded-[16px] text-[13px] font-medium text-gray-500">
-                    {{ $submission && $submission->keterangan ? $submission->keterangan : 'Belum ada umpan balik' }}
+                    {{ optional($submission)->keterangan ?? 'Belum ada umpan balik' }}
                 </div>
             </div>
 
