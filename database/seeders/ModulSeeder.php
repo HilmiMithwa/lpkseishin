@@ -13,17 +13,18 @@ class ModulSeeder extends Seeder
      */
     public function run(): void
     {
-        // Ambil data Mapel yang sudah dibuat di MapelSeeder
-        $mapelN5 = Mapel::where('kode_mapel', 'N590')->first();
-        $mapelN4 = Mapel::where('kode_mapel', 'N591')->first();
-        $mapelN3 = Mapel::where('kode_mapel', 'N592')->first();
+        // SINKRONISASI: Ubah pencarian dari 'kode_mapel' menjadi 'nama_mapel'
+        $mapelN5 = Mapel::where('nama_mapel', 'N5 Mastering')->first();
+        $mapelN4 = Mapel::where('nama_mapel', 'N4 Mastering')->first();
+        $mapelN3 = Mapel::where('nama_mapel', 'N3 Mastering')->first();
 
         // Seed Modul untuk N5
         if ($mapelN5) {
             $this->createModulData($mapelN5->id_mapel, [
                 'Dasar Hiragana & Katakana',
                 'Partikel Dasar (Wa, Ni, De)',
-                'Kata Kerja Bentuk Masu','Kosakata Sehari-hari (N5)',
+                'Kata Kerja Bentuk Masu',
+                'Kosakata Sehari-hari (N5)',
                 'Angka, Waktu, dan Tanggal',
                 'Ekspresi Salam dan Perkenalan'
             ], 'N5');
@@ -61,8 +62,8 @@ class ModulSeeder extends Seeder
             Modul::create([
                 'nama_modul'         => $title,
                 'kode_modul'         => 'MDL-' . $level . '-' . str_pad($index + 1, 2, '0', STR_PAD_LEFT),
-                'jp_teori'              => 12, // Nilai dummy jam pelajaran teori
-                'jp_praktik'            => 24, // Nilai dummy jam pelajaran praktik
+                'jp_teori'           => 12, // Nilai dummy jam pelajaran teori
+                'jp_praktik'         => 24, // Nilai dummy jam pelajaran praktik
                 'module_description' => "Materi lengkap mengenai konsep dan penggunaan $title untuk level $level.",
                 'id_mapel'           => $idMapel,
                 'id_rps'             => null, 

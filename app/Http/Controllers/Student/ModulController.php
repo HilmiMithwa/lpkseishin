@@ -75,39 +75,6 @@ class ModulController extends Controller
             $currentModul->tasks = collect([]);
         }
 
-        //Function utnuk completedModulesCount
-        $allModulesinMapel = Modul::where('id_mapel', $id_mapel)->get();
-        $completedModulesCount = 0;
-
-        foreach($allModulesinMapel as $modul) 
-            {
-                $totalMaterial = BahanAjar::where('id_modul', $modul->id_modul)->count();
-
-                $completedMaterial = DB::table('bahan_ajar')
-                    ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
-                    ->where('bahan_ajar.id_modul', $modul->id_modul)
-                    ->where('bahan_ajar_progress.id_user', $userId)
-                    ->where('bahan_ajar_progress.is_complete', true)
-                    ->count();
-                
-                $materialClear = ($totalMaterial == $completedMaterial);
-
-                $totalTask = Tugas::where('id_modul', $modul->id_modul)->count();
-
-                $completedTask = Tugas::join('pengiriman_tugas','tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
-                    ->where('tugas.id_modul', $modul->id_modul)
-                    ->where('pengiriman_tugas.id_user', $userId)
-                    ->where('pengiriman_tugas.status', 'dikirim')
-                    ->count();
-
-                $taskClear = ($totalTask == $completedTask);
-
-                if ($totalMaterial == 0 && $totalTask == 0) {
-                    $completedModulesCount++;
-                } elseif($materialClear && $taskClear) {
-                    $completedModulesCount++;
-                }
-            }
 
 
         // Ambil data mapel dan announcements untuk navigasi sidebar kanan

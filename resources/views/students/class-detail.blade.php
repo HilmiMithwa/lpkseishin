@@ -159,15 +159,11 @@
                                 <span class="text-[#666666] font-semibold">Progres</span>
                                 <div class="flex-1 bg-[#FFDBDB] h-2 rounded-full overflow-hidden">
                                     <div class="bg-[#d62828] h-2 rounded-full transition-all" 
-                                        style="width: {{ $modul->progress ?? '50' }}%">
+                                        style="width: {{ $modul->progress_percentage ?? 0 }}%">
                                     </div>
                                 </div>
                                 <span class="text-[#222222] font-black">
-                                    @isset($modul->progress)
-                                        {{ $modul->progress }}%
-                                    @else
-                                        <span class="text-[10px] text-[#d62828] font-bold">[Data: %]</span>
-                                    @endisset
+                                    {{ $modul->progress_percentage ?? 0 }}%
                                 </span>
                             </div>
 
