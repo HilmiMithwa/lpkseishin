@@ -2,28 +2,7 @@
 
 @section('title', 'Profil - LPK Seishin')
 
-@php
-    // 🌟 FRONTEND STATE: Data Dummy Terpusat (Jangan Hardcode di HTML)
-    $userData = (object) [
-        'name' => 'Ahmad Hidayat',
-        'id_number' => '022025005',
-        'batch' => 'Batch 5',
-        'level' => 'Pra-N5',
-        'email' => 'madd.hdyt@gmail.com',
-        'phone' => '+62 0831 9210 3301',
-        'dob' => '04 Juli 2004',
-        'education' => 'SMA/SMK',
-        'height_weight' => '160 cm / 59 kg',
-        'emergency_name' => 'Muria Mardika',
-        'emergency_phone' => '+62 0831 9210 3302',
-        // Fallback ke UI Avatars jika tidak ada foto
-        'avatar_url' => 'https://ui-avatars.com/api/?name=Ahmad+Hidayat&background=f3f4f6&color=d62828&size=200' 
-    ];
 
-    // Data Sidebar Fallback
-    $userName = Auth::user() ? Auth::user()->name : $userData->name;
-    $userLevel = Auth::user() && isset(Auth::user()->level) ? Auth::user()->level : 'Level ' . $userData->level;
-@endphp
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10">
@@ -36,7 +15,7 @@
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
         
         <div class="relative flex-shrink-0 mt-2 sm:mt-0">
-            <img src="{{ $userData->avatar_url }}" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm">
+            <img src="{{ $userData->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($userData->name) . '&background=f3f4f6&color=d62828&bold=true' }}" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm">
             <button class="absolute top-1 right-1 w-8 h-8 bg-white border border-gray-100 text-[#d62828] rounded-full shadow-sm flex items-center justify-center hover:bg-gray-50 transition transform translate-x-2 -translate-y-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
             </button>
@@ -68,33 +47,44 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         
-        <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col justify-between">
+        <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
             <h3 class="text-lg font-bold text-[#222222] mb-6">Detail Pribadi</h3>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-                <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Nama Lengkap:</label>
-                    <input type="text" value="{{ $userData->name }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-                </div>
-                <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Email:</label>
-                    <input type="email" value="{{ $userData->email }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-                </div>
-                <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Nomor Telepon:</label>
-                    <input type="text" value="{{ $userData->phone }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-                </div>
-                <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Tanggal Lahir:</label>
-                    <input type="text" value="{{ $userData->dob }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-                </div>
-            </div>
 
-            <div class="flex justify-end">
-                <button class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
-                    Simpan Perubahan
-                </button>
-            </div>
+            @if(session('success'))
+                <div class="mb-6 p-4 rounded-2xl bg-green-50 text-green-700 border border-green-100">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <form action="{{ route('students.profile.update') }}" method="POST" class="flex flex-col justify-between">
+                @csrf
+                @method('PATCH')
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+                    <div class="space-y-1.5 text-left">
+                        <label class="text-sm font-bold text-[#666666]">Nama Lengkap:</label>
+                        <input type="text" name="name" value="{{ old('name', $userData->name) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    </div>
+                    <div class="space-y-1.5 text-left">
+                        <label class="text-sm font-bold text-[#666666]">Email:</label>
+                        <input type="email" name="email" value="{{ old('email', $userData->email) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    </div>
+                    <div class="space-y-1.5 text-left">
+                        <label class="text-sm font-bold text-[#666666]">Nomor Telepon:</label>
+                        <input type="text" name="nomor_telepon" value="{{ old('nomor_telepon', $userData->nomor_telepon) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    </div>
+                    <div class="space-y-1.5 text-left">
+                        <label class="text-sm font-bold text-[#666666]">Tanggal Lahir:</label>
+                        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $userData->tanggal_lahir) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
         </div>
 
         <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col">
@@ -132,26 +122,47 @@
 
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
         <h3 class="text-lg font-bold text-[#222222] mb-6">Ubah Kata Sandi</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
-            <div class="space-y-1.5 text-left">
+
+        @if(session('status') === 'password-updated')
+            <div class="mb-6 p-4 rounded-2xl bg-green-50 text-green-700 border border-green-100">
+                Kata sandi berhasil diperbarui.
+            </div>
+        @endif
+
+        @if($errors->updatePassword->any())
+            <div class="mb-6 p-4 rounded-2xl bg-red-50 text-red-700 border border-red-100">
+                <ul class="list-disc pl-5 space-y-1 text-sm">
+                    @foreach($errors->updatePassword->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('password.update') }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
+                <div class="space-y-1.5 text-left">
                     <label class="text-sm font-bold text-[#666666]">Kata Sandi Saat Ini</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-            </div>
-            <div class="space-y-1.5 text-left">
+                    <input type="password" name="current_password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                </div>
+                <div class="space-y-1.5 text-left">
                     <label class="text-sm font-bold text-[#666666]">Kata Sandi Baru</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
-            </div>
-            <div class="space-y-1.5 text-left">
+                    <input type="password" name="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                </div>
+                <div class="space-y-1.5 text-left">
                     <label class="text-sm font-bold text-[#666666]">Konfirmasi Kata Sandi</label>
-                <input type="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    <input type="password" name="password_confirmation" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                </div>
+                <div>
+                    <button type="submit" class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
+                        Perbarui Kata Sandi
+                    </button>
+                </div>
             </div>
-            <div>
-                <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
-                    Perbarui Kata Sandi
-                </button>
-            </div>
-        </div>
+        </form>
     </div>
 
 </div>
