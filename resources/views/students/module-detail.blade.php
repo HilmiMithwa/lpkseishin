@@ -5,11 +5,16 @@
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10">
     
-    <div class="mb-6">
-        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1 text-left">
-            {{ $currentModul->nama_modul }}
-        </h1>
-        <nav class="flex items-center gap-2 text-sm font-medium text-[#666666] text-left">
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <a href="{{ route('subjects.show', $subject->id_mapel) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
+            <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight text-left">
+                {{ $currentModul->nama_modul }}
+            </h1>
+        </div>
+        <nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-[#666666] text-left">
             <a href="{{ route('students.dashboard') }}" class="hover:text-[#d62828] transition">Terdaftar</a> <span class="mx-1.5 text-gray-300">></span> 
             <a href="{{ route('subjects.show', $subject->id_mapel) }}" class="text-[#444444] hover:text-[#d62828] transition">
                 {{ $subject->nama_mapel ?? '[Data: mapel.nama_mapel]' }}

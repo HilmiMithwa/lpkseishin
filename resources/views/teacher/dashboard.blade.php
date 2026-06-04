@@ -93,9 +93,9 @@
 @endphp
             <div class="p-4 sm:p-6 lg:p-10">
 
-                <div class="mb-6">
-                    <h1 class="text-xl sm:text-2xl lg:text-[26px] font-bold font-ibm text-gray-900 tracking-tight">Beranda</h1>
-                    <p class="text-xs sm:text-sm text-gray-500 font-medium">Pemantauan Belajar</p>
+                <div class="mb-8">
+                    <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">Beranda</h1>
+                    <p class="text-xs sm:text-sm text-gray-500 font-medium mt-2">Pemantauan Belajar</p>
                 </div>
 
                 {{-- Banner --}}

@@ -1,14 +1,19 @@
 @extends('layouts.teacher')
 
 @section('content')
-<div x-data="evaluationForm()" class="min-h-screen bg-[#fffdfc]">
+<div x-data="evaluationForm()" class="p-4 sm:p-6 lg:p-10 bg-[#fdfdfc] min-h-screen">
     
-    <div class="px-6 py-8 mx-auto max-w-7xl">
+    <div class="w-full">
         {{-- Header & Breadcrumb --}}
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h1 class="text-3xl font-bold font-ibm text-gray-900 mb-2">Buat Evaluasi</h1>
-                <div class="flex items-center gap-2 text-sm font-karla text-gray-500">
+                <div class="flex items-center gap-3 mb-2">
+                    <a href="{{ route('teacher.modules.show', $currentModuleId ?? 2) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </a>
+                    <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">Buat Evaluasi</h1>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm font-karla text-gray-500">
                     <a href="{{ route('teacher.classes') }}" class="hover:text-red-500 transition">Kelas Saya</a>
                     <span>›</span>
                     <a href="{{ route('teacher.batch.show', 2) }}" class="hover:text-red-500 transition">Batch 2</a>

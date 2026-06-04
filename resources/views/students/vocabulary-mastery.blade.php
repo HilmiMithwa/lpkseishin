@@ -55,9 +55,9 @@
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 space-y-8">
     
-    <div class="text-left">
-        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Penguasaan Kosakata</h1>
-        <p class="text-sm text-[#666666] font-medium">Penguasaan Kosakata</p>
+    <div class="text-left mb-4">
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Penguasaan Kosakata</h1>
+        <p class="text-sm text-[#666666] font-medium mt-2">Penguasaan Kosakata</p>
     </div>
 
     <div class="w-full banner-red rounded-[32px] p-6 lg:p-10 text-white flex flex-col md:flex-row justify-between items-center relative shadow-sm min-h-[180px]">

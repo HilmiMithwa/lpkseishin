@@ -129,6 +129,10 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.material-create', ['currentModuleId' => $id_modul]);
     })->name('materials.create');
 
+    Route::get('/modules/{id_modul}/materials/{id_materi}', function ($id_modul, $id_materi) {
+        return view('teacher.material-detail', ['currentModuleId' => $id_modul, 'id_materi' => $id_materi]);
+    })->name('materials.show');
+
     Route::get('/modules/{id_modul}/evaluations/create', function ($id_modul) {
         return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
     })->name('evaluations.create');

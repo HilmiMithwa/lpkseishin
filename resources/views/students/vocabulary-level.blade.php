@@ -38,9 +38,9 @@
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 flex-1 flex flex-col">
     
-    <div class="mb-6 text-left">
-        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Level {{ $level_id }}</h1>
-        <div class="flex items-center gap-2 text-sm font-medium text-[#666666]">
+    <div class="mb-8 text-left">
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Level {{ $level_id }}</h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-[#666666] mt-2">
             <a href="{{ route('students.vocabulary-mastery') }}" class="hover:text-[#d62828] transition">Penguasaan Kosakata</a>
             <span class="text-gray-300">></span>
             <span class="text-[#d62828]">Level {{ $level_id }}</span>

@@ -21,7 +21,7 @@
     
     <div class="w-full max-w-3xl">
         <div class="text-center mb-8">
-            <h1 class="text-2xl sm:text-3xl lg:text-[32px] font-bold font-ibm text-[#222222] tracking-tight mb-2">Hasil Evaluasi</h1>
+            <h1 class="text-2xl sm:text-3xl lg:text-[32px] font-semibold font-ibm text-[#222222] tracking-tight mb-2">Hasil Evaluasi</h1>
             <p class="text-sm text-[#666666] font-medium">{{ $result->title }} • {{ $result->module_name }}</p>
         </div>
 

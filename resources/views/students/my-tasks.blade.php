@@ -5,10 +5,10 @@
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 space-y-6">
     
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-8">
         <div class="text-left">
-            <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Tugas Saya</h1>
-            <p class="text-sm text-[#666666] font-medium">Ruang Tugas</p>
+            <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Tugas Saya</h1>
+            <p class="text-sm text-[#666666] font-medium mt-2">Ruang Tugas</p>
         </div>
         <button class="flex items-center gap-2 border border-gray-100 rounded-xl px-4 py-2 text-xs font-bold text-[#444444] hover:bg-gray-50 transition shadow-sm">
             Saring 

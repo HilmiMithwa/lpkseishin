@@ -30,9 +30,9 @@
 @section('content')
 <div class="p-6 lg:p-10">
     
-    <div class="mb-6 text-left">
-        <h1 class="text-xl sm:text-2xl lg:text-[28px] font-bold font-ibm text-[#222222] tracking-tight mb-1">Pembayaran</h1>
-        <p class="text-sm text-[#666666] font-medium">Kelola tagihan SPP, metode pembayaran, dan riwayat transaksi.</p>
+    <div class="mb-8 text-left">
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Pembayaran</h1>
+        <p class="text-sm text-[#666666] font-medium mt-2">Kelola tagihan SPP, metode pembayaran, dan riwayat transaksi.</p>
     </div>
 
     @if(!$isFullyPaid)
