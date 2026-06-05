@@ -178,4 +178,9 @@ Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
 require __DIR__.'/auth.php';
 
+// Route to download submission files (authenticated users)
+Route::get('/submissions/{id_pengiriman}/download', [PengirimanTugasController::class, 'download'])
+    ->name('submissions.download')
+    ->middleware('auth');
+
 

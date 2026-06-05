@@ -27,7 +27,7 @@ class Mapel extends Model
 
     public function batch()
     {
-        return $this->belongsTo(\App\Models\Batch::class, 'id_batch', 'id_batch');
+        return $this->belongsTo(Batch::class, 'id_batch', 'id_batch');
     }
     
     public function rps() {
