@@ -25,7 +25,7 @@ class TeacherDashboardController extends Controller
             ])
             ->get();
 
-        $activeClassesCount = $teacherSubjects->where('status', 'active')->count();
+        $activeClassesCount = $teacherSubjects->where('status', 'Aktif')->count();
 
         $totalStudentsCount = DB::table('enrollment_access')
             ->whereIn('id_mapel', $teacherSubjects->pluck('id_mapel'))

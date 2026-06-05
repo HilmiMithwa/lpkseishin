@@ -10,24 +10,24 @@
     if (!isset($totalStudentsCount)) $totalStudentsCount = 45;
     if (!isset($todayScheduleCount)) $todayScheduleCount = 2;
 
-    if (!isset($teacherSubjects) || (is_countable($teacherSubjects) && count($teacherSubjects) == 0)) {
-        $teacherSubjects = [
-            (object)[
-                'batch' => (object)['nama_batch' => 'Batch 2'],
-                'nama_mapel' => 'N4 Mastering',
-                'modul_count' => 7,
-                'students_count' => 45,
-                'id_mapel' => 1
-            ],
-            (object)[
-                'batch' => (object)['nama_batch' => 'Batch 2'],
-                'nama_mapel' => 'N5 Mastering',
-                'modul_count' => 8,
-                'students_count' => 45,
-                'id_mapel' => 2
-            ]
-        ];
-    }
+    //if (!isset($teacherSubjects) || (is_countable($teacherSubjects) && count($teacherSubjects) == 0)) {
+    //    $teacherSubjects = [
+    //        (object)[
+    //            'batch' => (object)['nama_batch' => 'Batch 2'],
+    //            'nama_mapel' => 'N4 Mastering',
+    //            'modul_count' => 7,
+    //            'students_count' => 45,
+    //            'id_mapel' => 1
+    //        ],
+    //        (object)[
+    //            'batch' => (object)['nama_batch' => 'Batch 2'],
+    //            'nama_mapel' => 'N5 Mastering',
+    //            'modul_count' => 8,
+    //            'students_count' => 45,
+    //            'id_mapel' => 2
+    //        ]
+    //    ];
+    //}
 
     if (!isset($todaySchedules) || (is_countable($todaySchedules) && count($todaySchedules) == 0)) {
         $todaySchedules = [
