@@ -179,7 +179,7 @@
                                         <p class="text-[12px] font-bold text-[#222222] truncate">{{ basename($submission->file_path) }}</p>
                                         <p class="text-[9px] text-gray-400 font-bold uppercase mt-0.5">PDF</p>
                                     </div>
-                                    <a href="{{ $submissionFileUrl }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#d62828] text-[#d62828] text-[12px] font-bold hover:bg-red-50 transition">
+                                    <a href="{{ route('submissions.download', $submission->id_pengiriman_tugas) }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#d62828] text-[#d62828] text-[12px] font-bold hover:bg-red-50 transition">
                                         Buka File
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </a>
