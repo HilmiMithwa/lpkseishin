@@ -54,9 +54,9 @@
                         <svg class="w-5 h-5 text-[#d62828]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
                         Unduh Invoice
                     </button>
-                    <button class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition shadow-sm">
+                    <x-primary-button class="shadow-sm py-3 px-8">
                         Bayar Sekarang
-                    </button>
+                    </x-primary-button>
                 </div>
             </div>
 

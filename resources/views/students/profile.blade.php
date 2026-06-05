@@ -62,27 +62,27 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                     <div class="space-y-1.5 text-left">
-                        <label class="text-sm font-bold text-[#666666]">Nama Lengkap:</label>
-                        <input type="text" name="name" value="{{ old('name', $userData->name) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                        <x-input-label for="name" value="Nama Lengkap:" />
+                        <x-text-input id="name" name="name" type="text" :value="old('name', $userData->name)" />
                     </div>
                     <div class="space-y-1.5 text-left">
-                        <label class="text-sm font-bold text-[#666666]">Email:</label>
-                        <input type="email" name="email" value="{{ old('email', $userData->email) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                        <x-input-label for="email" value="Email:" />
+                        <x-text-input id="email" name="email" type="email" :value="old('email', $userData->email)" />
                     </div>
                     <div class="space-y-1.5 text-left">
-                        <label class="text-sm font-bold text-[#666666]">Nomor Telepon:</label>
-                        <input type="text" name="nomor_telepon" value="{{ old('nomor_telepon', $userData->nomor_telepon) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                        <x-input-label for="nomor_telepon" value="Nomor Telepon:" />
+                        <x-text-input id="nomor_telepon" name="nomor_telepon" type="text" :value="old('nomor_telepon', $userData->nomor_telepon)" />
                     </div>
                     <div class="space-y-1.5 text-left">
-                        <label class="text-sm font-bold text-[#666666]">Tanggal Lahir:</label>
-                        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $userData->tanggal_lahir) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                        <x-input-label for="tanggal_lahir" value="Tanggal Lahir:" />
+                        <x-text-input id="tanggal_lahir" name="tanggal_lahir" type="date" :value="old('tanggal_lahir', $userData->tanggal_lahir)" />
                     </div>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
+                    <x-primary-button>
                         Simpan Perubahan
-                    </button>
+                    </x-primary-button>
                 </div>
             </form>
         </div>
@@ -92,25 +92,25 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Tingkat Pendidikan:</label>
+                    <x-input-label value="Tingkat Pendidikan:" />
                     <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->education }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Tinggi / Berat Badan:</label>
+                    <x-input-label value="Tinggi / Berat Badan:" />
                     <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->height_weight }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Nama Kontak Darurat:</label>
+                    <x-input-label value="Nama Kontak Darurat:" />
                     <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->emergency_name }}
                     </div>
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Telepon Kontak Darurat:</label>
+                    <x-input-label value="Telepon Kontak Darurat:" />
                     <div class="w-full bg-gray-100 border border-transparent rounded-xl px-4 py-2.5 text-sm font-bold text-[#444444] select-none cursor-not-allowed">
                         {{ $userData->emergency_phone }}
                     </div>
@@ -145,21 +145,21 @@
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Kata Sandi Saat Ini</label>
-                    <input type="password" name="current_password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    <x-input-label for="current_password" value="Kata Sandi Saat Ini" />
+                    <x-text-input id="current_password" name="current_password" type="password" />
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Kata Sandi Baru</label>
-                    <input type="password" name="password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    <x-input-label for="password" value="Kata Sandi Baru" />
+                    <x-text-input id="password" name="password" type="password" />
                 </div>
                 <div class="space-y-1.5 text-left">
-                    <label class="text-sm font-bold text-[#666666]">Konfirmasi Kata Sandi</label>
-                    <input type="password" name="password_confirmation" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold text-[#222222] focus:outline-none focus:border-[#d62828] transition">
+                    <x-input-label for="password_confirmation" value="Konfirmasi Kata Sandi" />
+                    <x-text-input id="password_confirmation" name="password_confirmation" type="password" />
                 </div>
                 <div>
-                    <button type="submit" class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
+                    <x-primary-button class="w-full">
                         Perbarui Kata Sandi
-                    </button>
+                    </x-primary-button>
                 </div>
             </div>
         </form>
