@@ -69,4 +69,34 @@ class PengirimanTugasController extends Controller
 
         return back()->with('success', 'Pengiriman tugas berhasil dibatalkan.');
     }
+
+    public function download($id_pengiriman)
+    {
+        $submission = Pengiriman_Tugas::find($id_pengiriman);
+
+        if (!$submission) {
+            abort(404);
+        }
+
+        // Authorization: allow owner or teachers (role_id == 3)
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+
+        if ($user->id !== $submission->id_user && (int)$user->role_id !== 3) {
+            abort(403);
+        }
+
+        if (!$submission->file_path) {
+            abort(404);
+        }
+
+        $disk = Storage::disk('public');
+        if (!$disk->exists($submission->file_path)) {
+            abort(404);
+        }
+
+        return $disk->download($submission->file_path, basename($submission->file_path));
+    }
 }
