@@ -358,14 +358,14 @@
                             {{-- Dummy input for student ID --}}
                             <input type="hidden" name="student_id" :value="reviewData.id">
                             
-                            <div>
-                                <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Nilai (0 - 100)</label>
-                                <input type="number" name="score" min="0" max="100" x-model="reviewData.score" placeholder="Masukkan nilai..." class="w-full px-4 py-3 bg-white rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-bold font-karla outline-none transition" required>
+                            <div class="space-y-1.5">
+                                <x-input-label>Nilai (0 - 100)</x-input-label>
+                                <x-text-input type="number" name="score" min="0" max="100" x-model="reviewData.score" placeholder="Masukkan nilai..." required />
                             </div>
 
-                            <div>
-                                <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Catatan / Feedback <span class="text-gray-400 font-normal">(Opsional)</span></label>
-                                <textarea name="feedback" rows="5" placeholder="Tuliskan evaluasi atau masukan untuk siswa..." class="w-full px-4 py-3 bg-white rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition resize-y"></textarea>
+                            <div class="space-y-1.5">
+                                <x-input-label>Catatan / Feedback <span class="text-gray-400 font-normal">(Opsional)</span></x-input-label>
+                                <textarea name="feedback" rows="5" placeholder="Tuliskan evaluasi atau masukan untuk siswa..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y shadow-sm"></textarea>
                             </div>
                         </form>
                     </div>
@@ -375,10 +375,10 @@
                 {{-- Footer / Actions --}}
                 <div class="p-6 border-t border-gray-100 flex-shrink-0 bg-white flex gap-3">
                     <button type="button" @click="showReviewPanel = false" class="flex-1 py-3.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl font-bold font-karla text-sm transition">Batal</button>
-                    <button type="button" @click="showReviewPanel = false" class="flex-1 py-3.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla text-sm rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-red-200">
+                    <x-primary-button type="button" @click="showReviewPanel = false" class="flex-1 justify-center gap-2 py-3.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         Simpan Nilai
-                    </button>
+                    </x-primary-button>
                 </div>
                 
             </div>

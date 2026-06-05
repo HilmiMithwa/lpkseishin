@@ -71,10 +71,10 @@
             </div>
 
             <div class="flex justify-end pt-4">
-                <button type="button" onclick="initQuiz()" class="bg-[#d62828] hover:bg-red-700 text-white text-sm font-bold py-3 px-6 rounded-xl flex items-center gap-2 shadow-sm transition">
+                <x-primary-button type="button" onclick="initQuiz()" class="gap-2 shadow-sm py-3">
                     Mulai Ujian Sekarang
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
+                </x-primary-button>
             </div>
         </div>
         
@@ -119,9 +119,9 @@
                     <button type="button" onclick="prevQuestion()" id="btn-prev" class="bg-[#FFDBDB] text-[#d62828] hover:bg-red-200 text-sm font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sblmnya
                     </button>
-                    <button type="button" onclick="nextQuestion()" id="btn-next" class="bg-[#d62828] hover:bg-red-700 text-white text-sm font-bold py-3 px-6 rounded-xl flex items-center gap-2 shadow-sm transition">
+                    <x-primary-button type="button" onclick="nextQuestion()" id="btn-next" class="gap-2 shadow-sm py-3">
                         <span id="btn-next-text">Lanjut</span> <svg id="btn-next-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </button>
+                    </x-primary-button>
                 </div>
 
             </div>

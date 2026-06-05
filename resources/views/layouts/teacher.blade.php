@@ -126,15 +126,15 @@
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Kelas Saya</span>
                 </a>
-                <a href="#" class="nav-link flex items-center gap-3 text-[#444444] hover:bg-gray-50 hover:text-[#222222] px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('teacher.assignments') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.assignments']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.assignments']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    <span class="sidebar-text whitespace-nowrap">Pemeriksaan Tugas</span>
+                    <span class="sidebar-text whitespace-nowrap">Manajemen Tugas</span>
                 </a>
-                <a href="#" class="nav-link flex items-center gap-3 text-[#444444] hover:bg-gray-50 hover:text-[#222222] px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('teacher.vocabulary') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.vocabulary', 'teacher.vocabulary.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.vocabulary', 'teacher.vocabulary.*']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Database Kosakata</span>
                 </a>
-                <a href="#" class="nav-link flex items-center gap-3 text-[#444444] hover:bg-gray-50 hover:text-[#222222] px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('teacher.progress-report') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.progress-report']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.progress-report']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Laporan Perkembangan</span>
                 </a>
@@ -142,7 +142,7 @@
 
             <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest mt-6 uppercase transition-opacity">Sistem</p>
             <nav class="space-y-1">
-                <a href="#" class="nav-link flex items-center gap-3 text-[#444444] hover:bg-gray-50 hover:text-[#222222] px-4 py-3 rounded-xl font-semibold text-sm transition">
+                <a href="{{ route('teacher.profile') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('teacher.profile') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs('teacher.profile') ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Profil</span>
                 </a>
@@ -526,6 +526,56 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+    </script>
+    
+    {{-- Global Page Loading Transition --}}
+    <div x-data="{ pageLoading: false }"
+         @page-loading.window="pageLoading = true"
+         @page-loaded.window="pageLoading = false"
+         x-show="pageLoading"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[9999] bg-[#FFF9F4]/90 backdrop-blur-md flex flex-col items-center justify-center"
+         style="display: none;" x-cloak>
+         
+         <div class="relative flex items-center justify-center w-24 h-24 mb-4">
+             <div class="absolute inset-0 bg-[#d62828]/20 rounded-full animate-ping opacity-75 duration-1000"></div>
+             <img src="https://res.cloudinary.com/dz8fs7rp1/image/upload/v1780409565/logo-notext_kywvap.png" class="w-14 h-14 object-contain relative z-10" alt="LPK Seishin">
+         </div>
+         <h2 class="text-xs font-bold font-ibm text-[#d62828] tracking-[0.2em] uppercase animate-pulse mt-2">Memuat...</h2>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore state if returning from history
+            window.dispatchEvent(new CustomEvent('page-loaded'));
+            
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    const target = link.getAttribute('target');
+                    if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                        window.dispatchEvent(new CustomEvent('page-loading'));
+                    }
+                });
+            });
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if(!e.defaultPrevented) {
+                        window.dispatchEvent(new CustomEvent('page-loading'));
+                    }
+                });
+            });
+            
+            window.addEventListener('pageshow', (e) => {
+                window.dispatchEvent(new CustomEvent('page-loaded'));
+            });
+        });
     </script>
     @stack('modals')
     @stack('scripts')

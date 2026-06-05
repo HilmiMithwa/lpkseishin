@@ -40,10 +40,10 @@
                 <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="hidden sm:inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-bold py-2.5 px-5 rounded-xl text-sm transition">
                     Batal
                 </a>
-                <button type="button" @click="$dispatch('open-publish-modal')" class="inline-flex items-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition shadow-sm">
+                <x-primary-button type="button" @click="$dispatch('open-publish-modal')" class="gap-2">
                     Terbitkan Tugas
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                </button>
+                </x-primary-button>
             </div>
         </div>
 
@@ -55,17 +55,17 @@
                 <div class="bg-white border border-gray-100 rounded-[24px] p-6 lg:p-8 shadow-sm flex flex-col gap-6">
                     
                     {{-- Title Input --}}
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Judul Tugas</label>
-                        <input type="text" name="title" placeholder="Masukkan judul tugas..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                    <div class="space-y-1.5">
+                        <x-input-label>Judul Tugas</x-input-label>
+                        <x-text-input type="text" name="title" placeholder="Masukkan judul tugas..." />
                     </div>
                     
                     <div class="h-px bg-gray-100 w-full"></div>
 
                     {{-- Description Textarea --}}
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Deskripsi Tugas</label>
-                        <textarea name="content" rows="10" placeholder="Tuliskan instruksi atau deskripsi lengkap tugas di sini..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition resize-y"></textarea>
+                    <div class="space-y-1.5">
+                        <x-input-label>Deskripsi Tugas</x-input-label>
+                        <textarea name="content" rows="10" placeholder="Tuliskan instruksi atau deskripsi lengkap tugas di sini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y shadow-sm"></textarea>
                     </div>
 
                 </div>
@@ -79,19 +79,19 @@
                     <div class="space-y-6">
                         
                         {{-- Deadline --}}
-                        <div>
-                            <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Tenggat Waktu</label>
+                        <div class="space-y-1.5">
+                            <x-input-label>Tenggat Waktu</x-input-label>
                             <div class="relative">
-                                <svg class="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <input type="datetime-local" name="deadline" class="w-full px-4 py-3 pl-10 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                <svg class="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <input type="datetime-local" name="deadline" class="w-full px-4 py-2.5 pl-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm">
                             </div>
                         </div>
 
                         <div class="h-px bg-gray-100 w-full"></div>
 
                         {{-- Attachments --}}
-                        <div x-data="{ isUploading: false, showResource: false }">
-                            <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Tambah Sumber Daya</label>
+                        <div class="space-y-1.5" x-data="{ isUploading: false, showResource: false }">
+                            <x-input-label>Tambah Sumber Daya</x-input-label>
                             <input type="file" name="resource_file" x-ref="resourceFile" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.png" @change="if($refs.resourceFile.files.length > 0) { isUploading = true; setTimeout(() => { isUploading = false; showResource = true }, 1500) }">
                             
                             {{-- Dropzone Area --}}
