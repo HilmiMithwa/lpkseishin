@@ -100,19 +100,10 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
-    Route::get('/students/vocabulary-mastery', function () {
-        // Mengecek apakah tabel daily_words tersedia di database menggunakan Schema bawaan Laravel
-        $dailyWord = \Illuminate\Support\Facades\Schema::hasTable('daily_words')
-            ? \Illuminate\Support\Facades\DB::table('daily_words')->inRandomOrder()->first()
-            : null;
-
-        // Kirim data dailyWord asli hasil query ke dalam view agar dibaca oleh Blade
-        return view('students.vocabulary-mastery', compact('dailyWord'));
-    })->name('students.vocabulary-mastery');
-
-    Route::get('/students/vocabulary-mastery/level/{id}', function ($id) {
-        return view('students.vocabulary-level', ['level_id' => $id]);
-    })->name('students.vocabulary-level');
+    Route::get('/students/vocabulary-mastery', [StudentController::class, 'vocabularyMastery'])->name('students.vocabulary-mastery');
+    Route::get('/students/vocabulary-mastery/level/{id}', [StudentController::class, 'vocabularyLevel'])->name('students.vocabulary-level');
+    Route::post('/students/vocabulary/{id_vocabulary}/toggle-mastered', [StudentController::class, 'toggleMastered'])->name('students.vocabulary.toggle-mastered');
+    Route::post('/students/vocabulary/{id_vocabulary}/toggle-favorite', [StudentController::class, 'toggleFavorite'])->name('students.vocabulary.toggle-favorite');
 
     Route::get('/students/profile', function () {
         return view('students.profile', ['userData' => auth()->user()]);
@@ -189,10 +180,13 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 });
 
 
+<<<<<<< HEAD
 
 //buat ngetes API
 Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
+=======
+>>>>>>> a26d60bfda34928d435637d7483508501238343f
 require __DIR__.'/auth.php';
 
 // Route to download submission files (authenticated users)

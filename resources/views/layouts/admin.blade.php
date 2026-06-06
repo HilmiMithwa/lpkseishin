@@ -142,18 +142,18 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 -translate-y-2" 
-                         class="pl-12 pr-4 py-2 space-y-3 sidebar-text" style="display: none;">
-                        <a href="{{ route('admin.users') }}?role=siswa" class="block text-[13.5px] font-medium {{ request('role') == 'siswa' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'siswa' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Siswa
+                         class="pl-11 pr-4 py-2 space-y-1 sidebar-text" style="display: none;">
+                        <a href="{{ route('admin.users') }}?role=siswa" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'siswa' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'siswa' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Siswa</span>
                         </a>
-                        <a href="{{ route('admin.users') }}?role=guru" class="block text-[13.5px] font-medium {{ request('role') == 'guru' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Guru
+                        <a href="{{ route('admin.users') }}?role=guru" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'guru' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Guru</span>
                         </a>
-                        <a href="{{ route('admin.users') }}?role=admin" class="block text-[13.5px] font-medium {{ request('role') == 'admin' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'admin' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Admin
+                        <a href="{{ route('admin.users') }}?role=admin" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'admin' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'admin' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Admin</span>
                         </a>
                     </div>
                 </div>

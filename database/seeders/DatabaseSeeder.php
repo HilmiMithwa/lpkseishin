@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         BahanAjarSeeder::class,
         AnnouncementSeeder::class,
         ProgressBahanAjarSeeder::class,
+        VocabularySeeder::class
     ]);
 
         User::factory()->create([

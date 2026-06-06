@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB; // Tambahkan ini untuk fitur random
 use Illuminate\Support\Facades\Schema;
 use App\Models\Modul;
 use App\Models\User;
+use App\Models\Vocabulary;
 use App\Models\VocabProgress;
 use Illuminate\Support\Facades\Http;
 use App\Models\BahanAjar;
@@ -171,34 +172,17 @@ class StudentController extends Controller
         // 5. Lempar semua data beserta ID parameter untuk form action di Blade
         return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru'));
     }
-    public function getVocabulary()
-    {
-        $response = Http::get('https://jlpt-vocab-api.vercel.app/api/words/all');
-
-        if ($response->successful()) {
-            $vocabList = $response->json()['data'] ?? [];
-
-            $memorizedID = VocabProgress::where('id_user', Auth::id())->where('is_memorized', true)->pluck('vocabulary_id')->toArray();
-
-            return view('student.vocabulary', [ //sok ini sesuaikan aja buat nama view bladenya sama kamu 
-                'vocabList' => $vocabList,
-                'memorizedID' => $memorizedID,
-            ]);
-        }
-
-        return abort(500, 'Gagal mengambil data dari API');
-    }
 
     public function saveProgress(Request $request)
     {
         $request->validate([
-            'vocabulary_id' => 'required'
+            'id_vocabulary' => 'required'
         ]);
 
         VocabProgress::updateOrCreate(
             [
                 'id_user' => Auth::id(),
-                'vocabulary_id' => $request->vocabulary_id,
+                'id_vocabulary' => $request->id_vocabulary,
             ],
             [
                 'is_memorized' => true
@@ -366,6 +350,119 @@ class StudentController extends Controller
     }
 // ======================================
 
-    
+    public function vocabularyMastery()
+    {
+        $user = Auth::user();
+ 
+        $dailyWord = Schema::hasTable('daily_words')
+            ? DB::table('daily_words')->inRandomOrder()->first()
+            : null;
+ 
+        $statMastered  = VocabProgress::where('id_user', $user->id)->where('is_memorized', true)->count();
+        $statLearning  = VocabProgress::where('id_user', $user->id)->count();
+        $statFavourite = VocabProgress::where('id_user', $user->id)->where('is_favorite', true)->count();
+ 
+        $totalVocab         = Vocabulary::count();
+        $masteredPercentage = $totalVocab > 0 ? round(($statMastered / $totalVocab) * 100) : 0;
+ 
+        $levels = Vocabulary::select('level')->distinct()->orderBy('level')->pluck('level');
+ 
+        $flashcardLevels = $levels->map(function ($level) use ($user) {
+            $vocabIds   = Vocabulary::where('level', $level)->pluck('id_vocabulary');
+            $total      = $vocabIds->count();
+            $mastered   = VocabProgress::where('id_user', $user->id)
+                            ->where('is_memorized', true)
+                            ->whereIn('id_vocabulary', $vocabIds)
+                            ->count();
+            $lastUpdate = VocabProgress::where('id_user', $user->id)
+                            ->whereIn('id_vocabulary', $vocabIds)
+                            ->latest('updated_at')
+                            ->value('updated_at');
+ 
+            return (object)[
+                'level'   => $level,
+                'total'   => $total,
+                'mastered'=> $mastered,
+                'status'  => ($mastered >= $total && $total > 0) ? 'Selesai' : 'Proses',
+                'updated' => $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->diffForHumans() : '-',
+            ];
+        });
+ 
+        return view('students.vocabulary-mastery', compact(
+            'dailyWord', 'statMastered', 'statLearning', 'statFavourite',
+            'masteredPercentage', 'flashcardLevels'
+        ));
+    }
+
+    public function vocabularyLevel($id)
+    {
+        $user = Auth::user();
+ 
+        $vocabList = Vocabulary::where('level', $id)
+            ->orderBy('id_vocabulary')
+            ->get();
+ 
+        $progressMap = VocabProgress::where('id_user', $user->id)
+            ->whereIn('id_vocabulary', $vocabList->pluck('id_vocabulary'))
+            ->get()
+            ->keyBy('id_vocabulary');
+ 
+        $totalWords = $vocabList->count();
+ 
+        $flashcards = $vocabList->map(function ($vocab, $index) use ($progressMap, $totalWords) {
+            $progress = $progressMap->get($vocab->id_vocabulary);
+ 
+            return [
+                'id_vocabulary' => $vocab->id_vocabulary,
+                'kanji'         => $vocab->kanji,
+                'furigana'      => $vocab->furigana ?? '',
+                'romaji'        => $vocab->romaji,
+                'en'            => $vocab->meaning_en,
+                'id'            => $vocab->meaning_id,
+                'definition'    => $vocab->definition_id,
+                'usage'         => $vocab->contextual_usage,
+                'progress'      => 'Kartu ' . ($index + 1) . ' dari ' . $totalWords,
+                'status'        => ($progress && $progress->is_memorized) ? 'Dikuasai' : 'Belum Dikuasai',
+                'is_fav'        => $progress ? (bool) $progress->is_favorite : false,
+            ];
+        })->values();
+ 
+        return view('students.vocabulary-level', [
+            'level_id'   => $id,
+            'flashcards' => $flashcards,
+            'totalWords' => $totalWords,
+        ]);
+    }
+
+     public function toggleMastered($id_vocabulary)
+    {
+        $user     = Auth::user();
+        $progress = VocabProgress::firstOrNew([
+            'id_user'       => $user->id,
+            'id_vocabulary' => $id_vocabulary,
+        ]);
+        $progress->is_memorized = !$progress->is_memorized;
+        $progress->save();
+ 
+        return response()->json([
+            'is_memorized' => $progress->is_memorized,
+            'status'       => $progress->is_memorized ? 'Dikuasai' : 'Belum Dikuasai',
+        ]);
+    }
+
+    public function toggleFavorite($id_vocabulary)
+    {
+        $user     = Auth::user();
+        $progress = VocabProgress::firstOrNew([
+            'id_user'       => $user->id,
+            'id_vocabulary' => $id_vocabulary,
+        ]);
+        $progress->is_favorite = !$progress->is_favorite;
+        $progress->save();
+ 
+        return response()->json([
+            'is_favorite' => $progress->is_favorite,
+        ]);
+    }
     
 }

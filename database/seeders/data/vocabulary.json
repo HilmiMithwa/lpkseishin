@@ -1,0 +1,3422 @@
+[
+  {
+    "word": "同感",
+    "meaning": "agreement; same opinion; same feeling; sympathy; concurrence",
+    "meaning_id": "sependapat, setuju, simpati",
+    "furigana": "どうかん",
+    "romaji": "dōkan",
+    "level": 1,
+    "definition_id": "Kondisi memiliki pemikiran, perasaan, atau opini yang sama dengan apa yang dinyatakan oleh orang lain.",
+    "contextual_usage": "彼の意見には私も全く同感です。 (Kare no iken ni wa watashi mo mattaku dōkan desu. / Saya juga benar-benar sependapat dengan opininya.)"
+  },
+  {
+    "word": "風車",
+    "meaning": "1. windmill; 2. pinwheel",
+    "meaning_id": "kincir angin, mainan kincir kertas",
+    "furigana": "かざぐるま",
+    "romaji": "kazaguruma",
+    "level": 1,
+    "definition_id": "Alat atau mainan roda berporos yang berputar ketika terkena hembusan angin, sering digunakan untuk pembangkit listrik atau dekorasi.",
+    "contextual_usage": "丘の上に大きな風車が見えます。 (Oka no ue ni ōkina kazaguruma ga miemasu. / Terlihat sebuah kincir angin besar di atas bukit.)"
+  },
+  {
+    "word": "何処か",
+    "meaning": "somewhere; anywhere; in some respects",
+    "meaning_id": "suatu tempat, entah di mana, di suatu sisi",
+    "furigana": "どこか",
+    "romaji": "dokoka",
+    "level": 1,
+    "definition_id": "Kata ganti penunjuk lokasi yang tidak spesifik, belum diketahui secara pasti, atau merujuk pada aspek tertentu.",
+    "contextual_usage": "鍵を部屋の何処かに置き忘れてしまいました。 (Kagi wo heya no dokoka ni okiwasurete shimaimashita. / Saya lupa menaruh kunci di suatu tempat di dalam kamar.)"
+  },
+  {
+    "word": "早める",
+    "meaning": "to hasten; to quicken; to expedite; to precipitate; to accelerate",
+    "meaning_id": "mempercepat, memajukan (jadwal)",
+    "furigana": "はやめる",
+    "romaji": "hayameru",
+    "level": 1,
+    "definition_id": "Tindakan membuat tempo suatu gerakan menjadi lebih cepat atau memajukan waktu pelaksanaan dari jadwal semula.",
+    "contextual_usage": "出発の時間を一時間早めることにしました。 (Shuppatsu no jikan wo ichijikan hayameru koto ni shimashita. / Kami memutuskan untuk memajukan waktu keberangkatan satu jam lebih awal.)"
+  },
+  {
+    "word": "賭け",
+    "meaning": "betting; gambling; a gamble",
+    "meaning_id": "taruhan, perjudian, spekulasi berisiko",
+    "furigana": "かけ",
+    "romaji": "kake",
+    "level": 1,
+    "definition_id": "Pertaruhan uang atau barang berharga atas hasil suatu peristiwa yang tidak pasti, atau tindakan spekulatif yang berisiko tinggi.",
+    "contextual_usage": "勝負を予測して賭けをする。 (Shōbu wo yosoku shite kake wo suru. / Memprediksi hasil pertandingan lalu memasang taruhan.)"
+  },
+  {
+    "word": "興じる",
+    "meaning": "to amuse oneself; to make merry",
+    "meaning_id": "menikmati, bersenang-senang, asyik bermain",
+    "furigana": "きょうじる",
+    "romaji": "kyōjiru",
+    "level": 1,
+    "definition_id": "Tindakan melibatkan diri ke dalam suatu aktivitas atau permainan dengan penuh rasa tertarik dan gembira.",
+    "contextual_usage": "子供たちはチェスに興じています。 (Kodomotachi wa chesu ni kyōjite imasu. / Anak-anak sedang asyik bermain catur.)"
+  },
+  {
+    "word": "磁気",
+    "meaning": "magnetism",
+    "meaning_id": "magnetisme, daya magnet",
+    "furigana": "じき",
+    "romaji": "jiki",
+    "level": 1,
+    "definition_id": "Fenomena fisik berupa gaya tarik-menarik atau tolak-menolak yang dihasilkan oleh magnet atau arus listrik.",
+    "contextual_usage": "このカードは磁気の近くに置かないでください。 (Kono kādo wa jiki no chikaku ni okanaide kudasai. / Jangan meletakkan kartu ini di dekat daya magnet.)"
+  },
+  {
+    "word": "若しかして",
+    "meaning": "perhaps; possibly",
+    "meaning_id": "jangan-jangan, mungkinkah, barangkali",
+    "furigana": "もしかして",
+    "romaji": "moshikashite",
+    "level": 1,
+    "definition_id": "Kata keterangan yang digunakan untuk mengekspresikan dugaan, spekulasi, atau kemungkinan yang belum pasti.",
+    "contextual_usage": "若しかして、以前どこかでお会いしましたか。 (Moshikashite, izen dokoka de oai shimashita ka. / Mungkinkah kita pernah bertemu di suatu tempat sebelumnya?)"
+  },
+  {
+    "word": "彼方此方",
+    "meaning": "here and there",
+    "meaning_id": "sana-sini, di mana-mana, ke berbagai tempat",
+    "furigana": "あちこち",
+    "romaji": "achikochi",
+    "level": 1,
+    "definition_id": "Menunjukkan beberapa tempat atau arah yang tersebar secara acak di berbagai sisi.",
+    "contextual_usage": "京都の街をあちこち観光しました。 (Kyōto no machi wo achikochi kankō shimashita. / Saya berjalan-jalan ke sana-sini mengunjungi tempat wisata di kota Kyoto.)"
+  },
+  {
+    "word": "視点",
+    "meaning": "opinion; point of view; visual point",
+    "meaning_id": "sudut pandang, perspektif",
+    "furigana": "してん",
+    "romaji": "shiten",
+    "level": 1,
+    "definition_id": "Cara atau posisi seseorang dalam melihat, menilai, dan memahami suatu masalah atau keadaan.",
+    "contextual_usage": "新しい視点から問題を考えてみましょう。 (Atarashii shiten kara mondai wo kangaete mimashō. / Mari kita pikirkan masalah ini dari sudut pandang yang baru.)"
+  },
+  {
+    "word": "開発",
+    "meaning": "development; exploitation",
+    "meaning_id": "pengembangan, pembangunan, eksploitasi lahan",
+    "furigana": "かいはつ",
+    "romaji": "kaihatsu",
+    "level": 1,
+    "definition_id": "Proses memperbarui, merancang teknologi baru, atau membuka lahan baru demi meningkatkan nilai guna dan taraf hidup.",
+    "contextual_usage": "新しいスマートフォンのアプリを開発しています。 (Atarashii sumātofon no apuri wo kaihatsu shite imasu. / Kami sedang mengembangkan aplikasi ponsel pintar yang baru.)"
+  },
+  {
+    "word": "彼の",
+    "meaning": "that over there",
+    "meaning_id": "itu (jauh dari pembicara dan lawan bicara)",
+    "furigana": "あの",
+    "romaji": "ano",
+    "level": 1,
+    "definition_id": "Kata tunjuk untuk menyatakan benda, tempat, atau orang yang letaknya jauh dari posisi pembicara maupun lawan bicara.",
+    "contextual_usage": "あの山の上に白い建物が見えます。 (Ano yama no ue ni shiroi tatemono ga miemasu. / Di atas gunung itu terlihat bangunan berwarna putih.)"
+  },
+  {
+    "word": "滞納",
+    "meaning": "non-payment; default",
+    "meaning_id": "tunggakan, kelalaian membayar",
+    "furigana": "たいのう",
+    "romaji": "tainō",
+    "level": 1,
+    "definition_id": "Kondisi belum atau gagal membayar pajak, sewa, atau tagihan keuangan lainnya hingga melewati batas waktu resmi.",
+    "contextual_usage": "家賃を滞納すると催促状が届きます。 (Yachin wo tainō suru to saisokujō ga todokimasu. / Jika menunggak uang sewa rumah, surat tagihan akan datang.)"
+  },
+  {
+    "word": "果て",
+    "meaning": "the end; the extremity; the limit(s); the result",
+    "meaning_id": "ujung, batas akhir, akhir dari",
+    "furigana": "はて",
+    "romaji": "hate",
+    "level": 1,
+    "definition_id": "Titik paling ujung secara geografis, batas akhir dari jangkauan ruang/waktu, atau konsekuensi akhir dari suatu rangkaian tindakan.",
+    "contextual_usage": "宇宙の果てには何があるのだろう。 (Uchū no hate ni wa nani ga aru no darō. / Ada apa ya di ujung alam semesta?)"
+  },
+  {
+    "word": "長閑",
+    "meaning": "tranquil; calm; quiet",
+    "meaning_id": "tenang, damai, tenteram (suasana)",
+    "furigana": "のどか",
+    "romaji": "nodoka",
+    "level": 1,
+    "definition_id": "Suasana yang terasa santai, damai, dan menyenangkan, biasanya merujuk pada pemandangan desa atau cuaca musim semi yang hangat.",
+    "contextual_usage": "田舎の長閑な風景に癒やされました。 (Inaka no nodoka na fūkei ni iyasaremashita. / Saya merasa tenang oleh pemandangan desa yang damai.)"
+  },
+  {
+    "word": "負う",
+    "meaning": "to bear; to owe",
+    "meaning_id": "memikul, menanggung, menderita (luka)",
+    "furigana": "おう",
+    "romaji": "ō",
+    "level": 1,
+    "definition_id": "Mengemban tugas atau tanggung jawab yang berat, atau mengalami luka/cedera akibat kecelakaan.",
+    "contextual_usage": "彼は重大な責任を負っています。 (Kare wa jūdai na sekinin wo otte imasu. / Dia menanggung tanggung jawab yang besar.)"
+  },
+  {
+    "word": "首脳",
+    "meaning": "head; brains",
+    "meaning_id": "pimpinan tertinggi, kepala negara/pemerintahan",
+    "furigana": "しゅのう",
+    "romaji": "shunō",
+    "level": 1,
+    "definition_id": "Orang-orang yang memegang posisi jabatan atau kekuasaan struktural tertinggi dalam suatu organisasi negara atau badan internasional.",
+    "contextual_usage": "各国の首脳が集まって会議を開いた。 (Kakoku no shunō ga atsumatte kaigi wo hiraita. / Para pimpinan tertinggi dari berbagai negara berkumpul mengadakan konferensi.)"
+  },
+  {
+    "word": "一筋",
+    "meaning": "a line; earnestly; blindly; straightforwardly",
+    "meaning_id": "segaris, mengabdi sepenuhnya, fokus pada satu hal",
+    "furigana": "ひとすじ",
+    "romaji": "hitosuki",
+    "level": 1,
+    "definition_id": "Ungkapan untuk menunjukkan dedikasi yang lurus, fokus, dan teguh pada satu bidang pekerjaan atau jalur hidup tanpa menoleh ke hal lain. (Catatan: Furigana standar umumnya ひひとすじ / hitosuji).",
+    "contextual_usage": "彼は職人として研究一筋の人生を送った。 (Kare wa shokunin toshite kenkyū hitosuji no jinsei wo okutta. / Sebagai perajin, dia menjalani hidup yang sepenuhnya fokus pada penelitian.)"
+  },
+  {
+    "word": "落ち着き",
+    "meaning": "calm; composure",
+    "meaning_id": "ketenangan, ketabahan, kedewasaan sikap",
+    "furigana": "おちつき",
+    "romaji": "ochitsuki",
+    "level": 1,
+    "definition_id": "Kondisi mental atau pembawaan diri yang stabil, tidak gugup, tidak terburu-buru, dan mampu mengontrol emosi.",
+    "contextual_usage": "彼女はどんな時も落ち着きを失わない。 (Kanojo wa donna toki mo ochitsuki wo ushinawanai. / Dia tidak pernah kehilangan ketenangannya dalam situasi apa pun.)"
+  },
+  {
+    "word": "業者",
+    "meaning": "trader; merchant",
+    "meaning_id": "pelaku usaha, kontraktor, pihak penyedia jasa",
+    "furigana": "ぎょうしゃ",
+    "romaji": "gyōsha",
+    "level": 1,
+    "definition_id": "Individu atau badan hukum komersial yang bergerak dalam bidang perdagangan barang atau penyediaan layanan jasa spesifik.",
+    "contextual_usage": "修理を専門の業者に依頼しました。 (Shūri wo senmon no gyōsha ni irai shimashita. / Saya menyerahkan perbaikan kepada pihak penyedia jasa spesifik.)"
+  },
+  {
+    "word": "蛋白質",
+    "meaning": "protein",
+    "meaning_id": "protein",
+    "furigana": "たんぱくしつ",
+    "romaji": "tanpakushitsu",
+    "level": 1,
+    "definition_id": "Senyawa organik kompleks yang sangat dibutuhkan oleh tubuh makhluk hidup untuk pertumbuhan dan perbaikan sel.",
+    "contextual_usage": "筋肉を作るために蛋白質を多く摂取する。 (Kinniku wo tsukuru tame ni tanpakushitsu wo ōku sesshu suru. / Mengonsumsi banyak protein untuk membentuk otot.)"
+  },
+  {
+    "word": "タイムリー",
+    "meaning": "timely; run-batted-in (baseball); RBI",
+    "meaning_id": "tepat waktu, momen yang pas",
+    "furigana": "",
+    "romaji": "taimurī",
+    "level": 1,
+    "definition_id": "Terjadi atau dilakukan pada momen yang paling pas dan menguntungkan; diserap dari kata bahasa Inggris 'timely'.",
+    "contextual_usage": "彼からタイムリーなアドバイスをもらった。 (Kare kara taimurī na adobaisu wo moratta. / Saya mendapatkan saran yang sangat tepat waktu dari dia.)"
+  },
+  {
+    "word": "後悔",
+    "meaning": "regret; repentance",
+    "meaning_id": "penyesalan",
+    "furigana": "こうかい",
+    "romaji": "kōkai",
+    "level": 1,
+    "definition_id": "Perasaan sedih atau kecewa atas kesalahan atau keputusan buruk yang terlanjur dilakukan di masa lalu.",
+    "contextual_usage": "あの時もっと勉強しておけばよかったと後悔している。 (Ano toki motto benkyō shite okeba yokatta to kōkai shite imasu. / Saya menyesal mengapa waktu itu tidak belajar dengan lebih giat.)"
+  },
+  {
+    "word": "購読",
+    "meaning": "subscription (e.g. magazine)",
+    "meaning_id": "berlangganan (bacaan/berita)",
+    "furigana": "こうどく",
+    "romaji": "kōdoku",
+    "level": 1,
+    "definition_id": "Kegiatan membeli dan membayar surat kabar, majalah, atau artikel digital secara rutin berkala agar dikirim langsung.",
+    "contextual_usage": "毎月、経済専門の雑誌を購読しています。 (Maitsu, keizai senmon no zasshi wo kōdoku shite imasu. / Setiap bulan, saya berlangganan majalah khusus ekonomi.)"
+  },
+  {
+    "word": "嗜好",
+    "meaning": "taste; liking; preference",
+    "meaning_id": "selera, kegemaran, preferensi (makanan/hobi)",
+    "furigana": "しこう",
+    "romaji": "shikō",
+    "level": 1,
+    "definition_id": "Kecenderungan minat atau kesukaan khusus seseorang terhadap jenis makanan, minuman, atau hobi tertentu.",
+    "contextual_usage": "人の嗜好は年齢とともに変化することがある。 (Hito no shikō wa nenrei to tomo ni henka suru koto ga aru. / Selera seseorang terkadang berubah seiring bertambahnya usia.)"
+  },
+  {
+    "word": "診療",
+    "meaning": "medical examination and treatment; diagnosis",
+    "meaning_id": "pemeriksaan dan pengobatan medis",
+    "furigana": "しんりょう",
+    "romaji": "shinryō",
+    "level": 1,
+    "definition_id": "Prosedur dokter dalam memeriksa gejala penyakit pasien sekaligus memberikan terapi pengobatan yang tepat.",
+    "contextual_usage": "そのクリニックの診療時間は午後６時までです。 (Sono kurinikku no shinryō jikan wa gogo rokuji made desu. / Jam pemeriksaan medis klinik tersebut adalah sampai jam 6 sore.)"
+  },
+  {
+    "word": "班",
+    "meaning": "group; party; section (mil)",
+    "meaning_id": "kelompok, regu, tim kerja",
+    "furigana": "はん",
+    "romaji": "han",
+    "level": 1,
+    "definition_id": "Satuan unit kelompok kecil orang yang dibentuk untuk menyelesaikan tugas atau kegiatan bersama.",
+    "contextual_usage": "私たちは４人の班に分かれて実験を行った。 (Watashitachi wa yonin no han ni wakarete jikken wo okonatta. / Kami dibagi ke dalam kelompok berisi 4 orang untuk melakukan eksperimen.)"
+  },
+  {
+    "word": "保管",
+    "meaning": "charge; custody; safekeeping; deposit; storage",
+    "meaning_id": "penyimpanan, penitipan, pemeliharaan barang",
+    "furigana": "ほかん",
+    "romaji": "hokan",
+    "level": 1,
+    "definition_id": "Tindakan menaruh dan merawat barang atau dokumen di tempat aman agar tidak rusak, hilang, atau disalahgunakan.",
+    "contextual_usage": "重要書類は金庫に保管してください。 (Jūyō shorui wa kinko ni hokan shite kudasai. / Harap simpan dokumen penting di dalam brankas.)"
+  },
+  {
+    "word": "スチーム",
+    "meaning": "steam",
+    "meaning_id": "uap panas, kukusan",
+    "furigana": "",
+    "romaji": "suchīmu",
+    "level": 1,
+    "definition_id": "Uap air panas yang dihasilkan dari proses pemanasan air; diserap dari bahasa Inggris 'steam'.",
+    "contextual_usage": "スチームを使って顔のスキンケアをします。 (Suchīmu wo tsukatte kao no sukinkea wo shimasu. / Melakukan perawatan kulit wajah menggunakan uap panas.)"
+  },
+  {
+    "word": "配列",
+    "meaning": "arrangement; array (programming)",
+    "meaning_id": "susunan, jajaran, array (pemrograman)",
+    "furigana": "はいれつ",
+    "romaji": "hairetsu",
+    "level": 1,
+    "definition_id": "Hal menata objek dalam urutan tertentu, atau struktur data berurutan untuk menyimpan elemen sejenis dalam pemrograman komputer.",
+    "contextual_usage": "アルファベットの配列順にデータを並べ替える。 (Arufabetto no hairetsujun ni dēta wo narabekaeru. / Mengurutkan ulang data berdasarkan susunan urutan alfabet.)"
+  },
+  {
+    "word": "染める",
+    "meaning": "to dye; to colour",
+    "meaning_id": "mewarnai, menyemir, mewarnai kain",
+    "furigana": "そめる",
+    "romaji": "someru",
+    "level": 1,
+    "definition_id": "Mengubah warna dasar kain, rambut, atau kertas menggunakan cairan zat pewarna.",
+    "contextual_usage": "白髪が気になったので髪を黒く染めました。 (Shiraga ga kinatta node kami wo kuroku somemashita. / Karena terganggu dengan uban, saya menyemir rambut menjadi hitam.)"
+  },
+  {
+    "word": "途上",
+    "meaning": "en route; half way",
+    "meaning_id": "di tengah jalan, dalam proses menuju",
+    "furigana": "とじょう",
+    "romaji": "tojō",
+    "level": 1,
+    "definition_id": "Kondisi berada di perjalanan menuju suatu destinasi, atau berada di tengah fase perkembangan (misal: negara berkembang).",
+    "contextual_usage": "学校へ行く途上で旧友に偶然会った。 (Gakkō he iku tojō de kyūyū ni gūzen atta. / Di tengah jalan ke sekolah, saya kebetulan bertemu teman lama.)"
+  },
+  {
+    "word": "店",
+    "meaning": "store; shop; establishment",
+    "meaning_id": "toko, kedai, tempat usaha",
+    "furigana": "てん",
+    "romaji": "ten",
+    "level": 1,
+    "definition_id": "Bangunan atau stan komersial tempat dilangsungkannya aktivitas transaksi jual beli barang atau jasa.",
+    "contextual_usage": "あの店はいつも客で賑わっています。 (Ano ten wa itsumo kyaku de nigiwatte imasu. / Toko itu selalu ramai dipadati pelanggan.)"
+  },
+  {
+    "word": "刑",
+    "meaning": "penalty; sentence; punishment",
+    "meaning_id": "hukuman pidana, vonis",
+    "furigana": "けい",
+    "romaji": "kei",
+    "level": 1,
+    "definition_id": "Sanksi hukum resmi yang dijatuhkan oleh pengadilan kepada pelaku pelanggaran tindak kriminal.",
+    "contextual_usage": "裁判長は被告に禁固３年の刑を言い渡した。 (Saibanchō wa hikoku ni kinko sannen no kei wo iiiwatashita. / Ketua hakim menjatuhkan vonis hukuman 3 tahun penjara kepada terdakwa.)"
+  },
+  {
+    "word": "野党",
+    "meaning": "opposition party",
+    "meaning_id": "partai oposisi",
+    "furigana": "やとう",
+    "romaji": "yatō",
+    "level": 1,
+    "definition_id": "Partai politik yang berada di luar koalisi pemerintahan dan berfungsi mengawasi serta mengkritik kebijakan partai penguasa.",
+    "contextual_usage": "野党は政府の新法案に強く反対した。 (Yatō wa seifu no shin hōan ni tsuyoku hantai shita. / Partai oposisi menentang keras rancangan undang-undang baru dari pemerintah.)"
+  },
+  {
+    "word": "徒歩",
+    "meaning": "walking; going on foot",
+    "meaning_id": "berjalan kaki",
+    "furigana": "とほ",
+    "romaji": "toho",
+    "level": 1,
+    "definition_id": "Metode perpindahan tempat dengan melangkahkan kaki tanpa menggunakan alat bantu kendaraan apa pun.",
+    "contextual_usage": "駅から私の家までは徒歩で約10分です。 (Eki kara watashi no ie made wa toho de yaku juffun desu. / Dari stasiun ke rumah saya memakan waktu sekitar 10 min jika berjalan kaki.)"
+  },
+  {
+    "word": "伝来",
+    "meaning": "ancestral; hereditary; imported; transmitted; handed down",
+    "meaning_id": "turun-temurun, warisan leluhur, masuknya budaya asing",
+    "furigana": "でんらい",
+    "romaji": "denrai",
+    "level": 1,
+    "definition_id": "Sesuatu yang diwariskan dari nenek moyang secara generasi ke generasi, atau diperkenalkan dari luar negeri ke suatu bangsa pada masa silam.",
+    "contextual_usage": "これは我が家に代々伝来する家宝です。 (Kore wa wagaya ni daidai denrai suru kahō desu. / Ini adalah harta pusaka yang diwariskan turun-temurun di keluarga kami.)"
+  },
+  {
+    "word": "トーン",
+    "meaning": "tone",
+    "meaning_id": "nada, intonasi, corak warna",
+    "furigana": "",
+    "romaji": "tōn",
+    "level": 1,
+    "definition_id": "Tinggi rendahnya suara (nada bicara) atau nuansa kepekatan warna pada karya seni grafis; diserap dari bahasa Inggris 'tone'.",
+    "contextual_usage": "もう少し穏やかなトーンで話してください。 (Mō sukoshi odayaka na tōn de hanashite kudasai. / Tolong bicaralah dengan intonasi nada yang agak lebih tenang.)"
+  },
+  {
+    "word": "カメラマン",
+    "meaning": "cameraman",
+    "meaning_id": "fotografer, juru kamera",
+    "furigana": "",
+    "romaji": "kameraman",
+    "level": 1,
+    "definition_id": "Profesi seseorang yang ahli mengoperasikan kamera untuk mengambil foto atau merekam video/film.",
+    "contextual_usage": "プロのカメラマンに写真を撮ってもらった。 (Puro no kameraman ni shashin wo totte moratta. / Foto saya diambil oleh seorang fotografer profesional.)"
+  },
+  {
+    "word": "抗議",
+    "meaning": "protest; objection",
+    "meaning_id": "protes, sanggahan, penolakan keras",
+    "furigana": "こうぎ",
+    "romaji": "kōgi",
+    "level": 1,
+    "definition_id": "Pernyataan keberatan atau ketidaksetujuan secara tegas terhadap suatu keputusan, kebijakan, atau tindakan yang dianggap tidak adil.",
+    "contextual_usage": "不当な判定に対して審判に抗議した。 (Futō na hantei ni taishite shinpan ni kōgi shita. / Melayangkan protes kepada wasit atas keputusan yang tidak adil.)"
+  },
+  {
+    "word": "自惚れ",
+    "meaning": "pretension; conceit; hubris",
+    "meaning_id": "keangkuhan, besar kepala, terlalu percaya diri",
+    "furigana": "うぬぼれ",
+    "romaji": "unubore",
+    "level": 1,
+    "definition_id": "Sikap terlalu membanggakan kemampuan atau ketampanan diri sendiri secara berlebihan melebihi kenyataan asli.",
+    "contextual_usage": "彼は自分の才能を自惚れている。 (Kare wa jibun no sainō wo unuborete iru. / Dia besar kepala/terlalu sombong akan bakat yang dimilikinya.)"
+  },
+  {
+    "word": "齎らす",
+    "meaning": "to bring; to take; to bring about",
+    "meaning_id": "membawa, mendatangkan, menyebabkan",
+    "furigana": "もたらす",
+    "romaji": "motarasu",
+    "level": 1,
+    "definition_id": "Menjadi pemicu yang menghasilkan suatu dampak, perubahan, berkah, atau masalah tertentu bagi pihak lain.",
+    "contextual_usage": "大雨は地域に大きな被害をもたらした。 (Ōame wa chiiki ni ōkina higai wo motarashita. / Hujan lebat mendatangkan kerugian kerusakan besar bagi wilayah tersebut.)"
+  },
+  {
+    "word": "優越",
+    "meaning": "supremacy; predominance; being superior to",
+    "meaning_id": "keunggulan, merasa lebih hebat",
+    "furigana": "ゆうえつ",
+    "romaji": "yūetsu",
+    "level": 1,
+    "definition_id": "Kondisi berada dalam posisi yang lebih unggul, lebih baik, atau lebih berkualitas daripada yang lain.",
+    "contextual_usage": "他者に対して優越な地位に立つ。 (Tasha ni taishite yūetsu na chii ni tatsu. / Berdiri di posisi yang lebih unggul dibandingkan orang lain.)"
+  },
+  {
+    "word": "不服",
+    "meaning": "dissatisfaction; discontent; disapproval; objection; complaint; protest; disagreement",
+    "meaning_id": "tidak puas, keberatan, tidak menerima keputusan",
+    "furigana": "ふふく",
+    "romaji": "fufuku",
+    "level": 1,
+    "definition_id": "Rasa tidak puas atau sikap menolak untuk tunduk/menerima suatu vonis, aturan, atau perintah karena dirasa tidak adil.",
+    "contextual_usage": "判決に不服がある場合は上訴できる。 (Hanketsu ni fufuku ga aru baai wa jōso dekiru. / Jika keberatan/tidak menerima hasil keputusan vonis, seseorang bisa mengajukan banding.)"
+  },
+  {
+    "word": "開催",
+    "meaning": "holding a meeting; open an exhibition",
+    "meaning_id": "menyelenggarakan, mengadakan (acara)",
+    "furigana": "かいさい",
+    "romaji": "kaisai",
+    "level": 1,
+    "definition_id": "Tindakan membuka dan melaksanakan suatu acara besar, pameran, rapat, kompetisi olahraga, atau festival.",
+    "contextual_usage": "東京で国際会議が開催されました。 (Tōkyō de kokusai kaigi ga kaisai saremashita. / Konferensi internasional telah diselenggarakan di Tokyo.)"
+  },
+  {
+    "word": "内閣",
+    "meaning": "cabinet; (government) ministry",
+    "meaning_id": "kabinet, dewan menteri",
+    "furigana": "ないかく",
+    "romaji": "naikaku",
+    "level": 1,
+    "definition_id": "Badan eksekutif tertinggi pemerintahan negara yang terdiri dari perdana menteri/presiden beserta jajaran para menteri.",
+    "contextual_usage": "首相は新しい内閣を組織した。 (Shushō wa atarashii naikaku wo soshiki shita. / Perdana Menteri membentuk susunan kabinet pemerintahan yang baru.)"
+  },
+  {
+    "word": "正当",
+    "meaning": "just; justifiable; right; due; proper; equitable; reasonable; legitimate; lawful",
+    "meaning_id": "sah, legal, adil, berdasar alasan kuat",
+    "furigana": "せいとう",
+    "romaji": "seitō",
+    "level": 1,
+    "definition_id": "Kondisi yang benar secara logika moral, hukum formal, maupun keadilan sosial sehingga tidak dapat disalahkan.",
+    "contextual_usage": "自己防衛のための正当な理由があります。 (Jiko bōei no tame no seitō na riyū ga arimasu. / Ada alasan kuat yang sah demi pembelaan diri.)"
+  },
+  {
+    "word": "垢",
+    "meaning": "dirt; filth",
+    "meaning_id": "daki, kotoran kulit",
+    "furigana": "あか",
+    "romaji": "aka",
+    "level": 1,
+    "definition_id": "Lapisan kotoran berupa campuran sel kulit mati, keringat, dan debu yang menempel di permukaan kulit tubuh.",
+    "contextual_usage": "お風呂に入って体の垢を落とす。 (Ofuro ni haitte karada no aka wo otosu. / Masuk ke kamar mandi untuk membersihkan daki di tubuh.)"
+  },
+  {
+    "word": "先先月",
+    "meaning": "month before last",
+    "meaning_id": "dua bulan yang lalu",
+    "furigana": "せんせんげつ",
+    "romaji": "sensengetsu",
+    "level": 1,
+    "definition_id": "Satuan waktu yang merujuk pada bulan sebelum bulan kemarin dalam perhitungan penanggalan.",
+    "contextual_usage": "先先月、日本に来たばかりです。 (Sensengetsu, Nihon ni kita bakari desu. / Saya baru saja tiba di Jepang dua bulan yang lalu.)"
+  },
+  {
+    "word": "怠慢",
+    "meaning": "negligence; procrastination; carelessness",
+    "meaning_id": "kelalaian, pengabaian tugas, kemalasan",
+    "furigana": "たいまん",
+    "romaji": "taiman",
+    "level": 1,
+    "definition_id": "Sikap tidak bertanggung jawab yang mengabaikan kewajiban pekerjaan atau menunda-nunda tugas karena malas.",
+    "contextual_usage": "職務怠慢を理由に解雇された。 (Shokumu taiman wo riyū ni kaiko sareta. / Dia dipecat dengan alasan melalaikan tugas pekerjaan.)"
+  },
+  {
+    "word": "無口",
+    "meaning": "reticence",
+    "meaning_id": "pendiam, tidak banyak bicara",
+    "furigana": "むくち",
+    "romaji": "mukuchi",
+    "level": 1,
+    "definition_id": "Karakter pembawaan seseorang yang cenderung irit bicara, tenang, dan jarang mengekspresikan opini lewat kata-kata.",
+    "contextual_usage": "彼は無口な人だが、とても優しい。 (Kare wa mukuchi na hito da ga, totemo yasashii. / Dia orang yang pendiam, tetapi sangat baik hati.)"
+  },
+  {
+    "word": "ご馳走",
+    "meaning": "feast; treating (someone)",
+    "meaning_id": "hidangan lezat, jamuan, mentraktir makanan",
+    "furigana": "ごちそう",
+    "romaji": "gochisō",
+    "level": 1,
+    "definition_id": "Makanan mewah yang disajikan untuk menjamu tamu, atau aksi membelikan makanan enak bagi orang lain.",
+    "contextual_usage": "昨日は先輩に美味しい夕食をご馳走になった。 (Kinō wa senpai ni oishii yūshoku wo gochisō ni natta. / Kemarin saya ditraktir makan malam yang lezat oleh senior.)"
+  },
+  {
+    "word": "ポット",
+    "meaning": "pot",
+    "meaning_id": "teko, termos air panas",
+    "furigana": "",
+    "romaji": "potto",
+    "level": 1,
+    "definition_id": "Wadah atau wadah berinsulasi yang digunakan untuk menyimpan air panas agar suhunya terjaga; diserap dari bahasa Inggris 'pot'.",
+    "contextual_usage": "ポットからお湯を注いで茶を淹れる。 (Potto kara oyu wo sosoide cha wo ireru. / Menuangkan air panas dari termos untuk menyeduh teh.)"
+  },
+  {
+    "word": "閲覧",
+    "meaning": "inspection; reading",
+    "meaning_id": "membaca, melihat-lihat (dokumen/situs web)",
+    "furigana": "えつらん",
+    "romaji": "etsuran",
+    "level": 1,
+    "definition_id": "Kegiatan memeriksa, meneliti, membaca buku di perpustakaan, atau mengakses konten halaman situs web resmi.",
+    "contextual_usage": "図書館の貴重な本はここで閲覧できます。 (Toshokan no kichō na hon wa koko de etsuran dekimasu. / Buku perpustakaan yang berharga dapat dibaca di sini.)"
+  },
+  {
+    "word": "阻む",
+    "meaning": "to keep someone from doing; to stop; to prevent; to check; to hinder; to obstruct; to oppose; to thwart",
+    "meaning_id": "menghalangi, merintangi, menjegal",
+    "furigana": "はばむ",
+    "romaji": "habamu",
+    "level": 1,
+    "definition_id": "Tindakan menaruh hambatan atau memblokir jalan/rencana agar kemajuan pihak lain terhenti.",
+    "contextual_usage": "大雪が私たちの行く手を阻んだ。 (Ōyuki ga watashitachi no yukute wo habanda. / Salju lebat menghalangi jalan tujuan kami.)"
+  },
+  {
+    "word": "使命",
+    "meaning": "mission; errand; message",
+    "meaning_id": "misi, tugas suci, panggilan amanah",
+    "furigana": "しめい",
+    "romaji": "shimei",
+    "level": 1,
+    "definition_id": "Tugas penting penuh tanggung jawab moral yang diamanahkan kepada seseorang atau organisasi demi tujuan luhur.",
+    "contextual_usage": "医者として患者の命を救うのが私の使命です。 (Isha toshite kanja no inoichi wo sukū no ga watashi no shimei desu. / Menyelamatkan nyawa pasien adalah misi saya sebagai seorang dokter.)"
+  },
+  {
+    "word": "三日月",
+    "meaning": "new moon; crescent moon",
+    "meaning_id": "bulan sabit",
+    "furigana": "みかずき",
+    "romaji": "mikazuki",
+    "level": 1,
+    "definition_id": "Bentuk bulan pada fase awal penanggalan qamariyah yang terlihat melengkung tipis menyerupai sabit.",
+    "contextual_usage": "夜空に綺麗な三日月が浮かんでいる。 (Yozora ni kirei na mikazuki ga ukande iru. / Bulan sabit yang indah sedang terapung di langit malam.)"
+  },
+  {
+    "word": "意地",
+    "meaning": "disposition; spirit; willpower; obstinacy; backbone; appetite",
+    "meaning_id": "keras kepala, harga diri, keteguhan hati",
+    "furigana": "いじ",
+    "romaji": "iji",
+    "level": 1,
+    "definition_id": "Sifat dasar hati seseorang, ego keras kepala, atau kegigihan emosional untuk tidak mau mengalah dari orang lain.",
+    "contextual_usage": "彼は意地を張って自分の間違いを認めない。 (Kare wa iji wo hatte jibun no machigai wo mitomenai. / Dia keras kepala dan tidak mau mengakui kesalahannya sendiri.)"
+  },
+  {
+    "word": "音",
+    "meaning": "sound; note",
+    "meaning_id": "bunyi, suara nada, desir",
+    "furigana": "ね",
+    "romaji": "ne",
+    "level": 1,
+    "definition_id": "Nuansa atau kualitas bunyi yang dihasilkan oleh alat musik, serangga, atau rintik alam (sering dipakai puitis dibandingkan 'oto').",
+    "contextual_usage": "虫の音に秋の訪れを感じます。 (Mushi no ne ni aki no otozure wo kanjimasu. / Saya merasakan datangnya musim gugur dari suara dengung serangga.)"
+  },
+  {
+    "word": "造り",
+    "meaning": "make up; structure; physique",
+    "meaning_id": "struktur, rakitan, potongan model gaya",
+    "furigana": "つくり",
+    "romaji": "tsukuri",
+    "level": 1,
+    "definition_id": "Cara pembuatan, struktur susunan arsitektur bangunan, atau potongan tatanan bentuk fisik suatu objek.",
+    "contextual_usage": "この家は木造の伝統的な造りになっている。 (Kono ie wa mokuzō no dentōteki na tsukuri ni natte iru. / Rumah ini memiliki arsitektur gaya tradisional dari kayu.)"
+  },
+  {
+    "word": "忠告",
+    "meaning": "advice; warning",
+    "meaning_id": "nasihat, peringatan tulus",
+    "furigana": "ちゅうこく",
+    "romaji": "chūkoku",
+    "level": 1,
+    "definition_id": "Saran tegas yang disampaikan dengan tulus agar seseorang mengubah perilakunya demi mencegah bahaya/kesalahan.",
+    "contextual_usage": "友人の忠告を素直に受け入れた。 (Yūjin no chūkoku wo sunao ni ukeireta. / Saya menerima dengan lapang dada nasihat peringatan dari teman.)"
+  },
+  {
+    "word": "脈",
+    "meaning": "pulse",
+    "meaning_id": "denyut nadi, harapan/peluang",
+    "furigana": "みゃく",
+    "romaji": "myaku",
+    "level": 1,
+    "definition_id": "Detak aliran darah berkala yang teraba di pembuluh arteri, atau kiasan untuk adanya secercah peluang keberhasilan.",
+    "contextual_usage": "医者は患者の脈を測って状態を確認した。 (Isha wa kanja no myaku wo hakatte jōtai wo kakunin shita. / Dokter memeriksa kondisi pasien dengan mengukur denyut nadinya.)"
+  },
+  {
+    "word": "向上",
+    "meaning": "elevation; rise; improvement; advancement; progress",
+    "meaning_id": "peningkatan, pemaslahatan, progres maju",
+    "furigana": "こうじょう",
+    "romaji": "kōjō",
+    "level": 1,
+    "definition_id": "Proses usaha menaikkan level level kualitas, kemampuan, nilai, atau standar kondisi ke tingkat yang lebih unggul.",
+    "contextual_usage": "技術向上のために毎日練習を重ねる。 (Gijutsu kōjō no tame ni mainichi renshū wo kasaneru. / Berlatih setiap hari demi peningkatan keterampilan.)"
+  },
+  {
+    "word": "任務",
+    "meaning": "duty; function; office; mission; task",
+    "meaning_id": "tugas resmi, kewajiban jabatan",
+    "furigana": "にんむ",
+    "romaji": "ninmu",
+    "level": 1,
+    "definition_id": "Tanggung jawab atau pekerjaan khusus yang dibebankan kepada seseorang atas dasar jabatan atau misi resmi.",
+    "contextual_usage": "彼は与えられた重要な任務を無事に果たした。 (Kare wa ataerareta jūyō na任務 wo buji ni hatashita. / Dia berhasil menuntaskan tugas resmi penting yang diberikan kepadanya dengan selamat.)"
+  },
+  {
+    "word": "成熟",
+    "meaning": "maturity; ripeness",
+    "meaning_id": "kematangan, kedewasaan",
+    "furigana": "せいじゅく",
+    "romaji": "seijuku",
+    "level": 1,
+    "definition_id": "Kondisi buah yang sudah matang sepenuhnya, atau perkembangan mental/fisik manusia dan masyarakat yang mencapai fase dewasa.",
+    "contextual_usage": "果実が成熟して収穫の時期を迎える。 (Kajitsu ga seijuku shite shūkaku no jiki wo mukaeru. / Buahnya telah matang sepenuhnya dan memasuki masa panen.)"
+  },
+  {
+    "word": "余程",
+    "meaning": "very; greatly; much; to a large extent; quite",
+    "meaning_id": "sangat, amat, jauh lebih (skala besar)",
+    "furigana": "よっぽど",
+    "romaji": "yoppodo",
+    "level": 1,
+    "definition_id": "Kata keterangan penegas untuk menunjukkan intensitas keadaan yang sangat luar biasa tinggi atau jauh melebihi batas normal.",
+    "contextual_usage": "荷物が重いのか、彼は余程疲れた顔をしている。 (Nimotsu ga omoi no ka, kare wa yoppodo tsukareta kao wo shite iru. / Mungkin karena barangnya berat, wajahnya terlihat sangat amat kelelahan.)"
+  },
+  {
+    "word": "纏め",
+    "meaning": "settlement; conclusion",
+    "meaning_id": "kesimpulan, rangkuman, penyelesaian",
+    "furigana": "まとめ",
+    "romaji": "matome",
+    "level": 1,
+    "definition_id": "Hasil mengintegrasikan berbagai data, pendapat, atau urusan menjadi satu ringkasan atau kesepakatan akhir yang rapi.",
+    "contextual_usage": "会議の最後に、議長が議論の纏めを行った。 (Kaigi no saigo ni, gichō ga giron no matome wo okonatta. / Di akhir rapat, ketua melakukan perangkuman jalannya diskusi.)"
+  },
+  {
+    "word": "チャンネル",
+    "meaning": "a channel",
+    "meaning_id": "saluran TV, kanal komunikasi",
+    "furigana": "",
+    "romaji": "channeru",
+    "level": 1,
+    "definition_id": "Frekuensi siaran televisi/radio tertentu, atau jalur khusus yang digunakan untuk berkomunikasi; diserap dari kata 'channel'.",
+    "contextual_usage": "テレビのチャンネルをニュースに変えてください。 (Terebi no channeru wo nyūsu ni kaete kudasai. / Tolong ubah saluran TV ke siaran berita.)"
+  },
+  {
+    "word": "心掛け",
+    "meaning": "readiness; intention; aim",
+    "meaning_id": "sikap mental, niat perhatian, kewaspadaan diri",
+    "furigana": "こころがけ",
+    "romaji": "kokorogake",
+    "level": 1,
+    "definition_id": "Sikap perhatian konsisten dalam pikiran untuk selalu berbuat baik, waspada, atau menjaga etika setiap harinya.",
+    "contextual_usage": "健康のためには日頃の心掛けが大切です。 (Kenkō no tame ni wa higoro no kokorogake ga taisetsu desu. / Sikap perhatian diri sehari-hari sangat penting demi kesehatan.)"
+  },
+  {
+    "word": "雑談",
+    "meaning": "chatting; idle talk",
+    "meaning_id": "obrolan ringan, santai ngobrol, gosip kosong",
+    "furigana": "ざつだん",
+    "romaji": "zatsudan",
+    "level": 1,
+    "definition_id": "Percakapan informal mengenai berbagai hal santai yang tidak kaku dan tidak mengikat topik formal.",
+    "contextual_usage": "休憩時間に同僚と雑談を楽しみました。 (Kyūkei jikan ni dōryō to zatsudan wo tanoshimashita. / Saya menikmati ngobrol santai dengan rekan kerja di jam istirahat.)"
+  },
+  {
+    "word": "箪笥",
+    "meaning": "chest of drawers",
+    "meaning_id": "lemari laci baju",
+    "furigana": "たんす",
+    "romaji": "tansu",
+    "level": 1,
+    "definition_id": "Perabot mebel besar penyimpan pakaian yang dilengkapi susunan kompartemen kotak tarik.",
+    "contextual_usage": "衣替えのために箪笥から服を取り出した。 (Koromogae no tame ni tansu kara fuku wo toridashita. / Mengeluarkan pakaian dari lemari laci untuk pergantian musim.)"
+  },
+  {
+    "word": "処分",
+    "meaning": "disposal; dealing; punishment",
+    "meaning_id": "pembuangan barang, penanganan, sanksi hukuman",
+    "furigana": "しょぶん",
+    "romaji": "しょぶん",
+    "level": 1,
+    "definition_id": "Tindakan menyingkirkan/menjual barang bekas tak terpakai, atau pemberian hukuman disiplin atas suatu pelanggaran.",
+    "contextual_usage": "不要になった家具を処分することにしました。 (Fuyō ni natta kagu wo shobun suru koto ni shimashita. / Saya memutuskan untuk membuang furnitur yang sudah tidak terpakai.)"
+  },
+  {
+    "word": "風習",
+    "meaning": "custom",
+    "meaning_id": "adat istiadat, kelaziman tradisi, kebiasaan wilayah",
+    "furigana": "ふうしゅう",
+    "romaji": "fūshゅう",
+    "level": 1,
+    "definition_id": "Kebiasaan sosial atau praktik tradisi lama yang terus dipelihara oleh kelompok masyarakat di wilayah tertentu.",
+    "contextual_usage": "この地域には古くから伝わるユニークな風習があります。 (Kono chiiki ni wa furuku kara tsutawaru yunīku na fūshū ga arimasu. / Di daerah ini terdapat adat istiadat unik yang diwariskan sejak masa lampau.)"
+  },
+  {
+    "word": "取り引き",
+    "meaning": "transactions; dealings; business",
+    "meaning_id": "transaksi bisnis, jual beli kontrak",
+    "furigana": "とりひき",
+    "romaji": "torihiki",
+    "level": 1,
+    "definition_id": "Aktivitas melakukan negosiasi ekonomi atau jual beli barang dan saham antar-perusahaan dagang.",
+    "contextual_usage": "他社との新規の取り引きが始まりました。 (Tasha to no shinki no torihiki ga hajimaremashita. / Transaksi bisnis baru dengan perusahaan lain telah dimulai.)"
+  },
+  {
+    "word": "仕上げ",
+    "meaning": "end; finishing touches; being finished",
+    "meaning_id": "sentuhan akhir, penyelesaian proses pembuatan",
+    "furigana": "しあげ",
+    "romaji": "shiage",
+    "level": 1,
+    "definition_id": "Langkah-langkah final pengerjaan suatu karya agar hasilnya sempurna dan siap disajikan.",
+    "contextual_usage": "絵の仕上げに細かい部分を修正する。 (E no shiage ni komakai bubun wo shūsei suru. / Memperbaiki bagian-bagian kecil sebagai sentuhan akhir pada lukisan.)"
+  },
+  {
+    "word": "題名",
+    "meaning": "title",
+    "meaning_id": "judul",
+    "furigana": "だいめい",
+    "romaji": "daimei",
+    "level": 2,
+    "definition_id": "Nama yang diberikan untuk karya seperti buku, film, lagu, atau artikel.",
+    "contextual_usage": "この本にふさわしい題名を考えてください。 (Kono hon ni fusawashii daimei o kangaete kudasai. / Tolong pikirkan judul yang cocok untuk buku ini.)"
+  },
+  {
+    "word": "でたらめ",
+    "meaning": "(1) irresponsible utterance, nonsense, nonsensical, (2) random",
+    "meaning_id": "(1) omong kosong, tidak masuk akal, (2) asal-asalan, acak",
+    "furigana": "",
+    "romaji": "detarame",
+    "level": 2,
+    "definition_id": "Hal atau ucapan yang dilakukan atau dikatakan secara asal-asalan tanpa dasar kebenaran.",
+    "contextual_usage": "彼の言っていることは全部でたらめだ。 (Kare no itte iru koto wa zenbu detarame da. / Apa yang dia katakan semuanya omong kosong.)"
+  },
+  {
+    "word": "目上",
+    "meaning": "superior(s), senior",
+    "meaning_id": "atasan, senior, orang yang lebih tua/tinggi pangkatnya",
+    "furigana": "めうえ",
+    "romaji": "meue",
+    "level": 2,
+    "definition_id": "Orang yang memiliki posisi, usia, atau status sosial yang lebih tinggi daripada diri sendiri.",
+    "contextual_usage": "目上の人には敬語を使うべきです。 (Meue no hito ni wa keigo o tsukau beki desu. / Kita harus menggunakan bahasa sopan kepada atasan/senior.)"
+  },
+  {
+    "word": "成分",
+    "meaning": "ingredient, component, composition",
+    "meaning_id": "komponen, kandungan, bahan baku",
+    "furigana": "せいぶん",
+    "romaji": "seibun",
+    "level": 2,
+    "definition_id": "Zat atau unsur yang membentuk suatu campuran atau kesatuan materi.",
+    "contextual_usage": "この食品の成分を表示で確認します。 (Kono shokuhin no seibun o hyōji de kakunin shimasu. / Memeriksa kandungan makanan ini pada label kemasan.)"
+  },
+  {
+    "word": "サイレン",
+    "meaning": "siren",
+    "meaning_id": "sirine",
+    "furigana": "",
+    "romaji": "sairen",
+    "level": 2,
+    "definition_id": "Alat yang mengeluarkan bunyi mendengung keras sebagai tanda bahaya atau peringatan.",
+    "contextual_usage": "パトカーのサイレンが聞こえます。 (Patokā no sairen ga kikoemasu. / Suara sirine mobil polisi terdengar.)"
+  },
+  {
+    "word": "毛糸",
+    "meaning": "knitting wool",
+    "meaning_id": "benang wol",
+    "furigana": "けいと",
+    "romaji": "keito",
+    "level": 2,
+    "definition_id": "Benang yang dibuat dari bulu domba atau hewan lain, biasanya digunakan untuk merajut baju hangat.",
+    "contextual_usage": "母は毛糸でセーターを編んでいます。 (Haha wa keito de sētā o ande imasu. / Ibu sedang merajut sweter dengan benang wol.)"
+  },
+  {
+    "word": "酌む",
+    "meaning": "to serve sake",
+    "meaning_id": "menuangkan sake/minuman",
+    "furigana": "くむ",
+    "romaji": "kumu",
+    "level": 2,
+    "definition_id": "Menuangkan minuman alkohol (seperti sake) ke cangkir orang lain sebagai bentuk pelayanan atau keramahan.",
+    "contextual_usage": "お酒をお酌しましょう。 (Osake o oshaku shimashō. / Mari saya tuangkan sakenya.)"
+  },
+  {
+    "word": "中世",
+    "meaning": "Middle Ages, mediaeval times",
+    "meaning_id": "Abad Pertengahan",
+    "furigana": "ちゅうせい",
+    "romaji": "chūsei",
+    "level": 2,
+    "definition_id": "Periode sejarah yang berada di antara zaman kuno dan zaman modern (sekitar abad ke-5 hingga ke-15).",
+    "contextual_usage": "中世のヨーロッパの歴史を研究しています。 (Chūsei no Yōroppa no rekishi o kenkyū shite imasu. / Saya sedang meneliti sejarah Eropa pada Abad Pertengahan.)"
+  },
+  {
+    "word": "雨戸",
+    "meaning": "sliding storm door",
+    "meaning_id": "pintu badai geser, rana jendela luar",
+    "furigana": "あまど",
+    "romaji": "amado",
+    "level": 2,
+    "definition_id": "Pintu kayu atau logam geser di luar jendela rumah tradisional Jepang untuk melindungi dari hujan dan angin kencang.",
+    "contextual_usage": "台風が来る前に雨戸を閉めました。 (Taifū ga kuru mae ni amado o shimemashita. / Saya menutup pintu badai sebelum angin topan datang.)"
+  },
+  {
+    "word": "矢印",
+    "meaning": "directing arrow",
+    "meaning_id": "tanda panah, penunjuk arah",
+    "furigana": "やじるし",
+    "romaji": "yajirushi",
+    "level": 2,
+    "definition_id": "Simbol berbentuk panah yang digunakan untuk menunjukkan arah atau petunjuk.",
+    "contextual_usage": "矢印の方向へ進んでください。 (Yajirushi no hōkō e susunde kudasai. / Silakan berjalan ke arah yang ditunjukkan oleh tanda panah.)"
+  },
+  {
+    "word": "御中",
+    "meaning": "and Company, Messrs.",
+    "meaning_id": "kepada (untuk organisasi/perusahaan)",
+    "furigana": "おんちゅう",
+    "romaji": "onchū",
+    "level": 2,
+    "definition_id": "Kata kehormatan yang ditulis setelah nama instansi, departemen, atau perusahaan pada surat menyurat.",
+    "contextual_usage": "〇〇株式会社御中と封筒に書きます。 (〇〇 Kabushikigaisha Onchū to fūtō ni kakimasu. / Menulis 'Kepada PT 〇〇' di amplop surat.)"
+  },
+  {
+    "word": "目安",
+    "meaning": "criterion, aim",
+    "meaning_id": "patokan, perkiraan standar, tolok ukur",
+    "furigana": "めやす",
+    "romaji": "meyasu",
+    "level": 2,
+    "definition_id": "Standar kasar atau target perkiraan yang dijadikan acuan dalam melakukan sesuatu.",
+    "contextual_usage": "週に３回を目安に運動してください。 (Shū ni sankai o meyasu ni undō shite kudasai. / Silakan berolahraga dengan patokan tiga kali seminggu.)"
+  },
+  {
+    "word": "架空",
+    "meaning": "aerial, overhead, fiction, fanciful",
+    "meaning_id": "fiktif, khayalan, imajiner",
+    "furigana": "かくう",
+    "romaji": "kakū",
+    "level": 2,
+    "definition_id": "Sesuatu yang hanya ada dalam imajinasi dan tidak nyata atau tidak benar-benar ada di dunia nyata.",
+    "contextual_usage": "この物語は架空の町が舞台です。 (Kono monogatari wa kakū no machi ga butai desu. / Cerita ini berlatar di sebuah kota fiktif.)"
+  },
+  {
+    "word": "詰まる",
+    "meaning": "to be blocked, to be packed",
+    "meaning_id": "tersumbat, penuh sesak, padat",
+    "furigana": "つまる",
+    "romaji": "tsumaru",
+    "level": 2,
+    "definition_id": "Kondisi di mana saluran menjadi terhambat, atau suatu ruang terisi penuh tanpa celah.",
+    "contextual_usage": "鼻が詰まって息が苦しいです。 (Hana ga tsumatte iki ga kurushii desu. / Hidung saya tersumbat sehingga susah bernapas.)"
+  },
+  {
+    "word": "売行き",
+    "meaning": "sales",
+    "meaning_id": "tingkat penjualan, larisnya penjualan",
+    "furigana": "うれゆき",
+    "romaji": "ureyuki",
+    "level": 2,
+    "definition_id": "Kondisi atau keadaan seberapa cepat dan banyaknya suatu barang terjual di pasaran.",
+    "contextual_usage": "新商品の売行きは非常に好調です。 (Shinshōhin no ureyuki wa hijō ni kōchō desu. / Penjualan produk baru tersebut sangat bagus.)"
+  },
+  {
+    "word": "民謡",
+    "meaning": "folk song, popular song",
+    "meaning_id": "lagu daerah, lagu rakyat",
+    "furigana": "みんよう",
+    "romaji": "min'yō",
+    "level": 2,
+    "definition_id": "Lagu tradisional yang lahir, berkembang, dan diwariskan secara turun-temurun di kalangan masyarakat suatu daerah.",
+    "contextual_usage": "祖母は日本の民謡を歌うのが得意です。 (Sobo wa Nihon no min'yō o utau no ga tokui desu. / Nenek saya pandai menyanyikan lagu daerah Jepang.)"
+  },
+  {
+    "word": "発つ",
+    "meaning": "to depart (on a plane, train, etc.)",
+    "meaning_id": "berangkat, bertolak",
+    "furigana": "たつ",
+    "romaji": "tatsu",
+    "level": 2,
+    "definition_id": "Mulai melakukan perjalanan meninggalkan suatu tempat menggunakan sarana transportasi.",
+    "contextual_usage": "明日の朝、東京を発ちます。 (Asu no asa, Tōkyō o tachimasu. / Besok pagi, saya akan berangkat meninggalkan Tokyo.)"
+  },
+  {
+    "word": "真っ暗",
+    "meaning": "total darkness, shortsightedness, pitch dark",
+    "meaning_id": "gelap gulita",
+    "furigana": "まっくら",
+    "romaji": "makkura",
+    "level": 2,
+    "definition_id": "Keadaan yang sama sekali tidak ada cahaya sehingga tidak bisa melihat apa-apa.",
+    "contextual_usage": "停電で部屋が真っ暗になりました。 (Teiden de heya ga makkura ni narimashita. / Kamar menjadi gelap gulita karena mati lampu.)"
+  },
+  {
+    "word": "ぜひとも",
+    "meaning": "by all means (with sense of not taking no for an answer)",
+    "meaning_id": "tentu saja, bagaimanapun juga (sangat berharap)",
+    "furigana": "",
+    "romaji": "zehitomo",
+    "level": 2,
+    "definition_id": "Ungkapan yang menekankan keinginan yang sangat kuat atau permohonan yang tulus agar sesuatu terjadi.",
+    "contextual_usage": "次のパーティーにはぜひとも参加したいです。 (Tsugi no pātī ni wa zehitomo sanka shitai desu. / Saya sangat ingin ikut serta dalam pesta berikutnya.)"
+  },
+  {
+    "word": "小学生",
+    "meaning": "grade school student",
+    "meaning_id": "murid sekolah dasar (SD)",
+    "furigana": "しょうがくせい",
+    "romaji": "shōgakusei",
+    "level": 2,
+    "definition_id": "Anak-anak yang sedang menempuh pendidikan di sekolah dasar.",
+    "contextual_usage": "私の弟は今年から小学生になります。 (Watashi no otōto wa kotoshi kara shōgakusei ni narimashita. / Adik laki-laki saya menjadi murid SD mulai tahun ini.)"
+  },
+  {
+    "word": "手入れ",
+    "meaning": "repairs, maintenance",
+    "meaning_id": "perawatan, pemeliharaan",
+    "furigana": "ていれ",
+    "romaji": "teire",
+    "level": 2,
+    "definition_id": "Tindakan merawat, memperbaiki, atau menjaga sesuatu agar tetap dalam kondisi baik.",
+    "contextual_usage": "庭の植物の手入れをしています。 (Niwa no shokubutsu no teire o shite imasu. / Saya sedang merawat tanaman di kebun.)"
+  },
+  {
+    "word": "文献",
+    "meaning": "literature, books (reference)",
+    "meaning_id": "literatur, dokumen referensi, pustaka",
+    "furigana": "ぶんけん",
+    "romaji": "bunken",
+    "level": 2,
+    "definition_id": "Dokumen tertulis, buku, atau artikel ilmiah yang dijadikan referensi untuk penelitian atau studi.",
+    "contextual_usage": "論文を書くために古い文献を探しています。 (Ronbun o kaku tame ni furui bunken o sagashite imasu. / Saya mencari literatur lama untuk menulis tesis.)"
+  },
+  {
+    "word": "休業",
+    "meaning": "closed (e.g. store), business suspended, shutdown, holiday",
+    "meaning_id": "tutup usaha, libur beroperasi, penangguhan bisnis",
+    "furigana": "きゅうぎょう",
+    "romaji": "kyūgyō",
+    "level": 2,
+    "definition_id": "Menghentikan sementara aktivitas bisnis atau operasional toko/perusahaan pada hari tertentu.",
+    "contextual_usage": "あの店は毎週水曜日が休業です。 (Ano mise wa maishū suiyōbi ga kyūgyō desu. / Toko itu tutup beroperasi setiap hari Rabu.)"
+  },
+  {
+    "word": "軟らかい",
+    "meaning": "soft, tender, limp",
+    "meaning_id": "lunak, empuk, lembut",
+    "furigana": "やわらかい",
+    "romaji": "yawarakai",
+    "level": 2,
+    "definition_id": "Kondisi benda padat yang tidak keras, mudah berubah bentuk saat ditekan, atau mudah dikunyah.",
+    "contextual_usage": "このお肉はとても軟らかくて美味しいです。 (Kono oniku wa totemo yawarakakute oishii desu. / Daging ini sangat empuk dan lezat.)"
+  },
+  {
+    "word": "呼び掛ける",
+    "meaning": "to call out to, to accost, to address (crowd), to appeal",
+    "meaning_id": "memanggil, menyerukan, menghimbau",
+    "furigana": "よびかける",
+    "romaji": "yobikakeru",
+    "level": 2,
+    "definition_id": "Bersuara untuk menarik perhatian seseorang, atau mengajak masyarakat luas untuk melakukan tindakan tertentu.",
+    "contextual_usage": "募金への協力を市民に呼び掛けました。 (Bokin he no kyōryoku o shimin ni yobikakemashita. / Menyerukan kerja sama warga untuk penggalangan dana.)"
+  },
+  {
+    "word": "意義",
+    "meaning": "meaning, significance",
+    "meaning_id": "arti, makna, signifikansi",
+    "furigana": "いぎ",
+    "romaji": "igi",
+    "level": 2,
+    "definition_id": "Nilai penting atau arti mendalam dari suatu tindakan atau keberadaan sesuatu.",
+    "contextual_usage": "この活動に参加することには大きな意義があります。 (Kono katsudō ni sanka suru koto ni wa ōkina igi ga arimasu. / Berpartisipasi dalam kegiatan ini memiliki makna yang besar.)"
+  },
+  {
+    "word": "蒸し暑い",
+    "meaning": "humid, sultry",
+    "meaning_id": "gerah, panas lembap",
+    "furigana": "むしあつい",
+    "romaji": "mushiatsui",
+    "level": 2,
+    "definition_id": "Kondisi cuaca yang terasa panas dan sangat lembap sehingga membuat tubuh tidak nyaman.",
+    "contextual_usage": "日本の夏はとても蒸し暑いです。 (Nihon no natsu wa totemo mushiatsui desu. / Musim panas di Jepang sangat panas lembap.)"
+  },
+  {
+    "word": "殖える",
+    "meaning": "to increase, to multiply",
+    "meaning_id": "bertambah banyak, berkembang biak",
+    "furigana": "ふえる",
+    "romaji": "fueru",
+    "level": 2,
+    "definition_id": "Jumlah hewan, tumbuhan, atau harta kekayaan yang bertambah banyak dari jumlah sebelumnya.",
+    "contextual_usage": "池の魚がいつの間にか殖えていました。 (Ike no sakana ga itsunomanika fuete imashita. / Ikan di kolam tahu-tahu sudah bertambah banyak.)"
+  },
+  {
+    "word": "基準",
+    "meaning": "standard, basis, criteria, norm",
+    "meaning_id": "standar, kriteria, tolok ukur resmi",
+    "furigana": "きじゅん",
+    "romaji": "kijun",
+    "level": 2,
+    "definition_id": "Aturan atau norma baku yang dijadikan dasar untuk menilai atau membandingkan sesuatu.",
+    "contextual_usage": "合否の基準は公開されていません。 (Gōhi no kijun wa kōkai saretethimasen. / Kriteria kelulusan tidak dipublikasikan.)"
+  },
+  {
+    "word": "先端",
+    "meaning": "pointed end, tip, fine point",
+    "meaning_id": "ujung, bagian paling depan/pucuk",
+    "furigana": "せんたん",
+    "romaji": "sentan",
+    "level": 2,
+    "definition_id": "Bagian paling ujung dari benda yang panjang, atau garis paling depan dalam suatu bidang (seperti teknologi).",
+    "contextual_usage": "鉛筆の先端が尖っています。 (Enpitsu no sentan ga togatte imasu. / Ujung pensilnya runcing.)"
+  },
+  {
+    "word": "中性",
+    "meaning": "neuter gender, neutral (chem.), indifference, sterility",
+    "meaning_id": "netral (kimia), jenis kelamin netral",
+    "furigana": "ちゅうせい",
+    "romaji": "chūsei",
+    "level": 2,
+    "definition_id": "Sifat kimiawi yang tidak asam dan tidak basa (pH 7), atau sifat yang berada di tengah-tengah dua kubu.",
+    "contextual_usage": "この洗剤は肌に優しい中性です。 (Kono senzai wa hada ni yasashii chūsei desu. / Deterjen ini bersifat netral dan lembut di kulit.)"
+  },
+  {
+    "word": "比較的",
+    "meaning": "comparatively, relatively",
+    "meaning_id": "relatif, secara komparatif",
+    "furigana": "ひかくてき",
+    "romaji": "hikakuteki",
+    "level": 2,
+    "definition_id": "Kondisi yang dinilai berdasarkan perbandingan dengan hal lain secara umum.",
+    "contextual_usage": "今年の冬は比較的暖かいです。 (Kotoshi no fuyu wa hikakuteki atatakai desu. / Musim dingin tahun ini relatif hangat.)"
+  },
+  {
+    "word": "書籍",
+    "meaning": "book, publication",
+    "meaning_id": "buku, publikasi cetak",
+    "furigana": "しょせき",
+    "romaji": "shoseki",
+    "level": 2,
+    "definition_id": "Istilah formal untuk buku atau dokumen yang dijilid dan diterbitkan secara umum.",
+    "contextual_usage": "図書館には多くの書籍が保管されています。 (Toshokan ni wa ōku no shoseki ga hokan sarete imasu. / Banyak buku disimpan di dalam perpustakaan.)"
+  },
+  {
+    "word": "芯",
+    "meaning": "core, heart, wick, marrow",
+    "meaning_id": "inti, sumbu, bagian tengah",
+    "furigana": "しん",
+    "romaji": "shin",
+    "level": 2,
+    "definition_id": "Bagian terdalam atau pusat dari suatu benda yang memberikan kekuatan atau fungsi utama (seperti sumbu lilin atau isi pensil).",
+    "contextual_usage": "シャープペンシルの芯を入れ替えます。 (Shāpupenshiru no shin o irekaemasu. / Mengganti isi (inti) pensil mekanik.)"
+  },
+  {
+    "word": "琴",
+    "meaning": "Koto (Japanese harp)",
+    "meaning_id": "Koto (harpa/kecapi tradisional Jepang)",
+    "furigana": "こと",
+    "romaji": "koto",
+    "level": 2,
+    "definition_id": "Alat musik petik tradisional Jepang yang berbentuk panjang dengan dawai yang direntangkan di atas badan kayu.",
+    "contextual_usage": "彼女は正月によく琴を演奏します。 (Kanojo wa shōgatsu ni yoku koto o ensō shimasu. / Dia sering memainkan koto saat tahun baru.)"
+  },
+  {
+    "word": "お代わり",
+    "meaning": "second helping, another cup",
+    "meaning_id": "tambah (makanan/minuman), porsi kedua",
+    "furigana": "おかわり",
+    "romaji": "okawari",
+    "level": 2,
+    "definition_id": "Meminta porsi makanan atau minuman yang sama lagi setelah menghabiskan yang pertama.",
+    "contextual_usage": "ご飯のお代わりをください。 (Gohan no okawari o kudasai. / Tolong tambah nasi lagi.)"
+  },
+  {
+    "word": "卸す",
+    "meaning": "to sell wholesale, grated (vegetables)",
+    "meaning_id": "menjual secara grosir, memarut (sayur)",
+    "furigana": "おろす",
+    "romaji": "orosu",
+    "level": 2,
+    "definition_id": "Menjual barang dalam jumlah besar langsung kepada pedagang eceran, atau menghancurkan sayur dengan parutan.",
+    "contextual_usage": "この問屋は商品を安く小売店に卸しています。 (Kono tonya wa shōhin o yasuku kouriten ni oroshite imasu. / Agen grosir ini menjual barang dengan murah ke toko eceran.)"
+  },
+  {
+    "word": "ブラシ",
+    "meaning": "brushy, brush",
+    "meaning_id": "sikat",
+    "furigana": "",
+    "romaji": "burashi",
+    "level": 2,
+    "definition_id": "Alat pembersih atau perapih yang terdiri dari bulu-bulu yang dipasang pada sebuah gagang.",
+    "contextual_usage": "洋服のほこりをブラシで落とします。 (Yōfuku no hokori o burashi de otoshimasu. / Membersihkan debu di baju dengan sikat.)"
+  },
+  {
+    "word": "ふざける",
+    "meaning": "to romp, to gambol, to frolic, to joke",
+    "meaning_id": "bermain-main, bercanda, berkelakar",
+    "furigana": "",
+    "romaji": "fuzakeru",
+    "level": 2,
+    "definition_id": "Melakukan tindakan main-main atau berbicara yang tidak serius untuk bersenang-senang atau menggoda orang lain.",
+    "contextual_usage": "授業中にふざけてはいけません。 (Jugyōchū ni fuzakete wa ikemasen. / Tidak boleh bermain-main saat jam pelajaran.)"
+  },
+  {
+    "word": "基盤",
+    "meaning": "foundation, basis",
+    "meaning_id": "fondasi, basis, landasan utama",
+    "furigana": "きばん",
+    "romaji": "kiban",
+    "level": 2,
+    "definition_id": "Bagian dasar yang kuat yang menjadi penopang eksistensi atau perkembangan suatu hal (seperti ekonomi atau organisasi).",
+    "contextual_usage": "生活の基盤を安定させることが最優先です。 (Seikatsu no kiban o antei saseru koto ga saiyūsen desu. / Menstabilkan fondasi kehidupan adalah prioritas utama.)"
+  },
+  {
+    "word": "先々週",
+    "meaning": "the week before last",
+    "meaning_id": "dua minggu yang lalu",
+    "furigana": "せんせんしゅう",
+    "romaji": "sensenshū",
+    "level": 2,
+    "definition_id": "Satu minggu sebelum minggu lalu (dua minggu sebelum minggu berjalan).",
+    "contextual_usage": "先々週、友達と旅行に行きました。 (Sensenshū, tomodachi to ryokō ni ikimashita. / Dua minggu yang lalu, saya pergi berlibur bersama teman.)"
+  },
+  {
+    "word": "響く",
+    "meaning": "to resound",
+    "meaning_id": "bergema, bergaung, berdampak",
+    "furigana": "ひびく",
+    "romaji": "hibiku",
+    "level": 2,
+    "definition_id": "Suara yang merambat dan terpantul secara luas, atau suatu kejadian yang memberi pengaruh mendalam.",
+    "contextual_usage": "洞窟の中に声が響きました。 (Dōkutsu no naka ni koe ga hibikashita. / Suara bergema di dalam gua.)"
+  },
+  {
+    "word": "真っ黒",
+    "meaning": "pitch black",
+    "meaning_id": "hitam pekat",
+    "furigana": "まっくろ",
+    "romaji": "makkuro",
+    "level": 2,
+    "definition_id": "Warna hitam yang sangat pekat dan tidak tercampur warna lain sedikit pun.",
+    "contextual_usage": "日焼けして肌が真っ黒になりました。 (Hiyake shite hada ga makkuro ni narimashita. / Kulit menjadi hitam pekat karena terbakar matahari.)"
+  },
+  {
+    "word": "水平",
+    "meaning": "water level, horizon",
+    "meaning_id": "horizontal, sejajar air, rata",
+    "furigana": "すいへい",
+    "romaji": "suihei",
+    "level": 2,
+    "definition_id": "Kondisi permukaan yang datar dan sejajar dengan permukaan air yang tenang; tidak miring.",
+    "contextual_usage": "棚が水平になっているか確認します。 (Tana ga suihei ni natte iru ka kakunin shimasu. / Memeriksa apakah rak sudah dalam posisi horizontal/rata.)"
+  },
+  {
+    "word": "危うい",
+    "meaning": "dangerous, critical, grave",
+    "meaning_id": "berbahaya, kritis, di ujung tanduk",
+    "furigana": "あやうい",
+    "romaji": "ayaui",
+    "level": 2,
+    "definition_id": "Kondisi yang sangat riskan, genting, atau hampir terjerumus ke dalam bahaya atau kegagalan.",
+    "contextual_usage": "彼の命は一時危うい状態でした。 (Kare no inochi wa ichiji ayaui jōtai deshita. / Nyawanya sempat berada dalam kondisi kritis.)"
+  },
+  {
+    "word": "着々",
+    "meaning": "steadily",
+    "meaning_id": "secara mantap, langkah demi langkah, lancar",
+    "furigana": "ちゃくちゃく",
+    "romaji": "chakuchaku",
+    "level": 2,
+    "definition_id": "Proses pengerjaan tugas yang berjalan maju dengan stabil dan pasti sesuai rencana.",
+    "contextual_usage": "工事は着々と進んでいます。 (Kōji wa chakuchaku to susunde imasu. / Proyek pembangunan berjalan dengan lancar/mantap.)"
+  },
+  {
+    "word": "記号",
+    "meaning": "symbol, code",
+    "meaning_id": "simbol, tanda, lambang",
+    "furigana": "きごう",
+    "romaji": "kigō",
+    "level": 2,
+    "definition_id": "Tanda grafis yang disepakati untuk mewakili suatu makna, konsep, atau fungsi matematika/bahasa.",
+    "contextual_usage": "地図の記号の意味を調べます。 (Chizu no kigō no imi o shirabemasu. / Mencari tahu arti dari simbol-simbol di peta.)"
+  },
+  {
+    "word": "催促",
+    "meaning": "request, demand, claim, urge (action), press for",
+    "meaning_id": "desakan, tagihan, menuntut segera",
+    "furigana": "さいそく",
+    "romaji": "saisoku",
+    "level": 2,
+    "definition_id": "Tindakan mendesak orang lain agar segera melakukan kewajibannya (seperti membayar utang atau membalas surat).",
+    "contextual_usage": "家賃の支払いを催促されました。 (Yachin no shiharai o saisoku saremashita. / Saya didesak untuk segera membayar uang sewa rumah.)"
+  },
+  {
+    "word": "平気",
+    "meaning": "coolness, calmness, composure, unconcern",
+    "meaning_id": "tenang, biasa saja, tidak masalah",
+    "furigana": "へいき",
+    "romaji": "heiki",
+    "level": 2,
+    "definition_id": "Kondisi mental yang tetap tenang tanpa merasa khawatir, terganggu, atau takut menghadapi sesuatu.",
+    "contextual_usage": "これくらいの寒さは平気です。 (Kore kurai no samusa wa heiki desu. / Dingin selevel ini bagi saya biasa saja/tidak masalah.)"
+  },
+  {
+    "word": "学級",
+    "meaning": "grade in school",
+    "meaning_id": "kelas (kelompok belajar)",
+    "furigana": "がっきゅう",
+    "romaji": "gakkyū",
+    "level": 2,
+    "definition_id": "Kelompok atau rombongan belajar siswa yang dibentuk di sekolah untuk menerima pelajaran bersama.",
+    "contextual_usage": "インフルエンザで学級閉鎖になりました。 (Infuruenza de gakkyū heisa ni narimashita. / Kelas diliburkan karena penyebaran flu.)"
+  },
+  {
+    "word": "制作",
+    "meaning": "work (film, book)",
+    "meaning_id": "pembuatan karya (film, seni, buku)",
+    "furigana": "せいさく",
+    "romaji": "seisaku",
+    "level": 2,
+    "definition_id": "Proses memproduksi atau menciptakan karya seni, film, acara televisi, atau konten iklan.",
+    "contextual_usage": "新しい映画の制作が始まりました。 (Atarashii eiga no seisaku ga hajimaimashita. / Pembuatan film baru telah dimulai.)"
+  },
+  {
+    "word": "特売",
+    "meaning": "special sale",
+    "meaning_id": "penjualan khusus, obral harga murah",
+    "furigana": "とくばい",
+    "romaji": "tokubai",
+    "level": 2,
+    "definition_id": "Penjualan barang dagangan dengan harga yang jauh lebih murah daripada hari biasa untuk waktu terbatas.",
+    "contextual_usage": "スーパーで卵の特売をやっています。 (Sūpā de tamago no tokubai o yatte imasu. / Supermarket sedang mengadakan obral murah untuk telur.)"
+  },
+  {
+    "word": "休講",
+    "meaning": "lecture cancelled",
+    "meaning_id": "kuliah diliburkan / kelas dibatalkan",
+    "furigana": "きゅうこう",
+    "romaji": "kyūkō",
+    "level": 2,
+    "definition_id": "Pembatalan atau peniadaan kegiatan perkuliahan oleh dosen pada hari tersebut.",
+    "contextual_usage": "先生が病気のため、今日の授業は休講です。 (Sensei ga byōki no tame, kyō no jugyō wa kyūkō desu. / Karena dosen sakit, kelas hari ini dibatalkan.)"
+  },
+  {
+    "word": "おかず",
+    "meaning": "side dish, accompaniment for rice dishes",
+    "meaning_id": "lauk-pauk",
+    "furigana": "",
+    "romaji": "okazu",
+    "level": 2,
+    "definition_id": "Makanan pendamping yang dimakan bersama dengan nasi sebagai hidangan utama.",
+    "contextual_usage": "今日のおかずは唐揚げです。 (Kyō no okazu wa karaage desu. / Lauk hari ini adalah ayam goreng karaage.)"
+  },
+  {
+    "word": "鉱物",
+    "meaning": "mineral",
+    "meaning_id": "mineral, barang tambang",
+    "furigana": "こうぶつ",
+    "romaji": "kōbutsu",
+    "level": 2,
+    "definition_id": "Zat padat homogen alami yang terbentuk melalui proses anorganik di dalam bumi.",
+    "contextual_usage": "博物館で珍しい鉱物を見ました。 (Hakubutsukan de mezurashii kōbutsu o mimashita. / Saya melihat mineral langka di museum.)"
+  },
+  {
+    "word": "山林",
+    "meaning": "mountain forest, mountains and forest",
+    "meaning_id": "hutan pegunungan",
+    "furigana": "さんりん",
+    "romaji": "sanrin",
+    "level": 2,
+    "definition_id": "Daerah perbukitan atau pegunungan yang ditumbuhi oleh pepohonan lebat.",
+    "contextual_usage": "日本の国土の多くは山林で占められています。 (Nihon no kokudo no ōku wa sanrin de shimerarete imasu. / Sebagian besar wilayah Jepang ditutupi oleh hutan pegunungan.)"
+  },
+  {
+    "word": "粒",
+    "meaning": "grain",
+    "meaning_id": "butir, biji kecil",
+    "furigana": "つぶ",
+    "romaji": "tsubu",
+    "level": 2,
+    "definition_id": "Kata bantu bilangan atau sebutan untuk benda-benda padat berbentuk bulat atau kecil seperti beras atau obat.",
+    "contextual_usage": "薬を２粒飲んでください。 (Kusuri o futatsubu nonde kudasai. / Silakan minum obat ini sebanyak dua butir.)"
+  },
+  {
+    "word": "速達",
+    "meaning": "express, special delivery",
+    "meaning_id": "pengiriman kilat/ekspres",
+    "furigana": "そくたつ",
+    "romaji": "sokutatsu",
+    "level": 2,
+    "definition_id": "Layanan pengiriman surat atau paket pos yang diprioritaskan agar sampai lebih cepat dari pos biasa.",
+    "contextual_usage": "急ぎの手紙なので速達で出します。 (Isogi no tegami nanode sokutatsu de dashimasu. / Karena ini surat mendesak, saya akan mengirimkannya lewat pos kilat.)"
+  },
+  {
+    "word": "ずらり",
+    "meaning": "in a row",
+    "meaning_id": "berderet-deret, berbaris panjang",
+    "furigana": "",
+    "romaji": "zurari",
+    "level": 2,
+    "definition_id": "Kata keterangan yang menunjukkan banyak orang atau barang yang berjejer rapi dalam satu barisan.",
+    "contextual_usage": "本棚には本がずらりと並んでいる。 (Hondana ni wa hon ga zurari to narande iru. / Buku-buku berderet rapi di rak buku.)"
+  },
+  {
+    "word": "必需品",
+    "meaning": "necessities, necessary article, requisite, essential",
+    "meaning_id": "barang kebutuhan pokok/primer",
+    "furigana": "ひつじゅひん",
+    "romaji": "hitsujuhin",
+    "level": 2,
+    "definition_id": "Barang-barang yang mutlak diperlukan untuk kelangsungan hidup sehari-hari.",
+    "contextual_usage": "水と食料は災害時の必需品です。 (Mizu to shokuryō wa saigaiji no hitsujuhin desu. / Air dan makanan adalah barang kebutuhan pokok saat bencana.)"
+  },
+  {
+    "word": "農薬",
+    "meaning": "agricultural chemicals",
+    "meaning_id": "pestisida, obat pertanian",
+    "furigana": "のうやく",
+    "romaji": "nōyaku",
+    "level": 2,
+    "definition_id": "Bahan kimia yang digunakan untuk membasmi hama atau penyakit tanaman guna melindungi hasil tani.",
+    "contextual_usage": "この野菜は農薬を使わずに育てられました。 (Kono yasai wa nōyaku o tsukawazu ni sodateraremashita. / Sayur ini ditanam tanpa menggunakan pestisida.)"
+  },
+  {
+    "word": "鳴らす",
+    "meaning": "to ring, to sound, to chime, to beat, to snort (nose)",
+    "meaning_id": "membunyikan, mengetuk",
+    "furigana": "ならす",
+    "romaji": "narasu",
+    "level": 2,
+    "definition_id": "Tindakan sengaja membuat suatu benda mengeluarkan suara (seperti bel atau klakson).",
+    "contextual_usage": "玄関のチャイムを鳴らしました。 (Genkan no chaimu o narashimashita. / Saya membunyikan bel pintu masuk.)"
+  },
+  {
+    "word": "女の人",
+    "meaning": "woman",
+    "meaning_id": "wanita, perempuan",
+    "furigana": "おんなのひと",
+    "romaji": "onnanohito",
+    "level": 2,
+    "definition_id": "Sebutan umum untuk manusia dewasa yang berjenis kelamin perempuan.",
+    "contextual_usage": "向こうにいる女の人は私の先生です。 (Mukō ni iru onnanohito wa watashi no sensei desu. / Wanita yang di sebelah sana adalah guru saya.)"
+  },
+  {
+    "word": "余計",
+    "meaning": "too much, unnecessary, abundance, surplus, excess, superfluity",
+    "meaning_id": "berlebihan, tidak perlu, sia-sia",
+    "furigana": "よけい",
+    "romaji": "yokei",
+    "level": 2,
+    "definition_id": "Hal yang melebihi batas kebutuhan normal sehingga menjadi tidak penting atau justru mengganggu.",
+    "contextual_usage": "余計な心配はしなくていいですよ。 (Yokeina shinpai wa shinakute ii desu yo. / Kamu tidak perlu khawatir berlebihan.)"
+  },
+  {
+    "word": "大通り",
+    "meaning": "main street",
+    "meaning_id": "jalan raya utama, jalan protokol",
+    "furigana": "おおどおり",
+    "romaji": "ōdōri",
+    "level": 2,
+    "definition_id": "Jalan yang berukuran besar dan lebar yang menjadi jalur lalu lintas utama di suatu kota.",
+    "contextual_usage": "大通り沿いにはたくさんのお店があります。 (Ōdōri zoi ni wa takusan no omise ga arimasu. / Ada banyak toko di sepanjang jalan raya utama.)"
+  },
+  {
+    "word": "改造",
+    "meaning": "(1) remodeling, (2) modding (comp)",
+    "meaning_id": "modifikasi, merombak, merekonstruksi",
+    "furigana": "かいぞう",
+    "romaji": "kaizō",
+    "level": 2,
+    "definition_id": "Mengubah struktur atau bentuk asli suatu barang/bangunan agar fungsinya menjadi lebih baik atau berbeda.",
+    "contextual_usage": "古い車を改造して乗っています。 (Furui kuruma o kaizō shite notte imasu. / Saya memodifikasi mobil tua dan mengendarainya.)"
+  },
+  {
+    "word": "合図",
+    "meaning": "sign, signal",
+    "meaning_id": "tanda, isyarat, sinyal",
+    "furigana": "あいず",
+    "romaji": "aizu",
+    "level": 3,
+    "definition_id": "Gerakan, bunyi, atau tanda tertentu yang disepakati untuk menyampaikan pesan atau perintah secara cepat.",
+    "contextual_usage": "手を振って合図を送りました。 (Te wo futte aizu wo okurimashita. / Saya melambaikan tangan untuk memberikan isyarat.)"
+  },
+  {
+    "word": "清潔",
+    "meaning": "clean",
+    "meaning_id": "bersih, higienis, suci",
+    "furigana": "せいけつ",
+    "romaji": "seiketsu",
+    "level": 3,
+    "definition_id": "Kondisi yang bebas dari kotoran, kuman, atau noda; terjaga kesehatannya.",
+    "contextual_usage": "部屋をいつも清潔に保っています。 (Heya wo itsumo seiketsu ni tamotte imasu. / Saya selalu menjaga kamar tetap bersih.)"
+  },
+  {
+    "word": "願い",
+    "meaning": "desire, wish, request",
+    "meaning_id": "keinginan, harapan, permohonan",
+    "furigana": "ねがい",
+    "romaji": "negai",
+    "level": 3,
+    "definition_id": "Sesuatu yang sangat diharapkan atau diminta agar dapat dikabulkan atau menjadi kenyataan.",
+    "contextual_usage": "あなたの願いが叶うといいですね。 (Anata no negai ga kanau to ii desu ne. / Semoga harapan Anda dikabulkan, ya.)"
+  },
+  {
+    "word": "幕",
+    "meaning": "curtain, bunting, act (in play)",
+    "meaning_id": "tirai panggung, babak (sandiwara)",
+    "furigana": "まく",
+    "romaji": "maku",
+    "level": 3,
+    "definition_id": "Kain penutup berukuran besar yang digunakan di panggung teater, atau bagian pembagian cerita dalam drama.",
+    "contextual_usage": "ベルが鳴って、舞台の幕が上がりました。 (Beru ga natte, butai no maku ga agarimashita. / Bel berbunyi, dan tirai panggung pun mulai terangkat.)"
+  },
+  {
+    "word": "馬",
+    "meaning": "(1) horse, (2) promoted bishop (shogi)",
+    "meaning_id": "kuda",
+    "furigana": "うま",
+    "romaji": "uma",
+    "level": 3,
+    "definition_id": "Hewan mamalia berkaki empat yang bertubuh kuat, berambut leher, dan sering dijadikan tunggangan atau penarik kereta.",
+    "contextual_usage": "北海道で初めて馬に乗りました。 (Hokkaidō de hajimete uma ni norimashita. / Saya naik kuda untuk pertama kalinya di Hokkaido.)"
+  },
+  {
+    "word": "除く",
+    "meaning": "to remove, to exclude, to except",
+    "meaning_id": "mengecualikan, menghapus, menyingkirkan",
+    "furigana": "のぞく",
+    "romaji": "nozoku",
+    "level": 3,
+    "definition_id": "Memisahkan atau mengeluarkan suatu hal dari dalam kelompok, hitungan, atau rencana umum.",
+    "contextual_usage": "日曜日を除く毎日、仕事をしています。 (Nichiyōbi wo nozoku mainichi, shigoto wo shite imasu. / Saya bekerja setiap hari kecuali hari Minggu.)"
+  },
+  {
+    "word": "香り",
+    "meaning": "aroma, fragrance, scent, smell",
+    "meaning_id": "aroma, wewangian, bau harum",
+    "furigana": "かおり",
+    "romaji": "kaori",
+    "level": 3,
+    "definition_id": "Bau yang sedap dan menyenangkan yang tercium oleh indra penciuman, seperti dari bunga atau masakan.",
+    "contextual_usage": "コーヒーのいい香りがしますね。 (Kōhī no ii kaori ga shimasu ne. / Aroma kopinya harum sekali, ya.)"
+  },
+  {
+    "word": "歩道",
+    "meaning": "footpath, walkway, sidewalk",
+    "meaning_id": "trotoar, jalur pejalan kaki",
+    "furigana": "ほどう",
+    "romaji": "hodō",
+    "level": 3,
+    "definition_id": "Bagian jalan yang khusus disediakan untuk orang yang berjalan kaki, biasanya terletak di tepi jalan raya.",
+    "contextual_usage": "危ないから歩道を歩きなさい。 (Abunai kara hodō wo arukinasai. / Berjalanlah di trotoar karena jalan raya itu berbahaya.)"
+  },
+  {
+    "word": "想像",
+    "meaning": "imagination, guess",
+    "meaning_id": "imajinasi, bayangan, perkiraan",
+    "furigana": "そうぞう",
+    "romaji": "sōzō",
+    "level": 3,
+    "definition_id": "Proses membentuk gambaran mental tentang sesuatu yang tidak ada di depan mata atau belum pernah dialami.",
+    "contextual_usage": "未来の世界を想像してみてください。 (Mirai no sekai wo sōzō shite mite kudasai. / Cobalah bayangkan dunia di masa depan.)"
+  },
+  {
+    "word": "備える",
+    "meaning": "to furnish, to provide for, to equip, to install",
+    "meaning_id": "mempersiapkan, melengkapi, menginstal",
+    "furigana": "そなえる",
+    "romaji": "sonaeru",
+    "level": 3,
+    "definition_id": "Menyediakan segala sesuatu yang diperlukan untuk mengantisipasi kejadian di masa depan atau melengkapi fasilitas.",
+    "contextual_usage": "地震に備えて、水や食料を買っておきます。 (Jishin ni sonaete, mizu ya shokuryō wo katte okimasu. / Untuk bersiap menghadapi gempa, saya membeli dan menyimpan air serta makanan.)"
+  },
+  {
+    "word": "便",
+    "meaning": "way, means",
+    "meaning_id": "kesempatan, sarana (fasilitas), jadwal penerbangan/kapal",
+    "furigana": "びん",
+    "romaji": "bin",
+    "level": 3,
+    "definition_id": "Sarana transportasi berkala atau fasilitas yang memudahkan urusan komunikasi dan logistik.",
+    "contextual_usage": "東京行きの最終便に間に合いました。 (Tōkyō yuki no saishūbi ni maniaimashita. / Saya sempat mengejar jadwal penerbangan terakhir ke Tokyo.)"
+  },
+  {
+    "word": "ライター",
+    "meaning": "lighter, rider, writer",
+    "meaning_id": "korek api gas, penulis",
+    "furigana": "",
+    "romaji": "raitā",
+    "level": 3,
+    "definition_id": "Alat pemantik api portabel yang menggunakan gas, atau profesi seseorang yang menulis artikel/buku.",
+    "contextual_usage": "タバコを吸うためにライターを借りました。 (Tabako wo sū tame ni raitā wo karimashita. / Saya meminjam korek api gas untuk merokok.)"
+  },
+  {
+    "word": "平均",
+    "meaning": "equilibrium, balance, average, mean",
+    "meaning_id": "rata-rata, keseimbangan",
+    "furigana": "へいきん",
+    "romaji": "heikin",
+    "level": 3,
+    "definition_id": "Nilai tengah dari beberapa data nominal kuantitatif setelah digabungkan dan dibagi rata.",
+    "contextual_usage": "テストの点数は平均以上でした。 (Tesuto no tensū wa heikin ijō deshita. / Nilai ujian saya berada di atas rata-rata.)"
+  },
+  {
+    "word": "革",
+    "meaning": "leather",
+    "meaning_id": "kulit (olahan/hewan)",
+    "furigana": "かわ",
+    "romaji": "kawa",
+    "level": 3,
+    "definition_id": "Kulit binatang yang telah dikupas dan diproses melalui penyamaan untuk dijadikan bahan baku jaket, sepatu, atau tas.",
+    "contextual_usage": "父の誕生日に革の財布を贈りました。 (Chichi no tanjōbi ni kawa no saifu wo okurimashita. / Saya menghadiahkan dompet kulit di hari ulang tahun ayah.)"
+  },
+  {
+    "word": "去る",
+    "meaning": "to leave, to go away",
+    "meaning_id": "meninggalkan, pergi, berlalu",
+    "furigana": "さる",
+    "romaji": "saru",
+    "level": 3,
+    "definition_id": "Bergerak menjauh meninggalkan suatu tempat, atau menunjukkan waktu yang telah lewat (misal: tahun lalu).",
+    "contextual_usage": "台風が去って、いい天気になりました。 (Taifū ga satted, ii tenki ni narimashita. / Topan telah berlalu, dan cuaca menjadi cerah.)"
+  },
+  {
+    "word": "礼儀",
+    "meaning": "manners, courtesy, etiquette",
+    "meaning_id": "sopan santun, tata krama, etiket",
+    "furigana": "れいぎ",
+    "romaji": "reigi",
+    "level": 3,
+    "definition_id": "Aturan perilaku kesopanan yang disepakati dalam pergaulan antarmanusia demi menjaga rasa saling menghormati.",
+    "contextual_usage": "目上の人に対しては礼儀を守るべきです。 (Meue no hito ni taishite wa reigi wo mamoru beki desu. / Kita harus menjaga sopan santun terhadap orang yang lebih tua/atasan.)"
+  },
+  {
+    "word": "意思",
+    "meaning": "intention, purpose",
+    "meaning_id": "niat, kehendak, kemauan",
+    "furigana": "いし",
+    "romaji": "ishi",
+    "level": 3,
+    "definition_id": "Pikiran atau tekad yang bulat di dalam hati untuk melakukan atau mengekspresikan sesuatu.",
+    "contextual_usage": "自分の意思をはっきりと伝えることが大切です。 (Jibun no ishi wo hakkiri to tsutaeru koto ga taisetsu desu. / Menyampaikan kehendak sendiri secara jelas itu sangat penting.)"
+  },
+  {
+    "word": "全く",
+    "meaning": "really, truly, entirely, completely",
+    "meaning_id": "sama sekali, benar-benar",
+    "furigana": "まったく",
+    "romaji": "mattaku",
+    "level": 3,
+    "definition_id": "Keterangan yang menegaskan kondisi menyeluruh tanpa pengecualian, sering diikuti bentuk negatif untuk arti 'sama sekali tidak'.",
+    "contextual_usage": "彼の言っていることは全く分かりません。 (Kare no itte iru koto wa mattaku wakarimasen. / Saya sama sekali tidak paham apa yang dia katakan.)"
+  },
+  {
+    "word": "中央",
+    "meaning": "centre, central, center, middle",
+    "meaning_id": "pusat, tengah-tengah",
+    "furigana": "ちゅうおう",
+    "romaji": "chūō",
+    "level": 3,
+    "definition_id": "Titik atau wilayah yang berada tepat di bagian tengah dari suatu area, kota, atau organisasi.",
+    "contextual_usage": "町の中央に大きな公園があります。 (Machi no chūō ni ōkina kōen ga arimasu. / Di pusat kota terdapat taman yang luas.)"
+  },
+  {
+    "word": "歓迎",
+    "meaning": "welcome, reception",
+    "meaning_id": "sambut hangat, penyambutan, selamat datang",
+    "furigana": "かんげい",
+    "romaji": "kangei",
+    "level": 3,
+    "definition_id": "Sikap menerima kedatangan tamu atau anggota baru dengan penuh kegembiraan dan sukacita.",
+    "contextual_usage": "留学生たちを心から歓迎します。 (Ryūgakuseitachi wo kokoro kara kangei shimasu. / Kami menyambut hangat para mahasiswa asing dengan sepenuh hati.)"
+  },
+  {
+    "word": "輸出",
+    "meaning": "export",
+    "meaning_id": "ekspor",
+    "furigana": "ゆしゅつ",
+    "romaji": "yushutsu",
+    "level": 3,
+    "definition_id": "Kegiatan mengirimkan atau menjual barang dagangan dan komoditas ke luar negeri.",
+    "contextual_usage": "日本は自動車をたくさん輸出しています。 (Nihon wa jidōsha wo takusan yushutsu shite imasu. / Jepang mengekspor banyak mobil.)"
+  },
+  {
+    "word": "喉",
+    "meaning": "throat",
+    "meaning_id": "tenggorokan, kerongkongan",
+    "furigana": "のど",
+    "romaji": "nodo",
+    "level": 3,
+    "definition_id": "Bagian leher sebelah dalam yang berfungsi sebagai saluran makanan dan udara serta tempat pita suara.",
+    "contextual_usage": "風邪をひいて喉が痛いです。 (Kaze wo hiite nodo ga itai desu. / Saya masuk angin/flu dan tenggorokan saya sakit.)"
+  },
+  {
+    "word": "間",
+    "meaning": "space, room, time, pause",
+    "meaning_id": "waktu, jeda, celah kosong",
+    "furigana": "ま",
+    "romaji": "ma",
+    "level": 3,
+    "definition_id": "Jeda waktu di antara dua kejadian, atau ruang kosong di antara dua objek fisik.",
+    "contextual_usage": "話し方の「間」がとても上手な人ですね。 (Hanashikata no 'ma' ga totemo jōzu na hito desu ne. / Dia orang yang pandai mengatur jeda dalam berbicara, ya.)"
+  },
+  {
+    "word": "修正",
+    "meaning": "amendment, correction, revision, modification",
+    "meaning_id": "koreksi, perbaikan, revisi",
+    "furigana": "しゅうせい",
+    "romaji": "shūsei",
+    "level": 3,
+    "definition_id": "Tindakan mengubah bagian yang salah, kurang tepat, atau keliru agar menjadi benar dan sesuai.",
+    "contextual_usage": "間違いを見つけたので、文章を修正しました。 (Machigai wo mitsuketa node, bunshō wo shūsei shimashita. / Karena menemukan kesalahan, saya merevisi teks tersebut.)"
+  },
+  {
+    "word": "記念",
+    "meaning": "commemoration, memory",
+    "meaning_id": "peringatan, kenang-kenangan",
+    "furigana": "きねん",
+    "romaji": "kinen",
+    "level": 3,
+    "definition_id": "Sesuatu yang dilakukan atau disimpan sebagai pengingat suatu peristiwa penting atau bersejarah.",
+    "contextual_usage": "旅行の記念に写真を撮りましょう。 (Ryokō no kinen ni shashin wo torimashō. / Mari kita berfoto sebagai kenang-kenangan perjalanan.)"
+  },
+  {
+    "word": "震える",
+    "meaning": "to shiver, to shake, to quake",
+    "meaning_id": "gemetar, menggigil, bergetar",
+    "furigana": "ふるえる",
+    "romaji": "furueru",
+    "level": 3,
+    "definition_id": "Gerakan bergetar berulang-ulang dengan cepat pada tubuh karena kedinginan, takut, atau emosi intens.",
+    "contextual_usage": "寒さで手足が震えました。 (Samusa de teashi ga furuemashita. / Tangan dan kaki saya gemetar karena kedinginan.)"
+  },
+  {
+    "word": "一家",
+    "meaning": "a house, a home, a family, a household",
+    "meaning_id": "sekeluarga, rumah tangga",
+    "furigana": "いっか",
+    "romaji": "ikka",
+    "level": 3,
+    "definition_id": "Seluruh anggota keluarga yang tinggal bersama di bawah satu atap sebagai satu kesatuan.",
+    "contextual_usage": "佐藤さん一家は来月、引っ越すそうです。 (Satō-san ikka wa rainen, hikkosu sō desu. / Kabarnya sekeluarga Pak Sato akan pindah rumah bulan depan.)"
+  },
+  {
+    "word": "活動",
+    "meaning": "action, activity",
+    "meaning_id": "aktivitas, kegiatan, tindakan",
+    "furigana": "かつどう",
+    "romaji": "katsudō",
+    "level": 3,
+    "definition_id": "Rangkaian usaha atau perbuatan yang dilakukan secara aktif untuk mencapai suatu tujuan tertentu.",
+    "contextual_usage": "ボランティア活動に興味があります。 (Borantiamikatsudō ni kyōmi ga arimasu. / Saya tertarik dengan aktivitas sukarelawan.)"
+  },
+  {
+    "word": "少年",
+    "meaning": "boys, juveniles",
+    "meaning_id": "anak laki-laki, pemuda, remaja",
+    "furigana": "しょうねん",
+    "romaji": "shōnen",
+    "level": 3,
+    "definition_id": "Anak laki-laki yang berada pada rentang usia masa kanak-kanak akhir hingga sebelum dewasa.",
+    "contextual_usage": "彼は読書が好きな少年でした。 (Kare wa dokusho ga suki na shōnen deshita. / Dia dahulunya adalah anak laki-laki yang gemar membaca.)"
+  },
+  {
+    "word": "ダンス",
+    "meaning": "dance",
+    "meaning_id": "tarian, dansa",
+    "furigana": "",
+    "romaji": "dansu",
+    "level": 3,
+    "definition_id": "Gerakan tubuh yang berirama, biasanya diiringi oleh musik untuk mengekspresikan emosi atau seni.",
+    "contextual_usage": "彼女はダンスがとても上手です。 (Kanojo wa dansu ga totemo jōzu desu. / Dia sangat pandai menari.)"
+  },
+  {
+    "word": "違い",
+    "meaning": "difference, discrepancy",
+    "meaning_id": "perbedaan, selisih",
+    "furigana": "ちがい",
+    "romaji": "chigai",
+    "level": 3,
+    "definition_id": "Hal atau sifat yang membuat suatu objek tidak sama jika dibandingkan dengan objek lainnya.",
+    "contextual_usage": "この二つの言葉の違いが分かりません。 (Kono futatsu no kotoba no chigai ga wakarimasen. / Saya tidak tahu perbedaan di antara kedua kata ini.)"
+  },
+  {
+    "word": "週",
+    "meaning": "week",
+    "meaning_id": "minggu (satuan waktu)",
+    "furigana": "しゅう",
+    "romaji": "shū",
+    "level": 3,
+    "definition_id": "Satuan jangka waktu yang terdiri dari tujuh hari berturut-turut.",
+    "contextual_usage": "来週、テストが始まります。 (Raishū, tesuto ga hajimarimasu. / Minggu depan, ujian akan dimulai.)"
+  },
+  {
+    "word": "だが",
+    "meaning": "",
+    "meaning_id": "tetapi, namun, akan tetapi",
+    "furigana": "だが",
+    "romaji": "daga",
+    "level": 3,
+    "definition_id": "Kata sambung di awal kalimat untuk menyatakan pertentangan dengan kalimat yang telah diucapkan sebelumnya.",
+    "contextual_usage": "彼は一生懸命勉強した。だが、不合格だった。 (Kare wa isshōkenmei benkyō shita. Daga, fugōkaku datta. / Dia belajar dengan giat. Namun, dia tidak lulus ujian.)"
+  },
+  {
+    "word": "適用",
+    "meaning": "applying",
+    "meaning_id": "penerapan, aplikasi (hukum/aturan)",
+    "furigana": "てきよう",
+    "romaji": "tekiyō",
+    "level": 3,
+    "definition_id": "Hal memberlakukan suatu peraturan, hukum, atau diskon tarif pada kasus atau kondisi nyata.",
+    "contextual_usage": "この学生割引は外国人留学生にも適用されます。 (Kono gakusei waribiki wa gaikokujin ryūgakusei ni mo tekiyō saremasu. / Diskon pelajar ini juga diterapkan/berlaku bagi mahasiswa asing.)"
+  },
+  {
+    "word": "刈る",
+    "meaning": "to cut (hair), to mow (grass), to harvest",
+    "meaning_id": "memotong (rumput/rambut), memangkas, menuai",
+    "furigana": "かる",
+    "romaji": "karu",
+    "level": 3,
+    "definition_id": "Memotong tanaman (seperti rumput atau padi) atau rambut menggunakan alat pemotong atau gunting besar.",
+    "contextual_usage": "週末に庭の芝生を刈りました。 (Shūmatsu ni niwa no shibafu wo karimashita. / Saya memangkas rumput halaman rumah pada akhir pekan.)"
+  },
+  {
+    "word": "批判",
+    "meaning": "criticism, judgement, comment",
+    "meaning_id": "kritik, kecaman, penilaian",
+    "furigana": "ひはん",
+    "romaji": "hihan",
+    "level": 3,
+    "definition_id": "Ungkapan penolakan atau ulasan tajam terhadap tindakan atau pendapat seseorang yang dianggap salah.",
+    "contextual_usage": "他人の意見を簡単に批判してはいけない。 (Tanin no iken wo kantan ni hihan shite wa ikenai. / Kita tidak boleh mengkritik pendapat orang lain begitu saja.)"
+  },
+  {
+    "word": "場",
+    "meaning": "place, field (physics)",
+    "meaning_id": "tempat, situasi, area",
+    "furigana": "ば",
+    "romaji": "ba",
+    "level": 3,
+    "definition_id": "Lokasi spesifik di mana suatu aktivitas berlangsung, atau ruang lingkup situasi sosial.",
+    "contextual_usage": "その場に適した服装をしてください。 (Sono ba ni tekishita fukusō wo shite kudasai. / Harap kenakan pakaian yang sesuai dengan situasi/tempat tersebut.)"
+  },
+  {
+    "word": "何か",
+    "meaning": "something",
+    "meaning_id": "sesuatu, apa saja",
+    "furigana": "なにか",
+    "romaji": "nanika",
+    "level": 3,
+    "definition_id": "Kata ganti untuk menunjukkan suatu objek, hal, atau urusan yang belum ditentukan atau belum spesifik.",
+    "contextual_usage": "喉が渇いたので、何か飲むものが欲しいです。 (Nodo ga kawaita node, nanika nomu mono ga hoshii desu. / Karena haus, saya ingin sesuatu untuk diminum.)"
+  },
+  {
+    "word": "利口",
+    "meaning": "clever, shrewd, bright, sharp, wise, intelligent",
+    "meaning_id": "pintar, cerdas, cerdik",
+    "furigana": "りこう",
+    "romaji": "rikō",
+    "level": 3,
+    "definition_id": "Karakteristik seseorang atau hewan yang tanggap pikiran, pandai, dan bijaksana dalam menyikapi keadaan.",
+    "contextual_usage": "その犬は主人の命令を聞く利口な犬です。 (Sono inu wa shujin no meirei wo kiku rikō na inu desu. / Anjing itu adalah anjing pintar yang mematuhi perintah majikannya.)"
+  },
+  {
+    "word": "ちょうだい",
+    "meaning": "(1) please do for me (preceded by -te), (2) reception, being given, get",
+    "meaning_id": "tolong berikan saya..., mintalah",
+    "furigana": "",
+    "romaji": "chōdai",
+    "level": 3,
+    "definition_id": "Ungkapan bahasa santai (sering dipakai wanita/anak-anak) untuk meminta sesuatu barang atau meminta tolong dilakukan sesuatu.",
+    "contextual_usage": "お母さん、そのお菓子をちょうだい。 (Okāsan, sono okashi wo chōdai. / Ibu, tolong berikan kue itu ke aku.)"
+  },
+  {
+    "word": "味方",
+    "meaning": "friend, ally, supporter",
+    "meaning_id": "kawan, sekutu, pendukung",
+    "furigana": "みかた",
+    "romaji": "mikata",
+    "level": 3,
+    "definition_id": "Pihak atau orang yang berada di sisi kita, memberikan dukungan, dan membantu melawan kubu oposisi.",
+    "contextual_usage": "何があっても、私はあなたの味方です。 (Nan ga atte mo, watashi wa anata no mikata desu. / Apapun yang terjadi, aku akan selalu mendukungmu.)"
+  },
+  {
+    "word": "局",
+    "meaning": "court lady, lady in waiting",
+    "meaning_id": "kantor, biro, badan penyiaran",
+    "furigana": "きょく",
+    "romaji": "kyoku",
+    "level": 3,
+    "definition_id": "Unit instansi, kantor administrasi khusus, atau stasiun penyiaran (misal stasiun TV atau kantor pos).",
+    "contextual_usage": "近くの郵便局へ切手を買いに行きました。 (Chikaku no yūbinkyoku he kitte wo kai ni ikimashita. / Saya pergi ke kantor pos terdekat untuk membeli perangko.)"
+  },
+  {
+    "word": "恋人",
+    "meaning": "lover, sweetheart",
+    "meaning_id": "kekasih, pacar",
+    "furigana": "こいびと",
+    "romaji": "koibito",
+    "level": 3,
+    "definition_id": "Seseorang yang memiliki hubungan asmara romantis atas dasar rasa cinta yang saling mengikat.",
+    "contextual_usage": "休みの日は恋人とデートをします。 (Yasumi no hi wa koibito to dēto wo shimasu. / Di hari libur saya berkencan dengan pacar.)"
+  },
+  {
+    "word": "カー",
+    "meaning": "car",
+    "meaning_id": "mobil",
+    "furigana": "",
+    "romaji": "kā",
+    "level": 3,
+    "definition_id": "Kata serapan dari bahasa Inggris untuk kendaraan bermotor roda empat penunjang transportasi darat.",
+    "contextual_usage": "パトカーがサイレンを鳴らして走っていった。 (Patokā ga sairen wo narashite hashitte itta. / Mobil patroli polisi melaju sambil membunyikan sirine.)"
+  },
+  {
+    "word": "軍隊",
+    "meaning": "army, troops",
+    "meaning_id": "tentara, militer, angkatan bersenjata",
+    "furigana": "ぐんたい",
+    "romaji": "guntai",
+    "level": 3,
+    "definition_id": "Organisasi resmi pertahanan negara yang dilengkapi senjata untuk melindungi kedaulatan wilayah.",
+    "contextual_usage": "彼は18歳で軍隊に入りました。 (Kare wa jūhassai de guntai ni hairimashita. / Dia masuk dinas militer pada usia 18 tahun.)"
+  },
+  {
+    "word": "運",
+    "meaning": "fortune, luck",
+    "meaning_id": "keberuntungan, nasib",
+    "furigana": "うん",
+    "romaji": "un",
+    "level": 3,
+    "definition_id": "Sesuatu yang terjadi di luar kendali usaha manusia, membawa dampak mujur atau malang.",
+    "contextual_usage": "今日は宝くじが当たって運が良かったです。 (Kyō wa takarakuji ga atatte un ga yokatta desu. / Hari ini saya beruntung karena menang lotre.)"
+  },
+  {
+    "word": "責任",
+    "meaning": "duty, responsibility",
+    "meaning_id": "tanggung jawab, kewajiban",
+    "furigana": "せきにん",
+    "romaji": "sekinin",
+    "level": 3,
+    "definition_id": "Kewajiban menanggung beban atau konsekuensi atas segala perbuatan yang dilakukan.",
+    "contextual_usage": "リーダーとしての責任を感じています。 (Rīdā toshite no sekinin wo kanjite imasu. / Saya merasakan tanggung jawab yang besar sebagai pemimpin.)"
+  },
+  {
+    "word": "両替",
+    "meaning": "change, money exchange",
+    "meaning_id": "penukaran uang",
+    "furigana": "りょうがえ",
+    "romaji": "ryōgae",
+    "level": 3,
+    "definition_id": "Aktivitas menukarkan mata uang asing atau mengubah pecahan uang besar ke dalam pecahan koin/kecil.",
+    "contextual_usage": "銀行で一万円札を千円札に両替しました。 (Ginkō de ichiman'ensatsu wo sen'ensatsu ni ryōgae shimashita. / Saya menukarkan uang lembaran 10.000 yen menjadi pecahan 1.000 yen di bank.)"
+  },
+  {
+    "word": "伸びる",
+    "meaning": "to stretch, to extend, to make progress, to grow (beard, body height)",
+    "meaning_id": "memanjang, tumbuh, berkembang (intransitif)",
+    "furigana": "のびる",
+    "romaji": "nobiru",
+    "level": 3,
+    "definition_id": "Kondisi benda bertambah panjang, tinggi badan bertambah, atau kemampuan yang mengalami progres kemajuan.",
+    "contextual_usage": "髪が伸びたので、美容院へ行きます。 (Kami ga nobita node, biyōin he ikimasu. / Karena rambut sudah memanjang, saya akan pergi ke salon.)"
+  },
+  {
+    "word": "平和",
+    "meaning": "peace, harmony",
+    "meaning_id": "kedamaian, perdamaian, tenteram",
+    "furigana": "へいわ",
+    "romaji": "heiwa",
+    "level": 3,
+    "definition_id": "Situasi aman sentosa yang bebas dari konflik, perang, kerusuhan, ataupun perselisihan.",
+    "contextual_usage": "私たちは世界の平和を願っています。 (Watashitachi wa sekai no heiwa wo negatte imasu. / Kami mengharapkan terciptanya perdamaian dunia.)"
+  },
+  {
+    "word": "サービス",
+    "meaning": "(1) service, support system, (2) goods or services without charge",
+    "meaning_id": "layanan, servis, bonus cuma-cuma",
+    "furigana": "",
+    "romaji": "sābisu",
+    "level": 3,
+    "definition_id": "Pelayanan yang diberikan kepada pelanggan, atau pemberian barang ekstra tanpa biaya sebagai bonus pemikat.",
+    "contextual_usage": "この店は食後のコーヒーがサービスです。 (Kono mise wa shokugo no kōhī ga sābisu desu. / Toko ini memberikan kopi gratis sebagai bonus setelah makan.)"
+  },
+  {
+    "word": "伺う",
+    "meaning": "(hon) to visit, to ask, to inquire",
+    "meaning_id": "bertanya, mengunjungi (kenjougo/rendah hati)",
+    "furigana": "うかがう",
+    "romaji": "ukagau",
+    "level": 3,
+    "definition_id": "Ragam bahasa merendahkan diri dari kata 'kiku' (bertanya/mendengar) atau 'iku/kuru' (pergi/datang bersilaturahmi).",
+    "contextual_usage": "明日、オフィスへ伺ってもよろしいでしょうか。 (Ashita, ofisu he ukagatte mo yorashii deshō ka. / Apakah boleh besok saya mengunjungi kantor Anda?)"
+  },
+  {
+    "word": "経由",
+    "meaning": "go by the way, via",
+    "meaning_id": "melalui, via, transit di",
+    "furigana": "けいゆ",
+    "romaji": "keiyu",
+    "level": 3,
+    "definition_id": "Melewati suatu titik atau kota tertentu sebelum menuju ke stasiun/bandara destinasi akhir.",
+    "contextual_usage": "香港経由の飛行機で日本へ向かいました。 (Honkon keiyu no hikōki de Nihon he mukaimashita. / Saya bertolak ke Jepang menggunakan pesawat yang transit via Hong Kong.)"
+  },
+  {
+    "word": "浴びる",
+    "meaning": "to bathe, to bask in the sun, to shower",
+    "meaning_id": "mandi, mengguyur, tersorot (cahaya)",
+    "furigana": "あびる",
+    "romaji": "abiru",
+    "level": 3,
+    "definition_id": "Mengguyur seluruh tubuh dengan air (mandi pancuran), atau menerima pancaran sinar matahari/kritikan dalam jumlah besar.",
+    "contextual_usage": "スポーツの後でシャワーを浴びました。 (Supōtsu no ato de shawā wo abimashita. / Saya mandi pancuran/shower sehabis berolahraga.)"
+  },
+  {
+    "word": "売れる",
+    "meaning": "to be sold",
+    "meaning_id": "laku terjual, laris",
+    "furigana": "うれる",
+    "romaji": "ureru",
+    "level": 3,
+    "definition_id": "Kondisi suatu produk dagangan diminati khalayak sehingga habis dibeli oleh konsumen.",
+    "contextual_usage": "この本は今、一番売れています。 (Kono hon wa ima, ichiban urete imasu. / Buku ini sedang menjadi buku yang paling laris/laku terjual saat ini.)"
+  },
+  {
+    "word": "国境",
+    "meaning": "national or state border",
+    "meaning_id": "perbatasan negara",
+    "furigana": "こっきょう",
+    "romaji": "kokkyō",
+    "level": 3,
+    "definition_id": "Garis pembatas geografis atau hukum yang memisahkan kedaulatan teritorial antara dua negara.",
+    "contextual_usage": "車で国境を越えて隣の国へ行きました。 (Kuruma de kokkyō wo koete tonari no kuni he ikimashita. / Saya melewati perbatasan negara dengan mobil untuk pergi ke negara tetangga.)"
+  },
+  {
+    "word": "昼食",
+    "meaning": "lunch, midday meal",
+    "meaning_id": "makan siang",
+    "furigana": "ちゅうしょく",
+    "romaji": "chūshoku",
+    "level": 3,
+    "definition_id": "Sesi kegiatan mengonsumsi hidangan makanan yang dilakukan pada tengah hari.",
+    "contextual_usage": "昼食にうどんを食べました。 (Chūshoku ni udon wo tabemashita. / Saya menyantap mi udon untuk makan siang.)"
+  },
+  {
+    "word": "クラシック",
+    "meaning": "classic(s)",
+    "meaning_id": "klasik, musik klasik",
+    "furigana": "",
+    "romaji": "kurashikku",
+    "level": 3,
+    "definition_id": "Gaya karya seni barat kuno, terutama mengacu pada komposisi musik instrumental zaman abad pertengahan (seperti Mozart/Beethoven).",
+    "contextual_usage": "勉強するときはいつもクラシック音楽を聴きます。 (Benkyō suru toki wa itsumo kurashikku ongaku wo kikimasu. / Saya selalu mendengarkan musik klasik saat sedang belajar.)"
+  },
+  {
+    "word": "弁当",
+    "meaning": "box lunch",
+    "meaning_id": "bekal makanan, bento",
+    "furigana": "べんとう",
+    "romaji": "bentō",
+    "level": 3,
+    "definition_id": "Porsi makanan praktis yang ditata di wadah kotak portabel untuk dibawa dan disantap di tempat kerja atau sekolah.",
+    "contextual_usage": "毎日学校に弁当を持っていきます。 (Mainichi gakkō ni bentō wo motte ikimasu. / Setiap hari saya membawa bekal makanan ke sekolah.)"
+  },
+  {
+    "word": "飽きる",
+    "meaning": "to get tired of, to lose interest in, to have enough",
+    "meaning_id": "bosan, jenuh, jemu",
+    "furigana": "あきる",
+    "romaji": "akiru",
+    "level": 3,
+    "definition_id": "Kehilangan ketertarikan atau semangat terhadap suatu hal karena dilakukan terlalu sering atau berulang-ulang.",
+    "contextual_usage": "毎日同じ料理ばかりで飽きてしまいました。 (Mainichi onaji ryōri bakari de akite shimaimashita. / Saya bosan karena setiap hari makan hidangan yang itu-itu saja.)"
+  },
+  {
+    "word": "手間",
+    "meaning": "time, labour",
+    "meaning_id": "tenaga dan waktu, kerepotan",
+    "furigana": "てま",
+    "romaji": "tema",
+    "level": 3,
+    "definition_id": "Jumlah curahan energi fisik serta durasi waktu yang dihabiskan demi menuntaskan sebuah urusan rumit.",
+    "contextual_usage": "この料理は作るのに手間がかかります。 (Kono ryōri wa tsukuru no ni tema ga kakarimasu. / Masakan ini membutuhkan banyak tenaga dan waktu untuk membuatnya.)"
+  },
+  {
+    "word": "効く",
+    "meaning": "to be effective",
+    "meaning_id": "manjur, berkhasiat, berfungsi efektif",
+    "furigana": "きく",
+    "romaji": "kiku",
+    "level": 3,
+    "definition_id": "Menghasilkan dampak yang diharapkan; bekerja dengan baik (terutama untuk khasiat obat atau fungsi AC).",
+    "contextual_usage": "この薬は頭痛によく効きます。 (Kono kusuri wa zutsū ni yoku kikimasu. / Obat ini sangat manjur untuk meredakan sakit kepala.)"
+  },
+  {
+    "word": "逮捕",
+    "meaning": "arrest, apprehension, capture",
+    "meaning_id": "penangkapan, penahanan",
+    "furigana": "たいほ",
+    "romaji": "taiho",
+    "level": 3,
+    "definition_id": "Tindakan aparat kepolisian mengekang kebebasan fisik seseorang yang diduga kuat melakukan tindak pidana hukum.",
+    "contextual_usage": "警察はついに犯人を逮捕しました。 (Keisatsu wa tsuini hannin wo taiho shimashita. / Polisi akhirnya menangkap pelaku kriminal tersebut.)"
+  },
+  {
+    "word": "批評",
+    "meaning": "criticism, review, commentary",
+    "meaning_id": "ulasan, kritik seni, resensi",
+    "furigana": "ひひょう",
+    "romaji": "hihyō",
+    "level": 3,
+    "definition_id": "Kajian analisis mendalam guna mengupas nilai kelebihan dan kelemahan suatu karya sastra, film, atau buku.",
+    "contextual_usage": "新しい映画の批評を雑誌で読みました。 (Atarashii eiga no hihyō wo zasshi de yomaimashita. / Saya membaca ulasan film baru di majalah.)"
+  },
+  {
+    "word": "雲",
+    "meaning": "cloud",
+    "meaning_id": "awan",
+    "furigana": "くも",
+    "romaji": "kumo",
+    "level": 4,
+    "definition_id": "Kumpulan titik-titik air yang melayang di atmosfer, terbentuk dari kondensasi uap air.",
+    "contextual_usage": "空に白い雲がたくさん浮いています。 (Sora ni shiroi kumo ga takusan uite imasu. / Banyak awan putih yang melayang di langit.)"
+  },
+  {
+    "word": "サンドイッチ",
+    "meaning": "sandwich",
+    "meaning_id": "roti lapis, sandwich",
+    "furigana": "",
+    "romaji": "sandoitchi",
+    "level": 4,
+    "definition_id": "Makanan yang terbuat dari dua iris roti dengan isian daging, sayuran, atau keju di tengahnya.",
+    "contextual_usage": "昼ご飯にサンドイッチを作りました。 (Hirugohan ni sandoitchi wo tsukurimashita. / Saya membuat sandwich untuk makan siang.)"
+  },
+  {
+    "word": "故障",
+    "meaning": "to break-down",
+    "meaning_id": "rusak, mogok, mengalami kerusakan",
+    "furigana": "こしょう・する",
+    "romaji": "koshō-suru",
+    "level": 4,
+    "definition_id": "Kondisi di mana mesin, alat, atau kendaraan tidak dapat berfungsi sebagaimana mestinya.",
+    "contextual_usage": "車が故障して動かなくなりました。 (Kuruma ga koshō shite ugokanaku narimashita. / Mobilnya rusak dan tidak bisa bergerak.)"
+  },
+  {
+    "word": "怖い",
+    "meaning": "frightening",
+    "meaning_id": "takut, menakutkan, seram",
+    "furigana": "こわい",
+    "romaji": "kowai",
+    "level": 4,
+    "definition_id": "Perasaan terancam atau ngeri terhadap sesuatu yang dianggap berbahaya atau misterius.",
+    "contextual_usage": "昨日、怖い映画を観ました。 (Kinō, kowai eiga wo mimashita. / Kemarin, saya menonton film horor/menakutkan.)"
+  },
+  {
+    "word": "エスカレーター",
+    "meaning": "escalator",
+    "meaning_id": "eskalator, tangga berjalan",
+    "furigana": "",
+    "romaji": "esukarētā",
+    "level": 4,
+    "definition_id": "Tangga mekanis yang bergerak naik atau turun secara otomatis untuk mengangkut orang antar lantai.",
+    "contextual_usage": "エスカレーターに乗るときは注意してください。 (Esukarētā ni noru toki wa chūi shite kudasai. / Harap berhati-hati saat naik eskalator.)"
+  },
+  {
+    "word": "運ぶ",
+    "meaning": "to transport",
+    "meaning_id": "mengangkut, membawa, memindahkan",
+    "furigana": "はこぶ",
+    "romaji": "hakobu",
+    "level": 4,
+    "definition_id": "Memindahkan barang atau muatan dari satu tempat ke tempat lain menggunakan tenaga atau kendaraan.",
+    "contextual_usage": "荷物を部屋まで運んでください。 (Nimotsu wo heya made hakonde kudasai. / Tolong bawakan barang-barang ini sampai ke kamar.)"
+  },
+  {
+    "word": "受ける",
+    "meaning": "to take a lesson or test",
+    "meaning_id": "mengikuti (ujian/pelajaran), menerima",
+    "furigana": "うける",
+    "romaji": "ukeru",
+    "level": 4,
+    "definition_id": "Melaksanakan atau menempuh suatu evaluasi, tes, maupun sesi pembelajaran.",
+    "contextual_usage": "来月、日本語の試験を受けます。 (Raigetsu, Nihongo no shiken wo ukemasu. / Bulan depan, saya akan mengikuti ujian bahasa Jepang.)"
+  },
+  {
+    "word": "お嬢さん",
+    "meaning": "young lady",
+    "meaning_id": "nona, anak perempuan (orang lain)",
+    "furigana": "おじょうさん",
+    "romaji": "ojōsan",
+    "level": 4,
+    "definition_id": "Panggilan hormat atau sopan untuk anak perempuan atau gadis muda milik orang lain.",
+    "contextual_usage": "田中さんのお嬢さんはとても親切です。 (Tanaka-san no ojōsan wa totemo shinsetsu desu. / Anak perempuannya Pak Tanaka sangat baik hati.)"
+  },
+  {
+    "word": "首",
+    "meaning": "neck",
+    "meaning_id": "leher",
+    "furigana": "くび",
+    "romaji": "kubi",
+    "level": 4,
+    "definition_id": "Bagian tubuh makhluk hidup yang menghubungkan antara kepala dengan batang badan.",
+    "contextual_usage": "寒いので首にマフラーを巻きます。 (Samui node kubi ni mafurā wo makimasu. / Karena dingin, saya melilitkan syal di leher.)"
+  },
+  {
+    "word": "市民",
+    "meaning": "citizen",
+    "meaning_id": "warga kota, warga negara, masyarakat",
+    "furigana": "しみん",
+    "romaji": "shimin",
+    "level": 4,
+    "definition_id": "Penduduk resmi dari sebuah kota atau wilayah hukum yang memiliki hak dan kewajiban penuh.",
+    "contextual_usage": "多くの市民がそのイベントに参加した。 (Ōku no shimin ga sono ibento ni sanka shita. / Banyak warga kota yang berpartisipasi dalam acara tersebut.)"
+  },
+  {
+    "word": "付く",
+    "meaning": "to be attached",
+    "meaning_id": "menempel, terpasang, melekat",
+    "furigana": "つく",
+    "romaji": "tsuku",
+    "level": 4,
+    "definition_id": "Kondisi di mana suatu benda menjadi terikat, terhubung, atau menempel pada permukaan benda lain.",
+    "contextual_usage": "服にポケットが付いています。 (Fuku ni poketto ga tsuite imasu. / Pada pakaiannya terpasang saku.)"
+  },
+  {
+    "word": "すく",
+    "meaning": "to become empty",
+    "meaning_id": "menjadi kosong, menjadi lapar",
+    "furigana": "",
+    "romaji": "suku",
+    "level": 4,
+    "definition_id": "Kondisi ruang yang berkurang isinya hingga kosong, sering digunakan untuk menggambarkan perut yang lapar (onaka ga suku).",
+    "contextual_usage": "お腹がすいたので、何か食べましょう。 (Onaka ga suita node, nanika tabemashō. / Karena perut sudah lapar, mari makan sesuatu.)"
+  },
+  {
+    "word": "こと",
+    "meaning": "thing, matter",
+    "meaning_id": "hal, perkara, sesuatu yang abstrak",
+    "furigana": "",
+    "romaji": "koto",
+    "level": 4,
+    "definition_id": "Kata benda abstrak untuk menyatakan suatu kejadian, urusan, fakta, atau tindakan yang tidak berwujud fisik.",
+    "contextual_usage": "日本のことについてもっと知りたいです。 (Nihon no koto ni tsuite motto shiritai desu. / Saya ingin tahu lebih banyak hal mengenai Jepang.)"
+  },
+  {
+    "word": "訪ねる",
+    "meaning": "to visit",
+    "meaning_id": "mengunjungi, bertandang",
+    "furigana": "たずねる",
+    "romaji": "tazuneru",
+    "level": 4,
+    "definition_id": "Pergi ke suatu tempat atau kediaman seseorang dengan maksud untuk bertamu atau bersilaturahmi.",
+    "contextual_usage": "明日、京都の友達を訪ねる予定です。 (Ashita, Kyōto no tomodachi wo tazuneru yotei desu. / Besok, saya berencana mengunjungi teman di Kyoto.)"
+  },
+  {
+    "word": "お祝い",
+    "meaning": "congratulation",
+    "meaning_id": "perayaan, ucapan selamat, hadiah perayaan",
+    "furigana": "おいわい",
+    "romaji": "oiwai",
+    "level": 4,
+    "definition_id": "Ungkapan kegembiraan, ritual, atau pemberian hadiah atas momen bahagia atau keberhasilan seseorang.",
+    "contextual_usage": "友達の結婚のお祝いに時計をあげました。 (Tomodachi no kekkon no oiwai ni tokei wo agemashita. / Saya memberikan jam tangan sebagai hadiah perayaan pernikahan teman.)"
+  },
+  {
+    "word": "一生懸命",
+    "meaning": "with utmost effort",
+    "meaning_id": "dengan sekuat tenaga, sungguh-sungguh",
+    "furigana": "いっしょうけんめい",
+    "romaji": "isshōkenmei",
+    "level": 4,
+    "definition_id": "Sikap mencurahkan seluruh fokus, jiwa, dan raga untuk melakukan suatu pekerjaan atau mencapai tujuan.",
+    "contextual_usage": "試験のために一生懸命勉強しました。 (Shiken no tame ni isshōkenmei benkyō shimashita. / Saya belajar dengan sungguh-sungguh demi ujian.)"
+  },
+  {
+    "word": "済む",
+    "meaning": "to finish",
+    "meaning_id": "selesai, beres, berakhir",
+    "furigana": "すむ",
+    "romaji": "sumu",
+    "level": 4,
+    "definition_id": "Kondisi di mana suatu urusan, tugas, atau masalah telah tuntas diselesaikan tanpa ada hambatan lagi.",
+    "contextual_usage": "宿題が済んだら、ゲームをしてもいいよ。 (Shukudai ga sundara, gēmu wo shite mo ii yo. / Kalau PR-nya sudah selesai, kamu boleh main game.)"
+  },
+  {
+    "word": "アメリカ",
+    "meaning": "America",
+    "meaning_id": "Amerika (Amerika Serikat)",
+    "furigana": "",
+    "romaji": "amerika",
+    "level": 4,
+    "definition_id": "Nama negara federal yang terletak di benua Amerika Utara.",
+    "contextual_usage": "私の兄はアメリカに留学しています。 (Watashi no ani wa Amerika ni ryūgaku shite imasu. / Kakak laki-laki saya sedang kuliah di Amerika.)"
+  },
+  {
+    "word": "復習",
+    "meaning": "revision",
+    "meaning_id": "mengulang pelajaran, review",
+    "furigana": "ふくしゅう",
+    "romaji": "fukushū",
+    "level": 4,
+    "definition_id": "Aktivitas mempelajari kembali materi atau pelajaran yang telah diajarkan sebelumnya agar lebih paham.",
+    "contextual_usage": "授業の後できちんと復習をします。 (Jūgyō no ato de kichinto fukushū wo shimasu. / Saya mengulang pelajaran dengan baik setelah kelas selesai.)"
+  },
+  {
+    "word": "急",
+    "meaning": "urgent, steep",
+    "meaning_id": "mendadak, tiba-tiba, curam",
+    "furigana": "きゅう",
+    "romaji": "kyū",
+    "level": 4,
+    "definition_id": "Keadaan yang terjadi secara tiba-tiba tanpa diduga, atau kemiringan bidang yang sangat terjal.",
+    "contextual_usage": "急な用事ができて、行けなくなりました。 (Kyū na yōji ga dekite, ikenaku narimashita. / Karena ada urusan mendadak, saya jadi tidak bisa pergi.)"
+  },
+  {
+    "word": "これから",
+    "meaning": "after this",
+    "meaning_id": "mulai sekarang, setelah ini",
+    "furigana": "",
+    "romaji": "korekara",
+    "level": 4,
+    "definition_id": "Keterangan waktu yang menandakan poin awal mula dimulainya suatu aksi atau perubahan masa depan dari saat ini.",
+    "contextual_usage": "これからはもっと遅刻に気をつけます。 (Korekara wa motto chikoku ni ki wo tsukemasu. / Mulai sekarang saya akan lebih berhati-hati agar tidak terlambat.)"
+  },
+  {
+    "word": "指輪",
+    "meaning": "finger ring",
+    "meaning_id": "cincin",
+    "furigana": "ゆびわ",
+    "romaji": "yubiwa",
+    "level": 4,
+    "definition_id": "Aksesoris atau perhiasan berbentuk lingkaran kecil yang dikenakan di jari tangan.",
+    "contextual_usage": "誕生日に綺麗な指輪をもらいました。 (Tanjōbi ni kirei na yubiwa wo moraimashita. / Saya mendapatkan cincin yang indah di hari ulang tahun saya.)"
+  },
+  {
+    "word": "美しい",
+    "meaning": "beautiful",
+    "meaning_id": "indah, cantik, elok",
+    "furigana": "うつくしい",
+    "romaji": "utsukushii",
+    "level": 4,
+    "definition_id": "Sesuatu yang memiliki estetika tinggi, enak dipandang, atau memberikan kepuasan visual dan batin.",
+    "contextual_usage": "山の上から美しい景色が見えました。 (Yama no ue kara utsukushii keshiki ga miemashita. / Dari atas gunung terlihat pemandangan yang indah.)"
+  },
+  {
+    "word": "直る",
+    "meaning": "to be fixed, to be repaired",
+    "meaning_id": "membaik, sembuh, diperbaiki (intransitif)",
+    "furigana": "なおる",
+    "romaji": "naoru",
+    "level": 4,
+    "definition_id": "Kembalinya kondisi suatu barang yang rusak atau tubuh yang sakit ke keadaan normal semula tanpa menyebut pelaku kerjanya.",
+    "contextual_usage": "壊れていた時計がやっと直りました。 (Kowarete ita tokei ga yatto naorimashita. / Jam dinding yang sempat rusak akhirnya sudah beres/diperbaiki.)"
+  },
+  {
+    "word": "水泳",
+    "meaning": "swimming",
+    "meaning_id": "olahraga renang, berenang",
+    "furigana": "すいえい",
+    "romaji": "suiei",
+    "level": 4,
+    "definition_id": "Olahraga atau aktivitas menggerakkan tubuh melintasi air menggunakan kaki dan tangan.",
+    "contextual_usage": "学校の授業で水泳を習っています。 (Gakkō no jūgyō de suiei wo naratte imasu. / Saya belajar berenang di pelajaran sekolah.)"
+  },
+  {
+    "word": "真中",
+    "meaning": "middle",
+    "meaning_id": "tepat di tengah, pusat",
+    "furigana": "まんなか",
+    "romaji": "mannaka",
+    "level": 4,
+    "definition_id": "Posisi atau titik yang membagi suatu bidang atau ruang menjadi dua bagian yang sama persis.",
+    "contextual_usage": "部屋の真中に大きなテーブルがあります。 (Heya no mannaka ni ōkina tēburu ga arimasu. / Di tengah-tengah kamar ada meja yang besar.)"
+  },
+  {
+    "word": "発音",
+    "meaning": "pronunciation",
+    "meaning_id": "pengucapan, lafal, artikulasi",
+    "furigana": "はつおん",
+    "romaji": "hatsuon",
+    "level": 4,
+    "definition_id": "Cara atau bunyi suara yang dihasilkan saat mengucapkan kata-kata dalam suatu bahasa.",
+    "contextual_usage": "彼の英語の発音はとてもきれいです。 (Kare no Eigo no hatsuon wa totemo kirei desu. / Pengucapan bahasa Inggris dia sangat bagus/fasih.)"
+  },
+  {
+    "word": "手伝う",
+    "meaning": "to assist",
+    "meaning_id": "membantu, menolong (pekerjaan)",
+    "furigana": "てつだう",
+    "romaji": "tetsudau",
+    "level": 4,
+    "definition_id": "Ikut serta memberikan tenaga atau pikiran untuk meringankan beban pekerjaan orang lain.",
+    "contextual_usage": "母の料理を手伝いました。 (Haha no ryōri wo tetsudaimashita. / Saya membantu ibu memasak.)"
+  },
+  {
+    "word": "折れる",
+    "meaning": "to break or be folded",
+    "meaning_id": "patah, terlipat",
+    "furigana": "おれる",
+    "romaji": "oreru",
+    "level": 4,
+    "definition_id": "Kondisi benda panjang atau keras (seperti kayu/tulang) yang terbagi menjadi dua akibat tekanan, atau kertas yang terlipat.",
+    "contextual_usage": "強い風で木の枝が折れました。 (Tsuyoi kaze de ki no eda ga oremashita. / Ranting pohon patah karena angin kencang.)"
+  },
+  {
+    "word": "一度",
+    "meaning": "once",
+    "meaning_id": "satu kali, sekali",
+    "furigana": "いちど",
+    "romaji": "ichido",
+    "level": 4,
+    "definition_id": "Satuan jumlah frekuensi yang menunjukkan bahwa suatu tindakan hanya terjadi sebanyak satu kali.",
+    "contextual_usage": "一度日本へ行ってみたいです。 (Ichido Nihon he itte mitai desu. / Saya ingin mencoba pergi ke Jepang sekali saja.)"
+  },
+  {
+    "word": "高等学校",
+    "meaning": "high school",
+    "meaning_id": "SMA (Sekolah Menengah Atas)",
+    "furigana": "こうとうがっこう",
+    "romaji": "kōtōgakkō",
+    "level": 4,
+    "definition_id": "Lembaga pendidikan formal tingkat menengah atas setelah lulus dari tingkat SMP.",
+    "contextual_usage": "彼は来年、高等学校に進学します。 (Kare wa rainen, kōtōgakkō ni shingaku shimasu. / Dia akan melanjutkan sekolah ke SMA tahun depan.)"
+  },
+  {
+    "word": "アルコール",
+    "meaning": "alcohol",
+    "meaning_id": "alkohol, minuman keras",
+    "furigana": "",
+    "romaji": "arukōru",
+    "level": 4,
+    "definition_id": "Senyawa kimia organik atau jenis minuman yang memicu efek memabukkan.",
+    "contextual_usage": "医者にアルコールを控えなさいと言われました。 (Isha ni arukōru wo hikaenasai to iwaremashita. / Saya diminta dokter untuk mengurangi alkohol.)"
+  },
+  {
+    "word": "アナウンサー",
+    "meaning": "announcer",
+    "meaning_id": "penyiar, pembaca berita",
+    "furigana": "",
+    "romaji": "anaunsā",
+    "level": 4,
+    "definition_id": "Profesi seseorang yang bertugas menyampaikan informasi atau membacakan berita di radio atau televisi.",
+    "contextual_usage": "将来はテレビのアナウンサーになりたいです。 (Shōrai wa terebi no anaunsā ni naritai desu. / Di masa depan saya ingin menjadi penyiar televisi.)"
+  },
+  {
+    "word": "最初",
+    "meaning": "beginning, first",
+    "meaning_id": "pertama, awal mula, permulaan",
+    "furigana": "さいしょ",
+    "romaji": "saisho",
+    "level": 4,
+    "definition_id": "Urutan paling pertama atau titik awal dari suatu rangkaian kejadian, waktu, atau barisan.",
+    "contextual_usage": "最初は難しかったですが、今は慣れました。 (Saisho wa muzukashikatta desu ga, ima wa naremashita. / Awalnya memang sulit, tapi sekarang sudah terbiasa.)"
+  },
+  {
+    "word": "投げる",
+    "meaning": "to throw or cast away",
+    "meaning_id": "melempar",
+    "furigana": "なげる",
+    "romaji": "nageru",
+    "level": 4,
+    "definition_id": "Menggerakkan tangan dengan cepat untuk melontarkan suatu benda menjauh dari tubuh.",
+    "contextual_usage": "犬に向かってボールを投げました。 (Inu ni mukatte bōru wo nagemashita. / Saya melempar bola ke arah anjing.)"
+  },
+  {
+    "word": "変える",
+    "meaning": "to change",
+    "meaning_id": "mengubah, mengganti (transitif)",
+    "furigana": "かえる",
+    "romaji": "kaeru",
+    "level": 4,
+    "definition_id": "Tindakan sengaja membuat sesuatu menjadi berbeda dari kondisi asli atau sebelumnya.",
+    "contextual_usage": "髪型を変えたら、みんなに驚かれました。 (Kamigata wo kaetara, minna ni odorokaremashita. / Begitu mengubah gaya rambut, semua orang terkejut.)"
+  },
+  {
+    "word": "昼間",
+    "meaning": "daytime, during the day",
+    "meaning_id": "siang hari, waktu siang",
+    "furigana": "ひるま",
+    "romaji": "hiruma",
+    "level": 4,
+    "definition_id": "Rentang waktu dari terbitnya matahari sampai tenggelamnya matahari (waktu terang).",
+    "contextual_usage": "昼間は仕事をして、夜は大学に通っています。 (Hiruma wa shigoto wo shite, yoru wa daigaku ni kayotte imasu. / Siang hari saya bekerja, dan malamnya saya kuliah.)"
+  },
+  {
+    "word": "神社",
+    "meaning": "Shinto shrine",
+    "meaning_id": "kuil Shinto",
+    "furigana": "じんじゃ",
+    "romaji": "jinja",
+    "level": 4,
+    "definition_id": "Bangunan atau tempat ibadah penganut kepercayaan Shinto di Jepang untuk memuja Kami (dewa).",
+    "contextual_usage": "お正月に近くの神社へお参りに行きました。 (Oshōgatsu ni chikaku no jinja he omairi ni ikimashita. / Saat tahun baru, saya pergi berdoa ke kuil Shinto terdekat.)"
+  },
+  {
+    "word": "食料品",
+    "meaning": "groceries",
+    "meaning_id": "bahan makanan, sembako",
+    "furigana": "しょくりょうひん",
+    "romaji": "shokuryōhin",
+    "level": 4,
+    "definition_id": "Segala jenis produk barang mentah atau olahan yang diproduksi untuk dikonsumsi manusia.",
+    "contextual_usage": "スーパーで食料品をたくさん買い込みました。 (Sūpā de shokuryōhin wo takusan kaikomimashita. / Saya membeli banyak bahan makanan di supermarket.)"
+  },
+  {
+    "word": "丁寧",
+    "meaning": "polite",
+    "meaning_id": "sopan, ramah, teliti",
+    "furigana": "ていねい",
+    "romaji": "teinei",
+    "level": 4,
+    "definition_id": "Sikap atau perbuatan yang penuh hormat kepada orang lain, atau pengerjaan sesuatu secara saksama.",
+    "contextual_usage": "彼はいつも丁寧な言葉遣いをします。 (Kare wa itsumo teinei na kotobazukai wo shimasu. / Dia selalu menggunakan pilihan kata yang sopan.)"
+  },
+  {
+    "word": "規則",
+    "meaning": "regulations",
+    "meaning_id": "peraturan, regulasi",
+    "furigana": "きそく",
+    "romaji": "kisoku",
+    "level": 4,
+    "definition_id": "Tatanan norma atau hukum yang dibuat tertulis untuk dipatuhi bersama di suatu kelompok atau instansi.",
+    "contextual_usage": "学校の規則は守らなければなりません。 (Gakkō no kisoku wa mamoranakereba narimasen. / Peraturan sekolah harus dipatuhi.)"
+  },
+  {
+    "word": "もうすぐ",
+    "meaning": "soon",
+    "meaning_id": "sebentar lagi, segera",
+    "furigana": "",
+    "romaji": "mōsugu",
+    "level": 4,
+    "definition_id": "Keterangan waktu yang menyatakan bahwa suatu peristiwa akan segera terjadi dalam waktu dekat.",
+    "contextual_usage": "もうすぐクリスマスですね。 (Mōsugu kurisumasu desu ne. / Sebentar lagi Natal, ya.)"
+  },
+  {
+    "word": "絹",
+    "meaning": "silk",
+    "meaning_id": "sutra",
+    "furigana": "きぬ",
+    "romaji": "kinu",
+    "level": 4,
+    "definition_id": "Serat protein alami yang ditenun menjadi kain halus bernilai tinggi, diperoleh dari kepompong ulat sutra.",
+    "contextual_usage": "このスカーフは絹でできています。 (Kono sukāfu wa kinu de dekite imasu. / Syal ini terbuat dari sutra.)"
+  },
+  {
+    "word": "怒る",
+    "meaning": "to get angry, to be angry",
+    "meaning_id": "marah",
+    "furigana": "おこる",
+    "romaji": "okoru",
+    "level": 4,
+    "definition_id": "Luapan emosi tidak senang atau jengkel yang kuat karena merasa kecewa atau diperlakukan tidak adil.",
+    "contextual_usage": "約束を破ったら、友達が怒ってしまいました。 (Yakusoku wo yabuttara, tomodachi ga okotte shimaimashita. / Karena saya ingkar janji, teman saya menjadi marah.)"
+  },
+  {
+    "word": "用",
+    "meaning": "use",
+    "meaning_id": "keperluan, kegunaan, peruntukan",
+    "furigana": "よう",
+    "romaji": "yō",
+    "level": 4,
+    "definition_id": "Urusan yang harus dikerjakan, atau sufiks pembentuk makna barang yang ditujukan khusus bagi pihak tertentu.",
+    "contextual_usage": "これは子供用の自転車です。 (Kore wa kodomo-yō no jitensha desu. / Ini adalah sepeda khusus peruntukan anak-anak.)"
+  },
+  {
+    "word": "致す",
+    "meaning": "(humble) to do",
+    "meaning_id": "melakukan (bentuk bersahaja/kenjougo)",
+    "furigana": "いたす",
+    "romaji": "itasu",
+    "level": 4,
+    "definition_id": "Bentuk merendahkan diri (humble) dari kata kerja 'suru' (melakukan) demi menghormati lawan bicara.",
+    "contextual_usage": "お荷物はお預かりいたします。 (Onimotsu wa oazukari itashimasu. / Barang bawaan Anda akan kami bantu simpan/jagakan.)"
+  },
+  {
+    "word": "海岸",
+    "meaning": "coast",
+    "meaning_id": "pantai, pesisir, tepi laut",
+    "furigana": "かいがん",
+    "romaji": "kaigan",
+    "level": 4,
+    "definition_id": "Zona daratan yang berbatasan langsung dengan permukaan air laut.",
+    "contextual_usage": "夏休みに海岸を散歩しました。 (Natsuyasumi ni kaigan wo sanpo shimashita. / Saya berjalan-jalan di tepi pantai pada liburan musim panas.)"
+  },
+  {
+    "word": "経済",
+    "meaning": "finance, economy",
+    "meaning_id": "ekonomi, keuangan",
+    "furigana": "けいざい",
+    "romaji": "keizai",
+    "level": 4,
+    "definition_id": "Sistem atau ilmu yang mengatur produksi, distribusi, dan konsumsi barang serta jasa masyarakat.",
+    "contextual_usage": "大学で経済の勉強をしています。 (Daigaku de keizai no benkyō wo shite imasu. / Saya sedang belajar ilmu ekonomi di universitas.)"
+  },
+  {
+    "word": "以上",
+    "meaning": "more than, this is all",
+    "meaning_id": "lebih dari, sekian (selesai)",
+    "furigana": "いじょう",
+    "romaji": "ijō",
+    "level": 4,
+    "definition_id": "Batas angka/jumlah ke atas yang inklusif, atau frasa penutup yang menandakan suatu pernyataan telah berakhir.",
+    "contextual_usage": "18歳以上の人がこの映画を観られます。 (Jūhassaigai no hito ga kono eiga wo miramasu. / Orang yang berusia 18 tahun ke atas bisa menonton film ini.)"
+  },
+  {
+    "word": "掛ける",
+    "meaning": "to hang something",
+    "meaning_id": "menggantungkan, mengenakan (kacamata), menelepon",
+    "furigana": "かける",
+    "romaji": "kakeru",
+    "level": 4,
+    "definition_id": "Menempatkan sesuatu di atas cantelan agar menggantung, atau mengenakan aksesoris tertentu.",
+    "contextual_usage": "壁にカレンダーを掛けました。 (Kabe ni karendā wo kakemashita. / Saya menggantungkan kalender di dinding.)"
+  },
+  {
+    "word": "届ける",
+    "meaning": "to reach",
+    "meaning_id": "menyampaikan, mengantarkan, melaporkan",
+    "furigana": "とどける",
+    "romaji": "todokeru",
+    "level": 4,
+    "definition_id": "Membawa barang paket kiriman menuju ke alamat penerimanya secara langsung.",
+    "contextual_usage": "手紙を郵便局へ届けに行きます。 (Tegami wo yūbinkyoku he todoke ni ikimasu. / Saya pergi mengantarkan surat ke kantor pos.)"
+  },
+  {
+    "word": "適当",
+    "meaning": "suitability",
+    "meaning_id": "cocok, sesuai, seadanya/asal-asalan",
+    "furigana": "てきとう",
+    "romaji": "tekitō",
+    "level": 4,
+    "definition_id": "Sesuatu yang pas dengan kondisinya, atau dalam konotasi negatif berarti bertindak asal beres.",
+    "contextual_usage": "肉と野菜を適当な大きさに切ります。 (Niku to yasai wo tekitō na ōkisa ni kirimasu. / Potong daging dan sayuran dengan ukuran yang pas/sesuai.)"
+  },
+  {
+    "word": "祖父",
+    "meaning": "grandfather",
+    "meaning_id": "kakek (sendiri)",
+    "furigana": "そふ",
+    "romaji": "sofu",
+    "level": 4,
+    "definition_id": "Sebutan untuk orang tua laki-laki dari ayah atau ibu kandung diri sendiri.",
+    "contextual_usage": "私の祖父は今年で80歳になります。 (Watashi no sofu wa kotoshi de hachijūssai ni narimasu. / Kakek saya tahun ini menginjak usia 80 tahun.)"
+  },
+  {
+    "word": "研究室",
+    "meaning": "study room, laboratory",
+    "meaning_id": "ruang penelitian, laboratorium, ruang dosen",
+    "furigana": "けんきゅうしつ",
+    "romaji": "kenkyūshitsu",
+    "level": 4,
+    "definition_id": "Ruangan khusus yang digunakan akademisi atau ilmuwan untuk melakukan kajian ilmiah.",
+    "contextual_usage": "教授に会いに研究室へ行きました。 (Kyōju ni ai ni kenkyūshitsu he ikimashita. / Saya pergi ke ruang penelitian untuk menemui profesor.)"
+  },
+  {
+    "word": "文学",
+    "meaning": "literature",
+    "meaning_id": "sastra, kesusastraan",
+    "furigana": "ぶんがく",
+    "romaji": "bungaku",
+    "level": 4,
+    "definition_id": "Karya seni tulisan yang memiliki keindahan bahasa, nilai budaya, atau kajian akademis ilmu sastra.",
+    "contextual_usage": "日本の古典文学を研究しています。 (Nihon no koten bungaku wo kenkyū shite imasu. / Saya sedang meneliti sastra klasik Jepang.)"
+  },
+  {
+    "word": "生きる",
+    "meaning": "to live",
+    "meaning_id": "hidup, bernyawa",
+    "furigana": "いきる",
+    "romaji": "ikiru",
+    "level": 4,
+    "definition_id": "Keadaan terus bernapas dan menjalankan fungsi biologis tubuh, tidak mati.",
+    "contextual_usage": "地球上の全ての生き物が生きる権利を持っている。 (Chikyūjō no subete no ikimono ga ikiru kenri wo motte iru. / Semua makhluk hidup di bumi memiliki hak untuk hidup.)"
+  },
+  {
+    "word": "それほど",
+    "meaning": "to that extent",
+    "meaning_id": "sejauh itu, sebegitunya, tidak begitu (bila negatif)",
+    "furigana": "",
+    "romaji": "sorehodo",
+    "level": 4,
+    "definition_id": "Kata keterangan derajat tingkat yang menyamakan kadar sesuatu dengan perkara yang ditunjuk lawan bicara.",
+    "contextual_usage": "このテストはそれほど難しくないです。 (Kono tesuto wa sorehodo muzukashくない desu. / Tes ini tidak begitu sulit.)"
+  },
+  {
+    "word": "うまい",
+    "meaning": "delicious",
+    "meaning_id": "enak, lezat, pandai",
+    "furigana": "",
+    "romaji": "umai",
+    "level": 4,
+    "definition_id": "Rasa makanan yang memanjakan lidah, atau keahlian mahir dalam melakukan suatu keterampilan.",
+    "contextual_usage": "このラーメンは本当にうまいですね。 (Kono rāmen wa hontō ni umai desu ne. / Ramen ini benar-benar enak ya.)"
+  },
+  {
+    "word": "ずいぶん",
+    "meaning": "extremely",
+    "meaning_id": "sangat, amat, lumayan",
+    "furigana": "",
+    "romaji": "zuibun",
+    "level": 4,
+    "definition_id": "Keterangan derajat tingkat yang melampaui rata-rata standar perkiraan umum.",
+    "contextual_usage": "しばらく会わないうちに、ずいぶん背が伸びたね。 (Shibaraku awanai uchi ni, zuibun se ga nobita ne. / Selama lama tidak berjumpa, tinggimu bertambah sangat banyak ya.)"
+  },
+  {
+    "word": "お・金持ち",
+    "meaning": "rich man",
+    "meaning_id": "orang kaya, jutawan",
+    "furigana": "かねもち / おかねもち",
+    "romaji": "kanemochi / okanemochi",
+    "level": 4,
+    "definition_id": "Seseorang yang memiliki harta benda, properti, atau finansial berlimpah.",
+    "contextual_usage": "将来はお金持ちになって大きな家に住みたい。 (Shōrai wa okanemochi ni natte ōkina ie ni sumitai. / Masa depan saya ingin jadi orang kaya dan tinggal di rumah besar.)"
+  },
+  {
+    "word": "続く",
+    "meaning": "to be continued",
+    "meaning_id": "berlanjut, bersambung (intransitif)",
+    "furigana": "つづく",
+    "romaji": "tsuzuku",
+    "level": 4,
+    "definition_id": "Suatu rentetan peristiwa atau kondisi yang tetap berjalan tanpa mengalami putus atau berhenti.",
+    "contextual_usage": "雨が三日間も続いています。 (Ame ga mikkakan mo tsuzute imasu. / Hujan terus berlanjut sampai tiga hari lamanya.)"
+  },
+  {
+    "word": "受付",
+    "meaning": "receipt",
+    "meaning_id": "resepsionis, meja pendaftaran, meja informasi",
+    "furigana": "うけつけ",
+    "romaji": "uketsuke",
+    "level": 4,
+    "definition_id": "Tempat khusus di baris depan gedung untuk menerima tamu, pendaftaran, atau mengelola dokumen masuk.",
+    "contextual_usage": "会社の受付で名前を書いてください。 (Kaisha no uketsuke de namae wo kaite kudasai. / Silakan tulis nama Anda di meja resepsionis perusahaan.)"
+  },
+  {
+    "word": "代わり",
+    "meaning": "substitute, alternate",
+    "meaning_id": "pengganti, substitusi",
+    "furigana": "かわり",
+    "romaji": "kawari",
+    "level": 4,
+    "definition_id": "Seseorang atau barang yang difungsikan mengisi peran objek utama yang sedang berhalangan hadir atau kosong.",
+    "contextual_usage": "病気の先生の代わりに、新しい先生が来ました。 (Byōki no sensei no kawari ni, atarashii sensei ga kimashita. / Sebagai pengganti guru yang sakit, datanglah guru baru.)"
+  },
+  {
+    "word": "残る",
+    "meaning": "to remain",
+    "meaning_id": "tersisa, tinggal, menetap",
+    "furigana": "のこる",
+    "romaji": "nokoru",
+    "level": 4,
+    "definition_id": "Bagian yang tidak ikut terjual, termakan, terpakai, atau tidak ikut pergi dari tempatnya.",
+    "contextual_usage": "パーティーの料理がたくさん残りました。 (Pātī no ryōri ga takusan nokorimashita. / Masakan pesta tersisa banyak.)"
+  },
+  {
+    "word": "世話",
+    "meaning": "to look after",
+    "meaning_id": "merawat, mengurus, mengasuh",
+    "furigana": "せわ・する",
+    "romaji": "sewa-suru",
+    "level": 4,
+    "definition_id": "Memberikan perhatian penuh bantuan pangan, fisik, medis, atau bimbingan bagi objek yang memerlukan pertolongan.",
+    "contextual_usage": "毎朝、ペットの犬の世話をします。 (Maiasa, petto no inu no sewa wo shimasu. / Setiap pagi saya mengurus anjing peliharaan saya.)"
+  },
+  {
+    "word": "スーツケース",
+    "meaning": "suitcase",
+    "meaning_id": "koper",
+    "furigana": "",
+    "romaji": "sūtsukēsu",
+    "level": 4,
+    "definition_id": "Tas berukuran besar dengan rangka kokoh berbentuk persegi panjang yang digunakan membawa pakaian saat bepergian jauh.",
+    "contextual_usage": "スーツケースに荷物を詰めました。 (Sūtsukēsu ni nimotsu wo tsumemashita. / Saya mengemasi barang bawaan ke dalam koper.)"
+  },
+  {
+    "word": "くれる",
+    "meaning": "to give",
+    "meaning_id": "memberi (kepada pembicara/pihak saya)",
+    "furigana": "",
+    "romaji": "kureru",
+    "level": 4,
+    "definition_id": "Tindakan penyerahan suatu benda dari orang lain kepada diri pembicara atau lingkar kerabat internal pembicara.",
+    "contextual_usage": "誕生日に友達がプレゼントをくれました。 (Tanjōbi ni tomediachi ga purezento wo kuremashita. / Teman memberi saya hadiah di hari ulang tahun.)"
+  },
+  {
+    "word": "会話",
+    "meaning": "conversation",
+    "meaning_id": "percakapan, dialog",
+    "furigana": "かいわ",
+    "romaji": "kaiwa",
+    "level": 4,
+    "definition_id": "Interaksi pertukaran pesan suara atau obrolan lisan antar dua orang atau lebih.",
+    "contextual_usage": "毎日日本語で会話の練習をしています。 (Mainichi Nihongo de kaiwa no renshū wo shite imasu. / Setiap hari saya berlatih percakapan dalam bahasa Jepang.)"
+  },
+  {
+    "word": "向かう",
+    "meaning": "to face",
+    "meaning_id": "menuju, menghadap",
+    "furigana": "むかう",
+    "romaji": "mukau",
+    "level": 4,
+    "definition_id": "Mengarahkan posisi tubuh ke orientasi depan objek tertentu atau melakukan pergerakan spasial ke arah destinasi.",
+    "contextual_usage": "今、駅に向かって歩いています。 (Ima, eki ni mukatte aruite imasu. / Sekarang, saya sedang berjalan menuju stasiun.)"
+  },
+  {
+    "word": "増える",
+    "meaning": "to increase",
+    "meaning_id": "bertambah, meningkat (intransitif)",
+    "furigana": "ふえる",
+    "romaji": "fueru",
+    "level": 4,
+    "definition_id": "Kondisi di mana volume, kuantitas kuantitatif, atau derajat nominal berkadar naik dari batas sebelumnya.",
+    "contextual_usage": "日本を訪れる外国人の数が増えています。 (Nihon wo hozureru gaikokujin no kazu ga fuete imasu. / Jumlah warga asing yang mengunjungi Jepang tengah meningkat.)"
+  },
+  {
+    "word": "紹介",
+    "meaning": "introduction",
+    "meaning_id": "perkenalan, rekomendasi",
+    "furigana": "しょうかい",
+    "romaji": "shōkai",
+    "level": 4,
+    "definition_id": "Tindakan mempertemukan profil identitas orang baru, atau menyebarluaskan info produk barang biar dikenal khalayak.",
+    "contextual_usage": "新しい友達をみんなに紹介します。 (Atarashii tomodachi wo minna ni shōkai shimasu. / Saya akan memperkenalkan teman baru ke semuanya.)"
+  },
+  {
+    "word": "だから",
+    "meaning": "so, therefore",
+    "meaning_id": "oleh karena itu, jadi",
+    "furigana": "",
+    "romaji": "dakara",
+    "level": 4,
+    "definition_id": "Konjungsi penghubung antar kalimat untuk menerangkan kesimpulan penalaran logis sebab-akibat.",
+    "contextual_usage": "雨が降っています。だから、傘を持っていきます。 (Ame ga futte imasu. Dakara, kasa wo motte ikimasu. / Sedang hujan. Oleh karena itu, saya membawa payung.)"
+  },
+  {
+    "word": "季節",
+    "meaning": "season",
+    "meaning_id": "musim",
+    "furigana": "きせつ",
+    "romaji": "kisetsu",
+    "level": 4,
+    "definition_id": "Pembagian periode waktu tahunan berdasarkan perubahan berkala kondisi cuaca, ekologi, durasi cahaya.",
+    "contextual_usage": "日本の季節の中で、春が一番好きです。 (Nihon no kisetsu no naka de, haru ga ichiban suki desu. / Di antara musim-musim di Jepang, saya paling suka musim semi.)"
+  },
+  {
+    "word": "そんなに",
+    "meaning": "so much, like that",
+    "meaning_id": "begitu, sebegitu... (diikuti kalimat negatif berarti tidak terlalu)",
+    "furigana": "",
+    "romaji": "sonnani",
+    "level": 4,
+    "definition_id": "Keterangan penunjuk kadar yang menyejajarkan taraf perkara dengan objek milik lawan bicara.",
+    "contextual_usage": "そんなに怒らないでください。 (Sonnani okoranaide kudasai. / Janganlah marah sebegitunya.)"
+  },
+  {
+    "word": "このあいだ",
+    "meaning": "the other day, recently",
+    "meaning_id": "baru-baru ini, kemarin lalu, beberapa hari lalu",
+    "furigana": "",
+    "romaji": "konoaida",
+    "level": 4,
+    "definition_id": "Keterangan rentang kurun waktu lampau terdekat yang belum lama terlewati dari hari ini.",
+    "contextual_usage": "このあいだ、図書館で面白い本を借りました。 (Konoaida, toshokan de omoshiroi hon wo karimashita. / Baru-baru ini, saya meminjam buku menarik di perpustakaan.)"
+  },
+  {
+    "word": "虫",
+    "meaning": "insect",
+    "meaning_id": "serangga, ulat",
+    "furigana": "むし",
+    "romaji": "mushi",
+    "level": 4,
+    "definition_id": "Hewan artropoda kecil tak bertulang belakang yang umumnya memiliki kaki beruas atau berupa ulat kecil.",
+    "contextual_usage": "庭に小さな虫が飛んでいます。 (Niwa ni chiisana mushi ga tonde imasu. / Ada serangga kecil terbang di taman.)"
+  },
+  {
+    "word": "祖母",
+    "meaning": "grandmother",
+    "meaning_id": "nenek (sendiri)",
+    "furigana": "そぼ",
+    "romaji": "sobo",
+    "level": 4,
+    "definition_id": "Sebutan untuk orang tua perempuan dari ayah atau ibu kandung diri sendiri.",
+    "contextual_usage": "祖母は田舎で一人で暮らしています。 (Sobo wa inaka de hitori de kurashite imasu. / Nenek saya tinggal sendirian di desa.)"
+  },
+  {
+    "word": "いらっしゃる",
+    "meaning": "(respectful) to be, to come or to go",
+    "meaning_id": "ada, datang, pergi (bentuk hormat/sonkeigo)",
+    "furigana": "",
+    "romaji": "irassharu",
+    "level": 4,
+    "definition_id": "Kata kerja bentuk honorifik tingkat tinggi pengganti kata 'iru', 'kuru', atau 'iku' demi memuliakan status sosial subjek.",
+    "contextual_usage": "先生は明日、学校にいらっしゃいますか。 (Sensei wa ashita, gākkō ni irasshaimasu ka. / Apakah besok Bapak/Ibu Guru akan datang ke sekolah?)"
+  },
+  {
+    "word": "毎朝",
+    "meaning": "every morning",
+    "meaning_id": "setiap pagi",
+    "furigana": "まいあさ",
+    "romaji": "maiasa",
+    "level": 5,
+    "definition_id": "Aktivitas atau kejadian yang dilakukan secara rutin setiap kali pagi hari tiba.",
+    "contextual_usage": "毎朝、６時に起きてジョギングをします。 (Maiasa, roku-ji ni okite jogingu wo shimasu. / Setiap pagi, saya bangun jam 6 lalu melakukan jogging.)"
+  },
+  {
+    "word": "問題",
+    "meaning": "problem",
+    "meaning_id": "masalah, soal",
+    "furigana": "もんだい",
+    "romaji": "mondai",
+    "level": 5,
+    "definition_id": "Sesuatu yang harus diselesaikan atau dijawab, bisa berupa pertanyaan ujian atau perkara dalam kehidupan sehari-hari.",
+    "contextual_usage": "この日本語の質問は難しい問題です。 (Kono nihongo no shitsumon wa muzukashii mondai desu. / Pertanyaan bahasa Jepang ini adalah masalah/soal yang sulit.)"
+  },
+  {
+    "word": "お茶",
+    "meaning": "green tea",
+    "meaning_id": "teh hijau, teh",
+    "furigana": "おちゃ",
+    "romaji": "ocha",
+    "level": 5,
+    "definition_id": "Minuman tradisional Jepang yang diseduh dari daun teh, sering disajikan hangat atau dingin.",
+    "contextual_usage": "ご飯を食べたあとでお茶を飲みます。 (Gohan wo tabeta ato de ocha wo nomimasu. / Setelah makan nasi, saya minum teh hijau.)"
+  },
+  {
+    "word": "黒",
+    "meaning": "black",
+    "meaning_id": "hitam (kata benda)",
+    "furigana": "くろ",
+    "romaji": "kuro",
+    "level": 5,
+    "definition_id": "Nama warna gelap dasar yang tidak memantulkan cahaya (bentuk kata benda).",
+    "contextual_usage": "私は黒の車が好きです。 (Watashi wa kuro no kuruma ga suki desu. / Saya suka mobil warna hitam.)"
+  },
+  {
+    "word": "台所",
+    "meaning": "kitchen",
+    "meaning_id": "dapur",
+    "furigana": "だいどころ",
+    "romaji": "daidokoro",
+    "level": 5,
+    "definition_id": "Ruangan atau tempat di dalam rumah yang digunakan khusus untuk memasak dan menyiapkan makanan.",
+    "contextual_usage": "母は今、台所で料理を作っています。 (Haha wa ima, daidokoro de ryōri wo tsukutte imasu. / Ibu sekarang sedang membuat masakan di dapur.)"
+  },
+  {
+    "word": "葉書",
+    "meaning": "postcard",
+    "meaning_id": "kartu pos",
+    "furigana": "はがき",
+    "romaji": "hagaki",
+    "level": 5,
+    "definition_id": "Kartu dari kertas tebal persegi panjang yang digunakan untuk mengirim pesan pendek melalui pos tanpa amplop.",
+    "contextual_usage": "旅行先から友達に葉書を書きました。 (Ryokōsaki kara tomodachi ni hagaki wo kakimashita. / Saya menulis kartu pos untuk teman dari tempat wisata.)"
+  },
+  {
+    "word": "ペン",
+    "meaning": "pen",
+    "meaning_id": "pena, pulpen",
+    "furigana": "",
+    "romaji": "pen",
+    "level": 5,
+    "definition_id": "Alat tulis yang menggunakan tinta untuk menulis atau menggambar di atas kertas.",
+    "contextual_usage": "このペンを使って、名前に名前を書いてください。 (Kono pen wo tsukatte, namae ni namae wo kaite kudasai. / Tolong gunakan pulpen ini untuk menulis nama.)"
+  },
+  {
+    "word": "ニュース",
+    "meaning": "news",
+    "meaning_id": "berita",
+    "furigana": "",
+    "romaji": "nyūsu",
+    "level": 5,
+    "definition_id": "Informasi atau laporan mengenai kejadian atau peristiwa hangat yang baru saja terjadi, biasanya disiarkan di TV, radio, atau internet.",
+    "contextual_usage": "毎晩、テレビで時事のニュースを見ます。 (Maiban, terebi de jiji no nyūsu wo mimasu. / Setiap malam, saya melihat berita terkini di televisi.)"
+  },
+  {
+    "word": "花瓶",
+    "meaning": "a vase",
+    "meaning_id": "vas bunga",
+    "furigana": "かびん",
+    "romaji": "kabin",
+    "level": 5,
+    "definition_id": "Wadah atau tempat (biasanya terbuat dari kaca atau keramik) yang digunakan untuk menaruh bunga hiasan.",
+    "contextual_usage": "テーブルの上に綺麗な花瓶があります。 (Tēburu no ue ni kirei na kabin ga arimasu. / Di atas meja ada vas bunga yang cantik.)"
+  },
+  {
+    "word": "フォーク",
+    "meaning": "fork",
+    "meaning_id": "garpu",
+    "furigana": "",
+    "romaji": "fōku",
+    "level": 5,
+    "definition_id": "Alat makan yang memiliki gerigi di ujungnya, digunakan untuk menusuk atau mengambil makanan.",
+    "contextual_usage": "パスタをフォークで食べます。 (Pasuta wo fōku de tabemasu. / Makan pasta menggunakan garpu.)"
+  },
+  {
+    "word": "引く",
+    "meaning": "to pull",
+    "meaning_id": "menarik",
+    "furigana": "ひく",
+    "romaji": "hiku",
+    "level": 5,
+    "definition_id": "Gerakan menggerakkan sesuatu mendekati diri sendiri atau menggeser pintu dengan cara ditarik.",
+    "contextual_usage": "このドアは押さないで、引いて開けてください。 (Kono doa wa osanaide, hiite akete kudasai. / Pintu ini jangan didorong, silakan tarik untuk membukanya.)"
+  },
+  {
+    "word": "フィルム",
+    "meaning": "roll of film",
+    "meaning_id": "film (kamera analog)",
+    "furigana": "",
+    "romaji": "firumu",
+    "level": 5,
+    "definition_id": "Lembaran tipis sensitif cahaya yang digunakan dalam kamera analog untuk menangkap gambar.",
+    "contextual_usage": "古いカメラのフィルムを買いに行きます。 (Furui kamera no firumu wo kai ni ikimasu. / Saya pergi membeli roll film untuk kamera tua.)"
+  },
+  {
+    "word": "磨く",
+    "meaning": "to brush teeth, to polish",
+    "meaning_id": "menggosok (gigi), menyikat, memoles",
+    "furigana": "みがく",
+    "romaji": "migaku",
+    "level": 5,
+    "definition_id": "Membersihkan sesuatu dengan cara menggosoknya menggunakan sikat atau kain agar bersih atau mengkilap.",
+    "contextual_usage": "寝る前に必ず歯を磨きます。 (Neru mae ni kanarazu ha wo migaku. / Sebelum tidur pasti menggosok gigi.)"
+  },
+  {
+    "word": "押す",
+    "meaning": "to push, to stamp something",
+    "meaning_id": "mendorong, menekan, mengecap/stempel",
+    "furigana": "おす",
+    "romaji": "osu",
+    "level": 5,
+    "definition_id": "Memberikan tenaga atau tekanan pada sesuatu agar bergerak menjauh, atau menekan tombol/stempel.",
+    "contextual_usage": "エレベーターのボタンを押してください。 (Erebētā no botan wo oshite kudasai. / Tolong tekan tombol liftnya.)"
+  },
+  {
+    "word": "売る",
+    "meaning": "to sell",
+    "meaning_id": "menjual",
+    "furigana": "うる",
+    "romaji": "uru",
+    "level": 5,
+    "definition_id": "Menyerahkan barang kepemilikan kepada orang lain dengan imbalan uang.",
+    "contextual_usage": "あの店は美味しいパンを売っています。 (Ano mise wa oishii pan wo utte imasu. / Toko itu menjual roti yang enak.)"
+  },
+  {
+    "word": "電気",
+    "meaning": "electricity, electric light",
+    "meaning_id": "listrik, lampu listrik",
+    "furigana": "でんき",
+    "romaji": "denki",
+    "level": 5,
+    "definition_id": "Daya atau energi listrik, sering juga digunakan untuk merujuk pada peranti lampu penerangan rumah.",
+    "contextual_usage": "部屋が暗いので、電気をつけてください。 (Heya ga kurai node, denki wo tsukete kudasai. / Karena kamarnya gelap, tolong nyalakan lampunya.)"
+  },
+  {
+    "word": "並ぶ",
+    "meaning": "to line up, to stand in a line",
+    "meaning_id": "mengantre, berbaris, berjajar",
+    "furigana": "ならぶ",
+    "romaji": "narabu",
+    "level": 5,
+    "definition_id": "Kondisi di mana orang atau barang berada dalam posisi berjejer atau membentuk antrean lurus.",
+    "contextual_usage": "ラーメン屋の前でたくさんの人が並んでいます。 (Rāmen-ya no mae de takusan no hito ga narande imasu. / Banyak orang sedang mengantre di depan toko ramen.)"
+  },
+  {
+    "word": "病気",
+    "meaning": "illness",
+    "meaning_id": "sakit, penyakit",
+    "furigana": "びょうき",
+    "romaji": "byōki",
+    "level": 5,
+    "definition_id": "Kondisi tubuh atau pikiran yang terganggu dan tidak sehat (tidak berjalan sebagaimana mestinya).",
+    "contextual_usage": "病気ですから、今日は学校を休みます。 (Byōki desu kara, kyō wa gakkō wo yasumimasu. / Karena sakit, hari ini saya libur sekolah.)"
+  },
+  {
+    "word": "ポケット",
+    "meaning": "pocket",
+    "meaning_id": "kantong, saku",
+    "furigana": "",
+    "romaji": "poketto",
+    "level": 5,
+    "definition_id": "Kantong kecil yang dijahit pada pakaian (celana, baju, jaket) untuk menaruh barang-barang kecil.",
+    "contextual_usage": "上着のポケットに鍵を入れました。 (Uwagi no poketto ni kagi wo iremashita. / Saya memasukkan kunci ke dalam saku jaket.)"
+  },
+  {
+    "word": "頭",
+    "meaning": "head",
+    "meaning_id": "kepala",
+    "furigana": "あたま",
+    "romaji": "atama",
+    "level": 5,
+    "definition_id": "Bagian atas tubuh manusia atau hewan tempat terdapatnya otak, mata, hidung, telinga, dan mulut.",
+    "contextual_usage": "風邪をひいて、頭が痛いです。 (Kaze wo hiite, atama ga itai desu. / Saya masuk angin, dan kepala saya sakit.)"
+  },
+  {
+    "word": "はし",
+    "meaning": "chopsticks",
+    "meaning_id": "sumpit",
+    "furigana": "",
+    "romaji": "hashi",
+    "level": 5,
+    "definition_id": "Sepasang batang kecil (dari kayu, bambu, atau plastik) yang digunakan sebagai alat makan khas Asia Timur.",
+    "contextual_usage": "日本の料理ははしを使って食べます。 (Nihon no ryōri wa hashi wo tsukatte tabemasu. / Masakan Jepang dimakan menggunakan sumpit.)"
+  },
+  {
+    "word": "英語",
+    "meaning": "English language",
+    "meaning_id": "Bahasa Inggris",
+    "furigana": "えいご",
+    "romaji": "eigo",
+    "level": 5,
+    "definition_id": "Bahasa internasional yang berasal dari Inggris dan digunakan secara global.",
+    "contextual_usage": "大学で英語の授業を受けています。 (Daigaku de eigo no jugyō wo ukete imasu. / Saya sedang mengambil kelas bahasa Inggris di universitas.)"
+  },
+  {
+    "word": "家",
+    "meaning": "house",
+    "meaning_id": "rumah",
+    "furigana": "いえ",
+    "romaji": "ie",
+    "level": 5,
+    "definition_id": "Bangunan tempat tinggal manusia bersama keluarga.",
+    "contextual_usage": "私の家は駅から近くて便利です。 (Watashi no ie wa eki kara chikate benri desu. / Rumah saya dekat dari stasiun dan nyaman.)"
+  },
+  {
+    "word": "一月",
+    "meaning": "one month",
+    "meaning_id": "satu bulan (durasi)",
+    "furigana": "ひとつき",
+    "romaji": "hitotsuki",
+    "level": 5,
+    "definition_id": "Jangka waktu atau durasi yang lamanya kurang lebih 30 hari.",
+    "contextual_usage": "日本へ来てから、一月が経ちました。 (Nihon he kite kara, hitotsuki ga tachimashita. / Sudah satu bulan berlalu sejak saya datang ke Jepang.)"
+  },
+  {
+    "word": "暑い",
+    "meaning": "hot",
+    "meaning_id": "panas (cuaca/udara)",
+    "furigana": "あつい",
+    "romaji": "atsui",
+    "level": 5,
+    "definition_id": "Kata sifat untuk menggambarkan kondisi suhu udara atau cuaca sekitar yang tinggi.",
+    "contextual_usage": "日本の夏はとても暑いです。 (Nihon no natsu wa totemo atsui desu. / Musim panas di Jepang sangat panas.)"
+  },
+  {
+    "word": "遊ぶ",
+    "meaning": "to play, to make a visit",
+    "meaning_id": "bermain, berkunjung",
+    "furigana": "あそぶ",
+    "romaji": "asobu",
+    "level": 5,
+    "definition_id": "Melakukan aktivitas yang menyenangkan untuk menghibur diri, atau berkunjung ke tempat teman untuk bersenang-senang.",
+    "contextual_usage": "日曜日、友達と一緒に公園で遊びました。 (Nichiyōbi, tomodachi to issho ni kōen de asobimashita. / Hari Minggu, saya bermain di taman bersama teman.)"
+  },
+  {
+    "word": "取る",
+    "meaning": "to take something",
+    "meaning_id": "mengambil, memegang",
+    "furigana": "とる",
+    "romaji": "toru",
+    "level": 5,
+    "definition_id": "Memegang atau meraih sesuatu dengan tangan untuk dipindahkan ke diri sendiri.",
+    "contextual_usage": "すみませんが、そこの塩を取ってください。 (Sumimasen ga, soko no shio wo totte kudasai. / Permisi, tolong ambilkan garam di sebelah sana.)"
+  },
+  {
+    "word": "九",
+    "meaning": "nine",
+    "meaning_id": "sembilan",
+    "furigana": "きゅう / く",
+    "romaji": "kyū / ku",
+    "level": 5,
+    "definition_id": "Angka atau bilangan dasar setelah delapan dan sebelum sepuluh.",
+    "contextual_usage": "私は毎晩、九時に寝ます。 (Watashi wa maiban, ku-ji ni nemasu. / Saya tidur jam sembilan setiap malam.)"
+  },
+  {
+    "word": "閉める",
+    "meaning": "to close something",
+    "meaning_id": "menutup (sesuatu)",
+    "furigana": "しめる",
+    "romaji": "shimeru",
+    "level": 5,
+    "definition_id": "Tindakan membuat sesuatu yang terbuka menjadi tertutup (seperti jendela, pintu, atau buku).",
+    "contextual_usage": "部屋が寒いので、窓を閉めてください。 (Heya ga samui node, mado wo shimete kudasai. / Karena kamarnya dingin, tolong tutup jendelanya.)"
+  },
+  {
+    "word": "たいへん",
+    "meaning": "very",
+    "meaning_id": "sangat, berat/sulit",
+    "furigana": "",
+    "romaji": "taihen",
+    "level": 5,
+    "definition_id": "Kata keterangan untuk menunjukkan tingkat yang luar biasa (sangat), atau kata sifat yang berarti situasi yang sulit/merepotkan.",
+    "contextual_usage": "日本語の勉強はたいへんですが、面白いです。 (Nihongo no benkyō wa taihen desu ga, omashiroi desu. / Belajar bahasa Jepang itu berat/sulit, tapi menarik.)"
+  },
+  {
+    "word": "奥さん",
+    "meaning": "(honorable) wife",
+    "meaning_id": "istri (orang lain)",
+    "furigana": "おくさん",
+    "romaji": "okusan",
+    "level": 5,
+    "definition_id": "Panggilan hormat atau sopan yang digunakan untuk merujuk pada istri dari orang lain.",
+    "contextual_usage": "田中さんの奥さんはとても優しい人です。 (Tanaka-san no okusan wa totemo yasashii hito desu. / Istri Pak Tanaka adalah orang yang sangat baik.)"
+  },
+  {
+    "word": "作文",
+    "meaning": "composition, writing",
+    "meaning_id": "karangan, esai",
+    "furigana": "さくぶん",
+    "romaji": "sakubun",
+    "level": 5,
+    "definition_id": "Tulisan atau rangkaian kalimat yang dirangkai untuk mengungkapkan pikiran atau cerita (tugas mengarang).",
+    "contextual_usage": "宿題の作文を日本語で書きました。 (Shukudai no sakubun wo nihongo de kakimashita. / Saya menulis karangan PR dalam bahasa Jepang.)"
+  },
+  {
+    "word": "便利",
+    "meaning": "useful, convenient",
+    "meaning_id": "praktis, nyaman, mudah digunakan",
+    "furigana": "べんり",
+    "romaji": "benri",
+    "level": 5,
+    "definition_id": "Kondisi di mana sesuatu hal membuat aktivitas manusia menjadi lebih mudah, hemat waktu, dan tidak repot.",
+    "contextual_usage": "スマホはとても便利な道具です。 (Sumaho wa totemo benri na dōgu desu. / Smartphone adalah alat yang sangat praktis.)"
+  },
+  {
+    "word": "右",
+    "meaning": "right side",
+    "meaning_id": "kanan",
+    "furigana": "みぎ",
+    "romaji": "migi",
+    "level": 5,
+    "definition_id": "Arah atau posisi yang berlawanan dengan sisi kiri (biasanya sisi tangan tempat mayoritas orang menulis).",
+    "contextual_usage": "交差点を右に曲がってください。 (Kōsaten wo migi ni magatte kudasai. / Tolong belok kanan di persimpangan.)"
+  },
+  {
+    "word": "寒い",
+    "meaning": "cold",
+    "meaning_id": "dingin (cuaca/udara)",
+    "furigana": "さむい",
+    "romaji": "samui",
+    "level": 5,
+    "definition_id": "Kata sifat untuk menggambarkan kondisi suhu udara atau lingkungan sekitar yang rendah (suhu musim dingin).",
+    "contextual_usage": "今日の冬は風が強くて寒いですね。 (Kyō no fuyu wa kaze ga tsuyokute samui desu ne. / Musim dingin hari ini anginnya kencang dan dingin ya.)"
+  },
+  {
+    "word": "あびる",
+    "meaning": "to bathe, to shower",
+    "meaning_id": "mandi (mengguyur air/shower)",
+    "furigana": "",
+    "romaji": "abiru",
+    "level": 5,
+    "definition_id": "Mengguyur tubuh dengan air dari atas kepala/menggunakan shower untuk membersihkan diri.",
+    "contextual_usage": "毎朝、シャワーをあびてから学校へ行きます。 (Maiasa, shawā wo abite kara gakkō he ikimasu. / Setiap pagi, saya mandi shower dulu baru pergi ke sekolah.)"
+  },
+  {
+    "word": "十",
+    "meaning": "ten",
+    "meaning_id": "sepuluh",
+    "furigana": "じゅう / とお",
+    "romaji": "jū / tō",
+    "level": 5,
+    "definition_id": "Angka atau bilangan dasar setelah sembilan dan sebelum sebelas.",
+    "contextual_usage": "みかんを十個買いました。 (Mikan wo tōko kaimashita. / Saya membeli sepuluh buah jeruk.)"
+  },
+  {
+    "word": "中",
+    "meaning": "middle",
+    "meaning_id": "dalam, tengah",
+    "furigana": "なか",
+    "romaji": "naka",
+    "level": 5,
+    "definition_id": "Bagian atau posisi yang berada di sisi interior suatu wadah/ruangan, atau titik tengah di antara dua sisi.",
+    "contextual_usage": "カバンの中に本と財布が入っています。 (Kaban no naka ni hon to saifu ga haitte imasu. / Di dalam tas ada buku dan dompet.)"
+  },
+  {
+    "word": "消す",
+    "meaning": "to erase, to turn off power",
+    "meaning_id": "mematikan (alat elektronik), menghapus",
+    "furigana": "けす",
+    "romaji": "kesu",
+    "level": 5,
+    "definition_id": "Tindakan memutuskan aliran listrik (seperti mematikan lampu/TV) atau melenyapkan tulisan (menghapus papan tulis).",
+    "contextual_usage": "寝る前にテレビを消してください。 (Neru mae ni terebi wo keshite kudasai. / Tolong matikan TV sebelum tidur.)"
+  },
+  {
+    "word": "近く",
+    "meaning": "near",
+    "meaning_id": "dekat (kata benda/keterangan)",
+    "furigana": "ちかく",
+    "romaji": "chikaku",
+    "level": 5,
+    "definition_id": "Area atau jarak yang tidak jauh dari lokasi saat ini atau dari suatu titik referensi.",
+    "contextual_usage": "駅の近くに美味しいレストランがあります。 (Eki no chikaku ni oishii resutoran ga arimasu. / Di dekat stasiun ada restoran yang enak.)"
+  },
+  {
+    "word": "七つ",
+    "meaning": "seven",
+    "meaning_id": "tujuh (buah/benda)",
+    "furigana": "ななつ",
+    "romaji": "nanatsu",
+    "level": 5,
+    "definition_id": "Kata bilangan asli Jepang yang digunakan untuk menghitung jumlah barang/benda sebanyak tujuh buah.",
+    "contextual_usage": "りんごを七つください。 (Ringo wo nanatsu kudasai. / Tolong beri saya tujuh buah apel.)"
+  },
+  {
+    "word": "テープレコーダー",
+    "meaning": "tape recorder",
+    "meaning_id": "perekam kaset, alat pemutar pita kaset",
+    "furigana": "",
+    "romaji": "tēpurekōdā",
+    "level": 5,
+    "definition_id": "Alat elektronik zaman dulu yang digunakan untuk merekam atau memutar suara menggunakan pita kaset magnetik.",
+    "contextual_usage": "古いテープレコーダーで音楽を聴きます。 (Furui tēpurekōdā de ongaku wo kikimasu. / Mendengarkan musik dengan perekam kaset lama.)"
+  },
+  {
+    "word": "目",
+    "meaning": "eye",
+    "meaning_id": "mata",
+    "furigana": "め",
+    "romaji": "me",
+    "level": 5,
+    "definition_id": "Organ tubuh manusia atau hewan yang berfungsi untuk melihat keadaan sekitar.",
+    "contextual_usage": "パソコンを長く使ったので、目が痛いです。 (Pasokon wo nagaku tsukatta node, me ga itai desu. / Karena menggunakan komputer lama, mata saya sakit.)"
+  },
+  {
+    "word": "空",
+    "meaning": "sky",
+    "meaning_id": "langit",
+    "furigana": "そら",
+    "romaji": "sora",
+    "level": 5,
+    "definition_id": "Ruang luas yang terlihat di atas bumi tempat awan, matahari, bulan, dan bintang berada.",
+    "contextual_usage": "今日の空は青くて、とても綺麗です。 (Kyō no sora wa aokute, totemo kirei desu. / Langit hari ini biru dan sangat indah.)"
+  },
+  {
+    "word": "六日",
+    "meaning": "six days, sixth day of the month",
+    "meaning_id": "tanggal enam, enam hari",
+    "furigana": "むいか",
+    "romaji": "muika",
+    "level": 5,
+    "definition_id": "Hari keenam dalam penanggalan kalender bulanan, atau durasi waktu sepanjang enam hari.",
+    "contextual_usage": "来月の六日は私の誕生日です。 (Raigetsu no muika wa watashi no tanjōbi desu. / Tanggal enam bulan depan adalah hari ulang tahun saya.)"
+  },
+  {
+    "word": "座る",
+    "meaning": "to sit",
+    "meaning_id": "duduk",
+    "furigana": "すわる",
+    "romaji": "suwaru",
+    "level": 5,
+    "definition_id": "Menempatkan tubuh dengan posisi pantat bertumpu pada kursi atau lantai.",
+    "contextual_usage": "どうぞ、そこの椅子に座ってください。 (Dōzo, soko no isu ni suwatte kudasai. / Silakan duduk di kursi sebelah sana.)"
+  },
+  {
+    "word": "年",
+    "meaning": "year",
+    "meaning_id": "tahun, usia",
+    "furigana": "とし",
+    "romaji": "toshi",
+    "level": 5,
+    "definition_id": "Satuan waktu yang lamanya 365 hari (12 bulan), atau bisa juga berarti umur seseorang.",
+    "contextual_usage": "もうすぐ新しい年が始まります。 (Mō sugu atarashii toshi ga hajimarimasu. / Sebentar lagi tahun yang baru akan dimulai.)"
+  },
+  {
+    "word": "男の子",
+    "meaning": "boy",
+    "meaning_id": "anak laki-laki",
+    "furigana": "おとこのこ",
+    "romaji": "otokonoko",
+    "level": 5,
+    "definition_id": "Seorang anak kecil manusia yang berjenis kelamin laki-laki.",
+    "contextual_usage": "あそこで男の子が元気に走っています。 (Asoko de otokonoko ga genki ni hashitte imasu. / Di sana ada anak laki-laki sedang berlari dengan ceria.)"
+  },
+  {
+    "word": "狭い",
+    "meaning": "narrow",
+    "meaning_id": "sempit",
+    "furigana": "せまい",
+    "romaji": "setamai",
+    "level": 5,
+    "definition_id": "Kata sifat untuk menggambarkan ukuran ruangan, tempat, atau jalan yang kurang luas atau terbatas.",
+    "contextual_usage": "私の部屋は狭いですが、きれいです。 (Watashi no heya wa semai desu ga, kirei desu. / Kamar saya sempit, tapi bersih.)"
+  },
+  {
+    "word": "冷蔵庫",
+    "meaning": "refrigerator",
+    "meaning_id": "kulkas, lemari es",
+    "furigana": "れいぞうこ",
+    "romaji": "reizōko",
+    "level": 5,
+    "definition_id": "Alat rumah tangga bertenaga listrik yang menjaga makanan dan minuman tetap dingin agar awet.",
+    "contextual_usage": "冷たい水は冷蔵庫の中にあります。 (Tsumetai mizu wa reizōko no naka ni arimasu. / Air dingin ada di dalam kulkas.)"
+  },
+  {
+    "word": "カメラ",
+    "meaning": "camera",
+    "meaning_id": "kamera",
+    "furigana": "",
+    "romaji": "kamera",
+    "level": 5,
+    "definition_id": "Alat yang digunakan untuk mengambil foto atau merekam video.",
+    "contextual_usage": "誕生日に新しいカメラをもらいました。 (Tanjōbi ni atarashii kamera wo moraimashita. / Saya mendapatkan kamera baru di hari ulang tahun.)"
+  },
+  {
+    "word": "玄関",
+    "meaning": "entry hall",
+    "meaning_id": "pintu masuk rumah, genkan",
+    "furigana": "げんかん",
+    "romaji": "genkan",
+    "level": 5,
+    "definition_id": "Area terdepan di dalam rumah Jepang tempat orang masuk dan membuka/menaruh alas kaki.",
+    "contextual_usage": "玄関で靴を脱いで、家に入ります。 (Genkan de kutsu wo nuide, ie ni hairimus. / Lepas sepatu di genkan/pintu masuk, lalu masuk ke rumah.)"
+  },
+  {
+    "word": "違う",
+    "meaning": "to differ",
+    "meaning_id": "berbeda, salah",
+    "furigana": "ちがう",
+    "romaji": "chigau",
+    "level": 5,
+    "definition_id": "Kondisi tidak sama dengan sesuatu yang lain, atau tidak tepat (salah/keliru).",
+    "contextual_usage": "この答えは違いますから、直してください。 (Kono kotae wa chigaimasu kara, naoshite kudasai. / Karena jawaban ini salah, tolong diperbaiki.)"
+  },
+  {
+    "word": "危ない",
+    "meaning": "dangerous",
+    "meaning_id": "bahaya, berbahaya",
+    "furigana": "あぶない",
+    "romaji": "abunai",
+    "level": 5,
+    "definition_id": "Situasi atau tindakan yang berisiko menimbulkan kecelakaan, luka, atau kerugian.",
+    "contextual_usage": "車が多いですから、道で遊ぶのは危ないです。 (Kuruma ga ooi desu kara, michi de asobu no wa abunai desu. / Karena banyak mobil, bermain di jalanan itu berbahaya.)"
+  },
+  {
+    "word": "分かる",
+    "meaning": "to be understood",
+    "meaning_id": "mengerti, paham",
+    "furigana": "わかる",
+    "romaji": "wakaru",
+    "level": 5,
+    "definition_id": "Kondisi di mana otak berhasil mencerna informasi atau mengetahui suatu kebenaran.",
+    "contextual_usage": "先生の説明がよく分かりました。 (Sensei no setsumei ga yoku wakarimashita. / Saya sangat mengerti penjelasan guru.)"
+  },
+  {
+    "word": "言う",
+    "meaning": "to say",
+    "meaning_id": "berkata, mengatakan",
+    "furigana": "いう",
+    "romaji": "iu",
+    "level": 5,
+    "definition_id": "Mengeluarkan kata-kata atau suara lewat mulut untuk menyampaikan maksud kepada orang lain.",
+    "contextual_usage": "「ありがとう」と言うのは大切です。 (「Arigatō」to iu no wa taisetsu desu. / Mengucapkan \"terima kasih\" itu penting.)"
+  },
+  {
+    "word": "飲む",
+    "meaning": "to drink",
+    "meaning_id": "minum",
+    "furigana": "のむ",
+    "romaji": "nomu",
+    "level": 5,
+    "definition_id": "Memasukkan cairan ke dalam tenggorokan dan menelannya ke dalam tubuh.",
+    "contextual_usage": "朝、牛乳を一杯飲みます。 (Asa, gyūnyū wo ippai nomimasu. / Pagi hari, saya minum segelas susu.)"
+  },
+  {
+    "word": "練習",
+    "meaning": "to practice",
+    "meaning_id": "berlatih, latihan (kata kerja / kata benda)",
+    "furigana": "れんしゅうする",
+    "romaji": "renshūsuru",
+    "level": 5,
+    "definition_id": "Melakukan suatu aktivitas secara berulang-ulang agar menjadi mahir (misalnya olahraga atau bahasa).",
+    "contextual_usage": "毎日、ピアノを練習しています。 (Mainichi, piano wo renshū shite imasu. / Setiap hari, saya berlatih piano.)"
+  },
+  {
+    "word": "何",
+    "meaning": "what",
+    "meaning_id": "apa",
+    "furigana": "なん / なに",
+    "romaji": "nan / nani",
+    "level": 5,
+    "definition_id": "Kata tanya yang digunakan untuk menanyakan benda, perbuatan, atau informasi yang belum diketahui.",
+    "contextual_usage": "カバンの中に何がありますか。 (Kaban no naka ni nani ga arimasu ka. / Di dalam tas ada apa?)"
+  }
+]

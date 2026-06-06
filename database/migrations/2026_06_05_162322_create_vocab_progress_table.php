@@ -18,6 +18,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+<<<<<<< HEAD:database/migrations/2026_05_18_082236_create_vocab_progress_table.php
         if (!Schema::hasTable('vocab_progress')) {
             Schema::create('vocab_progress', function (Blueprint $table) {
                 $table->id();
@@ -28,6 +29,17 @@ return new class extends Migration
                 $table->unique(['id_user', 'vocabulary_id']);
             });
         }
+=======
+        Schema::create('vocab_progress', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_vocabulary')->constrained('vocabularies', 'id_vocabulary')->onDelete('cascade');
+            $table->boolean('is_memorized')->default(false);
+            $table->boolean('is_favorite')->default(false);
+            $table->timestamps();
+            $table->unique(['id_user', 'id_vocabulary']);
+        });
+>>>>>>> a26d60bfda34928d435637d7483508501238343f:database/migrations/2026_06_05_162322_create_vocab_progress_table.php
     }
 
     /**
