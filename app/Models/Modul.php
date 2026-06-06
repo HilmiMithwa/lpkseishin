@@ -28,4 +28,8 @@ class Modul extends Model
     public function rps() {
         return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
     }
+
+    public function bahanAjar() {
+        return $this->hasMany(BahanAjar::class, 'id_modul', 'id_modul');
+    }
 }

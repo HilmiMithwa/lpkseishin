@@ -179,15 +179,27 @@ class StudentController extends Controller
             'id_vocabulary' => 'required'
         ]);
 
-        VocabProgress::updateOrCreate(
-            [
-                'id_user' => Auth::id(),
+        $user = Auth::user();
+        
+        $current = DB::table('vocab_progress')
+            ->where('id_user', $user->id)
+            ->where('id_vocabulary', $request->id_vocabulary)
+            ->first();
+
+        if ($current) {
+            DB::table('vocab_progress')
+                ->where('id', $current->id)
+                ->update(['is_memorized' => DB::raw('true'), 'updated_at' => now()]);
+        } else {
+            DB::table('vocab_progress')->insert([
+                'id_user'       => $user->id,
                 'id_vocabulary' => $request->id_vocabulary,
-            ],
-            [
-                'is_memorized' => true
-            ]
-        );
+                'is_memorized'  => DB::raw('true'),
+                'is_favorite'   => DB::raw('false'),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Vocabulary Memorized!');
     }
@@ -358,9 +370,9 @@ class StudentController extends Controller
             ? DB::table('daily_words')->inRandomOrder()->first()
             : null;
  
-        $statMastered  = VocabProgress::where('id_user', $user->id)->where('is_memorized', true)->count();
+        $statMastered  = VocabProgress::where('id_user', $user->id)->where('is_memorized', DB::raw('true'))->count();
         $statLearning  = VocabProgress::where('id_user', $user->id)->count();
-        $statFavourite = VocabProgress::where('id_user', $user->id)->where('is_favorite', true)->count();
+        $statFavourite = VocabProgress::where('id_user', $user->id)->where('is_favorite', DB::raw('true'))->count();
  
         $totalVocab         = Vocabulary::count();
         $masteredPercentage = $totalVocab > 0 ? round(($statMastered / $totalVocab) * 100) : 0;
@@ -371,7 +383,7 @@ class StudentController extends Controller
             $vocabIds   = Vocabulary::where('level', $level)->pluck('id_vocabulary');
             $total      = $vocabIds->count();
             $mastered   = VocabProgress::where('id_user', $user->id)
-                            ->where('is_memorized', true)
+                            ->where('is_memorized', DB::raw('true'))
                             ->whereIn('id_vocabulary', $vocabIds)
                             ->count();
             $lastUpdate = VocabProgress::where('id_user', $user->id)
@@ -436,32 +448,66 @@ class StudentController extends Controller
 
      public function toggleMastered($id_vocabulary)
     {
-        $user     = Auth::user();
-        $progress = VocabProgress::firstOrNew([
-            'id_user'       => $user->id,
-            'id_vocabulary' => $id_vocabulary,
-        ]);
-        $progress->is_memorized = !$progress->is_memorized;
-        $progress->save();
+        $user = Auth::user();
+        $current = DB::table('vocab_progress')
+            ->where('id_user', $user->id)
+            ->where('id_vocabulary', $id_vocabulary)
+            ->first();
+
+        if ($current) {
+            $newValue = filter_var($current->is_memorized, FILTER_VALIDATE_BOOLEAN) ? 'false' : 'true';
+            DB::table('vocab_progress')
+                ->where('id', $current->id)
+                ->update(['is_memorized' => DB::raw($newValue), 'updated_at' => now()]);
+        } else {
+            $newValue = 'true';
+            DB::table('vocab_progress')->insert([
+                'id_user'       => $user->id,
+                'id_vocabulary' => $id_vocabulary,
+                'is_memorized'  => DB::raw($newValue),
+                'is_favorite'   => DB::raw('false'),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
+        
+        $is_memorized = $newValue === 'true';
  
         return response()->json([
-            'is_memorized' => $progress->is_memorized,
-            'status'       => $progress->is_memorized ? 'Dikuasai' : 'Belum Dikuasai',
+            'is_memorized' => $is_memorized,
+            'status'       => $is_memorized ? 'Dikuasai' : 'Belum Dikuasai',
         ]);
     }
 
     public function toggleFavorite($id_vocabulary)
     {
-        $user     = Auth::user();
-        $progress = VocabProgress::firstOrNew([
-            'id_user'       => $user->id,
-            'id_vocabulary' => $id_vocabulary,
-        ]);
-        $progress->is_favorite = !$progress->is_favorite;
-        $progress->save();
+        $user = Auth::user();
+        $current = DB::table('vocab_progress')
+            ->where('id_user', $user->id)
+            ->where('id_vocabulary', $id_vocabulary)
+            ->first();
+
+        if ($current) {
+            $newValue = filter_var($current->is_favorite, FILTER_VALIDATE_BOOLEAN) ? 'false' : 'true';
+            DB::table('vocab_progress')
+                ->where('id', $current->id)
+                ->update(['is_favorite' => DB::raw($newValue), 'updated_at' => now()]);
+        } else {
+            $newValue = 'true';
+            DB::table('vocab_progress')->insert([
+                'id_user'       => $user->id,
+                'id_vocabulary' => $id_vocabulary,
+                'is_memorized'  => DB::raw('false'),
+                'is_favorite'   => DB::raw($newValue),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
+        
+        $is_favorite = $newValue === 'true';
  
         return response()->json([
-            'is_favorite' => $progress->is_favorite,
+            'is_favorite' => $is_favorite,
         ]);
     }
     
