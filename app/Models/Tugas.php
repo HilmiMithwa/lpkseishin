@@ -24,4 +24,14 @@ class Tugas extends Model
     public function rps() {
         return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
     }
+
+    // Relasi ke Modul
+    public function modul() {
+        return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
+    }
+
+    // Relasi ke Pengiriman Tugas
+    public function submissions() { 
+        return $this->hasMany(Pengiriman_Tugas::class, 'id_tugas', 'id_tugas');
+    }
 }

@@ -19,4 +19,9 @@ class Batch extends Model
         'durasi',
         'jadwal',
     ];
+
+    public function mapel()
+    {
+        return $this->hasMany(Mapel::class, 'id_batch', 'id_batch');
+    }
 }

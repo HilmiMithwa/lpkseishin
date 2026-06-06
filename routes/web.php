@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
+use App\Http\Controllers\Teacher\ProgressReportController;
 
 
 
@@ -172,9 +173,14 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.vocabulary-level', ['level_id' => $id]);
     })->name('vocabulary.level');
 
-    Route::get('/progress-report', function () {
-        return view('teacher.progress-report');
-    })->name('progress-report');
+    Route::get('/progress-report', [ProgressReportController::class, 'index'])->name('progress-report');
+    Route::get('/progress-report/student/{id_user}/mapel/{id_mapel}', [ProgressReportController::class, 'getStudentDetails'])->name('progress-report.student-details');
+    Route::post('/progress-report/weekly-log', [ProgressReportController::class, 'storeWeeklyLog'])->name('progress-report.weekly-log.store');
+    Route::put('/progress-report/weekly-log/{id}', [ProgressReportController::class, 'updateWeeklyLog'])->name('progress-report.weekly-log.update');
+    Route::delete('/progress-report/weekly-log/{id}', [ProgressReportController::class, 'destroyWeeklyLog'])->name('progress-report.weekly-log.destroy');
+    Route::post('/progress-report/evaluation-log', [ProgressReportController::class, 'storeEvaluationLog'])->name('progress-report.evaluation-log.store');
+    Route::put('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'updateEvaluationLog'])->name('progress-report.evaluation-log.update');
+    Route::delete('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'destroyEvaluationLog'])->name('progress-report.evaluation-log.destroy');
 
     Route::get('/assignments', function () {
         return view('teacher.assignments');
