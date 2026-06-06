@@ -28,7 +28,7 @@
         ];
     }
 
-    if (!isset($modules) || (is_countable($modules) && count($modules) == 0)) {
+    if (!isset($modules)) {
         $modules = [
             (object)[
                 'id_modul' => 1,
@@ -474,7 +474,9 @@
                      </div>
 
                      <!-- Form Grid (Single Column) -->
-                     <form class="space-y-6">
+                     <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
+                         @csrf
+                         <input type="hidden" name="id_mapel" value="{{ $classData->id_mapel }}">
                          
                          <div class="space-y-1.5">
                              <x-input-label>Judul Modul:</x-input-label>

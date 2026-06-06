@@ -23,13 +23,14 @@ class StoreModulRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_modul' => 'required|string|max:50',
-            'kode_modul' => 'required|string|unique:modul,kode_modul',
-            'teori' => 'required|integer',
-            'praktik' => 'required|integer',
-            'module_description' => 'nullable|max:100',
+            'nama_modul' => 'required|string|max:255',
+            'kode_modul' => 'nullable|string|unique:modul,kode_modul',
+            'teori' => 'nullable|integer|min:0',
+            'praktik' => 'nullable|integer|min:0',
+            'jp' => 'nullable|integer|min:0', // Alokasi Durasi (JP)
+            'module_description' => 'nullable|string',
             'id_mapel' => 'required|exists:mapel,id_mapel',
-            'id_rps' => 'required|exists:rps,id_rps'
+            'id_rps' => 'nullable|exists:rps,id_rps'
         ];
     }
 
