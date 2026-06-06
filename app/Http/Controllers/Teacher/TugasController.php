@@ -65,7 +65,7 @@ class TugasController extends Controller
         if ($request->hasFile('file_path_tugas')) {
             $file = $request->file('file_path_tugas');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/assignments', $filename);
+            $file->storeAs('assignments', $filename, 's3');
             $data['file_path_tugas'] = 'assignments/' . $filename;
         }
 
@@ -92,13 +92,18 @@ class TugasController extends Controller
         $tugas->deskripsi_tugas = $request->deskripsi_tugas ?? '';
         $tugas->waktu_pengumpulan = $request->waktu_pengumpulan;
 
-        if ($request->hasFile('file_path_tugas')) {
-            if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
-                \Storage::disk('public')->delete($tugas->file_path_tugas);
+        if ($request->input('remove_resource') == '1') {
+            if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('s3')->delete($tugas->file_path_tugas);
+            }
+            $tugas->file_path_tugas = null;
+        } elseif ($request->hasFile('file_path_tugas')) {
+            if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('s3')->delete($tugas->file_path_tugas);
             }
             $file = $request->file('file_path_tugas');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/assignments', $filename);
+            $file->storeAs('assignments', $filename, 's3');
             $tugas->file_path_tugas = 'assignments/' . $filename;
         }
 
@@ -110,8 +115,8 @@ class TugasController extends Controller
     public function destroyAssignment($id) {
         $tugas = Tugas::findOrFail($id);
         
-        if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
-            \Storage::disk('public')->delete($tugas->file_path_tugas);
+        if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+            \Storage::disk('s3')->delete($tugas->file_path_tugas);
         }
         
         $tugas->delete();
@@ -132,7 +137,7 @@ class TugasController extends Controller
                 'avatar' => strtoupper(substr($sub->user->name, 0, 2)),
                 'attachment' => $sub->file_path ? [
                     'type' => 'document', 
-                    'url' => asset('storage/' . $sub->file_path),
+                    'url' => route('submissions.download', $sub->id_pengiriman_tugas),
                     'name' => basename($sub->file_path),
                     'size' => 'File' // We can improve this later
                 ] : null,
@@ -196,7 +201,7 @@ class TugasController extends Controller
         if ($request->hasFile('resource_file')) {
             $file = $request->file('resource_file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/assignments', $filename);
+            $file->storeAs('assignments', $filename, 's3');
             $tugas->file_path_tugas = 'assignments/' . $filename;
         }
 
@@ -209,6 +214,15 @@ class TugasController extends Controller
     {
         $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
         $task = Tugas::with(['submissions.user'])->findOrFail($id_tugas);
+        
+        $batchId = $modul->mapel->id_batch;
+        $mapelId = $modul->mapel->id_mapel;
+        $batchName = $modul->mapel->batch->nama;
+        $className = $modul->mapel->nama_mapel;
+        $moduleIndex = \App\Models\Modul::where('id_mapel', $modul->id_mapel)
+            ->orderBy('created_at', 'asc')
+            ->pluck('id_modul')
+            ->search($modul->id_modul) + 1;
 
         $submissions = $task->submissions->map(function($sub, $index) {
             return (object)[
@@ -221,15 +235,24 @@ class TugasController extends Controller
             ];
         });
 
-        return view('teacher.task-detail', compact('modul', 'task', 'submissions'));
+        return view('teacher.task-detail', compact('modul', 'task', 'submissions', 'batchId', 'moduleIndex', 'mapelId', 'batchName', 'className'));
     }
 
     public function edit($id_modul, $id_tugas)
     {
         $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
         $task = Tugas::findOrFail($id_tugas);
+
+         $batchId = $modul->mapel->id_batch;
+        $mapelId = $modul->mapel->id_mapel;
+        $batchName = $modul->mapel->batch->nama;
+        $className = $modul->mapel->nama_mapel;
+        $moduleIndex = \App\Models\Modul::where('id_mapel', $modul->id_mapel)
+            ->orderBy('created_at', 'asc')
+            ->pluck('id_modul')
+            ->search($modul->id_modul) + 1;
         
-        return view('teacher.task-create', compact('modul', 'task'));
+        return view('teacher.task-create', compact('modul', 'task', 'batchId', 'moduleIndex', 'mapelId', 'batchName', 'className'));
     }
 
     public function update(Request $request, $id_modul, $id_tugas)
@@ -246,16 +269,21 @@ class TugasController extends Controller
         $tugas->deskripsi_tugas = $request->content;
         $tugas->waktu_pengumpulan = $request->deadline;
 
-        if ($request->hasFile('resource_file')) {
-            if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
-                \Storage::disk('public')->delete($tugas->file_path_tugas);
+        if ($request->input('remove_resource') == '1') {
+            if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('s3')->delete($tugas->file_path_tugas);
+            }
+            $tugas->file_path_tugas = null;
+        } elseif ($request->hasFile('resource_file')) {
+            if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('s3')->delete($tugas->file_path_tugas);
             }
             $file = $request->file('resource_file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/assignments', $filename);
+            $file->storeAs('assignments', $filename, 's3');
+
             $tugas->file_path_tugas = 'assignments/' . $filename;
         }
-
         $tugas->save();
 
         return redirect()->route('teacher.tasks.show', ['id_modul' => $id_modul, 'id_tugas' => $id_tugas])->with('success', 'Tugas berhasil diperbarui!');
@@ -264,8 +292,8 @@ class TugasController extends Controller
     public function destroy(Request $request, $id_modul, $id_tugas)
     {
         $tugas = Tugas::where('id_modul', $id_modul)->findOrFail($id_tugas);
-        if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
-            \Storage::disk('public')->delete($tugas->file_path_tugas);
+        if ($tugas->file_path_tugas && \Storage::disk('s3')->exists($tugas->file_path_tugas)) {
+            \Storage::disk('s3')->delete($tugas->file_path_tugas);
         }
         $tugas->delete();
 

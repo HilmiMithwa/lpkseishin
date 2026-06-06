@@ -270,18 +270,19 @@
                     </div>
 
                     <!-- Upload -->
-                    <div x-data="{ fileName: null, isDragging: false }" class="space-y-1.5">
+                    <div x-data="{ fileName: null, isDragging: false, removeResource: false }" class="space-y-1.5">
                         <x-input-label>Lampiran Soal / Materi (Opsional)</x-input-label>
                         
                         <!-- File Input (Hidden) -->
                         <input type="file" id="assignment_file" name="file_path_tugas" class="hidden" 
-                               @change="fileName = $event.target.files[0] ? $event.target.files[0].name : null">
+                               @change="fileName = $event.target.files[0] ? $event.target.files[0].name : null; removeResource = false">
+                        <input type="hidden" name="remove_resource" :value="removeResource ? '1' : '0'">
                                
                         <!-- Dropzone -->
                         <label for="assignment_file" 
                                @dragover.prevent="isDragging = true" 
                                @dragleave.prevent="isDragging = false"
-                               @drop.prevent="isDragging = false; if($event.dataTransfer.files.length > 0) { document.getElementById('assignment_file').files = $event.dataTransfer.files; fileName = $event.dataTransfer.files[0].name; }"
+                               @drop.prevent="isDragging = false; if($event.dataTransfer.files.length > 0) { document.getElementById('assignment_file').files = $event.dataTransfer.files; fileName = $event.dataTransfer.files[0].name; removeResource = false; }"
                                class="block border-2 border-dashed rounded-2xl p-6 transition-colors cursor-pointer group"
                                :class="isDragging ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white hover:border-red-300'">
                             <!-- State: No File -->

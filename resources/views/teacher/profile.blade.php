@@ -28,12 +28,10 @@
                         reader.readAsDataURL($refs.photo.files[0]);
                     " />
 
-                <!-- Current Profile Photo -->
                 <div class="w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-sm border-2 border-gray-100" x-show="! photoPreview">
                     <img src="{{ Auth::user()->profile_photo_path ? Storage::disk('public')->url(Auth::user()->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=d62828&background=FFDBDB' }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                 </div>
 
-                <!-- New Profile Photo Preview -->
                 <div class="w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-sm border-2 border-gray-100" x-show="photoPreview" style="display: none;">
                     <span class="block w-full h-full bg-cover bg-no-repeat bg-center"
                           x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
