@@ -18,10 +18,15 @@ class Batch extends Model
         'waktu_berakhir',
         'durasi',
         'jadwal',
+        'status',
+        'quota',
     ];
 
     public function mapel()
     {
         return $this->hasMany(Mapel::class, 'id_batch', 'id_batch');
+    public function getNamaBatchAttribute()
+    {
+        return $this->nama;
     }
 }

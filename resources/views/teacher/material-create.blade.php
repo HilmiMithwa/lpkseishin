@@ -4,10 +4,9 @@
 
 @section('content')
 @php
-    $currentModuleId = request()->route('id_modul') ?? 2;
-    // Dummy Data
-    $batchName = 'Batch 2';
-    $className = 'N4 Mastering';
+    $currentModuleId = $modul->id_modul;
+    $batchName = $modul->mapel->batch->nama_batch ?? 'Unknown Batch';
+    $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
 @endphp
 
 @push('styles')
@@ -37,14 +36,11 @@
 @endpush
 
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
-    materialType: 'Practice',
-    showTextEditor: false,
-    showVideoUpload: false,
-    showTaskForm: false
+    materialType: '{{ old('type', 'practice') }}',
+    showTextEditor: {{ old('bahan_ajar_description') ? 'true' : 'false' }},
+    showVideoUpload: {{ (old('video_url') || old('video_title')) ? 'true' : 'false' }},
+    showTaskForm: {{ old('task_title') ? 'true' : 'false' }}
 }">
-    <form method="POST" action="{{ route('teacher.materials.store', $currentModuleId) }}" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="type" :value="materialType">
 
     {{-- Header Row: Title + Breadcrumb + Publish Button --}}
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
@@ -67,28 +63,50 @@
                 <span class="text-[#d62828] font-semibold">Tambah Materi</span>
             </nav>
         </div>
-        <x-primary-button @click="$dispatch('open-publish-modal')" class="self-start gap-2">
+        <x-primary-button type="button" @click="$dispatch('open-publish-modal')" class="self-start gap-2">
             Terbitkan Materi
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
         </x-primary-button>
     </div>
 
-    {{-- Main Content Grid --}}
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+    {{-- Main Content Grid Wrapped in Form --}}
+    <form id="materialForm" action="{{ route('teacher.materials.store', $currentModuleId) }}" method="POST" enctype="multipart/form-data">
+        @csrf
         
-        {{-- Left Column (Spans 3/4) --}}
-        <div class="lg:col-span-3 flex flex-col gap-6 lg:gap-8">
+        {{-- Validation Errors Banner --}}
+        @if ($errors->any())
+        <div x-data="{ showError: true }" x-show="showError" class="mb-6 bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 sm:p-5 shadow-sm relative">
+            <button type="button" @click="showError = false" class="absolute top-4 right-4 text-red-400 hover:text-red-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-start gap-3 pr-8">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div>
+                    <h4 class="font-bold text-sm mb-1">Gagal Menyimpan Materi</h4>
+                    <ul class="list-disc list-inside text-sm font-karla space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
             
-            {{-- Material Content Editor & Video --}}
-            <div class="bg-white border border-gray-100 rounded-[24px] p-6 sm:p-8 shadow-sm">
-                <input type="text" name="nama_bahan_ajar" placeholder="Masukkan judul di sini..." class="w-full text-xl sm:text-2xl font-bold font-ibm text-gray-900 placeholder-gray-400 border-none focus:ring-0 px-0 mb-6 bg-transparent outline-none">
+            {{-- Left Column (Spans 3/4) --}}
+            <div class="lg:col-span-3 flex flex-col gap-6 lg:gap-8">
+                
+                {{-- Material Content Editor & Video --}}
+                <div class="bg-white border border-gray-100 rounded-[24px] p-6 sm:p-8 shadow-sm">
+                    <input type="text" name="nama_bahan_ajar" value="{{ old('nama_bahan_ajar') }}" required placeholder="Masukkan judul di sini..." class="w-full text-xl sm:text-2xl font-bold font-ibm text-gray-900 placeholder-gray-400 border-none focus:ring-0 px-0 mb-6 bg-transparent outline-none">
                 
                 <div class="space-y-6">
                     {{-- Text Editor Toggle & Content --}}
                     <div>
                         <!-- Toggle Button -->
-                        <button  type='button' @click="showTextEditor = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
-                            
+                        <button type="button" x-show="!showTextEditor" @click="showTextEditor = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Tambah Teks
                         </button>
@@ -96,12 +114,12 @@
                         {{-- Quill Rich Text Editor --}}
                         <div x-show="showTextEditor" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
                             <div class="mb-4" wire:ignore>
-                                <div id="editor-container"></div>
-                                <input type="hidden" name="bahan_ajar_description" id="material-content">
+                                <div id="editor-container">{!! old('bahan_ajar_description') !!}</div>
+                                <input type="hidden" name="bahan_ajar_description" id="material-content" value="{{ old('bahan_ajar_description') }}">
                             </div>
                             
                             <div class="flex justify-end mt-4 pt-4 border-t border-gray-100">
-                                <button @click="showTextEditor = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                <button type="button" @click="showTextEditor = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
@@ -111,7 +129,7 @@
                     {{-- Video Upload/Link Toggle & Content --}}
                     <div>
                         <!-- Toggle Button -->
-                        <button x-show="!showVideoUpload" @click="showVideoUpload = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
+                        <button type="button" x-show="!showVideoUpload" @click="showVideoUpload = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Tambah Video
                         </button>
@@ -119,10 +137,10 @@
                         <div x-show="showVideoUpload" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
                             <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
                                 {{-- Left Side: Upload --}}
-                                <div class="md:col-span-2" x-data="{ isUploading: false, showFile: false }">
+                                <div class="md:col-span-2" x-data="{ isUploading: false, showFile: false, linkInput: '{{ old('video_url') }}', fileName: 'Video_Materi.mp4' }">
                                     <h4 class="text-xs font-bold font-karla text-gray-700 mb-2">Upload Video</h4>
                                     
-                                    <input type="file" name="video_file" x-ref="videoFile" class="hidden" accept="video/mp4,video/x-m4v,video/*" @change="if($refs.videoFile.files.length > 0) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true }, 1500) }">
+                                    <input type="file" name="video_file" x-ref="videoFile" class="hidden" accept="video/mp4,video/x-m4v,video/*" @change="if($refs.videoFile.files.length > 0) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true; fileName = $refs.videoFile.files[0].name; }, 1500) }">
                                     <div x-show="!showFile" @click="$refs.videoFile.click()" class="border-2 border-dashed border-red-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-red-50 transition cursor-pointer mb-4 min-h-[140px] relative">
                                         <div x-show="!isUploading" class="flex flex-col items-center">
                                             <svg class="w-10 h-10 text-[#d62828] mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -144,11 +162,11 @@
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                             </div>
                                             <div>
-                                                <p class="text-[13px] font-bold font-karla text-gray-900 truncate max-w-[100px]">Video_Materi.mp4</p>
-                                                <p class="text-[10px] font-karla text-gray-500 uppercase">MP4</p>
+                                                <p class="text-[13px] font-bold font-karla text-gray-900 truncate max-w-[100px]" x-text="fileName"></p>
+                                                <p class="text-[10px] font-karla text-gray-500 uppercase">Video</p>
                                             </div>
                                         </div>
-                                        <button @click="showFile = false" class="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition">
+                                        <button type="button" @click="showFile = false; linkInput = ''; $refs.videoFile.value = '';" class="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
@@ -159,11 +177,11 @@
                                         <div class="flex-grow border-t border-gray-200"></div>
                                     </div>
                                     
-                                    <div x-show="!showFile" class="mt-2" x-data="{ linkInput: '' }">
+                                    <div x-show="!showFile" class="mt-2">
                                         <div class="flex bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition mb-3">
-                                            <input type="text" x-model="linkInput" :value="linkInput" name="video_url" placeholder="Enter video url..." class="w-full px-4 py-3 bg-transparent border-none focus:ring-0 text-sm font-karla outline-none">
+                                            <input type="text" name="video_url" x-model="linkInput" placeholder="Enter video url..." class="w-full px-4 py-3 bg-transparent border-none focus:ring-0 text-sm font-karla outline-none">
                                         </div>
-                                        <x-primary-button @click="if(linkInput) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true; linkInput = '' }, 500) }" class="ml-auto gap-2">
+                                        <x-primary-button type="button" @click="if(linkInput) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true; fileName = linkInput; }, 500) }" class="ml-auto gap-2">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                             Tambah Link
                                         </x-primary-button>
@@ -174,27 +192,27 @@
                                 <div class="md:col-span-3 space-y-4">
                                     <div class="space-y-1.5">
                                         <x-input-label>Judul Video</x-input-label>
-                                        <x-text-input name="video_title" type="text" placeholder="cth., N4 Level Conversation - Dialogue" />
+                                        <x-text-input name="video_title" value="{{ old('video_title') }}" type="text" placeholder="cth., N4 Level Conversation - Dialogue" />
                                     </div>
                                     <div class="space-y-1.5">
                                         <x-input-label>Fokus Skill</x-input-label>
-                                        <x-text-input name="focus_skill" type="text" placeholder="cth., Speaking (Kaiwa)" />
+                                        <x-text-input name="focus_skill" value="{{ old('focus_skill') }}" type="text" placeholder="cth., Speaking (Kaiwa)" />
                                     </div>
                                     <div class="space-y-1.5">
                                         <x-input-label>Poin Utama</x-input-label>
-                                        <x-text-input name="key_points" type="text" placeholder="cth., Jikoshoukai, Etika Ojigi" />
+                                        <x-text-input name="key_points" value="{{ old('key_points') }}" type="text" placeholder="cth., Jikoshoukai, Etika Ojigi" />
                                     </div>
                                     <div class="space-y-1.5">
                                         <x-input-label>Tujuan</x-input-label>
-                                        <textarea name="objective" rows="2" placeholder="Siswa mampu memahami informasi penting..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
+                                        <textarea name="objective" rows="2" placeholder="Siswa mampu memahami informasi penting..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y">{{ old('objective') }}</textarea>
                                     </div>
                                     <div class="space-y-1.5">
                                         <x-input-label>Catatan Sensei</x-input-label>
-                                        <textarea name="sensei_note" rows="2" placeholder="Fokuskan perhatian pada pola kalimat..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
+                                        <textarea name="sensei_note" rows="2" placeholder="Fokuskan perhatian pada pola kalimat..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y">{{ old('sensei_note') }}</textarea>
                                     </div>
                                     
                                     <div class="flex justify-end pt-2">
-                                        <button @click="showVideoUpload = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                        <button type="button" @click="showVideoUpload = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
@@ -206,7 +224,7 @@
             </div>
 
             {{-- Practical Task Section --}}
-            <div x-show="materialType === 'Practice'" 
+            <div x-show="materialType === 'practice'" 
                  x-transition:enter="transition ease-out duration-300" 
                  x-transition:enter-start="opacity-0 translate-y-4" 
                  x-transition:enter-end="opacity-100 translate-y-0" 
@@ -218,7 +236,7 @@
                 <h3 class="text-base font-bold font-ibm text-gray-900 mb-6">Tugas Praktik</h3>
                 
                 <!-- Toggle Button -->
-                <button x-show="!showTaskForm" @click="showTaskForm = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
+                <button type="button" x-show="!showTaskForm" @click="showTaskForm = true" class="w-full py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Tambah Tugas
                 </button>
@@ -226,17 +244,20 @@
                 <div x-show="showTaskForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5">
-                            <div class="h-full space-y-1.5">
+                            <div class="space-y-1.5">
+                                <x-input-label>Judul Tugas</x-input-label>
+                                <x-text-input type="text" name="task_title" value="{{ old('task_title') }}" placeholder="Contoh: Latihan Dokkai 1" class="w-full" />
+                            </div>
+                            <div class="space-y-1.5">
                                 <x-input-label>Deskripsi Tugas</x-input-label>
-                                <textarea name="task_description" rows="6" placeholder="Bacalah dokumen PDF terlampir..." class="w-full h-full min-h-[140px] px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y outline-none transition"></textarea>
+                                <textarea name="task_description" rows="6" placeholder="Bacalah dokumen PDF terlampir..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y outline-none">{{ old('task_description') }}</textarea>
                             </div>
                         </div>
                         <div class="space-y-5">
                             <div class="space-y-1.5">
                                 <x-input-label>Batas Waktu</x-input-label>
                                 <div class="relative">
-                                    <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <input type="text" placeholder="DD-MM-YYYY 00:00" class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm">
+                                    <input type="datetime-local" name="task_deadline" value="{{ old('task_deadline') }}" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm">
                                 </div>
                             </div>
                             <div x-data="{ isUploading: false, showFile: false }">
@@ -276,7 +297,7 @@
                     </div>
                     
                     <div class="flex justify-end mt-4 pt-4 border-t border-gray-100">
-                        <button @click="showTaskForm = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                        <button type="button" @click="showTaskForm = false" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>
@@ -294,9 +315,9 @@
                     <div class="space-y-1.5">
                         <x-input-label>Tipe</x-input-label>
                         <div class="relative">
-                            <select x-model="materialType" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla bg-white outline-none transition cursor-pointer appearance-none bg-none">
-                                <option value="Theory">Teori</option>
-                                <option value="Practice">Praktik</option>
+                            <select name="type" x-model="materialType" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla bg-white outline-none transition cursor-pointer appearance-none bg-none">
+                                <option value="theory">Teori</option>
+                                <option value="practice">Praktik</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -333,21 +354,17 @@
                                     <p class="text-[10px] font-karla text-gray-500 uppercase">PDF</p>
                                 </div>
                             </div>
-                            <button @click="showResource = false" class="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition flex-shrink-0">
+                            <button type="button" @click="showResource = false" class="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition flex-shrink-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
-                        </div>
-                        <div class="mt-4">
-                            <x-primary-button type="submit" class="w-full justify-center py-3">Simpan Materi</x-primary-button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        </form>
     </div>
-
+    </form>
 </div>
 @endsection
 
@@ -365,8 +382,18 @@
             <h3 class="text-xl font-bold font-ibm text-gray-900 text-center mb-2">Terbitkan Materi?</h3>
             <p class="text-sm text-gray-500 font-karla text-center mb-6">Materi ini akan segera tersedia untuk semua siswa di dalam kelas.</p>
             <div class="flex gap-3">
-                <button @click="showPublishModal = false" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold font-karla text-sm hover:bg-gray-50 transition">Batal</button>
-                <x-primary-button @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId) }}'" class="flex-1 justify-center py-3">Terbitkan</x-primary-button>
+                <button type="button" @click="showPublishModal = false" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold font-karla text-sm hover:bg-gray-50 transition">Batal</button>
+                <x-primary-button type="button" @click="
+                    $dispatch('page-loading');
+                    const contentInput = document.getElementById('material-content');
+                    const qlEditor = document.querySelector('.ql-editor');
+                    if(contentInput && qlEditor) {
+                        let html = qlEditor.innerHTML;
+                        if(html === '<p><br></p>') html = '';
+                        contentInput.value = html;
+                    }
+                    document.getElementById('materialForm').submit();
+                " class="flex-1 justify-center py-3">Terbitkan</x-primary-button>
             </div>
         </div>
     </div>

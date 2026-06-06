@@ -18,20 +18,20 @@ class Tugas extends Model
         'deskripsi_tugas',
         'waktu_pengumpulan',
         'status_tugas',
-        'id_rps'
+        'id_rps',
+        'id_modul',
+        'file_path_tugas'
     ];
 
     public function rps() {
         return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
     }
 
-    // Relasi ke Modul
     public function modul() {
         return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
     }
 
-    // Relasi ke Pengiriman Tugas
-    public function submissions() { 
+    public function submissions() {
         return $this->hasMany(Pengiriman_Tugas::class, 'id_tugas', 'id_tugas');
     }
 }

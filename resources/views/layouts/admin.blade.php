@@ -147,13 +147,13 @@
                             <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
                             Data Siswa
                         </a>
-                        <a href="{{ route('admin.users') }}?role=guru" class="block text-[13.5px] font-medium {{ request('role') == 'guru' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Guru
+                        <a href="{{ route('admin.users') }}?role=guru" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'guru' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Guru</span>
                         </a>
-                        <a href="{{ route('admin.users') }}?role=admin" class="block text-[13.5px] font-medium {{ request('role') == 'admin' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'admin' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Admin
+                        <a href="{{ route('admin.users') }}?role=admin" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'admin' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'admin' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Admin</span>
                         </a>
                     </div>
                 </div>

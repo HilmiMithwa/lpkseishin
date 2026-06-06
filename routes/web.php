@@ -14,6 +14,7 @@ use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
 use App\Http\Controllers\Teacher\ProgressReportController;
+use App\Http\Controllers\Teacher\TugasController;
 
 
 
@@ -50,9 +51,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::get('/users', function() {
-        return view('admin.users.index');
-    })->name('users');
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users');
+    Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/users/{id}/edit', function($id) {
         return view('admin.users.edit', ['id' => $id]);
@@ -62,9 +64,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.payments.index');
     })->name('payments');
 
-    Route::get('/batches', function() {
-        return view('admin.batches.index');
-    })->name('batches');
+    Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
+    Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
+    Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
+    Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
     Route::get('/programs', function() {
         return view('admin.programs.index');
@@ -105,13 +108,12 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 
-    Route::get('/students/enrolled', function () {
-        return view('students.enrolled');
-    })->name('students.enrolled');
+    Route::get('/students/enrolled', [\App\Http\Controllers\Student\StudentController::class, 'enrolled'])->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
     Route::get('/students/vocabulary-mastery', [StudentController::class, 'vocabularyMastery'])->name('students.vocabulary-mastery');
+    Route::get('/students/vocabulary-mastery/favorites', [StudentController::class, 'vocabularyFavorites'])->name('students.vocabulary-favorites');
     Route::get('/students/vocabulary-mastery/level/{id}', [StudentController::class, 'vocabularyLevel'])->name('students.vocabulary-level');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-mastered', [StudentController::class, 'toggleMastered'])->name('students.vocabulary.toggle-mastered');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-favorite', [StudentController::class, 'toggleFavorite'])->name('students.vocabulary.toggle-favorite');
@@ -134,15 +136,18 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/classes', [BatchController::class, 'index'])->name('classes');
     Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
     Route::post('/classes/{id_batch}/add', [BatchController::class, 'storeClass'])->name('classes.store');
+    Route::put('/students/{id_studentbatch}/status', [BatchController::class, 'updateStudentStatus'])->name('students.status.update');
 
     Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
+    Route::delete('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroy'])->name('subjects.destroy');
     Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
+    Route::delete('/subjects/modules/{id_modul}', [\App\Http\Controllers\Teacher\MapelController::class, 'deleteModul'])->name('modules.destroy');
+    Route::post('/subjects/{id_mapel}/announcements', [\App\Http\Controllers\Teacher\MapelController::class, 'storeAnnouncement'])->name('announcements.store');
+    Route::delete('/announcements/{id}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroyAnnouncement'])->name('announcements.destroy');
 
     Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
 
-    Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
-        return view('teacher.material-create', ['currentModuleId' => $id_modul]);
-    })->name('materials.create');
+    Route::get('/modules/{id_modul}/materials/create', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'create'])->name('materials.create');
 
     Route::post('/modules/{id_modul}/materials', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'store'])->name('materials.store');
 
@@ -165,12 +170,30 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
     })->name('tasks.show');
 
-    Route::get('/vocabulary', function () {
-        return view('teacher.vocabulary');
-    })->name('vocabulary');
+    Route::get('/vocabulary', [\App\Http\Controllers\Teacher\VocabularyController::class, 'index'])->name('vocabulary');
+    Route::put('/vocabulary/level/{level}/update', [\App\Http\Controllers\Teacher\VocabularyController::class, 'updateLevel'])->name('vocabulary.level.update');
+    Route::delete('/vocabulary/level/{level}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroyLevel'])->name('vocabulary.level.destroy');
 
     Route::get('/vocabulary/level/{id}', function ($id) {
-        return view('teacher.vocabulary-level', ['level_id' => $id]);
+        $query = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc');
+        
+        if (request()->has('search') && request('search') != '') {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('kanji', 'ilike', "%{$search}%")
+                  ->orWhere('furigana', 'ilike', "%{$search}%")
+                  ->orWhere('romaji', 'ilike', "%{$search}%")
+                  ->orWhere('meaning_id', 'ilike', "%{$search}%");
+            });
+        }
+        
+        if (request()->has('category') && request('category') != '') {
+            $query->where('category', request('category'));
+        }
+        
+        $words = $query->paginate(18)->appends(request()->query());
+        
+        return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
 
     Route::get('/progress-report', [ProgressReportController::class, 'index'])->name('progress-report');
@@ -181,20 +204,25 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::post('/progress-report/evaluation-log', [ProgressReportController::class, 'storeEvaluationLog'])->name('progress-report.evaluation-log.store');
     Route::put('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'updateEvaluationLog'])->name('progress-report.evaluation-log.update');
     Route::delete('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'destroyEvaluationLog'])->name('progress-report.evaluation-log.destroy');
+    Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
+    Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
+    Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
 
-    Route::get('/assignments', function () {
-        return view('teacher.assignments');
-    })->name('assignments');
-    
+    Route::get('/progress-report', function () {
+        return view('teacher.progress-report');
+    })->name('progress-report');
+
+    Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
+    Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
     // Preview: Grading Workspace
-    Route::get('/assignments/grade', function () {
-        return view('teacher.grade-submission');
-    })->name('assignments.grade');
+    Route::get('/assignments/{id}/grade', [TugasController::class, 'gradePage'])->name('assignments.grade');
+    Route::post('/submissions/{id}/grade', [TugasController::class, 'gradeAssignment'])->name('assignments.grade.store');
 
-    Route::get('/profile', function () {
-        return view('teacher.profile');
-    })->name('profile');
-
+    Route::get('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'index'])->name('profile');
+    Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+    Route::delete('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
+    Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 
