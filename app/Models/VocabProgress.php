@@ -11,7 +11,7 @@ class VocabProgress extends Model
  
     protected $fillable = [
         'id_user',
-        'vocabulary_id',
+        'id_vocabulary',
         'is_memorized',
         'is_favorite',
     ];
@@ -27,6 +27,6 @@ class VocabProgress extends Model
 
     public function vocabulary()
     {
-        return $this->belongsTo(Vocabulary::class, 'vocabulary_id');
+        return $this->belongsTo(Vocabulary::class, 'id_vocabulary',  'id_vocabulary');
     }
 }

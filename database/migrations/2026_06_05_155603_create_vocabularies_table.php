@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vocabularies', function (Blueprint $table) {
-            $table->id();
+            $table->id("id_vocabulary");
             $table->string('kanji');
-            $table->string('furigana');
-            $table->string('romaji');
             $table->string('meaning_en');
             $table->string('meaning_id');
-            $table->text('definition');
-            $table->text('usage_jp');
-            $table->text('usage_en');
+            $table->string('furigana');
+            $table->string('romaji');
             $table->unsignedTinyInteger('level');
+            $table->string('definition_id');
+            $table->string('contextual_usage');
             $table->timestamps();
         });
     }

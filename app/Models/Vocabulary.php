@@ -9,15 +9,7 @@ class Vocabulary extends Model
     protected $table = 'vocabularies';
  
     protected $fillable = [
-        'kanji',
-        'furigana',
-        'romaji',
-        'meaning_en',
-        'meaning_id',
-        'definition',
-        'usage_jp',
-        'usage_en',
-        'level',
+        'kanji', 'furigana', 'romaji', 'meaning_en', 'meaning_id', 'level', 'definition_id', 'contextual_usage',
     ];
  
     protected $casts = [
@@ -29,7 +21,7 @@ class Vocabulary extends Model
      */
     public function progresses()
     {
-        return $this->hasMany(VocabProgress::class, 'vocabulary_id');
+        return $this->hasMany(VocabProgress::class, 'id_vocabulary', 'id_vocabulary');
     }
  
     /**
