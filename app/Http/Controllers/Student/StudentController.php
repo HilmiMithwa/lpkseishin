@@ -50,14 +50,7 @@ class StudentController extends Controller
             $totalModul = $subject->modul_count;
             if ($totalModul === 0) return false;
 
-            $completedModul = DB::table('bahan_ajar_progress')
-                ->join('bahan_ajar', 'bahan_ajar_progress.id_bahan_ajar', '=', 'bahan_ajar.id_bahan_ajar')
-                ->join('modul', 'bahan_ajar.id_modul', '=', 'modul.id_modul')
-                ->where('modul.id_mapel', $subject->id_mapel)
-                ->where('bahan_ajar_progress.id_user', $user->id)
-                ->where('bahan_ajar_progress.is_complete', true)
-                ->distinct('bahan_ajar.id_modul')
-                ->count('bahan_ajar.id_modul');
+            $completedModul = $this->getCompletedModulesCount($subject->id_mapel, $user->id);
 
             return $completedModul >= $totalModul;
         })->count();
@@ -285,6 +278,91 @@ class StudentController extends Controller
             ->get();
 
         return view('students.my-tasks', compact('tasks'));
+    }
+
+    // Fungsi page Terdaftar (Enrolled)
+    public function enrolled()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Fetch subjects the user is enrolled in
+        $subjects = $user->mapels()->withCount('modul')->get();
+
+        // Calculate progress status for each enrolled subject
+        foreach ($subjects as $subject) {
+            $totalModul = $subject->modul_count;
+            if ($totalModul === 0) {
+                $subject->status = 'Selesai';
+            } else {
+                $completedModul = $this->getCompletedModulesCount($subject->id_mapel, $user->id);
+                $subject->status = ($completedModul >= $totalModul) ? 'Selesai' : 'Proses';
+            }
+
+            // Dynamically assign icon
+            if (stripos($subject->nama_mapel, 'test') !== false || stripos($subject->nama_mapel, 'tryout') !== false) {
+                $subject->icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>';
+            } else {
+                $subject->icon = 'あa';
+            }
+            $subject->icon_color = 'text-[#d62828]';
+        }
+
+        $enrollment = Transaction::where('id_user', Auth::id())->first();
+
+        return view('students.enrolled', compact('subjects', 'enrollment'));
+    }
+
+    /**
+     * Calculate how many modules in a subject are completed by the user.
+     */
+    private function getCompletedModulesCount($id_mapel, $userId)
+    {
+        $modulIds = DB::table('modul')
+            ->where('id_mapel', $id_mapel)
+            ->pluck('id_modul')
+            ->toArray();
+
+        $completedModulesCount = 0;
+
+        foreach ($modulIds as $id_modul) {
+            // Count total materials in the module
+            $totalMaterial = DB::table('bahan_ajar')
+                ->where('id_modul', $id_modul)
+                ->count();
+
+            // Count completed materials in the module
+            $completedMaterial = DB::table('bahan_ajar')
+                ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
+                ->where('bahan_ajar.id_modul', $id_modul)
+                ->where('bahan_ajar_progress.id_user', $userId)
+                ->where('bahan_ajar_progress.is_complete', true)
+                ->count();
+
+            // Count total tasks in the module
+            $totalTask = DB::table('tugas')
+                ->where('id_modul', $id_modul)
+                ->count();
+
+            // Count submitted/completed tasks in the module
+            $completedTask = DB::table('tugas')
+                ->join('pengiriman_tugas', 'tugas.id_tugas', '=', 'pengiriman_tugas.id_tugas')
+                ->where('tugas.id_modul', $id_modul)
+                ->where('pengiriman_tugas.id_user', $userId)
+                ->whereIn('pengiriman_tugas.status', ['dikirim', 'dinilai'])
+                ->count();
+
+            $materialClear = ($totalMaterial === $completedMaterial);
+            $taskClear = ($totalTask === $completedTask);
+
+            if ($totalMaterial === 0 && $totalTask === 0) {
+                $completedModulesCount++;
+            } elseif ($materialClear && $taskClear) {
+                $completedModulesCount++;
+            }
+        }
+
+        return $completedModulesCount;
     }
 // ======================================
 
