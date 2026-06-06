@@ -4,6 +4,8 @@
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+    searchQuery: '',
+    filterStatus: 'Semua Status',
     selectedBatch: '{{ $selectedBatchName }}',
     selectedClass: '{{ $selectedClassName }}',
     detailOpen: false, 
@@ -239,16 +241,31 @@
         <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
             <div class="relative w-full sm:w-80">
                 <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
+                <input type="text" x-model="searchQuery" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
             </div>
             
-            <div class="relative w-full sm:w-auto">
-                <select class="w-full sm:w-auto bg-white border border-gray-200 rounded-full px-5 pr-10 py-2.5 text-sm font-bold text-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300">
-                    <option>Status</option>
-                    <option>Aktif</option>
-                    <option>Tidak Aktif</option>
-                    <option>Selesai</option>
-                </select>
+            <div class="relative w-full sm:w-48" x-data="{ open: false }">
+                <button @click="open = !open" @click.away="open = false" type="button" class="w-full bg-white border border-gray-200 rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 shadow-sm text-gray-600">
+                    <span x-text="filterStatus"></span>
+                    <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180 text-gray-800' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-[100] w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
+                    <ul class="py-1">
+                        <li>
+                            <button type="button" @click="filterStatus = 'Semua Status'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Semua Status' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Semua Status</button>
+                        </li>
+                        <li>
+                            <button type="button" @click="filterStatus = 'Aktif'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Aktif' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Aktif</button>
+                        </li>
+                        <li>
+                            <button type="button" @click="filterStatus = 'Tidak Aktif'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Tidak Aktif' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Tidak Aktif</button>
+                        </li>
+                        <li>
+                            <button type="button" @click="filterStatus = 'Selesai'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Selesai' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Selesai</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -269,7 +286,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @forelse($students as $index => $student)
-                    <tr class="hover:bg-gray-50/50 transition">
+                    <tr x-show="(searchQuery === '' || '{{ strtolower($student->name) }}'.includes(searchQuery.toLowerCase())) && (filterStatus === 'Semua Status' || '{{ $student->status }}' === filterStatus)" class="hover:bg-gray-50/50 transition">
                         <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
                         <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
                         <td class="py-4 px-4">
