@@ -56,9 +56,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.payments.index');
     })->name('payments');
 
-    Route::get('/batches', function() {
-        return view('admin.batches.index');
-    })->name('batches');
+    Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
+    Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
+    Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
+    Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');

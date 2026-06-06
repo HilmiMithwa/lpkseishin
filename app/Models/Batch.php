@@ -18,6 +18,8 @@ class Batch extends Model
         'waktu_berakhir',
         'durasi',
         'jadwal',
+        'status',
+        'quota',
     ];
 
     public function getNamaBatchAttribute()
