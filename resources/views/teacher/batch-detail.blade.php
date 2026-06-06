@@ -3,84 +3,6 @@
 @section('title', ($batch->nama_batch ?? 'Batch') . ' - Kelas Saya - LPK Seishin')
 
 @section('content')
-@php
-    // Dummy Data — Batch detail
-    if (!isset($batch)) {
-        $batch = (object)[
-            'id_batch' => request()->route('id_batch') ?? 2,
-            'nama_batch' => 'Batch ' . (request()->route('id_batch') ?? 2),
-            'nama_program' => 'Regular Japanese Language Program',
-            'target_level' => 'JLPT N5 - N4',
-            'deskripsi' => 'Comprehensive program for beginners and intermediate learners.',
-            'tanggal_mulai' => '01 Jan 2026',
-            'tanggal_selesai' => '31 Dec 2026',
-            'durasi' => '12 Months',
-            'jadwal' => 'Monday - Friday',
-            'total_siswa' => 4,
-            'total_kelas' => 2,
-            'status' => 'Active',
-        ];
-    }
-
-    if (!isset($senseis)) {
-        $senseis = [
-            (object)['name' => 'Ahmad Hidayat', 'avatar' => null],
-            (object)['name' => 'Neida Nurfadillah', 'avatar' => null],
-        ];
-    }
-
-    if (!isset($batchClasses) || (is_countable($batchClasses) && count($batchClasses) == 0)) {
-        $batchClasses = [
-            (object)[
-                'id_mapel' => 1,
-                'nama_mapel' => 'N4 Mastering',
-                'modul_count' => 7,
-                'batch' => (object)['nama_batch' => $batch->nama_batch],
-            ],
-            (object)[
-                'id_mapel' => 2,
-                'nama_mapel' => 'N5 Mastering',
-                'modul_count' => 8,
-                'batch' => (object)['nama_batch' => $batch->nama_batch],
-            ],
-        ];
-    }
-
-    if (!isset($students) || (is_countable($students) && count($students) == 0)) {
-        $students = [
-            (object)[
-                'no' => 1, 'id_siswa' => '012025004', 'name' => 'Ahmad Hidayat',
-                'module_progress' => 60, 'avg_task' => 80, 'eval_score' => 90,
-                'status' => 'Completed',
-            ],
-            (object)[
-                'no' => 2, 'id_siswa' => '012025005', 'name' => 'Siti Nurhaliza',
-                'module_progress' => 56, 'avg_task' => 75, 'eval_score' => 85,
-                'status' => 'Active',
-            ],
-            (object)[
-                'no' => 3, 'id_siswa' => '012025006', 'name' => 'Budi Santoso',
-                'module_progress' => 52, 'avg_task' => 70, 'eval_score' => 78,
-                'status' => 'Inactive',
-            ],
-            (object)[
-                'no' => 4, 'id_siswa' => '012025007', 'name' => 'Dewi Lestari',
-                'module_progress' => 64, 'avg_task' => 85, 'eval_score' => 92,
-                'status' => 'Active',
-            ],
-            (object)[
-                'no' => 5, 'id_siswa' => '012025008', 'name' => 'Rizky Aditya',
-                'module_progress' => 58, 'avg_task' => 78, 'eval_score' => 88,
-                'status' => 'Inactive',
-            ],
-            (object)[
-                'no' => 6, 'id_siswa' => '012025009', 'name' => 'Lina Marlina',
-                'module_progress' => 54, 'avg_task' => 72, 'eval_score' => 80,
-                'status' => 'Active',
-            ],
-        ];
-    }
-@endphp
 
 <div class="p-4 sm:p-6 lg:p-10" x-data>
 
@@ -184,11 +106,11 @@
                 <div class="space-y-3">
                     <div>
                         <p class="text-[10px] sm:text-[11px] text-gray-500 font-semibold uppercase tracking-wide">Total Students</p>
-                        <p class="text-sm font-bold text-gray-900">{{ $batch->total_siswa ?? 4 }} Students</p>
+                        <p class="text-sm font-bold text-gray-900">{{ $batch->total_siswa }} Students</p>
                     </div>
                     <div>
                         <p class="text-[10px] sm:text-[11px] text-gray-500 font-semibold uppercase tracking-wide">Assigned Classes</p>
-                        <p class="text-sm font-bold text-gray-900">{{ $batch->total_kelas ?? 2 }} Classes</p>
+                        <p class="text-sm font-bold text-gray-900">{{ $batch->total_kelas }} Classes</p>
                     </div>
                     <div>
                         <p class="text-[10px] sm:text-[11px] text-gray-500 font-semibold uppercase tracking-wide">Sensei</p>
@@ -282,10 +204,10 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 top-full mt-2 w-40 bg-white border border-gray-100 rounded-2xl shadow-lg p-2 z-20">
-                        <button class="w-full text-left px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition">Semua</button>
-                        <button class="w-full text-left px-3 py-2 text-xs font-semibold text-emerald-600 hover:bg-gray-50 rounded-xl transition">Active</button>
-                        <button class="w-full text-left px-3 py-2 text-xs font-semibold text-red-500 hover:bg-gray-50 rounded-xl transition">Inactive</button>
-                        <button class="w-full text-left px-3 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-50 rounded-xl transition">Completed</button>
+                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition" data-status="all">Semua</button>
+                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-emerald-600 hover:bg-gray-50 rounded-xl transition" data-status="active">Active</button>
+                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-red-500 hover:bg-gray-50 rounded-xl transition" data-status="inactive">Inactive</button>
+                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-50 rounded-xl transition" data-status="completed">Completed</button>
                     </div>
                 </div>
             </div>
@@ -308,7 +230,9 @@
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @foreach($students as $student)
-                            <tr class="hover:bg-gray-50/50 transition">
+                            <tr class="student-row hover:bg-gray-50/50 transition" 
+                                data-name="{{ strtolower($student->name) }}" 
+                                data-status="{{ strtolower($student->status) }}">
                                 <td class="px-4 py-4 text-sm font-semibold text-gray-500">{{ $student->no }}</td>
                                 <td class="px-4 py-4 text-sm font-semibold text-gray-700">{{ $student->id_siswa }}</td>
                                 <td class="px-4 py-4">
@@ -362,88 +286,79 @@
                 <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900" id="modal-title">Tambah Kelas Baru</h3>
                 <span class="px-3 py-1 rounded-full bg-gray-200 text-xs font-bold font-karla text-gray-700">Ditambahkan ke: {{ $batch->nama_batch }}</span>
             </div>
-                     <form @submit.prevent="
-                         isLoading = true;
-                         setTimeout(() => {
-                             isLoading = false;
-                             $dispatch('close');
-                             $dispatch('show-toast', { message: 'Kelas berhasil ditambahkan!' });
-                         }, 1000);
-                     " x-data="{ isLoading: false }">
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                             
-                             <!-- Left Column -->
-                             <div class="space-y-6">
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Nama Kelas:</x-input-label>
-                                     <x-text-input type="text" required placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
-                                 </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Deskripsi:</x-input-label>
-                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
-                                 </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Mentor Sensei:</x-input-label>
-                                     <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
-                                         <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
-                                         <span class="text-sm font-bold font-karla text-gray-900">{{ Auth::user()->name }}</span>
-                                     </div>
-                                 </div>
-                             </div>
+            <form action="{{ route('teacher.classes.store', $batch->id_batch) }}" method="POST">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                     
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <div class="space-y-1.5">
+                            <x-input-label>Nama Kelas:</x-input-label>
+                            <x-text-input type="text" name="nama_mapel" required placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <x-input-label>Deskripsi:</x-input-label>
+                            <textarea name="deskripsi_mapel" required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
+                        </div>
+                        <div class="space-y-1.5">
+                            <x-input-label>Mentor Sensei:</x-input-label>
+                            <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
+                                <span class="text-sm font-bold font-karla text-gray-900">{{ Auth::user()->name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <div class="space-y-1.5">
+                            <x-input-label>Target Sertifikasi:</x-input-label>
+                            <div class="relative">
+                                <select name="target" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
+                                    <option value="" disabled selected>Pilih Target Sertifikasi</option>
+                                    <option value="JLPT N4">JLPT N4</option>
+                                    <option value="JLPT N5">JLPT N5</option>
+                                    <option value="JFT-Basic A2">JFT-Basic A2</option>
+                                </select>
+                                <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <x-input-label>Total Durasi (JP):</x-input-label>
+                            <x-text-input type="number" name="jp" required placeholder="cth., 264" class="w-full" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <x-input-label>Jadwal:</x-input-label>
+                            <x-text-input type="text" name="jadwal" required placeholder="cth., Senin - Jumat" class="w-full" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
+                            <x-text-input type="number" name="min_score" required placeholder="cth., 80" class="w-full" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="mt-2 flex items-center gap-4 pt-6">
+                    <x-outline-button type="button" @click="$dispatch('close')" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
+                        Batal
+                    </x-outline-button>
+                    <x-primary-button type="submit" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
+                        Simpan Kelas
+                    </x-primary-button>
+                </div>
+            </form>
 
-                             <!-- Right Column -->
-                             <div class="space-y-6">
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Target Sertifikasi:</x-input-label>
-                                     <div class="relative">
-                                         <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
-                                             <option value="" disabled selected>Pilih Target Sertifikasi</option>
-                                             <option value="JLPT N4">JLPT N4</option>
-                                             <option value="JLPT N5">JLPT N5</option>
-                                             <option value="JFT-Basic A2">JFT-Basic A2</option>
-                                         </select>
-                                         <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                     </div>
-                                 </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Total Durasi (JP):</x-input-label>
-                                     <x-text-input type="text" required placeholder="cth., 264" class="w-full" />
-                                 </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Jadwal:</x-input-label>
-                                     <x-text-input type="text" required placeholder="cth., Senin - Jumat" class="w-full" />
-                                 </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
-                                     <x-text-input type="text" required placeholder="cth., 80" class="w-full" />
-                                 </div>
-                             </div>
-
-                         </div>
-
-                         <!-- Actions -->
-                         <div class="mt-2 flex items-center gap-4 pt-6">
-                             <x-outline-button @click="$dispatch('close')" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
-                                 Batal
-                             </x-outline-button>
-                             <x-primary-button type="submit" x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3 disabled:opacity-70 disabled:cursor-not-allowed">
-                                 <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                 <span x-show="!isLoading">Simpan Kelas</span>
-                                 <span x-show="isLoading">Menyimpan...</span>
-                             </x-primary-button>
-                         </div>
-                     </form>
         </div>
     </x-modal>
 
     {{-- Global Toast Notification --}}
-    <div x-data="{ show: false, message: '' }" 
-         x-on:show-toast.window="
-            message = $event.detail.message;
-            show = true;
-            setTimeout(() => show = false, 3000);
-         "
-         class="fixed bottom-6 right-6 z-[110] flex flex-col gap-2 pointer-events-none">
+    <div x-data="{show: {{ session('success') ? 'true' : 'false' }}, message: '{{ session('success') }}'}" 
+        x-init="if(show) { setTimeout(() => show = false, 3000) }"
+        x-on:show-toast.window="
+           message = $event.detail.message;
+           show = true;
+           setTimeout(() => show = false, 3000);
+        "
+        class="fixed bottom-6 right-6 z-[110] flex flex-col gap-2 pointer-events-none">
         
         <div x-show="show" style="display: none;"
              x-transition:enter="transform ease-out duration-300 transition"
@@ -478,4 +393,49 @@
 @endpush
 
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-student');
+        const statusButtons = document.querySelectorAll('.status-filter-btn');
+        const studentRows = document.querySelectorAll('.student-row');
+        let currentStatus = 'all';
+        let currentQuery = '';
+
+        function filterStudents() {
+            studentRows.forEach(row => {
+                const name = row.dataset.name || '';
+                const status = row.dataset.status || '';
+                
+                const matchesQuery = name.includes(currentQuery);
+                const matchesStatus = (currentStatus === 'all') || (status === currentStatus);
+
+                if (matchesQuery && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Event pencarian
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                currentQuery = this.value.toLowerCase();
+                filterStudents();
+            });
+        }
+
+        // Event filter status
+        statusButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentStatus = this.dataset.status;
+                filterStudents();
+            });
+        });
+    });
+</script>
+@endpush
+
+
 @endsection

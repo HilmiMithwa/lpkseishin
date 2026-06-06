@@ -12,6 +12,8 @@ use App\Http\Controllers\Student\PengirimanTugasController;
 use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\BatchController;
+
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -104,7 +106,9 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 
-    Route::get('/students/enrolled', [StudentController::class, 'enrolled'])->name('students.enrolled');
+    Route::get('/students/enrolled', function () {
+        return view('students.enrolled');
+    })->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
@@ -128,13 +132,9 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/classes', function () {
-        return view('teacher.classes');
-    })->name('classes');
-
-    Route::get('/classes/{id_batch}', function ($id_batch) {
-        return view('teacher.batch-detail');
-    })->name('batch.show');
+    Route::get('/classes', [BatchController::class, 'index'])->name('classes');
+    Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
+    Route::post('/classes/{id_batch}/add', [BatchController::class, 'storeClass'])->name('classes.store');
 
     Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
     Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
@@ -205,5 +205,3 @@ require __DIR__.'/auth.php';
 Route::get('/submissions/{id_pengiriman}/download', [PengirimanTugasController::class, 'download'])
     ->name('submissions.download')
     ->middleware('auth');
-
-
