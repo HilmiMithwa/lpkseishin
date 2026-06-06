@@ -63,52 +63,36 @@
         <div class="flex items-end gap-4 mb-6 border-b border-gray-200 overflow-x-auto custom-scrollbar">
             <button @click="activeTab = 'belum_diperiksa'" :class="activeTab === 'belum_diperiksa' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-2">
                 Belum Diperiksa
-                <span class="bg-[#d62828] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
+                <span class="bg-[#d62828] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{{ $belumDiperiksa->count() }}</span>
             </button>
-            <button @click="activeTab = 'aktif'" :class="activeTab === 'aktif' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition">
+            <button @click="activeTab = 'aktif'" :class="activeTab === 'aktif' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-1">
                 Aktif berjalan
+                @if($aktifBerjalan->count() > 0)
+                <span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">{{ $aktifBerjalan->count() }}</span>
+                @endif
             </button>
-            <button @click="activeTab = 'selesai'" :class="activeTab === 'selesai' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition">
+            <button @click="activeTab = 'selesai'" :class="activeTab === 'selesai' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-1">
                 Selesai
+                @if($selesai->count() > 0)
+                <span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">{{ $selesai->count() }}</span>
+                @endif
             </button>
         </div>
 
         <!-- Tab 1: Belum Diperiksa -->
         <div x-show="activeTab === 'belum_diperiksa'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-            @if($assignments->isEmpty())
+            @if($belumDiperiksa->isEmpty())
             <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm min-h-[300px] flex flex-col items-center justify-center">
                 <div class="w-24 h-24 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mb-6 border-4 border-red-100/50">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Tugas</h3>
-                <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Belum ada tugas yang tersedia. Buat tugas baru atau pastikan data tugas sudah tersimpan di database.</p>
+                <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Saat ini tidak ada tugas yang perlu diperiksa atau dinilai.</p>
             </div>
             @else
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                @foreach($assignments as $task)
-                <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col h-full group relative overflow-hidden">
-                    <div class="flex items-center justify-end mb-4 relative z-10">
-                        <div class="flex items-center gap-1.5 text-xs font-bold {{ $task->status_tugas === 'Aktif' ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-50' }} px-2 py-1 rounded-lg">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            {{ $task->status_tugas ?? 'Aktif' }}
-                        </div>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug relative z-10">{{ $task->judul_tugas }}</h3>
-                    <p class="text-xs font-semibold text-gray-500 mb-5 flex-1 relative z-10">{{ $task->modul->nama_modul ?? 'Modul tidak tersedia' }}</p>
-                    <div class="mb-5 relative z-10">
-                        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
-                            <span class="text-gray-500">Tenggat</span>
-                            <span class="text-gray-800">{{ $task->waktu_pengumpulan ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y') : '-' }}</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-[#d62828] h-1.5 rounded-full" style="width: 45%"></div>
-                        </div>
-                    </div>
-                    <a href="{{ route('teacher.assignments.grade') }}" class="w-full mt-auto bg-red-50 hover:bg-[#d62828] text-[#d62828] hover:text-white border border-red-100 hover:border-[#d62828] font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10">
-                        Periksa Tugas
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </a>
-                </div>
+                @foreach($belumDiperiksa as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
                 @endforeach
             </div>
             @endif
@@ -116,6 +100,7 @@
 
         <!-- Tab 2: Aktif Berjalan -->
         <div x-show="activeTab === 'aktif'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            @if($aktifBerjalan->isEmpty())
             <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[300px]">
                 <div class="w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mb-4">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -123,28 +108,32 @@
                 <h3 class="text-lg font-bold text-gray-800 mb-1">Tidak Ada Tugas Aktif</h3>
                 <p class="text-sm text-gray-500 max-w-sm">Semua tugas sudah melewati masa tenggat waktu. Silakan buat tugas baru.</p>
             </div>
+            @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($aktifBerjalan as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
+                @endforeach
+            </div>
+            @endif
         </div>
 
         <!-- Tab 3: Selesai -->
         <div x-show="activeTab === 'selesai'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <!-- Task Card 3 -->
-                <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm flex flex-col h-full group relative overflow-hidden">
-                    <div class="flex items-center justify-end mb-4">
-                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg uppercase tracking-wide">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Selesai Dinilai
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug">Latihan Tata Bahasa Partikel Wa, Ga, O</h3>
-                    <p class="text-xs font-semibold text-gray-500 mb-5 flex-1">Bab 1 - Modul Dasar</p>
-                    
-                    <button class="w-full mt-auto bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 font-bold py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
-                        Lihat Rekap Nilai
-                    </button>
+            @if($selesai->isEmpty())
+            <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm min-h-[300px] flex flex-col items-center justify-center">
+                <div class="w-24 h-24 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mb-6 border-4 border-red-100/50">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Tugas Selesai</h3>
+                <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Tugas yang sudah selesai diperiksa dan melewati batas waktu akan muncul di sini.</p>
             </div>
+            @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($selesai as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
+                @endforeach
+            </div>
+            @endif
         </div>
 
     </div>

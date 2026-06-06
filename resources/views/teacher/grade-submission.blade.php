@@ -4,28 +4,8 @@
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10" x-data="{
-    activeStudent: 1,
-    students: [
-        { 
-            id: 1, name: 'Ahmad Hidayat', status: 'belum_dinilai', submitted_at: 'Kemarin, 14:30', avatar: 'AH', 
-            attachment: { type: 'image', url: 'https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', name: 'ahmad_kanji_bab4.jpg' }, 
-            score: null, notes: 'Sensei, maaf tulisan kanjinya agak miring karena buru-buru berangkat kerja.' 
-        },
-        { 
-            id: 2, name: 'Budi Santoso', status: 'selesai', score: 85, submitted_at: '3 Jun 2026, 09:15', avatar: 'BS', 
-            attachment: { type: 'document', name: 'budi_tugas_kanji.pdf', size: '2.4 MB' }, 
-            notes: '' 
-        },
-        { 
-            id: 3, name: 'Citra Kirana', status: 'terlambat', score: null, submitted_at: 'Hari ini, 10:00', avatar: 'CK', 
-            attachment: { type: 'audio', name: 'rekaman_perkenalan.mp3', duration: '01:45' }, 
-            notes: 'Maaf sensei terlambat mengumpulkan.' 
-        },
-        { 
-            id: 4, name: 'Deni Pratama', status: 'belum_kumpul', score: null, submitted_at: '-', avatar: 'DP', 
-            attachment: null, notes: '' 
-        }
-    ]
+    activeStudent: {{ $submissions->first()['id'] ?? 'null' }},
+    students: {{ json_encode($submissions) }}
 }">
 
     <!-- Header Row: Title + Breadcrumb -->
@@ -40,13 +20,13 @@
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                 <a href="{{ route('teacher.assignments') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Manajemen Tugas</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-[#d62828] font-semibold">Tugas Menulis Kanji Bab 4</span>
+                <span class="text-[#d62828] font-semibold">{{ $tugas->judul_tugas }}</span>
             </nav>
         </div>
         <div class="flex items-center gap-2 self-start mt-1">
             <span class="bg-white border border-gray-200 text-gray-600 px-3 py-2 rounded-xl text-sm font-bold shadow-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Tenggat: 4 Jun 2026
+                Tenggat: {{ \Carbon\Carbon::parse($tugas->waktu_pengumpulan)->translatedFormat('d M Y') }}
             </span>
         </div>
     </div>
@@ -68,7 +48,7 @@
             <!-- List -->
             <div class="bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                 <div class="p-4 border-b border-gray-100 bg-gray-50/50">
-                    <h3 class="font-bold text-gray-800 text-sm">Daftar Pengumpulan (18/20)</h3>
+                    <h3 class="font-bold text-gray-800 text-sm">Daftar Pengumpulan ({{ $submissions->count() }})</h3>
                 </div>
                 <div class="p-2 space-y-1 max-h-[600px] overflow-y-auto custom-scrollbar">
                     <template x-for="student in students" :key="student.id">
@@ -203,7 +183,8 @@
                     </div>
 
                     <!-- Grading Form Card -->
-                    <div class="bg-white rounded-[32px] border border-gray-100 shadow-sm p-6 sm:p-8">
+                    <form method="POST" :action="'{{ url('teacher/submissions') }}/' + student.id + '/grade'" class="bg-white rounded-[32px] border border-gray-100 shadow-sm p-6 sm:p-8">
+                        @csrf
                         <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                             <svg class="w-5 h-5 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
                             Form Penilaian
@@ -213,27 +194,24 @@
                             <!-- Input Skor -->
                             <div class="md:col-span-4 space-y-1.5">
                                 <x-input-label>Berikan Skor (0-100)</x-input-label>
-                                <x-text-input type="number" min="0" max="100" x-bind:value="student.score" class="w-full text-3xl font-bold font-ibm rounded-2xl px-6 py-5 text-center" placeholder="0" />
+                                <x-text-input name="nilai" type="number" min="0" max="100" x-bind:value="student.score" required class="w-full text-3xl font-bold font-ibm rounded-2xl px-6 py-5 text-center" placeholder="0" />
                             </div>
 
                             <!-- Input Feedback -->
                             <div class="md:col-span-8 space-y-1.5">
                                 <x-input-label>Catatan / Feedback Sensei</x-input-label>
-                                <textarea rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-none" placeholder="Tuliskan evaluasi atau koreksi untuk siswa..."></textarea>
+                                <textarea name="feedback" x-text="student.feedback" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-none" placeholder="Tuliskan evaluasi atau koreksi untuk siswa..."></textarea>
                             </div>
                         </div>
 
                         <!-- Actions -->
                         <div class="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row justify-end gap-3">
-                            <button class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
-                                Simpan Saja
-                            </button>
-                            <x-primary-button class="justify-center gap-2 py-3 shadow-sm hover:shadow-md">
+                            <x-primary-button type="submit" class="justify-center gap-2 py-3 shadow-sm hover:shadow-md">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                                Simpan & Lanjut Berikutnya
+                                Simpan Nilai
                             </x-primary-button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </template>
         </div>
