@@ -94,14 +94,14 @@ class StudentController extends Controller
  
         // Jumlah kosakata yang sudah dihafal
         $vocabularyCount = VocabProgress::where('id_user', $user->id)
-            ->where('is_memorized', true)
+            ->where('is_memorized', DB::raw('true'))
             ->count();
  
         // Estimasi jam belajar: hitung bahan ajar yang sudah selesai
         // Asumsi rata-rata 15 menit per bahan ajar
         $completedMaterialsCount = DB::table('bahan_ajar_progress')
             ->where('id_user', $user->id)
-            ->where('is_complete', true)
+            ->where('is_complete', DB::raw('true'))
             ->count();
         $learningHours = round(($completedMaterialsCount * 15) / 60, 1);
 
@@ -320,7 +320,7 @@ class StudentController extends Controller
                 ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
                 ->where('bahan_ajar.id_modul', $id_modul)
                 ->where('bahan_ajar_progress.id_user', $userId)
-                ->where('bahan_ajar_progress.is_complete', true)
+                ->where('bahan_ajar_progress.is_complete', DB::raw('true'))
                 ->count();
 
             // Count total tasks in the module

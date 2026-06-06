@@ -25,11 +25,11 @@
                         </div>
                     </div>
                     
-                    @if($class->status === 'Proses')
+                    @if($enrollment->status === 'Proses')
                         <span class="bg-[#FFB800] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
                             Proses
                         </span>
-                    @elseif($class->status === 'Selesai')
+                    @elseif($enrollment->status === 'Selesai')
                         <span class="bg-[#00C853] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
                             Selesai
                         </span>
