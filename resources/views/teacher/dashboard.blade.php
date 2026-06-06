@@ -311,7 +311,7 @@
                                             <span class="text-xs sm:text-sm text-gray-500">{{ $task->submitted_at ? $task->submitted_at->diffForHumans() : '[Data: submitted_at]' }}</span>
                                         </td>
                                         <td class="px-4 sm:px-6 py-3 sm:py-4 text-right">
-                                            <a href="{{ route('teacher.tasks.show', ['id_modul' => $task->modul->id_modul ?? 1, 'id_tugas' => $task->id_tugas ?? 1]) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#d62828] hover:text-red-700 transition">
+                                            <a href="{{ route('teacher.assignments.grade', $task->id_tugas ?? 1) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#d62828] hover:text-red-700 transition">
                                                 Nilai
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                             </a>
