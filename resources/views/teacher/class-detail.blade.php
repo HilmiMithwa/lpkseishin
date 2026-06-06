@@ -54,7 +54,7 @@
                         {{-- Title --}}
                         <h2 class="text-2xl sm:text-3xl font-bold font-ibm text-white leading-tight mb-3">{{ $classData->nama_mapel }}</h2>
                         {{-- Description --}}
-                        <p class="text-white/85 text-xs sm:text-sm font-karla font-medium leading-relaxed">{{ $classData->deskripsi }}</p>
+                        <p class="text-white/85 text-xs sm:text-sm font-karla font-medium leading-relaxed">{{ $classData->deskripsi_mapel }}</p>
                     </div>
                 </div>
 
@@ -296,7 +296,7 @@
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Deskripsi:</x-input-label>
-                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi }}</textarea>
+                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi_mapel }}</textarea>
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Mentor Sensei:</x-input-label>
