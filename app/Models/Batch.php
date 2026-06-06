@@ -22,6 +22,9 @@ class Batch extends Model
         'quota',
     ];
 
+    public function mapel()
+    {
+        return $this->hasMany(Mapel::class, 'id_batch', 'id_batch');
     public function getNamaBatchAttribute()
     {
         return $this->nama;

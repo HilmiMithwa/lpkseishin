@@ -30,4 +30,10 @@ class BahanAjar extends Model
         'id_modul'
     ];
 
+    // Relasi ke Modul
+    public function modul()
+    {
+        return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
+    }
+
 }

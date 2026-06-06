@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
-    selectedBatch: '',
-    selectedClass: '',
+    selectedBatch: '{{ $selectedBatchName }}',
+    selectedClass: '{{ $selectedClassName }}',
     detailOpen: false, 
     studentId: '', 
     studentName: '', 
@@ -21,7 +21,132 @@
     evalFormTitle: 'Draf - Evaluasi Baru',
     showDeleteConfirm: false,
     deleteTargetName: '',
-    deleteTargetUrl: '#'
+    deleteTargetUrl: '#',
+    overallAverage: 0,
+    predikat: '',
+    radarScores: [0, 0, 0, 0, 0, 0],
+    weeklyLogs: [],
+    evaluations: [],
+    editWeeklyId: null,
+    editEvalId: null,
+    openStudentDetail(userId) {
+        this.studentId = userId;
+        this.editWeeklyId = null;
+        this.editEvalId = null;
+        fetch(`/teacher/progress-report/student/${userId}/mapel/{{ $selectedClassId }}`)
+            .then(res => res.json())
+            .then(data => {
+                this.studentName = data.studentName;
+                this.studentAvatar = data.studentAvatar;
+                this.overallAverage = data.overallAverage;
+                this.predikat = data.predikat;
+                this.radarScores = data.radarScores;
+                this.weeklyLogs = data.weeklyLogs;
+                this.evaluations = data.evaluations;
+                this.detailOpen = true;
+            });
+    },
+    saveWeeklyLog(e) {
+        let formData = new FormData(e.target);
+        formData.append('id_user', this.studentId);
+        formData.append('id_mapel', '{{ $selectedClassId }}');
+        
+        let url = '/teacher/progress-report/weekly-log';
+        if (this.editWeeklyId) {
+            url = '/teacher/progress-report/weekly-log/' + this.editWeeklyId;
+            formData.append('_method', 'PUT');
+        }
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+        }).then(async (res) => {
+            if (res.ok) {
+                this.openStudentDetail(this.studentId);
+                this.showAddWeekly = false;
+                this.editWeeklyId = null;
+                e.target.reset();
+            } else {
+                let err = await res.json();
+                console.error(err);
+                alert('Gagal menyimpan. Coba periksa input Anda.');
+            }
+        });
+    },
+    saveEvaluationLog(e) {
+        let formData = new FormData(e.target);
+        formData.append('id_user', this.studentId);
+        formData.append('id_mapel', '{{ $selectedClassId }}');
+        
+        let url = '/teacher/progress-report/evaluation-log';
+        if (this.editEvalId) {
+            url = '/teacher/progress-report/evaluation-log/' + this.editEvalId;
+            formData.append('_method', 'PUT');
+        }
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+        }).then(async (res) => {
+            if (res.ok) {
+                this.openStudentDetail(this.studentId);
+                this.showAddEvaluation = false;
+                this.editEvalId = null;
+                e.target.reset();
+            } else {
+                let err = await res.json();
+                console.error(err);
+                alert('Gagal menyimpan. Coba periksa input Anda.');
+            }
+        });
+    },
+    openEditWeekly(log) {
+        this.editWeeklyId = log.id_catatan_mingguan;
+        this.weeklyFormTitle = 'Edit Catatan Mingguan (Minggu ' + log.minggu_ke + ')';
+        this.showAddWeekly = true;
+        
+        // Use nextTick to ensure form is rendered
+        this.$nextTick(() => {
+            const form = document.getElementById('weeklyForm');
+            if(form) {
+                form.elements['minggu_ke'].value = log.minggu_ke;
+                form.elements['score_word'].value = log.score_word;
+                form.elements['score_kotoba'].value = log.score_kotoba;
+                form.elements['score_bunpou'].value = log.score_bunpou;
+                form.elements['score_kanji'].value = log.score_kanji;
+                form.elements['score_choukai'].value = log.score_choukai;
+                form.elements['score_kaiwa'].value = log.score_kaiwa;
+            }
+        });
+        this.$refs.offcanvasBody.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    openEditEval(evalLog) {
+        this.editEvalId = evalLog.id_catatan_evaluasi;
+        this.evalFormTitle = 'Edit Catatan Evaluasi (' + evalLog.nama_evaluasi + ')';
+        this.showAddEvaluation = true;
+        
+        this.$nextTick(() => {
+            const form = document.getElementById('evalForm');
+            if(form) {
+                form.elements['nama_evaluasi'].value = evalLog.nama_evaluasi;
+                form.elements['tipe_ujian'].value = evalLog.tipe_ujian;
+                form.elements['skor'].value = evalLog.skor;
+            }
+        });
+        this.$refs.offcanvasBody.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    deleteLog(id, type) {
+        const url = type === 'weekly' ? `/teacher/progress-report/weekly-log/${id}` : `/teacher/progress-report/evaluation-log/${id}`;
+        fetch(url, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+        }).then(() => {
+            this.openStudentDetail(this.studentId);
+            this.showDeleteConfirm = false;
+        });
+    }
 }">
 
     <div class="mb-8 text-left">
@@ -43,27 +168,13 @@
                     
                     <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
                         <ul class="py-1">
-                            <!-- TODO Backend: Loop data Batch di sini. Hanya tampilkan Batch yang di-assign ke Sensei yang sedang login.
-                                 Contoh implementasi Blade:
-                                 {{-- 
-                                 @foreach(auth()->user()->teacher->batches as $batch)
-                                     <li>
-                                         <button type="button" @click="selectedBatch = '{{ $batch->name }}'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === '{{ $batch->name }}' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">{{ $batch->name }}</button>
-                                     </li>
-                                 @endforeach
-                                 --}}
-                            -->
-                            
-                            <!-- Dummy Data Slicing -->
+                            @foreach($batches as $batch)
                             <li>
-                                <button type="button" @click="selectedBatch = 'Batch 3'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === 'Batch 3' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Batch 3</button>
+                                <a href="{{ route('teacher.progress-report', ['batch_id' => $batch->id_batch]) }}" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors {{ $selectedBatchId == $batch->id_batch ? 'bg-red-50 text-[#d62828]' : 'text-gray-700' }}">
+                                    {{ $batch->nama }}
+                                </a>
                             </li>
-                            <li>
-                                <button type="button" @click="selectedBatch = 'Batch 2'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === 'Batch 2' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Batch 2</button>
-                            </li>
-                            <li>
-                                <button type="button" @click="selectedBatch = 'Batch 1'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === 'Batch 1' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Batch 1</button>
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -78,22 +189,13 @@
                     
                     <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
                         <ul class="py-1">
-                            <!-- TODO Backend: Loop data Kelas di sini. Hanya tampilkan Kelas yang berada di dalam Batch yang dipilih (via AJAX/Fetch).
-                                 Contoh implementasi Blade/Alpine:
-                                 <template x-for="cls in availableClasses" :key="cls.id">
-                                     <li>
-                                         <button type="button" @click="selectedClass = cls.name; open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedClass === cls.name ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'" x-text="cls.name"></button>
-                                     </li>
-                                 </template>
-                            -->
-                            
-                            <!-- Dummy Data Slicing -->
+                            @foreach($classes as $cls)
                             <li>
-                                <button type="button" @click="selectedClass = '4 Mastering'; open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedClass === '4 Mastering' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">4 Mastering</button>
+                                <a href="{{ route('teacher.progress-report', ['batch_id' => $selectedBatchId, 'class_id' => $cls->id_mapel]) }}" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors {{ $selectedClassId == $cls->id_mapel ? 'bg-red-50 text-[#d62828]' : 'text-gray-700' }}">
+                                    {{ $cls->nama_mapel }}
+                                </a>
                             </li>
-                            <li>
-                                <button type="button" @click="selectedClass = '3 Beginner'; open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedClass === '3 Beginner' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">3 Beginner</button>
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -104,7 +206,7 @@
         <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm flex flex-col justify-center text-center sm:text-left transition-all duration-300" :class="selectedBatch !== '' && selectedClass !== '' ? '' : 'bg-gray-50/50 opacity-70 grayscale'">
             <p class="text-[11px] font-bold text-gray-500 mb-2 tracking-wider">RATA-RATA KELAS</p>
             <div class="flex items-baseline justify-center sm:justify-start gap-1">
-                <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-gray-800' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '85' : '-'">85</h2>
+                <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-gray-800' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '{{ $avgClass }}' : '-'">{{ $avgClass }}</h2>
                 <span class="text-sm font-bold text-gray-400" x-show="selectedBatch !== '' && selectedClass !== ''" x-transition.opacity>/100</span>
             </div>
         </div>
@@ -112,13 +214,13 @@
         <!-- Avg Progress -->
         <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm flex flex-col justify-center text-center sm:text-left transition-all duration-300" :class="selectedBatch !== '' && selectedClass !== '' ? '' : 'bg-gray-50/50 opacity-70 grayscale'">
             <p class="text-[11px] font-bold text-gray-500 mb-2 tracking-wider">RATA-RATA PROGRESS</p>
-            <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-gray-800' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '60%' : '-'">60%</h2>
+            <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-gray-800' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '{{ $avgProgress }}%' : '-'">{{ $avgProgress }}%</h2>
         </div>
 
         <!-- Warning Student -->
         <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm flex flex-col justify-center text-center sm:text-left transition-all duration-300" :class="selectedBatch !== '' && selectedClass !== '' ? '' : 'bg-gray-50/50 opacity-70 grayscale'">
             <p class="text-[11px] font-bold text-gray-500 mb-2 tracking-wider">SISWA PERINGATAN</p>
-            <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-[#d62828]' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '3' : '-'">3</h2>
+            <h2 class="text-3xl font-bold tracking-tight" :class="selectedBatch !== '' && selectedClass !== '' ? 'text-[#d62828]' : 'text-gray-400'" x-text="selectedBatch !== '' && selectedClass !== '' ? '{{ $warningCount }}' : '-'">{{ $warningCount }}</h2>
         </div>
     </div>
     <!-- Empty State Notification -->
@@ -166,95 +268,46 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    <!-- Row 1 -->
+                    @forelse($students as $index => $student)
                     <tr class="hover:bg-gray-50/50 transition">
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">1</td>
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">012025004</td>
+                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
+                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?img=11" alt="Ahmad Hidayat" class="w-8 h-8 rounded-full object-cover">
-                                <span class="text-sm font-bold text-gray-800">Ahmad Hidayat</span>
+                                <img src="{{ $student->avatar }}" alt="{{ $student->name }}" class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-sm font-bold text-gray-800">{{ $student->name }}</span>
                             </div>
                         </td>
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#d62828] rounded-full" style="width: 60%"></div>
+                                    <div class="h-full bg-[#d62828] rounded-full" style="width: {{ $student->progress_modul }}%"></div>
                                 </div>
-                                <span class="text-xs font-bold text-gray-600 w-8">60%</span>
+                                <span class="text-xs font-bold text-gray-600 w-8">{{ $student->progress_modul }}%</span>
                             </div>
                         </td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">80</td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">90</td>
+                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->rata_rata_tugas }}</td>
+                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->nilai_evaluasi }}</td>
                         <td class="py-4 px-4">
-                            <span class="inline-flex px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">Selesai</span>
+                            @if($student->status == 'Selesai')
+                            <span class="inline-flex px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @elseif($student->status == 'Aktif')
+                            <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @else
+                            <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @endif
                         </td>
                         <td class="py-4 px-4 text-center">
-                            <button @click="detailOpen = true; studentName = 'Ahmad Hidayat'; studentAvatar = 'https://i.pravatar.cc/150?img=11'" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            <button @click="openStudentDetail({{ $student->user_id }})" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </button>
                         </td>
                     </tr>
-                    
-                    <!-- Row 2 -->
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">2</td>
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">012025005</td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?img=5" alt="Siti Nurhaliza" class="w-8 h-8 rounded-full object-cover">
-                                <span class="text-sm font-bold text-gray-800">Siti Nurhaliza</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#d62828] rounded-full" style="width: 56%"></div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-600 w-8">56%</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">75</td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">85</td>
-                        <td class="py-4 px-4">
-                            <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">Aktif</span>
-                        </td>
-                        <td class="py-4 px-4 text-center">
-                            <button @click="detailOpen = true; studentName = 'Siti Nurhaliza'; studentAvatar = 'https://i.pravatar.cc/150?img=5'" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                            </button>
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="py-8 text-center text-gray-500 text-sm">Belum ada data siswa untuk kelas ini.</td>
                     </tr>
-
-                    <!-- Row 3 -->
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">3</td>
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">012025006</td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?img=12" alt="Budi Santoso" class="w-8 h-8 rounded-full object-cover">
-                                <span class="text-sm font-bold text-gray-800">Budi Santoso</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#d62828] rounded-full" style="width: 52%"></div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-600 w-8">52%</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">70</td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">78</td>
-                        <td class="py-4 px-4">
-                            <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">Tidak Aktif</span>
-                        </td>
-                        <td class="py-4 px-4 text-center">
-                            <button @click="detailOpen = true; studentName = 'Budi Santoso'; studentAvatar = 'https://i.pravatar.cc/150?img=12'" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                            </button>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -296,8 +349,8 @@
             </button>
         </div>
 
-        <!-- Scrollable Content -->
-        <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8 bg-[#FAFAFA]">
+            <!-- Offcanvas Body -->
+            <div x-ref="offcanvasBody" class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8 bg-[#fafafa]">
             
             <!-- Student Summary -->
             <section>
@@ -308,22 +361,20 @@
                     <div class="flex-1">
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Rata-rata Nilai:</p>
                         <div class="flex items-baseline gap-1 mb-4">
-                            <h2 class="text-3xl font-bold text-gray-800 tracking-tight">85</h2>
+                            <h2 class="text-3xl font-bold text-gray-800 tracking-tight" x-text="overallAverage"></h2>
                             <span class="text-[11px] font-bold text-gray-400">/100</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Predikat:</span>
-                            <span class="inline-flex px-2 py-0.5 bg-green-100 text-green-700 rounded-md text-[10px] font-bold tracking-wide uppercase">B - Baik</span>
+                            <span class="inline-flex px-2 py-0.5 bg-green-100 text-green-700 rounded-md text-[10px] font-bold tracking-wide uppercase" x-text="predikat"></span>
                         </div>
                     </div>
                     
                     <!-- SVG Radar Chart Interaktif -->
                     <div class="w-32 h-32 relative flex items-center justify-center shrink-0 mr-6" x-data="{
-                        scores: [85, 90, 88, 87, 80, 80],
                         labels: ['Word', 'Kotoba', 'Bunpou', 'Kanji', 'Choukai', 'Kaiwa'],
-                        activePoint: null,
                         getPoints() {
-                            return this.scores.map((score, i) => {
+                            return radarScores.map((score, i) => {
                                 const angle = (Math.PI / 2) - (2 * Math.PI * i / 6);
                                 const r = (score / 100) * 40;
                                 return `${50 + r * Math.cos(angle)},${50 - r * Math.sin(angle)}`;
@@ -352,20 +403,20 @@
                             <polygon :points="getPoints()" fill="rgba(214, 40, 40, 0.2)" stroke="#d62828" stroke-width="1.5" class="transition-all duration-300"/>
                             
                             <!-- Interactive Points (Visible) -->
-                            <circle :cx="getPoint(scores[0], 0).x" :cy="getPoint(scores[0], 0).y" :r="activePoint === 0 ? 4 : 2" :fill="activePoint === 0 ? '#fff' : '#d62828'" :stroke="activePoint === 0 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
-                            <circle :cx="getPoint(scores[1], 1).x" :cy="getPoint(scores[1], 1).y" :r="activePoint === 1 ? 4 : 2" :fill="activePoint === 1 ? '#fff' : '#d62828'" :stroke="activePoint === 1 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
-                            <circle :cx="getPoint(scores[2], 2).x" :cy="getPoint(scores[2], 2).y" :r="activePoint === 2 ? 4 : 2" :fill="activePoint === 2 ? '#fff' : '#d62828'" :stroke="activePoint === 2 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
-                            <circle :cx="getPoint(scores[3], 3).x" :cy="getPoint(scores[3], 3).y" :r="activePoint === 3 ? 4 : 2" :fill="activePoint === 3 ? '#fff' : '#d62828'" :stroke="activePoint === 3 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
-                            <circle :cx="getPoint(scores[4], 4).x" :cy="getPoint(scores[4], 4).y" :r="activePoint === 4 ? 4 : 2" :fill="activePoint === 4 ? '#fff' : '#d62828'" :stroke="activePoint === 4 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
-                            <circle :cx="getPoint(scores[5], 5).x" :cy="getPoint(scores[5], 5).y" :r="activePoint === 5 ? 4 : 2" :fill="activePoint === 5 ? '#fff' : '#d62828'" :stroke="activePoint === 5 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[0], 0).x" :cy="getPoint(radarScores[0], 0).y" :r="activePoint === 0 ? 4 : 2" :fill="activePoint === 0 ? '#fff' : '#d62828'" :stroke="activePoint === 0 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[1], 1).x" :cy="getPoint(radarScores[1], 1).y" :r="activePoint === 1 ? 4 : 2" :fill="activePoint === 1 ? '#fff' : '#d62828'" :stroke="activePoint === 1 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[2], 2).x" :cy="getPoint(radarScores[2], 2).y" :r="activePoint === 2 ? 4 : 2" :fill="activePoint === 2 ? '#fff' : '#d62828'" :stroke="activePoint === 2 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[3], 3).x" :cy="getPoint(radarScores[3], 3).y" :r="activePoint === 3 ? 4 : 2" :fill="activePoint === 3 ? '#fff' : '#d62828'" :stroke="activePoint === 3 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[4], 4).x" :cy="getPoint(radarScores[4], 4).y" :r="activePoint === 4 ? 4 : 2" :fill="activePoint === 4 ? '#fff' : '#d62828'" :stroke="activePoint === 4 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
+                            <circle :cx="getPoint(radarScores[5], 5).x" :cy="getPoint(radarScores[5], 5).y" :r="activePoint === 5 ? 4 : 2" :fill="activePoint === 5 ? '#fff' : '#d62828'" :stroke="activePoint === 5 ? '#d62828' : 'none'" stroke-width="1.5" class="transition-all duration-300 pointer-events-none" />
                             
                             <!-- Hitboxes (Invisible, larger area for smooth hover) -->
-                            <circle :cx="getPoint(scores[0], 0).x" :cy="getPoint(scores[0], 0).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 0" @mouseleave="activePoint = null" />
-                            <circle :cx="getPoint(scores[1], 1).x" :cy="getPoint(scores[1], 1).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 1" @mouseleave="activePoint = null" />
-                            <circle :cx="getPoint(scores[2], 2).x" :cy="getPoint(scores[2], 2).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 2" @mouseleave="activePoint = null" />
-                            <circle :cx="getPoint(scores[3], 3).x" :cy="getPoint(scores[3], 3).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 3" @mouseleave="activePoint = null" />
-                            <circle :cx="getPoint(scores[4], 4).x" :cy="getPoint(scores[4], 4).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 4" @mouseleave="activePoint = null" />
-                            <circle :cx="getPoint(scores[5], 5).x" :cy="getPoint(scores[5], 5).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 5" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[0], 0).x" :cy="getPoint(radarScores[0], 0).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 0" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[1], 1).x" :cy="getPoint(radarScores[1], 1).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 1" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[2], 2).x" :cy="getPoint(radarScores[2], 2).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 2" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[3], 3).x" :cy="getPoint(radarScores[3], 3).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 3" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[4], 4).x" :cy="getPoint(radarScores[4], 4).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 4" @mouseleave="activePoint = null" />
+                            <circle :cx="getPoint(radarScores[5], 5).x" :cy="getPoint(radarScores[5], 5).y" r="10" fill="transparent" class="cursor-pointer" @mouseenter="activePoint = 5" @mouseleave="activePoint = null" />
                             
                             <!-- Labels -->
                             <text x="50" y="3" font-size="7" text-anchor="middle" font-weight="bold" :fill="activePoint === 0 ? '#d62828' : '#6b7280'" class="transition-colors">Word</text>
@@ -376,10 +427,9 @@
                             <text x="9" y="30" font-size="7" text-anchor="end" font-weight="bold" :fill="activePoint === 5 ? '#d62828' : '#6b7280'" class="transition-colors">Kaiwa</text>
                         </svg>
                         
-                        <!-- Tooltip Overlay -->
                         <div x-show="activePoint !== null" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm border border-red-100 shadow-md rounded-lg px-2 py-1 pointer-events-none z-10" style="display: none;">
                             <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider text-center" x-text="activePoint !== null ? labels[activePoint] : ''"></p>
-                            <p class="text-sm font-bold text-[#d62828] text-center leading-none mt-0.5" x-text="activePoint !== null ? scores[activePoint] : ''"></p>
+                            <p class="text-sm font-bold text-[#d62828] text-center leading-none mt-0.5" x-text="activePoint !== null ? radarScores[activePoint] : ''"></p>
                         </div>
                     </div>
                 </div>
@@ -388,18 +438,18 @@
             <!-- Weekly Log -->
             <section>
                 <h4 class="text-sm font-bold text-gray-800 mb-3">Catatan Mingguan</h4>
-                <button @click="showAddWeekly = true" x-show="!showAddWeekly" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
+                <button @click="showAddWeekly = true; weeklyFormTitle = 'Draf - Minggu Baru'; editWeeklyId = null; document.getElementById('weeklyForm').reset();" x-show="!showAddWeekly" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                     Tambah Catatan Mingguan
                 </button>
                 
                 <!-- Add Weekly Form Draft -->
-                <form action="#" method="POST" @submit.prevent="showAddWeekly = false" x-show="showAddWeekly" x-transition class="bg-white border border-red-100 rounded-2xl p-5 shadow-sm mb-4" style="display: none;">
+                <form id="weeklyForm" action="#" method="POST" @submit.prevent="saveWeeklyLog" x-show="showAddWeekly" x-transition class="bg-white border border-red-100 rounded-2xl p-5 shadow-sm mb-4" style="display: none;">
                     @csrf
                     <h5 class="text-xs font-bold text-gray-800 mb-4" x-text="weeklyFormTitle"></h5>
                     <div class="space-y-1.5 mb-4">
                         <x-input-label>Minggu Ke (Week)</x-input-label>
-                        <x-text-input type="number" name="week_number" placeholder="mis. 1" class="w-full" required />
+                        <x-text-input type="number" name="minggu_ke" placeholder="mis. 1" class="w-full" required />
                     </div>
                     <div class="grid grid-cols-2 gap-4 mb-5">
                         <div class="space-y-1.5">
@@ -435,126 +485,66 @@
 
                 <!-- Accordions -->
                 <div class="space-y-3">
-                    <!-- Week 3 -->
-                    <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" :class="week3Open ? 'ring-1 ring-red-100' : ''">
-                        <button @click="week3Open = !week3Open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="week3Open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                    <template x-for="(log, index) in weeklyLogs" :key="log.id_catatan_mingguan">
+                        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" x-data="{ open: false }" :class="open ? 'ring-1 ring-red-100' : ''">
+                            <button @click="open = !open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                                    </div>
+                                    <span class="font-bold text-sm text-gray-800" x-text="'Minggu ' + log.minggu_ke"></span>
                                 </div>
-                                <span class="font-bold text-sm text-gray-800">Minggu 3</span>
-                            </div>
-                            <span class="text-xs font-bold text-gray-500">Rata-rata: <span class="text-gray-800">85</span></span>
-                        </button>
-                        <div x-show="week3Open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-                            <div class="px-5 pb-5 pt-2 border-t border-gray-50">
-                                <div class="grid grid-cols-6 gap-2 mb-5">
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Word</p><p class="text-sm font-bold text-gray-800 mt-1">85</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kotoba</p><p class="text-sm font-bold text-gray-800 mt-1">90</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Bunpou</p><p class="text-sm font-bold text-gray-800 mt-1">88</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kanji</p><p class="text-sm font-bold text-gray-800 mt-1">87</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Choukai</p><p class="text-sm font-bold text-gray-800 mt-1">80</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kaiwa</p><p class="text-sm font-bold text-gray-800 mt-1">80</p></div>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                                    <span class="text-[10px] font-semibold text-gray-400">Diperbarui: 31 Februari 2026</span>
-                                    <div class="flex gap-4">
-                                        <button type="button" @click="showAddWeekly = true; weeklyFormTitle = 'Edit Catatan Mingguan (Minggu 3)'; $el.closest('.custom-scrollbar').scrollTo({ top: 0, behavior: 'smooth' });" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                                        <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Mingguan (Minggu 3)'; deleteTargetUrl = '#'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
+                                <span class="text-xs font-bold text-gray-500">Rata-rata: <span class="text-gray-800" x-text="Math.round((log.score_word + log.score_kotoba + log.score_bunpou + log.score_kanji + log.score_choukai + log.score_kaiwa) / 6)"></span></span>
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+                                <div class="px-5 pb-5 pt-2 border-t border-gray-50">
+                                    <div class="grid grid-cols-6 gap-2 mb-5">
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Word</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_word"></p></div>
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kotoba</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_kotoba"></p></div>
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Bunpou</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_bunpou"></p></div>
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kanji</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_kanji"></p></div>
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Choukai</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_choukai"></p></div>
+                                        <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kaiwa</p><p class="text-sm font-bold text-gray-800 mt-1" x-text="log.score_kaiwa"></p></div>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-3 border-t border-gray-50">
+                                        <span class="text-[10px] font-semibold text-gray-400" x-text="'Diperbarui: ' + new Date(log.updated_at).toLocaleDateString()"></span>
+                                        <div class="flex gap-4">
+                                            <button type="button" @click="openEditWeekly(log)" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
+                                            <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Mingguan (Minggu ' + log.minggu_ke + ')'; deleteId = log.id_catatan_mingguan; deleteType = 'weekly'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Week 2 -->
-                    <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" :class="week2Open ? 'ring-1 ring-red-100' : ''">
-                        <button @click="week2Open = !week2Open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="week2Open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                                </div>
-                                <span class="font-bold text-sm text-gray-800">Minggu 2</span>
-                            </div>
-                            <span class="text-xs font-bold text-gray-500">Rata-rata: <span class="text-gray-800">82</span></span>
-                        </button>
-                        <div x-show="week2Open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-                            <div class="px-5 pb-5 pt-2 border-t border-gray-50">
-                                <div class="grid grid-cols-6 gap-2 mb-5">
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Word</p><p class="text-sm font-bold text-gray-800 mt-1">80</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kotoba</p><p class="text-sm font-bold text-gray-800 mt-1">85</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Bunpou</p><p class="text-sm font-bold text-gray-800 mt-1">82</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kanji</p><p class="text-sm font-bold text-gray-800 mt-1">85</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Choukai</p><p class="text-sm font-bold text-gray-800 mt-1">78</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kaiwa</p><p class="text-sm font-bold text-gray-800 mt-1">82</p></div>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                                    <span class="text-[10px] font-semibold text-gray-400">Diperbarui: 24 Februari 2026</span>
-                                    <div class="flex gap-4">
-                                        <button type="button" @click="showAddWeekly = true; weeklyFormTitle = 'Edit Catatan Mingguan (Minggu 2)'; $el.closest('.custom-scrollbar').scrollTo({ top: 0, behavior: 'smooth' });" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                                        <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Mingguan (Minggu 2)'; deleteTargetUrl = '#'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Week 1 -->
-                    <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" :class="week1Open ? 'ring-1 ring-red-100' : ''">
-                        <button @click="week1Open = !week1Open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="week1Open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                                </div>
-                                <span class="font-bold text-sm text-gray-800">Minggu 1</span>
-                            </div>
-                            <span class="text-xs font-bold text-gray-500">Rata-rata: <span class="text-gray-800">75</span></span>
-                        </button>
-                        <div x-show="week1Open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-                            <div class="px-5 pb-5 pt-2 border-t border-gray-50">
-                                <div class="grid grid-cols-6 gap-2 mb-5">
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Word</p><p class="text-sm font-bold text-gray-800 mt-1">70</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kotoba</p><p class="text-sm font-bold text-gray-800 mt-1">75</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Bunpou</p><p class="text-sm font-bold text-gray-800 mt-1">72</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kanji</p><p class="text-sm font-bold text-gray-800 mt-1">78</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Choukai</p><p class="text-sm font-bold text-gray-800 mt-1">75</p></div>
-                                    <div class="text-center"><p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Kaiwa</p><p class="text-sm font-bold text-gray-800 mt-1">80</p></div>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                                    <span class="text-[10px] font-semibold text-gray-400">Diperbarui: 17 Februari 2026</span>
-                                    <div class="flex gap-4">
-                                        <button type="button" @click="showAddWeekly = true; weeklyFormTitle = 'Edit Catatan Mingguan (Minggu 1)'; $el.closest('.custom-scrollbar').scrollTo({ top: 0, behavior: 'smooth' });" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                                        <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Mingguan (Minggu 1)'; deleteTargetUrl = '#'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </template>
                 </div>
             </section>
 
             <!-- Evaluation Log -->
             <section>
                 <h4 class="text-sm font-bold text-gray-800 mb-3">Catatan Evaluasi</h4>
-                <button @click="showAddEvaluation = true" x-show="!showAddEvaluation" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
+                <button @click="showAddEvaluation = true; evalFormTitle = 'Draf - Evaluasi Baru'; editEvalId = null; document.getElementById('evalForm').reset();" x-show="!showAddEvaluation" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                     Tambah Catatan Evaluasi
                 </button>
                 
                 <!-- Add Evaluation Form Draft -->
-                <form action="#" method="POST" @submit.prevent="showAddEvaluation = false" x-show="showAddEvaluation" x-transition class="bg-white border border-red-100 rounded-2xl p-5 shadow-sm mb-4" style="display: none;">
+                <form id="evalForm" action="#" method="POST" @submit.prevent="saveEvaluationLog" x-show="showAddEvaluation" x-transition class="bg-white border border-red-100 rounded-2xl p-5 shadow-sm mb-4" style="display: none;">
                     @csrf
                     <h5 class="text-xs font-bold text-gray-800 mb-4" x-text="evalFormTitle"></h5>
                     <div class="space-y-1.5 mb-4">
                         <x-input-label>Nama Evaluasi</x-input-label>
-                        <x-text-input type="text" name="evaluation_name" placeholder="mis. UTS 2" class="w-full" required />
+                        <x-text-input type="text" name="nama_evaluasi" placeholder="mis. UTS 2" class="w-full" required />
                     </div>
                     
-                    <input type="hidden" name="type" value="offline">
+                    <div class="space-y-1.5 mb-4">
+                        <x-input-label>Tipe Ujian</x-input-label>
+                        <x-text-input type="text" name="tipe_ujian" placeholder="mis. Offline" class="w-full" required />
+                    </div>
                     
                     <div class="space-y-1.5 mb-5">
                         <x-input-label>Skor</x-input-label>
-                        <x-text-input type="number" name="score" placeholder="1-100" class="w-full" required />
+                        <x-text-input type="number" name="skor" placeholder="1-100" class="w-full" required />
                     </div>
                     <div class="flex gap-2">
                         <button type="button" @click="showAddEvaluation = false" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-bold transition">Batal</button>
@@ -564,67 +554,37 @@
 
                 <!-- Evaluation Accordions -->
                 <div class="space-y-3 pb-10">
-                    <!-- UTS 1 -->
-                    <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" :class="uts1Open ? 'ring-1 ring-red-100' : ''">
-                        <button @click="uts1Open = !uts1Open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="uts1Open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                    <template x-for="(eval, index) in evaluations" :key="eval.id_catatan_evaluasi">
+                        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" x-data="{ open: false }" :class="open ? 'ring-1 ring-red-100' : ''">
+                            <button @click="open = !open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-sm text-gray-800" x-text="eval.nama_evaluasi"></span>
+                                        <span class="px-2 py-0.5 bg-orange-50 text-orange-600 rounded text-[9px] font-bold tracking-wide uppercase border border-orange-100" x-text="eval.tipe_ujian || 'Offline'"></span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="font-bold text-sm text-gray-800">UTS 1</span>
-                                    <span class="px-2 py-0.5 bg-orange-50 text-orange-600 rounded text-[9px] font-bold tracking-wide uppercase border border-orange-100">Offline</span>
-                                </div>
-                            </div>
-                            <span class="text-xs font-bold text-gray-500">Skor: <span class="text-gray-800">85</span></span>
-                        </button>
-                        <div x-show="uts1Open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-                            <div class="px-5 pb-5 pt-2 border-t border-gray-50">
-                                <div class="mb-4">
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tipe Ujian</p>
-                                    <p class="text-sm font-bold text-gray-800">UTS (Ujian Tengah Semester)</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                                    <span class="text-[10px] font-semibold text-gray-400">Diperbarui: 23 Januari 2026</span>
-                                    <div class="flex gap-4">
-                                        <button type="button" @click="showAddEvaluation = true; evalFormTitle = 'Edit Catatan Evaluasi (UTS 1)'; $el.closest('.custom-scrollbar').scrollTo({ top: 0, behavior: 'smooth' });" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                                        <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Evaluasi (UTS 1)'; deleteTargetUrl = '#'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
+                                <span class="text-xs font-bold text-gray-500">Skor: <span class="text-gray-800" x-text="eval.skor"></span></span>
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+                                <div class="px-5 pb-5 pt-2 border-t border-gray-50">
+                                    <div class="mb-4">
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tipe Ujian</p>
+                                        <p class="text-sm font-bold text-gray-800" x-text="eval.tipe_ujian || 'Ujian Reguler'"></p>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-3 border-t border-gray-50">
+                                        <span class="text-[10px] font-semibold text-gray-400" x-text="'Diperbarui: ' + new Date(eval.updated_at).toLocaleDateString()"></span>
+                                        <div class="flex gap-4">
+                                            <button type="button" @click="openEditEval(eval)" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
+                                            <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Evaluasi (' + eval.nama_evaluasi + ')'; deleteId = eval.id_catatan_evaluasi; deleteType = 'evaluation'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Quiz 1 -->
-                    <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" :class="quiz1Open ? 'ring-1 ring-red-100' : ''">
-                        <button @click="quiz1Open = !quiz1Open" class="w-full px-5 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition outline-none">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300" :class="quiz1Open ? 'rotate-90 bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400'">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="font-bold text-sm text-gray-800">Quiz 1</span>
-                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[9px] font-bold tracking-wide uppercase border border-blue-100">Online</span>
-                                </div>
-                            </div>
-                            <span class="text-xs font-bold text-gray-500">Skor: <span class="text-gray-800">85</span></span>
-                        </button>
-                        <div x-show="quiz1Open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-                            <div class="px-5 pb-5 pt-2 border-t border-gray-50">
-                                <div class="mb-4">
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tipe Ujian</p>
-                                    <p class="text-sm font-bold text-gray-800">Kuis Reguler (Online via LMS)</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                                    <span class="text-[10px] font-semibold text-green-500 flex items-center gap-1">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                                        Tersinkronisasi dari LMS
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    </template>
                 </div>
             </section>
 
@@ -641,11 +601,7 @@
                     <p class="text-sm text-gray-500 mb-6">Yakin ingin menghapus <span class="font-bold text-gray-800" x-text="deleteTargetName"></span>? Tindakan ini tidak dapat dibatalkan.</p>
                     <div class="flex gap-3">
                         <button @click="showDeleteConfirm = false" type="button" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold transition outline-none focus:ring-2 focus:ring-gray-200">Batal</button>
-                        <form :action="deleteTargetUrl" method="POST" class="flex-1" @submit.prevent="showDeleteConfirm = false">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" @click="showDeleteConfirm = false" class="w-full py-2.5 bg-[#d62828] hover:bg-red-700 text-white rounded-xl text-sm font-bold shadow-sm transition outline-none focus:ring-2 focus:ring-red-500/50">Ya, Hapus</button>
-                        </form>
+                        <button type="button" @click="deleteLog(deleteId, deleteType)" class="w-full flex-1 py-2.5 bg-[#d62828] hover:bg-red-700 text-white rounded-xl text-sm font-bold shadow-sm transition outline-none focus:ring-2 focus:ring-red-500/50">Ya, Hapus</button>
                     </div>
                 </div>
             </div>
