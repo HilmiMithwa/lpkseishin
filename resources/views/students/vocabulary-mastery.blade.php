@@ -2,29 +2,6 @@
 
 @section('title', 'Penguasaan Kosakata - LPK Seishin')
 
-@php
-    $dailyKanji = isset($dailyWord->kanji) ? $dailyWord->kanji : '夢語り';
-    $dailyRomaji = isset($dailyWord->romaji) ? $dailyWord->romaji : 'Yumegatari';
-    $dailyMeaningEn = isset($dailyWord->meaning_en) ? $dailyWord->meaning_en : 'Speak of Dream';
-    $dailyMeaningId = isset($dailyWord->meaning_id) ? $dailyWord->meaning_id : 'Cerita Mimpi';
-    $dailyFurigana = isset($dailyWord->furigana) ? $dailyWord->furigana : 'ゆめがたり';
-
-    $statMastered = "456";
-    $statLearning = "456";
-    $statFavourite = "56";
-    $masteredPercentage = 76; 
-
-    $flashcardLevels = [
-        (object)['level' => 1, 'total' => 104, 'mastered' => 104, 'status' => 'Selesai', 'updated' => '2 Hari Lalu'],
-        (object)['level' => 2, 'total' => 104, 'mastered' => 104, 'status' => 'Selesai', 'updated' => '2 Hari Lalu'],
-        (object)['level' => 3, 'total' => 104, 'mastered' => 45,  'status' => 'Proses', 'updated' => '2 Hari Lalu'],
-        (object)['level' => 4, 'total' => 104, 'mastered' => 0,   'status' => 'Proses', 'updated' => '2 Hari Lalu'],
-        (object)['level' => 5, 'total' => 104, 'mastered' => 0,   'status' => 'Proses', 'updated' => '2 Hari Lalu'],
-    ];
-
-    $userName = Auth::user() ? Auth::user()->name : 'Siswa Seishin';
-    $userLevel = Auth::user() && isset(Auth::user()->level) ? Auth::user()->level : 'Japanese N4';
-@endphp
 
 @push('styles')
 <style>
@@ -69,14 +46,12 @@
                 </span>
             </div>
             <div class="pt-0.5 text-center">
-                <p class="text-sm font-medium text-red-200/90 italic tracking-wider">{{ $dailyFurigana ?? "[Data: dailyWord->furigana]" }}</p>
-                
                 <h2 class="text-6xl lg:text-8xl font-bold tracking-tight text-white mt-0.5">
-                    {{ $dailyKanji }}
+                    {{ $dailyWord->kanji }}
                 </h2>
                 
                 <p class="text-base font-bold text-red-100/90 tracking-wide mt-1">
-                    {{ $dailyRomaji }}
+                    {{ $dailyWord->romaji }}
                 </p>
             </div>
         </div>
@@ -90,11 +65,11 @@
                 <p class="text-[9px] font-bold text-[#666666] uppercase tracking-widest">Terjemahan</p>
                 
                 <h3 class="text-sm font-bold text-[#222222] mt-1.5 leading-snug tracking-tight max-w-full break-words">
-                    {{ $dailyMeaningId }}
+                    {{ $dailyWord->meaning_id }}
                 </h3>
                 
                 <p class="text-xs font-medium text-[#444444] mt-1 max-w-full break-words">
-                    {{ $dailyMeaningEn }}
+                    {{ $dailyWord->meaning_en }}
                 </p>
             </div>
 

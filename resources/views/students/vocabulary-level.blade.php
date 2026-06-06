@@ -2,39 +2,6 @@
 
 @section('title', 'Level ' . $level_id . ' - Penguasaan Kosakata')
 
-@php // Dummy data
-    $flashcards = [
-        ['kanji' => '勉強', 'furigana' => 'べんきょう', 'romaji' => 'Benkyou', 'en' => 'Study', 'id' => 'Belajar', 'definition' => 'The act of studying or learning.', 'usage_jp' => '私は毎日日本語を勉強します。', 'usage_en' => 'I study Japanese every day.', 'progress' => 'Kartu 1 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '望ましい', 'furigana' => 'のぞましい', 'romaji' => 'Nozomashii', 'en' => 'Desirable', 'id' => 'Diinginkan', 'definition' => 'Hoped for; to be wished for.', 'usage_jp' => '早く返信することが望ましい。', 'usage_en' => 'It is desirable to reply quickly.', 'progress' => 'Kartu 2 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => 'ランプ', 'furigana' => 'らんぷ', 'romaji' => 'Ranpu', 'en' => 'Lamp', 'id' => 'Lampu', 'definition' => 'A device for giving light.', 'usage_jp' => '暗いのでランプをつけてください。', 'usage_en' => 'It\'s dark, so please turn on the lamp.', 'progress' => 'Kartu 3 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '夢語り', 'furigana' => 'ゆめがたり', 'romaji' => 'Yumegatari', 'en' => 'Speak of Dream', 'id' => 'Cerita Mimpi', 'definition' => 'Talking about one\'s dreams or illusions.', 'usage_jp' => '彼のはなしはいつも夢語りだ。', 'usage_en' => 'His stories are always just speak of dreams.', 'progress' => 'Kartu 4 dari 50', 'status' => 'Dikuasai', 'is_fav' => false],
-        ['kanji' => '笑顔', 'furigana' => 'えがお', 'romaji' => 'Egao', 'en' => 'Smiling face', 'id' => 'Wajah Tersenyum', 'definition' => 'A facial expression indicating pleasure.', 'usage_jp' => '彼女の笑顔は素敵です。', 'usage_en' => 'Her smile is wonderful.', 'progress' => 'Kartu 5 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => true],
-        ['kanji' => '時間', 'furigana' => 'じかん', 'romaji' => 'Jikan', 'en' => 'Time', 'id' => 'Waktu', 'definition' => 'The indefinite continued progress of existence.', 'usage_jp' => '時間がありません。', 'usage_en' => 'There is no time.', 'progress' => 'Kartu 6 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '家族', 'furigana' => 'かぞく', 'romaji' => 'Kazoku', 'en' => 'Family', 'id' => 'Keluarga', 'definition' => 'A group of one or more parents and their children.', 'usage_jp' => '私の家族は5人です。', 'usage_en' => 'There are 5 people in my family.', 'progress' => 'Kartu 7 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '友達', 'furigana' => 'ともだち', 'romaji' => 'Tomodachi', 'en' => 'Friend', 'id' => 'Teman', 'definition' => 'A person whom one knows and with whom one has a bond.', 'usage_jp' => '週末に友達と遊びます。', 'usage_en' => 'I will hang out with my friend this weekend.', 'progress' => 'Kartu 8 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '先生', 'furigana' => 'せんせい', 'romaji' => 'Sensei', 'en' => 'Teacher', 'id' => 'Guru', 'definition' => 'A person who teaches, especially in a school.', 'usage_jp' => '先生に質問します。', 'usage_en' => 'I will ask the teacher a question.', 'progress' => 'Kartu 9 dari 50', 'status' => 'Dikuasai', 'is_fav' => false],
-        ['kanji' => '学校', 'furigana' => 'がっこう', 'romaji' => 'Gakkou', 'en' => 'School', 'id' => 'Sekolah', 'definition' => 'An institution for educating children.', 'usage_jp' => '明日、学校へ行きます。', 'usage_en' => 'I will go to school tomorrow.', 'progress' => 'Kartu 10 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '音楽', 'furigana' => 'おんがく', 'romaji' => 'Ongaku', 'en' => 'Music', 'id' => 'Musik', 'definition' => 'Vocal or instrumental sounds combined.', 'usage_jp' => '毎日音楽を聞きます。', 'usage_en' => 'I listen to music every day.', 'progress' => 'Kartu 11 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '映画', 'furigana' => 'えいが', 'romaji' => 'Eiga', 'en' => 'Movie', 'id' => 'Film', 'definition' => 'A story or event recorded by a camera.', 'usage_jp' => '新しい映画を見たいです。', 'usage_en' => 'I want to watch a new movie.', 'progress' => 'Kartu 12 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '料理', 'furigana' => 'りょうり', 'romaji' => 'Ryouri', 'en' => 'Cooking', 'id' => 'Masakan', 'definition' => 'The practice or skill of preparing food.', 'usage_jp' => '母の料理は美味しいです。', 'usage_en' => 'My mother\'s cooking is delicious.', 'progress' => 'Kartu 13 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '散歩', 'furigana' => 'さんぽ', 'romaji' => 'Sanpo', 'en' => 'Stroll', 'id' => 'Jalan-jalan', 'definition' => 'A short leisurely walk.', 'usage_jp' => '公園を散歩します。', 'usage_en' => 'I take a stroll in the park.', 'progress' => 'Kartu 14 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '旅行', 'furigana' => 'りょこう', 'romaji' => 'Ryokou', 'en' => 'Travel', 'id' => 'Perjalanan', 'definition' => 'Make a journey, typically of some length.', 'usage_jp' => '日本へ旅行したいです。', 'usage_en' => 'I want to travel to Japan.', 'progress' => 'Kartu 15 dari 50', 'status' => 'Dikuasai', 'is_fav' => false],
-        ['kanji' => '電車', 'furigana' => 'でんしゃ', 'romaji' => 'Densha', 'en' => 'Train', 'id' => 'Kereta', 'definition' => 'A series of connected railway carriages.', 'usage_jp' => '電車で会社に行きます。', 'usage_en' => 'I go to work by train.', 'progress' => 'Kartu 16 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '電話', 'furigana' => 'でんわ', 'romaji' => 'Denwa', 'en' => 'Telephone', 'id' => 'Telepon', 'definition' => 'A system for transmitting voices over a distance.', 'usage_jp' => '後で電話します。', 'usage_en' => 'I will call you later.', 'progress' => 'Kartu 17 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '質問', 'furigana' => 'しつもん', 'romaji' => 'Shitsumon', 'en' => 'Question', 'id' => 'Pertanyaan', 'definition' => 'A sentence worded or expressed to elicit information.', 'usage_jp' => '質問がありますか。', 'usage_en' => 'Do you have any questions?', 'progress' => 'Kartu 18 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '答え', 'furigana' => 'こたえ', 'romaji' => 'Kotae', 'en' => 'Answer', 'id' => 'Jawaban', 'definition' => 'A thing said, written, or done to deal with a question.', 'usage_jp' => '答えがわかりません。', 'usage_en' => 'I don\'t know the answer.', 'progress' => 'Kartu 19 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '宿題', 'furigana' => 'しゅくだい', 'romaji' => 'Shukudai', 'en' => 'Homework', 'id' => 'Pekerjaan Rumah', 'definition' => 'Schoolwork that a student is required to do at home.', 'usage_jp' => '宿題を忘れました。', 'usage_en' => 'I forgot my homework.', 'progress' => 'Kartu 20 dari 50', 'status' => 'Dikuasai', 'is_fav' => true],
-        ['kanji' => '意味', 'furigana' => 'いみ', 'romaji' => 'Imi', 'en' => 'Meaning', 'id' => 'Arti', 'definition' => 'What is meant by a word, text, concept, or action.', 'usage_jp' => 'この漢字の意味は何ですか。', 'usage_en' => 'What is the meaning of this kanji?', 'progress' => 'Kartu 21 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => false],
-        ['kanji' => '言葉', 'furigana' => 'ことば', 'romaji' => 'Kotoba', 'en' => 'Word', 'id' => 'Kata', 'definition' => 'A single distinct meaningful element of speech or writing.', 'usage_jp' => '美しい言葉ですね。', 'usage_en' => 'That is a beautiful word.', 'progress' => 'Kartu 22 dari 50', 'status' => 'Dikuasai', 'is_fav' => false],
-        ['kanji' => '準備', 'furigana' => 'じゅんび', 'romaji' => 'Junbi', 'en' => 'Preparation', 'id' => 'Persiapan', 'definition' => 'The action or process of making ready.', 'usage_jp' => 'テストの準備をします。', 'usage_en' => 'I am preparing for the test.', 'progress' => 'Kartu 23 dari 50', 'status' => 'Belum Dikuasai', 'is_fav' => true],
-        ['kanji' => '約束', 'furigana' => 'やくそく', 'romaji' => 'Yakusoku', 'en' => 'Promise', 'id' => 'Janji', 'definition' => 'A declaration that one will do or refrain from doing something.', 'usage_jp' => '約束を守ってください。', 'usage_en' => 'Please keep your promise.', 'progress' => 'Kartu 24 dari 50', 'status' => 'Dikuasai', 'is_fav' => false],
-    ];
-
-    $totalWords = count($flashcards);
-    $userName = Auth::user() ? Auth::user()->name : 'Siswa Seishin';
-    $userLevel = Auth::user() && isset(Auth::user()->level) ? Auth::user()->level : 'Japanese N4';
-@endphp
-
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 flex-1 flex flex-col">
     
@@ -52,7 +19,7 @@
             <div class="text-sm font-bold text-[#444444] mr-2">Daftar Flashcard</div>
             <div class="relative">
                 <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#666666]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Cari kata..." class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-[#444444] focus:outline-none focus:border-gray-400 w-48 sm:w-64 transition-colors">
+                <input id="search-input" type="text" placeholder="Cari kata..." class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-[#444444] focus:outline-none focus:border-gray-400 w-48 sm:w-64 transition-colors">
             </div>
             <div class="flex items-center gap-2">
                 <div class="relative dropdown-container">
@@ -130,7 +97,7 @@
             <div id="flash-card-inner" class="border-[4px] bg-white border-[#FFB700] rounded-[32px] p-6 lg:p-8 relative flex flex-col justify-between aspect-square transition-colors duration-200">
                 
                 <div class="absolute top-4 right-4">
-                    <button id="modal-fav-btn" class="w-10 h-10 bg-white border border-gray-100 rounded-full shadow-sm flex items-center justify-center transition-all hover:scale-105">
+                    <button id="modal-fav-btn" onclick="toggleFavorite()" class="w-10 h-10 bg-white border border-gray-100 rounded-full shadow-sm flex items-center justify-center transition-all hover:scale-105">
                         <svg id="modal-fav-icon" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                     </button>
                 </div>
@@ -166,8 +133,7 @@
                     
                     <div>
                         <p class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1.5">Penggunaan Kontekstual (oleh Sensei)</p>
-                        <p id="modal-usage-jp" class="text-sm font-bold text-[#222222] mb-1 leading-snug tracking-tight">--</p>
-                        <p id="modal-usage-en" class="text-xs font-semibold text-[#666666] leading-snug">--</p>
+                        <p id="modal-usage" class="text-sm font-bold text-[#222222] mb-1 leading-snug tracking-tight">--</p>
                     </div>
                     
                     <div>
@@ -183,7 +149,7 @@
                 </div>
 
                 <div class="flex items-center gap-3 mt-8">
-                    <button id="modal-master-btn" class="flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2">
+                    <button id="modal-master-btn" onclick="toggleMastered()" class="flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2">
                     </button>
                     <button onclick="closeFlashcardModal()" class="px-8 py-3.5 bg-gray-200 hover:bg-gray-300 text-[#444444] font-bold rounded-2xl text-sm transition shadow-sm">
                         Tutup
@@ -203,17 +169,57 @@
     const itemsPerPage = 18;
     let currentPage = 1;
 
+    let filteredCards = [...allCards];
+    let activeCardIndex = null; 
+
+    function applyFilters() {
+        const searchVal    = document.getElementById('search-input').value.toLowerCase().trim();
+        const statusFilter = document.querySelector('input[name="filter_status"]:checked').value;
+        const favOnly      = document.querySelector('input[name="filter_fav"]').checked;
+ 
+        filteredCards = allCards.filter(card => {
+            // Filter pencarian: cocokkan kanji, furigana, romaji, atau arti
+            const matchSearch = !searchVal ||
+                card.kanji.toLowerCase().includes(searchVal)    ||
+                card.furigana.toLowerCase().includes(searchVal) ||
+                card.romaji.toLowerCase().includes(searchVal)   ||
+                card.en.toLowerCase().includes(searchVal)       ||
+                card.id.toLowerCase().includes(searchVal);
+ 
+            // Filter status: 'dikuasai' / 'belum' / 'semua'
+            const matchStatus =
+                statusFilter === 'semua'    ? true :
+                statusFilter === 'dikuasai' ? card.status === 'Dikuasai' :
+                statusFilter === 'belum'    ? card.status === 'Belum Dikuasai' :
+                true;
+ 
+            // Filter favorit
+            const matchFav = !favOnly || card.is_fav;
+ 
+            return matchSearch && matchStatus && matchFav;
+        });
+ 
+        currentPage = 1;
+        renderGrid(currentPage);
+    }
+
     function renderGrid(page) {
         const grid = document.getElementById('flashcard-grid');
         grid.innerHTML = '';
         
         const startIndex = (page - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const pageCards = allCards.slice(startIndex, endIndex);
-
+        const endIndex   = startIndex + itemsPerPage;
+        // [FIX] Render dari filteredCards, bukan allCards langsung
+        const pageCards  = filteredCards.slice(startIndex, endIndex);
+ 
+        if (pageCards.length === 0) {
+            grid.innerHTML = `<div class="col-span-full text-center text-sm text-[#666666] font-semibold py-12">Tidak ada kata yang sesuai.</div>`;
+            renderPagination(page);
+            return;
+        }
+ 
         pageCards.forEach((card, i) => {
             const actualIndex = startIndex + i;
-            
             const bgClass = card.is_fav ? 'bg-[#FFEDB5] border-transparent' : 'bg-white border border-gray-200';
             
             grid.innerHTML += `
@@ -223,7 +229,7 @@
                     <h2 class="text-3xl lg:text-4xl font-black text-[#444444] group-hover:opacity-0 transition-opacity duration-200">
                         ${card.kanji}
                     </h2>
-
+ 
                     <div class="absolute inset-0 bg-[#d62828] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white">
                         <span class="text-sm font-semibold tracking-wide">Buka</span>
                         <span class="text-sm font-semibold tracking-wide">Flashcard</span>
@@ -237,7 +243,7 @@
     }
 
     function renderPagination(page) {
-        const totalPages = Math.ceil(allCards.length / itemsPerPage);
+        const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
         const container = document.getElementById('pagination-container');
         let html = '';
 
@@ -265,7 +271,7 @@
     }
 
     function changePage(newPage) {
-        const totalPages = Math.ceil(allCards.length / itemsPerPage);
+        const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
         if(newPage >= 1 && newPage <= totalPages) {
             currentPage = newPage;
             renderGrid(currentPage);
@@ -280,46 +286,32 @@
     const masterBtn = document.getElementById('modal-master-btn');
 
     function openFlashcardModal(index) {
-        const card = allCards[index];
-
+        activeCardIndex = index;
+        const card = filteredCards[index]; // [FIX] Baca dari filteredCards
+ 
         document.getElementById('modal-title').innerText = `Detail Kata: ${card.kanji} (${card.romaji})`;
-        document.getElementById('modal-kanji').innerText = card.kanji;
+        document.getElementById('modal-kanji').innerText    = card.kanji;
         document.getElementById('modal-furigana').innerText = card.furigana;
-        document.getElementById('modal-romaji').innerText = card.romaji;
-        document.getElementById('modal-en').innerText = card.en;
-        document.getElementById('modal-id').innerText = card.id;
+        document.getElementById('modal-romaji').innerText   = card.romaji;
+        document.getElementById('modal-en').innerText       = card.en;
+        document.getElementById('modal-id').innerText       = card.id;
         document.getElementById('modal-definition').innerText = card.definition;
-        document.getElementById('modal-usage-jp').innerText = card.usage_jp;
-        document.getElementById('modal-usage-en').innerText = card.usage_en;
+        document.getElementById('modal-usage').innerText    = card.usage;
         document.getElementById('modal-progress').innerText = card.progress;
-        document.getElementById('modal-status').innerText = card.status;
+        document.getElementById('modal-status').innerText   = card.status;
 
-        if (card.is_fav) {
-            favIcon.setAttribute('fill', 'currentColor');
-            favIcon.classList.replace('text-gray-400', 'text-[#FFB700]'); 
-            innerCard.classList.replace('bg-white', 'bg-[#FFFEE3]'); 
-        } else {
-            favIcon.setAttribute('fill', 'none');
-            favIcon.classList.replace('text-[#FFB700]', 'text-gray-400');
-            innerCard.classList.replace('bg-[#FFFEE3]', 'bg-white');
-        }
-
-        if (card.status === 'Dikuasai') {
-            masterBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Batal Dikuasai`;
-            masterBtn.className = "flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2 bg-[#d62828] hover:bg-red-700 text-white";
-        } else {
-            masterBtn.innerHTML = `Tandai Dikuasai`;
-            masterBtn.className = "flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2 bg-[#FFDBDB] hover:bg-red-200 text-[#d62828]";
-        }
-
+        updateFavUI(card.is_fav);
+        updateMasterUI(card.status);
+ 
         modal.classList.replace('hidden', 'flex');
-        
         setTimeout(() => {
             modalBackdrop.classList.replace('opacity-0', 'opacity-100');
             modalContent.classList.replace('opacity-0', 'opacity-100');
             modalContent.classList.replace('scale-95', 'scale-100');
         }, 10);
     }
+
+
 
     function closeFlashcardModal() {
         modalBackdrop.classList.replace('opacity-100', 'opacity-0');
@@ -331,6 +323,88 @@
         }, 300);
     }
 
+    function updateFavUI(isFav) {
+        if (isFav) {
+            favIcon.setAttribute('fill', 'currentColor');
+            favIcon.classList.remove('text-gray-400');
+            favIcon.classList.add('text-[#FFB700]');
+            innerCard.classList.remove('bg-white');
+            innerCard.classList.add('bg-[#FFFEE3]');
+        } else {
+            favIcon.setAttribute('fill', 'none');
+            favIcon.classList.remove('text-[#FFB700]');
+            favIcon.classList.add('text-gray-400');
+            innerCard.classList.remove('bg-[#FFFEE3]');
+            innerCard.classList.add('bg-white');
+        }
+    }
+
+    function updateMasterUI(status) {
+        if (status === 'Dikuasai') {
+            masterBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M6 18L18 6"></path></svg> Batal Dikuasai`;
+            masterBtn.className = "flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2 bg-[#FFDBDB] hover:bg-red-200 text-[#d62828]";
+        } else {
+            masterBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Tandai Dikuasai`;
+            masterBtn.className = "flex-1 font-bold py-3.5 rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2 bg-[#d62828] hover:bg-red-700 text-white";
+        }
+    }
+
+    function toggleMastered() {
+        if (activeCardIndex === null) return;
+        const card = filteredCards[activeCardIndex];
+ 
+        fetch(`/students/vocabulary/${card.id_vocabulary}/toggle-mastered`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Update state di allCards dan filteredCards agar sinkron
+            card.status = data.status;
+            const originalCard = allCards.find(c => c.id_vocabulary === card.id_vocabulary);
+            if (originalCard) originalCard.status = data.status;
+ 
+            // Update tampilan modal tanpa menutupnya
+            document.getElementById('modal-status').innerText = data.status;
+            updateMasterUI(data.status);
+ 
+            // Re-render grid agar perubahan status langsung tercermin (penting saat filter aktif)
+            applyFilters();
+        });
+    }
+
+    function toggleFavorite() {
+        if (activeCardIndex === null) return;
+        const card = filteredCards[activeCardIndex];
+ 
+        fetch(`/students/vocabulary/${card.id_vocabulary}/toggle-favorite`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Update state di allCards dan filteredCards agar sinkron
+            card.is_fav = data.is_favorite;
+            const originalCard = allCards.find(c => c.id_vocabulary === card.id_vocabulary);
+            if (originalCard) originalCard.is_fav = data.is_favorite;
+ 
+            // Update tampilan modal tanpa menutupnya
+            updateFavUI(data.is_favorite);
+ 
+            // Re-render grid agar warna kartu (kuning/putih) langsung berubah
+            applyFilters();
+        });
+    }
+
+
     renderGrid(1);
 
     // Filter Interaction Logic
@@ -338,6 +412,8 @@
     const filterRadios = document.querySelectorAll('input[name="filter_status"]');
     const filterFav = document.querySelector('input[name="filter_fav"]');
     const activeFiltersContainer = document.getElementById('active-filters-container');
+
+    document.getElementById('search-input').addEventListener('input', applyFilters);
 
     function updateFilterState() {
         let activeFilters = [];
@@ -378,6 +454,7 @@
             activeFiltersContainer.classList.add('hidden');
             activeFiltersContainer.innerHTML = '';
         }
+        applyFilters();
     }
 
     // Attach global window function for removing filter

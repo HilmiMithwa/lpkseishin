@@ -8,19 +8,25 @@ class VocabProgress extends Model
 {
     protected $table = 'vocab_progress';
     protected $primaryKey = 'id';
-
+ 
     protected $fillable = [
         'id_user',
-        'vocabulary_id',
+        'id_vocabulary',
         'is_memorized',
+        'is_favorite',
     ];
 
     protected $casts = [
         'is_memorized' => 'boolean',
+        'is_favorite'  => 'boolean',
     ];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function vocabulary()
+    {
+        return $this->belongsTo(Vocabulary::class, 'id_vocabulary',  'id_vocabulary');
+    }
 }

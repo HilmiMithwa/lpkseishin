@@ -3,48 +3,6 @@
 @section('title', 'Kelas Saya - LPK Seishin')
 
 @section('content')
-@php
-    // Dummy Data — Batch list
-    if (!isset($batches) || (is_countable($batches) && count($batches) == 0)) {
-        $batches = [
-            (object)[
-                'id_batch' => 2,
-                'nama_batch' => 'Batch 2',
-                'tanggal_mulai' => '24 January 2025',
-                'tanggal_selesai' => '31 May 2025',
-                'gradient' => 'from-[#d62828] to-[#8b1a1a]',
-            ],
-            (object)[
-                'id_batch' => 3,
-                'nama_batch' => 'Batch 3',
-                'tanggal_mulai' => '1 June 2025',
-                'tanggal_selesai' => '30 September 2025',
-                'gradient' => 'from-[#c22626] to-[#7a1717]',
-            ],
-            (object)[
-                'id_batch' => 4,
-                'nama_batch' => 'Batch 4',
-                'tanggal_mulai' => '1 October 2025',
-                'tanggal_selesai' => '31 December 2025',
-                'gradient' => 'from-[#b52222] to-[#6e1414]',
-            ],
-            (object)[
-                'id_batch' => 5,
-                'nama_batch' => 'Batch 5',
-                'tanggal_mulai' => '1 January 2026',
-                'tanggal_selesai' => '30 April 2026',
-                'gradient' => 'from-[#a31e1e] to-[#5e1111]',
-            ],
-            (object)[
-                'id_batch' => 1,
-                'nama_batch' => 'Batch 1',
-                'tanggal_mulai' => '24 January 2025',
-                'tanggal_selesai' => '31 May 2025',
-                'gradient' => 'from-[#6b6b6b] to-[#3d3d3d]',
-            ],
-        ];
-    }
-@endphp
 
 <div class="p-4 sm:p-6 lg:p-10">
 
@@ -68,9 +26,24 @@
 
     {{-- Batch Cards Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" id="batch-grid">
+        @php
+            // Palet warna gradasi merah premium agar tetap konsisten dengan desain awal
+            $gradients = [
+                'from-[#d62828] to-[#8b1a1a]',
+                'from-[#c22626] to-[#7a1717]',
+                'from-[#b52222] to-[#6e1414]',
+                'from-[#a31e1e] to-[#5e1111]',
+                'from-[#6b6b6b] to-[#3d3d3d]',
+            ];
+        @endphp
+
         @foreach($batches as $batch)
-        <div class="batch-card group relative bg-gradient-to-br {{ $batch->gradient }} rounded-2xl lg:rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[160px] overflow-hidden"
-             data-name="{{ strtolower($batch->nama_batch) }}">
+        @php
+            // Memilih gradasi berdasarkan index perulangan secara dinamis
+            $gradient = $gradients[$loop->index % count($gradients)];
+        @endphp
+        <div class="batch-card group relative bg-gradient-to-br {{ $gradient }} rounded-2xl lg:rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[160px] overflow-hidden"
+             data-name="{{ strtolower($batch->nama) }}">
             
             {{-- Decorative bg pattern --}}
             <div class="absolute top-0 right-0 w-1/2 h-full opacity-[0.08] pointer-events-none">
@@ -82,10 +55,12 @@
 
             {{-- Batch Info --}}
             <div class="relative z-10">
-                <h3 class="text-2xl sm:text-3xl font-bold font-ibm text-white mb-2 leading-tight">{{ $batch->nama_batch }}</h3>
+                <h3 class="text-2xl sm:text-3xl font-bold font-ibm text-white mb-2 leading-tight">{{ $batch->nama }}</h3>
                 <div class="flex items-center gap-1.5 text-white/80">
                     <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="text-[11px] sm:text-xs font-medium">{{ $batch->tanggal_mulai }} - {{ $batch->tanggal_selesai }}</span>
+                    <span class="text-[11px] sm:text-xs font-medium">
+                        {{ \Carbon\Carbon::parse($batch->waktu_mulai)->format('j F Y') }} - {{ \Carbon\Carbon::parse($batch->waktu_berakhir)->format('j F Y') }}
+                    </span>
                 </div>
             </div>
 
@@ -98,6 +73,7 @@
             </div>
         </div>
         @endforeach
+
     </div>
 
 </div>
