@@ -100,13 +100,30 @@
                             <span class="text-gray-500">Tenggat</span>
                             <span class="text-gray-800">{{ $task->waktu_pengumpulan ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y') : '-' }}</span>
                         </div>
+                        @php
+                            $percentage = 0;
+                            if ($task->waktu_pengumpulan) {
+                                $end = \Carbon\Carbon::parse($task->waktu_pengumpulan)->timestamp;
+                                $now = \Carbon\Carbon::now()->timestamp;
+                                
+                                if ($now >= $end) {
+                                    $percentage = 100;
+                                } elseif ($task->created_at) {
+                                    $start = \Carbon\Carbon::parse($task->created_at)->timestamp;
+                                    if ($end > $start && $now > $start) {
+                                        $percentage = (($now - $start) / ($end - $start)) * 100;
+                                    }
+                                }
+                                $percentage = max(0, min(100, $percentage));
+                            }
+                        @endphp
                         <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-[#d62828] h-1.5 rounded-full" style="width: 45%"></div>
+                            <div class="bg-[#d62828] h-1.5 rounded-full transition-all duration-500" style="width: {{ round($percentage) }}%"></div>
                         </div>
                     </div>
-                    <a href="{{ route('teacher.assignments.grade') }}" class="w-full mt-auto bg-red-50 hover:bg-[#d62828] text-[#d62828] hover:text-white border border-red-100 hover:border-[#d62828] font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10">
-                        Periksa Tugas
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    <a href="{{ route('teacher.assignments.grade', $task->id_tugas) }}" class="w-full mt-auto bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10 shadow-sm">
+                        Lihat Detail Tugas
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                 </div>
                 @endforeach

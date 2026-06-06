@@ -30,4 +30,8 @@ class Tugas extends Model
     public function modul() {
         return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
     }
+
+    public function submissions() {
+        return $this->hasMany(Pengiriman_Tugas::class, 'id_tugas', 'id_tugas');
+    }
 }
