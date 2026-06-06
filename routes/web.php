@@ -42,10 +42,30 @@ Route::middleware('auth')->group(function () {
 });
 
 //Dashboard Admin
-Route::middleware(['auth', 'checkRole:admin'])->group(function () {
-    Route::get('/admin/dashboard', function() {
-        return view ('admin.dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/users', function() {
+        return view('admin.users.index');
+    })->name('users');
+
+    Route::get('/payments', function() {
+        return view('admin.payments.index');
+    })->name('payments');
+
+    Route::get('/batches', function() {
+        return view('admin.batches.index');
+    })->name('batches');
+
+    Route::get('/announcements', function() {
+        return view('admin.announcements.index');
+    })->name('announcements');
+    
+    Route::get('/profile', function() {
+        return view('admin.profile');
+    })->name('profile');
 });
 
 //Dashboard Siswa
