@@ -34,4 +34,8 @@ class Modul extends Model
     public function bahanAjar() {
         return $this->hasMany(BahanAjar::class, 'id_modul', 'id_modul');
     }
+
+    public function evaluasi() {
+        return $this->hasMany(Evaluasi::class, 'id_modul', 'id_modul');
+    }
 }

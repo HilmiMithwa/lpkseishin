@@ -442,25 +442,20 @@
                      </div>
 
                      <!-- Form Grid -->
-                     <form @submit.prevent="
-                         isLoading = true;
-                         setTimeout(() => {
-                             isLoading = false;
-                             open = false;
-                             $dispatch('show-toast', { message: 'Perubahan kelas berhasil disimpan!' });
-                         }, 800);
-                     " x-data="{ isLoading: false }">
+                     <form action="{{ route('teacher.subjects.update', $classData->id_mapel) }}" method="POST" x-data="{ isLoading: false }" @submit="isLoading = true">
+                         @csrf
+                         @method('PUT')
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                              
                              <!-- Left Column -->
                              <div class="space-y-6">
                                  <div class="space-y-1.5">
                                      <x-input-label>Nama Kelas:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->nama_mapel }}" placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
+                                     <x-text-input type="text" name="nama_mapel" required value="{{ $classData->nama_mapel }}" placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Deskripsi:</x-input-label>
-                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi_mapel }}</textarea>
+                                     <textarea name="deskripsi_mapel" required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi_mapel }}</textarea>
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Mentor Sensei:</x-input-label>
@@ -476,7 +471,7 @@
                                  <div class="space-y-1.5">
                                      <x-input-label>Target Sertifikasi:</x-input-label>
                                      <div class="relative">
-                                         <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
+                                         <select name="target" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
                                              <option value="" disabled>Pilih Target Sertifikasi</option>
                                              <option value="JLPT N4" {{ $classData->target == 'JLPT N4' ? 'selected' : '' }}>JLPT N4</option>
                                              <option value="JLPT N5" {{ $classData->target == 'JLPT N5' ? 'selected' : '' }}>JLPT N5</option>
@@ -487,15 +482,15 @@
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Total Durasi (JP):</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
+                                     <x-text-input type="text" name="jp" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Jadwal:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
+                                     <x-text-input type="text" name="jadwal" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->min_score }}" placeholder="cth., 80" class="w-full" />
+                                     <x-text-input type="text" name="min_score" required value="{{ $classData->min_score }}" placeholder="cth., 80" class="w-full" />
                                  </div>
                              </div>
 
@@ -716,6 +711,21 @@
 
     {{-- Global Toast Notification --}}
     <div x-data="{ show: false, message: '' }" 
+         x-init="
+            @if(session('success'))
+                message = '{{ session('success') }}';
+                show = true;
+                setTimeout(() => show = false, 3000);
+            @elseif(request()->query('success') === 'modul_deleted')
+                message = 'Modul berhasil dihapus';
+                show = true;
+                setTimeout(() => show = false, 3000);
+                
+                const url = new URL(window.location);
+                url.searchParams.delete('success');
+                window.history.replaceState({}, '', url);
+            @endif
+         "
          x-on:show-toast.window="
             message = $event.detail.message;
             show = true;

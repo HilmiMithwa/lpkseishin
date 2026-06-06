@@ -138,6 +138,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::put('/students/{id_studentbatch}/status', [BatchController::class, 'updateStudentStatus'])->name('students.status.update');
 
     Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
+    Route::put('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'update'])->name('subjects.update');
     Route::delete('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroy'])->name('subjects.destroy');
     Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
     Route::delete('/subjects/modules/{id_modul}', [\App\Http\Controllers\Teacher\MapelController::class, 'deleteModul'])->name('modules.destroy');
@@ -157,17 +158,19 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::delete('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'destroy'])->name('materials.destroy');
 
 
-    Route::get('/modules/{id_modul}/evaluations/create', function ($id_modul) {
-        return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
-    })->name('evaluations.create');
+    Route::get('/modules/{id_modul}/evaluations/create', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'create'])->name('evaluations.create');
+    Route::post('/modules/{id_modul}/evaluations', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'store'])->name('evaluations.store');
+    Route::get('/modules/{id_modul}/evaluations/{id}', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'show'])->name('evaluations.show');
+    Route::delete('/modules/{id_modul}/evaluations/{id}', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'destroy'])->name('evaluations.destroy');
 
-    Route::get('/modules/{id_modul}/tasks/create', function ($id_modul) {
-        return view('teacher.task-create', ['currentModuleId' => $id_modul]);
-    })->name('tasks.create');
-
-    Route::get('/modules/{id_modul}/tasks/{id_tugas}', function ($id_modul, $id_tugas) {
-        return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
-    })->name('tasks.show');
+    // Tugas (Tasks) CRUD
+    Route::get('/modules/{id_modul}/tasks/create', [TugasController::class, 'create'])->name('tasks.create');
+    Route::post('/modules/{id_modul}/tasks', [TugasController::class, 'store'])->name('tasks.store');
+    Route::get('/modules/{id_modul}/tasks/{id_tugas}', [TugasController::class, 'showTask'])->name('tasks.show');
+    Route::get('/modules/{id_modul}/tasks/{id_tugas}/edit', [TugasController::class, 'edit'])->name('tasks.edit');
+    Route::put('/modules/{id_modul}/tasks/{id_tugas}', [TugasController::class, 'update'])->name('tasks.update');
+    Route::delete('/modules/{id_modul}/tasks/{id_tugas}', [TugasController::class, 'destroy'])->name('tasks.destroy');
+    Route::post('/modules/{id_modul}/tasks/{id_tugas}/grade', [TugasController::class, 'gradeTaskSubmission'])->name('tasks.grade');
 
     Route::get('/vocabulary', [\App\Http\Controllers\Teacher\VocabularyController::class, 'index'])->name('vocabulary');
     Route::put('/vocabulary/level/{level}/update', [\App\Http\Controllers\Teacher\VocabularyController::class, 'updateLevel'])->name('vocabulary.level.update');
