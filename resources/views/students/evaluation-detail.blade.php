@@ -153,9 +153,13 @@
             <h2 id="modal-title" class="text-2xl font-black text-[#222222] mb-2 tracking-tight">Judul</h2>
             <p id="modal-desc" class="text-sm font-medium text-[#666666] leading-relaxed mb-8">Deskripsi</p>
             
-            <a href="{{ route('students.evaluation-result') }}" class="block w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-[0_8px_16px_rgba(214,40,40,0.25)]">
-                Lihat Hasil Skor
-            </a>
+            <form id="eval-submit-form" action="{{ route('evaluations.submit', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $evaluation->id]) }}" method="POST">
+                @csrf
+                <div id="hidden-inputs"></div>
+                <button type="submit" class="block w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-[0_8px_16px_rgba(214,40,40,0.25)]">
+                    Lihat Hasil Skor
+                </button>
+            </form>
         </div>
     </div>
 @endpush
@@ -227,10 +231,18 @@
             iconContainer.innerHTML = '<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>';
         }
         
+        // POPULATE ANSWERS UNTUK FORM SUBMIT
+        let hiddenInputs = '';
+        questions.forEach((q, idx) => {
+            if(answers[idx]) {
+                hiddenInputs += `<input type="hidden" name="answers[${q.id_soal}]" value="${answers[idx]}" />`;
+            }
+        });
+        document.getElementById('hidden-inputs').innerHTML = hiddenInputs;
+
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         
-        // Animasi masuk
         setTimeout(() => {
             content.classList.remove('scale-95', 'opacity-0');
             content.classList.add('scale-100', 'opacity-100');

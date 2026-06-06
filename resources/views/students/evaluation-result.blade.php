@@ -3,17 +3,24 @@
 @section('title', 'Hasil Evaluasi - LPK Seishin')
 
 @php
-    // Dummy Data Hasil Evaluasi
-    $result = (object)[
-        'score' => 84,
-        'total_questions' => 50,
-        'correct' => 42,
-        'wrong' => 8,
-        'empty' => 0,
-        'title' => 'Final Competency Test & Mock Interview',
-        'module_name' => 'Dasar Hiragana & Katakana',
-        'is_passed' => true // Jika >= 70
-    ];
+    // Prioritas: 1) dari controller langsung, 2) dari flash session, 3) fallback
+    if (!isset($result)) {
+        $result = session('evaluation_result');
+    }
+    
+    // Jika tidak ada sama sekali (misal user akses langsung URL)
+    if (!$result) {
+        $result = (object)[
+            'score' => 0,
+            'total_questions' => 0,
+            'correct' => 0,
+            'wrong' => 0,
+            'empty' => 0,
+            'title' => 'Belum ada evaluasi',
+            'module_name' => '-',
+            'is_passed' => false
+        ];
+    }
 @endphp
 
 @section('content')
@@ -87,8 +94,8 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     Kembali ke Beranda
                 </a>
-                <a href="#" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-8 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-                    Lihat Modul Selanjutnya
+                <a href="{{ route('modules.show', ['id_mapel' => $result->id_mapel ?? 0, 'id_modul' => $result->id_modul ?? 0]) }}" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-8 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
+                    Kembali ke Modul
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
             </div>

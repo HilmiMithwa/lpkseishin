@@ -26,6 +26,8 @@ class SubmitPengirimanTugasRequest extends FormRequest
             'text_content' => 'nullable|string',
             'task_files' => 'nullable|array',
             'task_files.*' => 'file|mimes:pdf,docx,xlsx,xls,pptx,txt|max:20480',
+            'task_links' => 'nullable|array',
+            'task_links.*' => 'url',
         ];
     }
 

@@ -92,4 +92,24 @@ class BahanAjarController extends Controller
         // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate
         return back();
     }
+    public function downloadMaterial($id_materi)
+    {
+        $material = BahanAjar::findOrFail($id_materi);
+        
+        if (!$material->path_file_dokumen_ajar) {
+            abort(404, 'File materi tidak ditemukan.');
+        }
+
+        // Remove '/storage/' prefix because the file is actually in 'storage/app/public'
+        // which corresponds to the 'public' disk root.
+        $path = str_replace('/storage/', '', $material->path_file_dokumen_ajar);
+
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+
+        $fileName = $material->nama_dokumen_ajar ?? basename($path);
+        
+        return \Illuminate\Support\Facades\Storage::disk('public')->download($path, $fileName);
+    }
 }

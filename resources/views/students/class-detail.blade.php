@@ -16,11 +16,12 @@
         </div>
         <nav class="flex items-center gap-2 text-sm font-medium text-[#666666] text-left">
             <a href="{{ route('students.dashboard') }}" class="hover:text-[#d62828] transition">Terdaftar</a> <span class="mx-1.5 text-gray-300">></span> 
-            <span class="text-[#d62828]">{{ $subject->nama_mapel ?? '[Data: mapel.nama_mapel]' }}</span>
+            <span class="text-[#d62828]">{{ $subject->nama_mapel }}</span>
         </nav>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
         
         <div class="lg:col-span-8 space-y-8">
             
@@ -55,7 +56,7 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[10px] text-[#666666] font-bold uppercase tracking-wider truncate">Target Sertifikasi</p>
-                                <p class="font-bold text-[#222222] truncate">{{ $subject->target ?? '[Data: mapel.target]' }}</p>
+                                <p class="font-bold text-[#222222] truncate">{{ $subject->target ?? 'Sertifikasi N4' }}</p>
                             </div>
                         </div>
 
@@ -68,7 +69,7 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[10px] text-[#666666] font-bold uppercase tracking-wider truncate">Total Durasi</p>
-                                <p class="font-bold text-[#222222] truncate">{{ $subject->jp ?? '[Data: mapel.jp]' }} JP</p>
+                                <p class="font-bold text-[#222222] truncate">{{ $subject->jp ?? '0' }} JP</p>
                             </div>
                         </div>
 
@@ -83,7 +84,7 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[10px] text-[#666666] font-bold uppercase tracking-wider truncate">Jadwal</p>
-                                <p class="font-bold text-[#222222] truncate">{{ $subject->jadwal ?? '[Data: mapel.jadwal]' }}</p>
+                                <p class="font-bold text-[#222222] truncate">{{ $subject->jadwal ?? 'Belum ada jadwal' }}</p>
                             </div>
                         </div>
 
@@ -99,7 +100,7 @@
                             <div class="min-w-0">
                                 <p class="text-[10px] text-[#666666] font-bold uppercase tracking-wider">Syarat Kelulusan</p>
                                 <p class="font-bold text-[#222222] truncate">
-                                    Min. Skor {{ $subject->min_score ?? '[Data: min_score]' }}
+                                    Min. Skor {{ $subject->min_score ?? '0' }}
                                 </p>
                             </div>
                         </div>
@@ -154,8 +155,8 @@
                                         {{ $modul->nama_modul }}
                                     </h4>
                                     <p class="text-[11px] text-[#666666] mt-1 font-semibold tracking-wide">
-                                        {{ $modul->kode_modul ?? '[DATA: MODUL.KODE]' }} | 
-                                        Teori ({{ $modul->jp_teori ?? '[MODUL.JP_TEORI]' }} JP) & Praktik ({{ $modul->jp_praktik ?? '[MODUL.JP_PRAKTIK]' }} JP)
+                                        {{ $modul->kode_modul ?? '-' }} | 
+                                        Teori ({{ $modul->jp_teori ?? '0' }} JP) & Praktik ({{ $modul->jp_praktik ?? '0' }} JP)
                                     </p>
                                 </div>
                             </div>
@@ -199,7 +200,7 @@
                             @isset($overallProgress)
                                 {{ $overallProgress }}%
                             @else
-                                <span class="text-[10px] text-[#666666] font-medium">[Data: overallProgress]</span>
+                                <span class="text-[10px] text-[#666666] font-medium">0%</span>
                             @endisset
                         </span>
                     </div>
@@ -208,13 +209,13 @@
                         <div class="leading-tight">
                             <p class="text-[11px] font-semibold text-[#666666]">Selesai:</p>
                             <p class="text-sm font-bold text-[#222222]">
-                                {{ $completedModulesCount ?? '[Data: completedModulesCount]' }} / {{ $modul_count }} Modul
+                                {{ $completedModulesCount ?? '0' }} / {{ $modul_count }} Modul
                             </p>
                         </div>
                         <div class="leading-tight">
                             <p class="text-[11px] font-semibold text-[#666666]">Tersisa:</p>
                             <p class="text-sm font-bold text-[#222222]">
-                                {{ $remainingModulesCount ?? '[Data: remainingModulesCount]' }} Modul
+                                {{ $remainingModulesCount ?? '0' }} Modul
                             </p>
                         </div>
                     </div>
@@ -237,19 +238,15 @@
                 </div>
 
                 <h4 class="font-bold text-[#222222] text-base sm:text-lg leading-snug">
-                    {{ $subject->guru->name ?? '[Data: guru.name]' }}
+                    {{ $subject->guru->name ?? 'Belum ada guru' }}
                 </h4>
                 
                 <p class="text-xs text-[#666666] font-medium mt-0.5 mb-5">
-                    @isset($subject->guru->level)
-                        Level {{ $subject->guru->level }}
-                    @else
-                        Level [DATA: GURU.LEVEL]
-                    @endisset
+                    Guru Bahasa Jepang
                 </p>
 
                 <div class="flex gap-2">
-                    <a href="{{ isset($subject->guru->no_wa) ? 'https://wa.me/' . $subject->guru->no_wa : '#[Data: guru.no_wa]' }}" 
+                    <a href="{{ isset($subject->guru->nomor_telepon) ? 'https://wa.me/' . $subject->guru->nomor_telepon : '#' }}" 
                     target="_blank" 
                     class="flex-1 bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
                         <span>Hubungi Sensei</span>
@@ -258,7 +255,7 @@
                         </svg>
                     </a>
 
-                    <a href="mailto:{{ $subject->guru->email ?? '#[Data: guru.email]' }}" 
+                    <a href="mailto:{{ $subject->guru->email ?? '#' }}" 
                     class="bg-[#FFDBDB] text-[#d62828] p-3 rounded-xl hover:bg-red-100 transition flex items-center justify-center shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -274,17 +271,15 @@
                     @forelse($subject->announcements ?? [] as $announcement)
                         <div class="py-3.5 border-b border-gray-100 last:border-0">
                             <p class="text-xs sm:text-sm font-medium text-[#222222] hover:text-[#d62828] transition cursor-pointer">
-                                {{ $announcement->title }} <span class="text-[#666666] font-normal">({{ $announcement->date_formatted ?? '[Data: date]' }})</span>
+                                {{ $announcement->title }} <span class="text-[#666666] font-normal">({{ $announcement->created_at ? $announcement->created_at->format('d M Y') : '' }})</span>
                             </p>
                         </div>
                     @empty
-                        @for ($i = 0; $i < 4; $i++)
-                            <div class="py-3.5 border-b border-gray-100 last:border-0">
-                                <p class="text-xs sm:text-sm font-medium text-[#666666]">
-                                    [DATA: ANNOUNCEMENT.TITLE] <span class="text-gray-300 font-normal">([Data: date])</span>
-                                </p>
-                            </div>
-                        @endfor
+                        <div class="py-3.5 border-b border-gray-100 last:border-0 text-center">
+                            <p class="text-xs sm:text-sm font-medium text-[#666666]">
+                                Belum ada pengumuman
+                            </p>
+                        </div>
                     @endforelse
                 </div>
 
