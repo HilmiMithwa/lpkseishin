@@ -446,6 +446,48 @@ class StudentController extends Controller
         ]);
     }
 
+    public function vocabularyFavorites()
+    {
+        $user = Auth::user();
+
+        $vocabProgress = VocabProgress::where('id_user', $user->id)
+            ->where('is_favorite', DB::raw('true'))
+            ->get()
+            ->keyBy('id_vocabulary');
+
+        $vocabIds = $vocabProgress->keys();
+
+        $vocabList = Vocabulary::whereIn('id_vocabulary', $vocabIds)
+            ->orderBy('level')
+            ->orderBy('id_vocabulary')
+            ->get();
+
+        $totalWords = $vocabList->count();
+
+        $flashcards = $vocabList->map(function ($vocab, $index) use ($vocabProgress, $totalWords) {
+            $progress = $vocabProgress->get($vocab->id_vocabulary);
+
+            return [
+                'id_vocabulary' => $vocab->id_vocabulary,
+                'kanji'         => $vocab->kanji,
+                'furigana'      => $vocab->furigana ?? '',
+                'romaji'        => $vocab->romaji,
+                'en'            => $vocab->meaning_en,
+                'id'            => $vocab->meaning_id,
+                'definition'    => $vocab->definition_id,
+                'usage'         => $vocab->contextual_usage,
+                'progress'      => 'Level ' . $vocab->level,
+                'status'        => ($progress && filter_var($progress->is_memorized, FILTER_VALIDATE_BOOLEAN)) ? 'Dikuasai' : 'Belum Dikuasai',
+                'is_fav'        => true,
+            ];
+        })->values();
+
+        return view('students.vocabulary-favorites', [
+            'flashcards' => $flashcards,
+            'totalWords' => $totalWords,
+        ]);
+    }
+
      public function toggleMastered($id_vocabulary)
     {
         $user = Auth::user();
