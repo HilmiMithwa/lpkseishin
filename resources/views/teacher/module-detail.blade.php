@@ -3,35 +3,7 @@
 @section('title', 'Modul ' . (request()->route('id_modul') ?? 2) . ': Vocabulary & Reading - LPK Seishin')
 
 @section('content')
-@php
-    $currentModuleId = request()->route('id_modul') ?? 2;
-
-    // Dummy Data
-    $batchName = 'Batch 2';
-    $className = 'N4 Mastering';
-    $moduleTitle = 'Modul ' . $currentModuleId . ': Vocabulary & Reading (Kotoba & Dokkai)';
-    
-    $modules = [
-        (object)['id' => 1, 'name' => 'Modul 1'],
-        (object)['id' => 2, 'name' => 'Modul 2'],
-        (object)['id' => 3, 'name' => 'Modul 3'],
-        (object)['id' => 4, 'name' => 'Modul 4'],
-        (object)['id' => 5, 'name' => 'Modul 5'],
-        (object)['id' => 6, 'name' => 'Modul 6'],
-        (object)['id' => 7, 'name' => 'Modul 7'],
-        (object)['id' => 8, 'name' => 'Modul 8'],
-    ];
-
-    $materials = [
-        (object)['id' => 1, 'title' => 'Intro to N4 and Kanji', 'type' => 'Theory', 'status' => 'completed'],
-        (object)['id' => 2, 'title' => 'Intro to N4 and Kanji', 'type' => 'Practice', 'status' => 'practice'],
-    ];
-
-    $tasks = [
-        (object)['id' => 1, 'title' => 'N4 Exercise', 'due_date' => '8 Mei 2026, 23:59'],
-        (object)['id' => 2, 'title' => 'Kanji Writing Exercise', 'due_date' => '9 Mei 2026, 23:59'],
-    ];
-@endphp
+{{-- Dummy data removed, variables injected from ModulController --}}
 
 <div class="p-4 sm:p-6 lg:p-10">
 
@@ -71,7 +43,7 @@
                 <div class="mb-8">
                     <h3 class="text-base sm:text-lg font-bold font-ibm text-gray-900 mb-3">Deskripsi Modul</h3>
                     <p class="text-sm font-karla text-gray-600 leading-relaxed">
-                        Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4. Fokus pembelajaran tidak hanya ditujukan untuk mencapai kelulusan sertifikasi, tetapi juga secara khusus membekali siswa agar mampu membaca dan memahami instruksi kerja tertulis, manual operasional dasar, serta pengumuman sehari-hari yang sangat krusial saat bermukim dan bekerja di Jepang nanti.
+                        {{ $modul->module_description ?? 'Belum ada deskripsi untuk modul ini.' }}
                     </p>
                 </div>
 
@@ -94,16 +66,16 @@
                                     </div>
                                     @endif
                                     <div>
-                                        <h4 class="text-sm font-bold font-karla text-gray-900">{{ $material->title }}</h4>
-                                        <p class="text-[11px] font-karla text-gray-500 mt-0.5">{{ $material->type }}</p>
+                                        <h4 class="text-sm font-bold font-karla text-gray-900">{{ $material->nama_bahan_ajar }}</h4>
+                                        <p class="text-[11px] font-karla text-gray-500 mt-0.5 capitalize">{{ $material->type }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <a href="{{ route('teacher.materials.show', ['id_modul' => $currentModuleId, 'id_materi' => $material->id]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
+                                    <a href="{{ route('teacher.materials.show', ['id_modul' => $currentModuleId, 'id_materi' => $material->id_bahan_ajar]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
                                         Lihat
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </a>
-                                    <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $material->id }}, name: '{{ addslashes($material->title) }}', type: 'Materi' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                    <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $material->id_bahan_ajar }}, name: '{{ addslashes($material->nama_bahan_ajar) }}', type: 'Materi' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
@@ -177,14 +149,14 @@
                 
                 <div class="space-y-2">
                     @foreach($modules as $m)
-                    @if($m->id == $currentModuleId)
+                    @if($m->id_modul == $currentModuleId)
                     <div class="w-full px-4 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm shadow-md flex items-center justify-between">
-                        {{ $m->name }}
+                        Modul {{ $m->id_modul }}: {{ $m->nama_modul }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     @else
-                    <a href="{{ route('teacher.modules.show', $m->id) }}" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:shadow-sm text-gray-700 hover:text-[#d62828] font-bold font-karla text-sm flex items-center justify-between transition-all">
-                        {{ $m->name }}
+                    <a href="{{ route('teacher.modules.show', $m->id_modul) }}" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:shadow-sm text-gray-700 hover:text-[#d62828] font-bold font-karla text-sm flex items-center justify-between transition-all">
+                        Modul {{ $m->id_modul }}: {{ $m->nama_modul }}
                     </a>
                     @endif
                     @endforeach
@@ -414,9 +386,24 @@
     </div>
 
     {{-- Delete Item Modal --}}
-    <div x-data="{ open: false, itemId: null, itemName: '', itemType: '', isLoading: false }" 
+    <div x-data="{ 
+            open: false, 
+            itemId: null, 
+            itemName: '', 
+            itemType: '', 
+            isLoading: false,
+            deleteUrl: ''
+         }" 
          x-show="open" 
-         x-on:open-delete-item-modal.window="itemId = $event.detail.id; itemName = $event.detail.name; itemType = $event.detail.type; open = true;"
+         x-on:open-delete-item-modal.window="
+            itemId = $event.detail.id; 
+            itemName = $event.detail.name; 
+            itemType = $event.detail.type; 
+            deleteUrl = itemType === 'Materi' 
+                 ? '{{ url('/teacher/modules/' . $currentModuleId . '/materials') }}/' + itemId 
+                 : '{{ url('/teacher/modules/' . $currentModuleId . '/tasks') }}/' + itemId;
+            open = true;
+         "
          style="display: none;"
          class="fixed inset-0 z-[110] overflow-y-auto" 
          aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -456,17 +443,14 @@
                  </div>
                  
                  <div class="mt-8 sm:mt-6 sm:flex sm:flex-row-reverse gap-3">
-                     <button type="button" @click="
-                         isLoading = true;
-                         setTimeout(() => {
-                             isLoading = false;
-                             open = false;
-                             $dispatch('show-toast', { message: itemType + ' berhasil dihapus' });
-                         }, 800);
-                     " :disabled="isLoading" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold font-karla text-white shadow-sm hover:bg-red-500 sm:w-auto transition items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-                         <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                         <span x-text="isLoading ? 'Menghapus...' : 'Ya, Hapus'"></span>
-                     </button>
+                     <form :action="deleteUrl" method="POST" class="m-0" @submit="isLoading = true">
+                         @csrf
+                         @method('DELETE')
+                         <button type="submit" :disabled="isLoading" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold font-karla text-white shadow-sm hover:bg-red-500 sm:w-auto transition items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                             <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                             <span x-text="isLoading ? 'Menghapus...' : 'Ya, Hapus'"></span>
+                         </button>
+                     </form>
                      <button type="button" @click="open = false" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-bold font-karla text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition">Batal</button>
                  </div>
             </div>

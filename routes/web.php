@@ -12,6 +12,8 @@ use App\Http\Controllers\Student\PengirimanTugasController;
 use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\ModulController as TeacherModulController;
+use App\Http\Controllers\Teacher\BahanAjarController as TeacherBahanAjarController;
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -149,17 +151,13 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.class-detail');
     })->name('subjects.show');
 
-    Route::get('/modules/{id_modul}', function ($id_modul) {
-        return view('teacher.module-detail');
-    })->name('modules.show');
+    Route::get('/modules/{id_modul}', [TeacherModulController::class, 'show'])->name('modules.show');
 
-    Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
-        return view('teacher.material-create', ['currentModuleId' => $id_modul]);
-    })->name('materials.create');
+    Route::get('/modules/{id_modul}/materials/create', [TeacherBahanAjarController::class, 'create'])->name('materials.create');
+    Route::post('/modules/{id_modul}/materials', [TeacherBahanAjarController::class, 'store'])->name('materials.store');
 
-    Route::get('/modules/{id_modul}/materials/{id_materi}', function ($id_modul, $id_materi) {
-        return view('teacher.material-detail', ['currentModuleId' => $id_modul, 'id_materi' => $id_materi]);
-    })->name('materials.show');
+    Route::get('/modules/{id_modul}/materials/{id_materi}', [TeacherBahanAjarController::class, 'show'])->name('materials.show');
+    Route::delete('/modules/{id_modul}/materials/{id_materi}', [TeacherBahanAjarController::class, 'destroy'])->name('materials.destroy');
 
     Route::get('/modules/{id_modul}/evaluations/create', function ($id_modul) {
         return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
