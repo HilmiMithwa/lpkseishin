@@ -23,16 +23,17 @@ class ModulController extends Controller
         // Fetch all modules of this mapel/class for the sidebar list
         $modules = $modul->mapel->modul; 
 
-        // Fetch materials and tasks
+        // Fetch materials, tasks, and evaluations
         $materials = $modul->bahanAjar;
         $tasks = Tugas::where('id_modul', $id_modul)->get();
+        $evaluations = $modul->evaluasi;
 
-        return view('teacher.module-detail', compact('modul', 'currentModuleId', 'batchName', 'className', 'moduleTitle', 'modules', 'materials', 'tasks'));
+        return view('teacher.module-detail', compact('modul', 'currentModuleId', 'batchName', 'className', 'moduleTitle', 'modules', 'materials', 'tasks', 'evaluations'));
     }
 
     public function store(StoreModulRequest $request)
     {
         Modul::create($request->validated());
-        return redirect()->route('teacher.dashboardmodul')->with('success', 'Modul Berhasil ditambahkan!'); //buat routingan dashboard guru ini aku serahin lagi ke kamu zan. Ini sebagai contoh doang
+        return redirect()->back()->with('success', 'Modul berhasil ditambahkan!');
     }
 }

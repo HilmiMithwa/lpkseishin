@@ -131,10 +131,20 @@ class BahanAjarController extends Controller
     {
         $material = BahanAjar::findOrFail($id_materi);
         
-        $disk = env('FILESYSTEM_DISK', 's3');
+        $disk = 'public';
 
-        if ($material->path_file_dokumen_ajar && Storage::disk($disk)->exists($material->path_file_dokumen_ajar)) {
-            Storage::disk($disk)->delete($material->path_file_dokumen_ajar);
+        if ($material->path_file_dokumen_ajar) {
+            $path = str_replace('/storage/', '', $material->path_file_dokumen_ajar);
+            if (Storage::disk($disk)->exists($path)) {
+                Storage::disk($disk)->delete($path);
+            }
+        }
+
+        if ($material->video_url && str_starts_with($material->video_url, '/storage/')) {
+            $path = str_replace('/storage/', '', $material->video_url);
+            if (Storage::disk($disk)->exists($path)) {
+                Storage::disk($disk)->delete($path);
+            }
         }
         
         $material->delete();

@@ -114,4 +114,132 @@ class TugasController extends Controller
 
         return back()->with('success', 'Nilai berhasil disimpan!');
     }
+
+    public function create($id_modul)
+    {
+        $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
+        return view('teacher.task-create', compact('modul'));
+    }
+
+    public function store(Request $request, $id_modul)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'deadline' => 'nullable|date',
+            'resource_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,png|max:10240'
+        ]);
+
+        $modul = Modul::findOrFail($id_modul);
+
+        $tugas = new Tugas();
+        $tugas->id_modul = $id_modul;
+        $tugas->id_rps = $modul->id_rps;
+        $tugas->judul_tugas = $request->title;
+        $tugas->deskripsi_tugas = $request->content;
+        $tugas->waktu_pengumpulan = $request->deadline;
+        $tugas->status_tugas = 'Aktif';
+
+        if ($request->hasFile('resource_file')) {
+            $file = $request->file('resource_file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/assignments', $filename);
+            $tugas->file_path_tugas = 'assignments/' . $filename;
+        }
+
+        $tugas->save();
+
+        return redirect()->route('teacher.modules.show', $id_modul)->with('success', 'Tugas berhasil ditambahkan!');
+    }
+
+    public function showTask($id_modul, $id_tugas)
+    {
+        $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
+        $task = Tugas::with(['submissions.user'])->findOrFail($id_tugas);
+
+        $submissions = $task->submissions->map(function($sub, $index) {
+            return (object)[
+                'no' => $index + 1,
+                'id_siswa' => $sub->id_pengiriman_tugas, // as placeholder or use real student id if available
+                'name' => $sub->user->name,
+                'status' => $sub->status === 'dikirim' ? 'Menunggu Penilaian' : ($sub->status === 'dinilai' ? 'Sudah Dinilai' : 'Belum Dikumpulkan'),
+                'submitted_at' => $sub->submitted_at ? \Carbon\Carbon::parse($sub->submitted_at)->translatedFormat('d M Y, H:i') : '-',
+                'score' => $sub->nilai ?? '-'
+            ];
+        });
+
+        return view('teacher.task-detail', compact('modul', 'task', 'submissions'));
+    }
+
+    public function edit($id_modul, $id_tugas)
+    {
+        $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
+        $task = Tugas::findOrFail($id_tugas);
+        
+        return view('teacher.task-create', compact('modul', 'task'));
+    }
+
+    public function update(Request $request, $id_modul, $id_tugas)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'deadline' => 'nullable|date',
+            'resource_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,png|max:10240'
+        ]);
+
+        $tugas = Tugas::where('id_modul', $id_modul)->findOrFail($id_tugas);
+        $tugas->judul_tugas = $request->title;
+        $tugas->deskripsi_tugas = $request->content;
+        $tugas->waktu_pengumpulan = $request->deadline;
+
+        if ($request->hasFile('resource_file')) {
+            if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('public')->delete($tugas->file_path_tugas);
+            }
+            $file = $request->file('resource_file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/assignments', $filename);
+            $tugas->file_path_tugas = 'assignments/' . $filename;
+        }
+
+        $tugas->save();
+
+        return redirect()->route('teacher.tasks.show', ['id_modul' => $id_modul, 'id_tugas' => $id_tugas])->with('success', 'Tugas berhasil diperbarui!');
+    }
+
+    public function destroy(Request $request, $id_modul, $id_tugas)
+    {
+        $tugas = Tugas::where('id_modul', $id_modul)->findOrFail($id_tugas);
+        if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
+            \Storage::disk('public')->delete($tugas->file_path_tugas);
+        }
+        $tugas->delete();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Tugas berhasil dihapus'
+            ]);
+        }
+
+        return redirect()->route('teacher.modules.show', $id_modul)->with('success', 'Tugas berhasil dihapus!');
+    }
+
+    public function gradeTaskSubmission(Request $request, $id_modul, $id_tugas)
+    {
+        $request->validate([
+            'student_id' => 'required',
+            'score' => 'required|numeric|min:0|max:100',
+            'feedback' => 'nullable|string'
+        ]);
+
+        $submission = \App\Models\Pengiriman_Tugas::findOrFail($request->student_id);
+        $submission->nilai = $request->score;
+        $submission->feedback = $request->feedback;
+        $submission->status = 'dinilai';
+        $submission->save();
+
+        return back()->with('success', 'Nilai berhasil disimpan!');
+    }
 }

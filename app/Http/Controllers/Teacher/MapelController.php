@@ -19,6 +19,30 @@ class MapelController extends Controller
         return view('teacher.class-detail', compact('classData', 'modules', 'announcements'));
     }
 
+    public function update(Request $request, $id_mapel)
+    {
+        $request->validate([
+            'nama_mapel' => 'required|string|max:255',
+            'deskripsi_mapel' => 'required|string',
+            'target' => 'required|string',
+            'jp' => 'required|numeric',
+            'jadwal' => 'required|string',
+            'min_score' => 'required|numeric',
+        ]);
+
+        $mapel = Mapel::findOrFail($id_mapel);
+        $mapel->update([
+            'nama_mapel' => $request->nama_mapel,
+            'deskripsi_mapel' => $request->deskripsi_mapel,
+            'target' => $request->target,
+            'jp' => $request->jp,
+            'jadwal' => $request->jadwal,
+            'min_score' => $request->min_score,
+        ]);
+
+        return redirect()->back()->with('success', 'Perubahan kelas berhasil disimpan!');
+    }
+
     public function addModul(StoreModulRequest $request)
     {
         $data = $request->validated();
@@ -61,9 +85,8 @@ class MapelController extends Controller
         // 3. Simpan ke database
         Modul::create($data);
 
-        // 4. Redirect ke detail kelas (subjects.show)
-        return redirect()->route('teacher.subjects.show', $data['id_mapel'])
-            ->with('success', 'Modul berhasil ditambahkan');
+        // 4. Redirect kembali ke halaman sebelumnya
+        return redirect()->back()->with('success', 'Modul berhasil ditambahkan');
     }
 
     public function storeAnnouncement(Request $request, $id_mapel)
@@ -96,7 +119,51 @@ class MapelController extends Controller
         $id_batch = $mapel->id_batch;
         
         // Delete related records manually to avoid foreign key constraint errors if ON DELETE CASCADE is missing
-        \App\Models\Modul::where('id_mapel', $id_mapel)->delete();
+        $moduls = \App\Models\Modul::with(['bahanAjar', 'evaluasi.questions.images'])->where('id_mapel', $id_mapel)->get();
+        foreach ($moduls as $modul) {
+            // Delete Bahan Ajar files
+            foreach ($modul->bahanAjar as $materi) {
+                if ($materi->path_file_dokumen_ajar) {
+                    $path = str_replace('/storage/', '', $materi->path_file_dokumen_ajar);
+                    if (\Storage::disk('public')->exists($path)) {
+                        \Storage::disk('public')->delete($path);
+                    }
+                }
+                if ($materi->video_url && str_starts_with($materi->video_url, '/storage/')) {
+                    $path = str_replace('/storage/', '', $materi->video_url);
+                    if (\Storage::disk('public')->exists($path)) {
+                        \Storage::disk('public')->delete($path);
+                    }
+                }
+                $materi->delete();
+            }
+
+            // Delete Tugas files
+            $tasks = \App\Models\Tugas::where('id_modul', $modul->id_modul)->get();
+            foreach ($tasks as $task) {
+                if ($task->file_path_tugas && \Storage::disk('public')->exists($task->file_path_tugas)) {
+                    \Storage::disk('public')->delete($task->file_path_tugas);
+                }
+                $task->delete();
+            }
+
+            // Delete Evaluasi and its relations
+            foreach ($modul->evaluasi as $evaluasi) {
+                foreach ($evaluasi->questions as $question) {
+                    foreach ($question->images as $image) {
+                        if (\Storage::disk('public')->exists($image->image_path)) {
+                            \Storage::disk('public')->delete($image->image_path);
+                        }
+                    }
+                    $question->images()->delete();
+                    $question->delete();
+                }
+                $evaluasi->delete();
+            }
+
+            $modul->delete();
+        }
+        
         \App\Models\Rps::where('id_mapel', $id_mapel)->delete();
         \App\Models\Announcement::where('id_mapel', $id_mapel)->delete();
         \App\Models\Enrollment_List::where('id_mapel', $id_mapel)->delete();
@@ -108,12 +175,45 @@ class MapelController extends Controller
     public function deleteModul($id_modul)
     {
         try {
-            $modul = Modul::findOrFail($id_modul);
+            $modul = Modul::with(['bahanAjar', 'evaluasi.questions.images'])->findOrFail($id_modul);
+            
+            // 1. Delete Bahan Ajar files
+            foreach ($modul->bahanAjar as $materi) {
+                if (\Storage::disk('public')->exists($materi->file_path)) {
+                    \Storage::disk('public')->delete($materi->file_path);
+                }
+                $materi->delete();
+            }
+
+            // 2. Delete Tugas files
+            $tasks = \App\Models\Tugas::where('id_modul', $id_modul)->get();
+            foreach ($tasks as $task) {
+                if ($task->file_path_tugas && \Storage::disk('public')->exists($task->file_path_tugas)) {
+                    \Storage::disk('public')->delete($task->file_path_tugas);
+                }
+                $task->delete();
+            }
+
+            // 3. Delete Evaluasi and its relations
+            foreach ($modul->evaluasi as $evaluasi) {
+                foreach ($evaluasi->questions as $question) {
+                    foreach ($question->images as $image) {
+                        if (\Storage::disk('public')->exists($image->image_path)) {
+                            \Storage::disk('public')->delete($image->image_path);
+                        }
+                    }
+                    $question->images()->delete();
+                    $question->delete();
+                }
+                $evaluasi->delete();
+            }
+
+            // 4. Finally, delete the module itself
             $modul->delete();
             
             return response()->json([
                 'success' => true,
-                'message' => 'Modul berhasil dihapus'
+                'message' => 'Modul beserta seluruh isinya (Materi, Tugas, Evaluasi) berhasil dihapus'
             ]);
         } catch (\Exception $e) {
             return response()->json([
