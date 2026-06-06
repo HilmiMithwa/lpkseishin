@@ -94,9 +94,7 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 
-    Route::get('/students/enrolled', function () {
-        return view('students.enrolled');
-    })->name('students.enrolled');
+    Route::get('/students/enrolled', [StudentController::class, 'enrolled'])->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
