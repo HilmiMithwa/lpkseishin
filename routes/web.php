@@ -171,8 +171,13 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     })->name('vocabulary');
 
     Route::get('/vocabulary/level/{id}', function ($id) {
-        return view('teacher.vocabulary-level', ['level_id' => $id]);
+        $words = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc')->paginate(18);
+        return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
+
+    Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
+    Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
+    Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
 
     Route::get('/progress-report', function () {
         return view('teacher.progress-report');

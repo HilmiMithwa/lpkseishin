@@ -2,13 +2,6 @@
 
 @section('title', "Level {$level_id} - LPK Seishin")
 
-@php
-    $words = [
-        '夢語り', '望ましい', 'ランプ', '望ましい', 'ランプ', '望ましい',
-        '夢語り', '望ましい', 'ランプ', '夢語り', '望ましい', 'ランプ',
-        '夢語り', '望ましい', 'ランプ', '夢語り', '望ましい', 'ランプ',
-    ];
-@endphp
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 space-y-4" x-data="{ hoveredIndex: null, activePage: 1, showFilter: false }">
@@ -38,7 +31,7 @@
         
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h3 class="text-lg font-bold text-[#222222]">Daftar Flashcard</h3>
-            <p class="text-sm font-bold text-[#d62828]">Total: 124 Kata</p>
+            <p class="text-sm font-bold text-[#d62828]">Total: {{ $words->total() }} Kata</p>
         </div>
 
         {{-- Toolbar --}}
@@ -66,19 +59,11 @@
         {{-- Grid --}}
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             @foreach($words as $index => $word)
-                <div @mouseenter="hoveredIndex = {{ $index }}" @mouseleave="hoveredIndex = null" @click="$dispatch('open-detail', { 
-                        word: '{{ $word }}', 
-                        furigana: 'べんきょう',
-                        romaji: 'Benkyou',
-                        arti: 'Belajar',
-                        category: 'meishi',
-                        context_jp: '私は毎日日本語を勉強します。',
-                        context_id: 'Saya belajar bahasa Jepang setiap hari.'
-                    })"
+                <div @mouseenter="hoveredIndex = {{ $index }}" @mouseleave="hoveredIndex = null" @click="$dispatch('open-detail', { index: {{ $index }} })"
                      class="aspect-[4/3] sm:aspect-square border border-gray-200 rounded-[28px] flex items-center justify-center text-center p-4 cursor-pointer transition-colors duration-200"
                      :class="hoveredIndex === {{ $index }} ? 'bg-[#d62828] text-white border-[#d62828] shadow-md' : 'bg-white text-[#222222] hover:bg-gray-50'">
                     
-                    <span x-show="hoveredIndex !== {{ $index }}" class="text-3xl font-bold">{{ $word }}</span>
+                    <span x-show="hoveredIndex !== {{ $index }}" class="text-3xl font-bold">{{ $word->kanji }}</span>
                     
                     <div x-show="hoveredIndex === {{ $index }}" class="flex flex-col items-center justify-center w-full h-full gap-1" style="display:none;">
                         <span class="text-sm font-semibold">Buka<br>Flashcard</span>
@@ -90,19 +75,35 @@
         </div>
 
         {{-- Pagination --}}
+        @if ($words->lastPage() > 1)
         <div class="flex justify-end mt-10">
             <div class="flex gap-2">
-                <button @click="if(activePage > 1) activePage--" class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#EABABA] text-red-600 hover:bg-red-200 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
-                </button>
-                <button @click="activePage = 1" :class="activePage === 1 ? 'bg-[#d62828] text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'" class="w-9 h-9 flex items-center justify-center rounded-lg transition font-bold text-sm">1</button>
-                <button @click="activePage = 2" :class="activePage === 2 ? 'bg-[#d62828] text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'" class="w-9 h-9 flex items-center justify-center rounded-lg transition font-bold text-sm">2</button>
-                <button @click="activePage = 3" :class="activePage === 3 ? 'bg-[#d62828] text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'" class="w-9 h-9 flex items-center justify-center rounded-lg transition font-bold text-sm">3</button>
-                <button @click="if(activePage < 3) activePage++" class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#d62828] text-white hover:bg-red-700 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
-                </button>
+                @if ($words->onFirstPage())
+                    <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#EABABA]/50 text-red-600/50 cursor-not-allowed transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                @else
+                    <a href="{{ $words->previousPageUrl() }}" class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#EABABA] text-red-600 hover:bg-red-200 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    </a>
+                @endif
+
+                @for ($i = 1; $i <= $words->lastPage(); $i++)
+                    <a href="{{ $words->url($i) }}" class="w-9 h-9 flex items-center justify-center rounded-lg transition font-bold text-sm {{ $words->currentPage() == $i ? 'bg-[#d62828] text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50' }}">{{ $i }}</a>
+                @endfor
+
+                @if ($words->hasMorePages())
+                    <a href="{{ $words->nextPageUrl() }}" class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#d62828] text-white hover:bg-red-700 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                @else
+                    <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#d62828]/50 text-white cursor-not-allowed transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                @endif
             </div>
         </div>
+        @endif
 
     </div>
 
@@ -111,7 +112,34 @@
 
 @push('modals')
     {{-- Modal Word Detail --}}
-    <div x-data="{ show: false, showDelete: false, wordData: {} }" @open-detail.window="show = true; wordData = $event.detail; showDelete = false" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
+    <div x-data="{ 
+            show: false, 
+            showDelete: false, 
+            wordData: {},
+            currentIndex: 0,
+            wordsList: [
+                @foreach($words as $w)
+                {
+                    word: '{{ addslashes($w->kanji) }}', 
+                    furigana: '{{ addslashes($w->furigana ?? '') }}',
+                    romaji: '{{ addslashes($w->romaji) }}',
+                    arti: '{{ addslashes($w->meaning_id) }}',
+                    en: '{{ addslashes($w->meaning_en) }}',
+                    definition: '{{ addslashes($w->definition_id) }}',
+                    context_jp: '{{ addslashes($w->contextual_usage) }}',
+                    context_id: '',
+                    id: {{ $w->id_vocabulary }}
+                }@if(!$loop->last),@endif
+                @endforeach
+            ]
+        }" 
+        @open-detail.window="
+            show = true; 
+            currentIndex = $event.detail.index;
+            wordData = wordsList[currentIndex];
+            showDelete = false;
+        " 
+        x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
         <div x-show="show" @click.away="show = false" class="bg-[#F5F5F5] sm:bg-white rounded-[32px] w-full max-w-[800px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] relative" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             
             {{-- Header --}}
@@ -137,7 +165,7 @@
                             </div>
                             <div class="flex justify-between border-t border-gray-100 pt-3">
                                 <span class="font-bold text-gray-400">EN</span>
-                                <span class="font-bold text-[#222222]">Study</span>
+                                <span class="font-bold text-[#222222]" x-text="wordData.en"></span>
                             </div>
                             <div class="flex justify-between border-t border-gray-100 pt-3">
                                 <span class="font-bold text-gray-400">ID</span>
@@ -151,7 +179,7 @@
                 <div class="w-full md:w-[55%] flex flex-col justify-center gap-5">
                     <div>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Definisi</p>
-                        <p class="text-[15px] font-semibold text-[#222222] leading-relaxed">Tindakan untuk belajar atau mempelajari sesuatu hal baru.</p>
+                        <p class="text-[15px] font-semibold text-[#222222] leading-relaxed" x-text="wordData.definition"></p>
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Penggunaan Kontekstual (oleh Sensei)</p>
@@ -160,12 +188,36 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Indeks Kata</p>
-                        <p class="text-[15px] font-bold text-[#222222]">#14</p>
+                        <p class="text-[15px] font-bold text-[#222222]" x-text="'#' + wordData.id"></p>
                     </div>
                     
                     <div class="flex items-center gap-3 mt-2">
-                        <a href="#" class="px-6 py-2.5 text-sm font-bold text-gray-600 border border-gray-200 bg-white rounded-xl hover:bg-gray-50 transition flex-1 text-center">Sebelumnya</a>
-                        <a href="#" class="px-6 py-2.5 text-sm font-bold text-white bg-[#d62828] rounded-xl hover:bg-red-700 transition flex-1 text-center">Selanjutnya</a>
+                        <button type="button" 
+                                @click="
+                                    if(currentIndex > 0) { 
+                                        currentIndex--; wordData = wordsList[currentIndex]; 
+                                    } else if ('{{ $words->previousPageUrl() }}') {
+                                        window.location.href = '{!! $words->previousPageUrl() !!}&open_last=true';
+                                    }
+                                " 
+                                :disabled="currentIndex === 0 && !'{{ $words->previousPageUrl() }}'"
+                                :class="currentIndex === 0 && !'{{ $words->previousPageUrl() }}' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'"
+                                class="px-6 py-2.5 text-sm font-bold text-gray-600 border border-gray-200 bg-white rounded-xl transition flex-1 text-center">
+                            Sebelumnya
+                        </button>
+                        <button type="button" 
+                                @click="
+                                    if(currentIndex < wordsList.length - 1) { 
+                                        currentIndex++; wordData = wordsList[currentIndex]; 
+                                    } else if ('{{ $words->nextPageUrl() }}') {
+                                        window.location.href = '{!! $words->nextPageUrl() !!}&open_first=true';
+                                    }
+                                " 
+                                :disabled="currentIndex === wordsList.length - 1 && !'{{ $words->nextPageUrl() }}'"
+                                :class="currentIndex === wordsList.length - 1 && !'{{ $words->nextPageUrl() }}' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'"
+                                class="px-6 py-2.5 text-sm font-bold text-white bg-[#d62828] rounded-xl transition flex-1 text-center">
+                            Selanjutnya
+                        </button>
                     </div>
                     
                     <button @click="showDelete = true" class="flex items-center justify-center gap-2 mt-1 text-sm font-bold text-red-500 bg-white border border-red-100 rounded-xl py-3 hover:bg-red-50 hover:border-red-200 transition w-full shadow-sm">
@@ -191,7 +243,7 @@
                     <p class="text-sm text-slate-500 mb-6">Flashcard <span class="font-bold text-[#d62828]" x-text="wordData.word"></span> akan dihapus permanen dan tidak dapat dikembalikan.</p>
                     <div class="flex gap-3">
                         <button type="button" @click="showDelete = false" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-slate-700 rounded-xl font-bold text-sm transition">Batal</button>
-                        <form action="#" method="POST" @submit.prevent="window.dispatchEvent(new CustomEvent('show-toast', {detail: 'Flashcard berhasil dihapus!'})); showDelete = false; show = false;" class="flex-1 flex">
+                        <form :action="'{{ url('/teacher/vocabulary') }}/' + wordData.id" method="POST" class="flex-1 flex">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="flex-1 py-3 bg-[#d62828] hover:bg-red-700 text-white rounded-xl font-bold text-sm transition shadow-sm border border-red-700">Ya, Hapus</button>
@@ -205,7 +257,7 @@
     {{-- Modal Create Flash Card --}}
     <div x-data="{ show: false, kanji: '', furigana: '', romaji: '', arti: '', category: '', context_jp: '', context_id: '' }" @open-create.window="show = true" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
         <div x-show="show" @click.away="show = false" class="bg-[#F5F5F5] sm:bg-white rounded-[32px] w-full max-w-[800px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <form action="#" method="POST" @submit.prevent="window.dispatchEvent(new CustomEvent('show-toast', {detail: 'Flashcard berhasil dibuat!'})); show = false; kanji=''; furigana=''; romaji=''; arti=''; category=''; context_jp=''; context_id='';" class="flex flex-col h-full overflow-hidden">
+            <form action="{{ route('teacher.vocabulary.store', $level_id) }}" method="POST" class="flex flex-col h-full overflow-hidden">
                 @csrf
                 
                 {{-- Header --}}
@@ -302,9 +354,10 @@
     </div>
 
     {{-- Modal Edit Flash Card --}}
-    <div x-data="{ show: false, kanji: '', furigana: '', romaji: '', arti: '', category: '', context_jp: '', context_id: '' }" 
+    <div x-data="{ show: false, id: '', kanji: '', furigana: '', romaji: '', arti: '', category: '', context_jp: '', context_id: '' }" 
          @open-edit.window="
             show = true; 
+            id = $event.detail.id;
             kanji = $event.detail.word;
             furigana = $event.detail.furigana;
             romaji = $event.detail.romaji;
@@ -315,7 +368,7 @@
          " 
          x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
         <div x-show="show" @click.away="show = false" class="bg-[#F5F5F5] sm:bg-white rounded-[32px] w-full max-w-[800px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-            <form action="#" method="POST" @submit.prevent="window.dispatchEvent(new CustomEvent('show-toast', {detail: 'Flashcard berhasil diperbarui!'})); show = false;" class="flex flex-col h-full overflow-hidden">
+            <form :action="'{{ url('/teacher/vocabulary') }}/' + id" method="POST" class="flex flex-col h-full overflow-hidden">
                 @csrf
                 @method('PUT')
                 
@@ -450,4 +503,34 @@
              </button>
         </div>
     </div>
+
+    @if(session('success'))
+        <script>
+            document.addEventListener('alpine:init', () => {
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('show-toast', { detail: "{{ session('success') }}" }));
+                }, 100);
+            });
+        </script>
+    @endif
+
+    @if(request()->has('open_first'))
+        <script>
+            document.addEventListener('alpine:init', () => {
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('open-detail', { detail: { index: 0 } }));
+                }, 100);
+            });
+        </script>
+    @endif
+
+    @if(request()->has('open_last') && $words->count() > 0)
+        <script>
+            document.addEventListener('alpine:init', () => {
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('open-detail', { detail: { index: {{ $words->count() - 1 }} } }));
+                }, 100);
+            });
+        </script>
+    @endif
 @endpush
