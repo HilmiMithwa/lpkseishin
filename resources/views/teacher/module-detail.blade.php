@@ -11,7 +11,7 @@
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('teacher.subjects.show', 1) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">{{ $moduleTitle }}</h1>
@@ -19,11 +19,11 @@
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                 <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.batch.show', 2) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
+                <a href="{{ route('teacher.batch.show', $batchId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.subjects.show', 1) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
+                <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-[#d62828] font-semibold">Modul {{ $currentModuleId }}</span>
+                <span class="text-[#d62828] font-semibold">Modul {{ $moduleIndex }}</span>
             </nav>
         </div>
         <div class="flex items-center gap-2 sm:gap-3 self-start">
@@ -198,17 +198,15 @@
                 <h3 class="text-sm sm:text-base font-bold font-ibm text-gray-900 mb-4">Daftar Modul</h3>
                 
                 <div class="space-y-2">
-                    @foreach($modules as $m)
-                    @if($m->id_modul == $currentModuleId)
-                    <div class="w-full px-4 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm shadow-md flex items-center justify-between">
-                        Modul {{ $m->id_modul }}: {{ $m->nama_modul }}
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </div>
-                    @else
-                    <a href="{{ route('teacher.modules.show', $m->id_modul) }}" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:shadow-sm text-gray-700 hover:text-[#d62828] font-bold font-karla text-sm flex items-center justify-between transition-all">
-                        Modul {{ $m->id_modul }}: {{ $m->nama_modul }}
+                    @foreach($modules as $index => $m)
+                    <a href="{{ route('teacher.modules.show', $m->id_modul) }}" class="block w-full text-left p-4 rounded-xl border {{ $m->id_modul === $modul->id_modul ? 'bg-[#d62828] border-[#d62828] text-white shadow-md transform scale-[1.02]' : 'bg-white border-gray-100 text-gray-700 hover:border-red-200 hover:bg-red-50 hover:text-[#d62828]' }} transition-all duration-200 group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-bold font-karla">Modul {{ $index + 1 }}: {{ $m->nama_modul }}</span>
+                            @if($m->id_modul === $modul->id_modul)
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            @endif
+                        </div>
                     </a>
-                    @endif
                     @endforeach
 
                     <button x-data @click="$dispatch('open-add-module-modal')" class="w-full mt-2 py-3 px-4 border-2 border-dashed border-red-200 hover:border-[#d62828] hover:bg-red-50 rounded-xl text-[#d62828] font-bold font-karla text-sm flex items-center justify-center gap-2 transition">
@@ -495,7 +493,7 @@
                          .then(response => response.json())
                          .then(data => {
                              if (data.success) {
-                                 window.location.href = '{{ route('teacher.subjects.show', $modul->id_mapel ?? 1) }}?success=modul_deleted';
+                                 window.location.href = '{{ route('teacher.subjects.show', $mapelId) }}?success=modul_deleted';
                              } else {
                                  isLoading = false;
                                  alert(data.message || 'Gagal menghapus modul');

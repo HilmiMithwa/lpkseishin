@@ -74,6 +74,51 @@ class TugasController extends Controller
         return redirect()->route('teacher.assignments')->with('success', 'Tugas berhasil dibuat!');
     }
 
+    public function updateAssignment(Request $request, $id) {
+        $request->validate([
+            'judul_tugas' => 'required|string|max:255',
+            'deskripsi_tugas' => 'nullable|string',
+            'waktu_pengumpulan' => 'nullable|date',
+            'file_path_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,png|max:10240',
+            'id_modul' => 'required|exists:modul,id_modul'
+        ]);
+
+        $tugas = Tugas::findOrFail($id);
+        
+        $modul = \App\Models\Modul::findOrFail($request->id_modul);
+        $tugas->id_modul = $request->id_modul;
+        $tugas->id_rps = $modul->id_rps;
+        $tugas->judul_tugas = $request->judul_tugas;
+        $tugas->deskripsi_tugas = $request->deskripsi_tugas ?? '';
+        $tugas->waktu_pengumpulan = $request->waktu_pengumpulan;
+
+        if ($request->hasFile('file_path_tugas')) {
+            if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
+                \Storage::disk('public')->delete($tugas->file_path_tugas);
+            }
+            $file = $request->file('file_path_tugas');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/assignments', $filename);
+            $tugas->file_path_tugas = 'assignments/' . $filename;
+        }
+
+        $tugas->save();
+
+        return redirect()->route('teacher.assignments')->with('success', 'Tugas berhasil diperbarui!');
+    }
+
+    public function destroyAssignment($id) {
+        $tugas = Tugas::findOrFail($id);
+        
+        if ($tugas->file_path_tugas && \Storage::disk('public')->exists($tugas->file_path_tugas)) {
+            \Storage::disk('public')->delete($tugas->file_path_tugas);
+        }
+        
+        $tugas->delete();
+
+        return redirect()->route('teacher.assignments')->with('success', 'Tugas berhasil dihapus!');
+    }
+
     public function gradePage($id) {
         $tugas = Tugas::with(['submissions.user', 'modul.mapel.batch'])->findOrFail($id);
         
@@ -118,7 +163,15 @@ class TugasController extends Controller
     public function create($id_modul)
     {
         $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
-        return view('teacher.task-create', compact('modul'));
+        $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
+        $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
+        $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+
+        return view('teacher.task-create', compact('modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className'));
     }
 
     public function store(Request $request, $id_modul)

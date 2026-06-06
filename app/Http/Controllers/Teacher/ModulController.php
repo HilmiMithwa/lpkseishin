@@ -16,9 +16,14 @@ class ModulController extends Controller
         $modul = Modul::with(['mapel.batch', 'mapel.modul', 'bahanAjar'])->findOrFail($id_modul);
         
         $currentModuleId = $modul->id_modul;
-        $batchName = $modul->mapel->batch->nama_batch ?? 'Unknown Batch';
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
+        $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
         $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
-        $moduleTitle = 'Modul ' . $currentModuleId . ': ' . $modul->nama_modul;
+        
+        // Calculate the module's sequence index within its mapel
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+        $moduleTitle = 'Modul ' . $moduleIndex . ': ' . $modul->nama_modul;
         
         // Fetch all modules of this mapel/class for the sidebar list
         $modules = $modul->mapel->modul; 
@@ -28,7 +33,7 @@ class ModulController extends Controller
         $tasks = Tugas::where('id_modul', $id_modul)->get();
         $evaluations = $modul->evaluasi;
 
-        return view('teacher.module-detail', compact('modul', 'currentModuleId', 'batchName', 'className', 'moduleTitle', 'modules', 'materials', 'tasks', 'evaluations'));
+        return view('teacher.module-detail', compact('modul', 'currentModuleId', 'mapelId', 'batchId', 'batchName', 'className', 'moduleTitle', 'moduleIndex', 'modules', 'materials', 'tasks', 'evaluations'));
     }
 
     public function store(StoreModulRequest $request)

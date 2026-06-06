@@ -38,16 +38,16 @@
             @endif
 
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm font-karla">
-                <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 transition font-medium">Kelas Saya</a>
-                <span class="text-gray-400">></span>
-                <a href="{{ route('teacher.batch.show', $modul->mapel->id_batch ?? 2) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $batchName }}</a>
-                <span class="text-gray-400">></span>
-                <a href="{{ route('teacher.subjects.show', $modul->id_mapel ?? 1) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $className }}</a>
-                <span class="text-gray-400">></span>
-                    <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">Modul {{ $currentModuleId }}</a>
-                    <span class="text-gray-400">›</span>
-                    <span class="text-[#d62828] font-bold">{{ isset($task) ? 'Edit Tugas' : 'Tambah Tugas' }}</span>
-                </nav>
+                <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.batch.show', $batchId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Modul {{ $moduleIndex }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <span class="text-[#d62828] font-bold">{{ isset($task) ? 'Edit Tugas' : 'Tambah Tugas' }}</span>
+            </nav>
             </div>
             <div class="flex items-center gap-3 self-start">
                 <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="hidden sm:inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-bold py-2.5 px-5 rounded-xl text-sm transition">

@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between mb-8">
             <div>
                 <div class="flex items-center gap-3 mb-2">
-                    <a href="{{ route('teacher.modules.show', $currentModuleId ?? 2) }}" @click.prevent="navigateAway('{{ route('teacher.modules.show', $currentModuleId ?? 2) }}')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                    <a href="{{ route('teacher.modules.show', $currentModuleId) }}" @click.prevent="navigateAway('{{ route('teacher.modules.show', $currentModuleId) }}')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                     </a>
                     <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">Buat Evaluasi</h1>
@@ -16,11 +16,11 @@
                 <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                     <a href="{{ route('teacher.classes') }}" @click.prevent="navigateAway('{{ route('teacher.classes') }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
                     <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    <a href="{{ route('teacher.batch.show', 2) }}" @click.prevent="navigateAway('{{ route('teacher.batch.show', 2) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">Batch 2</a>
+                    <a href="{{ route('teacher.batch.show', $batchId) }}" @click.prevent="navigateAway('{{ route('teacher.batch.show', $batchId) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
                     <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    <a href="{{ route('teacher.subjects.show', 1) }}" @click.prevent="navigateAway('{{ route('teacher.subjects.show', 1) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">N4 Mastering</a>
+                    <a href="{{ route('teacher.subjects.show', $mapelId) }}" @click.prevent="navigateAway('{{ route('teacher.subjects.show', $mapelId) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
                     <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    <a href="{{ route('teacher.modules.show', $currentModuleId ?? 2) }}" @click.prevent="navigateAway('{{ route('teacher.modules.show', $currentModuleId ?? 2) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">Modul 2</a>
+                    <a href="{{ route('teacher.modules.show', $currentModuleId) }}" @click.prevent="navigateAway('{{ route('teacher.modules.show', $currentModuleId) }}')" class="text-gray-500 hover:text-gray-700 font-medium transition">Modul {{ $moduleIndex }}</a>
                     <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     <span class="text-[#d62828] font-semibold">Buat Evaluasi</span>
                 </nav>
@@ -698,7 +698,7 @@
                 .then(data => {
                     if (data.success) {
                         window.isCustomLeaving = true;
-                        window.location.href = '{{ route('teacher.modules.show', $currentModuleId ?? 2) }}?success=evaluation_created';
+                        window.location.href = '{{ route('teacher.modules.show', $currentModuleId) }}?success=evaluation_created';
                     } else {
                         this.isSubmitting = false;
                         this.showToast(data.message || 'Gagal menyimpan evaluasi', 'error');

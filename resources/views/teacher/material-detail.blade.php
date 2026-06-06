@@ -13,7 +13,7 @@
     {{-- Breadcrumb & Back --}}
     <div class="mb-8">
         <div class="flex items-center gap-3 mb-2">
-            <a href="{{ route('teacher.modules.show', $currentModuleId ?? 1) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+            <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
             <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">Detail Materi</h1>
@@ -21,11 +21,11 @@
         <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-karla text-gray-500">
             <a href="{{ route('teacher.classes') }}" class="hover:text-[#d62828] transition">Kelas Saya</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            <span>{{ $batchName }}</span>
+            <a href="{{ route('teacher.batch.show', $batchId) }}" class="hover:text-[#d62828] transition">{{ $batchName }}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            <span>{{ $className }}</span>
+            <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="hover:text-[#d62828] transition">{{ $className }}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="hover:text-[#d62828] transition">Modul {{ $currentModuleId }}</a>
+            <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="hover:text-[#d62828] transition">Modul {{ $moduleIndex }}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             <span class="text-[#d62828] font-bold">{{ $material->nama_bahan_ajar }}</span>
         </div>

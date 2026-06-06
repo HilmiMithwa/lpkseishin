@@ -217,6 +217,8 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
     Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
+    Route::put('/assignments/{id}',[TugasController::class, 'updateAssignment'])->name('assignments.update');
+    Route::delete('/assignments/{id}',[TugasController::class, 'destroyAssignment'])->name('assignments.destroy');
     // Preview: Grading Workspace
     Route::get('/assignments/{id}/grade', [TugasController::class, 'gradePage'])->name('assignments.grade');
     Route::post('/submissions/{id}/grade', [TugasController::class, 'gradeAssignment'])->name('assignments.grade.store');
