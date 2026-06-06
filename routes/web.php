@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
+use App\Http\Controllers\Teacher\TugasController;
 
 
 
@@ -198,10 +199,8 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.progress-report');
     })->name('progress-report');
 
-    Route::get('/assignments', function () {
-        return view('teacher.assignments');
-    })->name('assignments');
-    
+    Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
+    Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
     // Preview: Grading Workspace
     Route::get('/assignments/grade', function () {
         return view('teacher.grade-submission');
