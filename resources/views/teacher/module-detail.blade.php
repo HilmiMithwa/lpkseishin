@@ -276,71 +276,73 @@
                          <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900" id="modal-title">Tambah Modul Baru</h3>
                      </div>
 
-                     <!-- Form Grid (Single Column) -->
-                     <form class="space-y-6">
-                         
-                         <div class="space-y-1.5">
-                             <x-input-label>Judul Modul:</x-input-label>
-                             <x-text-input type="text" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" />
-                         </div>
+                      <!-- Form Grid (Single Column) -->
+                      <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
+                          @csrf
+                          <input type="hidden" name="id_mapel" value="{{ $module->id_mapel ?? 1 }}">
+                          
+                          <div>
+                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Judul Modul:</label>
+                              <input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                          </div>
 
-                         <div class="space-y-1.5">
-                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
-                             <x-text-input type="text" placeholder="cth., 22" />
-                         </div>
+                          <div>
+                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Alokasi Durasi (JP):</label>
+                              <input type="number" name="jp" required placeholder="cth., 22" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                          </div>
 
-                         <div>
-                             <div class="mb-3">
-                                 <x-input-label>Pilih Ikon Modul:</x-input-label>
-                                 <p class="text-xs font-karla text-gray-500 mt-1">Pilih ikon yang paling sesuai untuk ditampilkan pada daftar modul siswa.</p>
-                             </div>
-                             
-                             <div class="flex items-center gap-4">
-                                 {{-- Icon 1: Language --}}
-                                 <button type="button" @click="selectedIcon = 1" :class="selectedIcon === 1 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
-                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
-                                 </button>
-                                 {{-- Icon 2: Book --}}
-                                 <button type="button" @click="selectedIcon = 2" :class="selectedIcon === 2 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
-                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                                 </button>
-                                 {{-- Icon 3: Puzzle --}}
-                                 <button type="button" @click="selectedIcon = 3" :class="selectedIcon === 3 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
-                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a1.5 1.5 0 01-1.5 1.5H9c-.443 0-.792-.35-.792-.792 0-.214-.078-.415-.224-.555C7.755 6 7.424 6 7.125 6c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401h0a1.5 1.5 0 011.5 1.5v2.625c0 .443-.35.792-.792.792-.214 0-.415.078-.555.224C10 16.245 10 16.576 10 16.875c0 1.036 1.007 1.875 2.25 1.875s2.25-.84 2.25-1.875c0-.369-.128-.713-.349-1.003-.215-.283-.401-.604-.401-.959v0a1.5 1.5 0 011.5-1.5h2.625c.443 0 .792.35.792.792 0 .214.078.415.224.555.229.229.56.229.859.229 1.036 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401h0a1.5 1.5 0 01-1.5-1.5V6.087z" /></svg>
-                                 </button>
-                                 {{-- Icon 4: Clipboard --}}
-                                 <button type="button" @click="selectedIcon = 4" :class="selectedIcon === 4 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
-                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
-                                 </button>
-                             </div>
-                         </div>
+                          <div>
+                              <div class="mb-3">
+                                  <label class="block text-sm font-bold font-karla text-gray-700">Pilih Ikon Modul:</label>
+                                  <p class="text-xs font-karla text-gray-500 mt-1">Pilih ikon yang paling sesuai untuk ditampilkan pada daftar modul siswa.</p>
+                              </div>
+                              
+                              <div class="flex items-center gap-4">
+                                  {{-- Icon 1: Language --}}
+                                  <button type="button" @click="selectedIcon = 1" :class="selectedIcon === 1 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
+                                      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                                  </button>
+                                  {{-- Icon 2: Book --}}
+                                  <button type="button" @click="selectedIcon = 2" :class="selectedIcon === 2 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
+                                      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                  </button>
+                                  {{-- Icon 3: Puzzle --}}
+                                  <button type="button" @click="selectedIcon = 3" :class="selectedIcon === 3 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
+                                      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a1.5 1.5 0 01-1.5 1.5H9c-.443 0-.792-.35-.792-.792 0-.214-.078-.415-.224-.555C7.755 6 7.424 6 7.125 6c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401h0a1.5 1.5 0 011.5 1.5v2.625c0 .443-.35.792-.792.792-.214 0-.415.078-.555.224C10 16.245 10 16.576 10 16.875c0 1.036 1.007 1.875 2.25 1.875s2.25-.84 2.25-1.875c0-.369-.128-.713-.349-1.003-.215-.283-.401-.604-.401-.959v0a1.5 1.5 0 011.5-1.5h2.625c.443 0 .792.35.792.792 0 .214.078.415.224.555.229.229.56.229.859.229 1.036 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401h0a1.5 1.5 0 01-1.5-1.5V6.087z" /></svg>
+                                  </button>
+                                  {{-- Icon 4: Clipboard --}}
+                                  <button type="button" @click="selectedIcon = 4" :class="selectedIcon === 4 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
+                                      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
+                                  </button>
+                              </div>
+                          </div>
 
-                         <div class="space-y-1.5">
-                             <x-input-label>Deskripsi Modul:</x-input-label>
-                             <textarea rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y min-h-[120px] shadow-sm"></textarea>
-                         </div>
+                          <div>
+                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi Modul:</label>
+                              <textarea name="module_description" rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]"></textarea>
+                          </div>
 
-                         <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
-                             <div>
-                                 <x-input-label class="mb-1">Akses Berurutan</x-input-label>
-                                 <p class="text-[13px] font-karla text-gray-600 leading-snug">Kunci modul ini (Siswa harus menyelesaikan modul sebelumnya untuk membuka akses).</p>
-                             </div>
-                             <button type="button" @click="sequential = !sequential" :class="sequential ? 'bg-[#d62828]' : 'bg-gray-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none">
-                                 <span class="sr-only">Toggle sequential access</span>
-                                 <span aria-hidden="true" :class="sequential ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
-                             </button>
-                         </div>
+                          <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
+                              <div>
+                                  <label class="block text-sm font-bold font-karla text-gray-700 mb-1">Akses Berurutan</label>
+                                  <p class="text-[13px] font-karla text-gray-600 leading-snug">Kunci modul ini (Siswa harus menyelesaikan modul sebelumnya untuk membuka akses).</p>
+                              </div>
+                              <button type="button" @click="sequential = !sequential" :class="sequential ? 'bg-[#d62828]' : 'bg-gray-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none">
+                                  <span class="sr-only">Toggle sequential access</span>
+                                  <span aria-hidden="true" :class="sequential ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                              </button>
+                          </div>
 
-                         <!-- Actions -->
-                         <div class="mt-4 flex items-center gap-4 pt-6">
-                             <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
-                                 Batal
-                             </button>
-                             <x-primary-button type="button" @click="open = false" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
-                                 Buat Modul
-                             </x-primary-button>
-                         </div>
-                     </form>
+                          <!-- Actions -->
+                          <div class="mt-4 flex items-center gap-4 pt-6">
+                              <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
+                                  Batal
+                              </button>
+                              <button type="submit" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base">
+                                  Buat Modul
+                              </button>
+                          </div>
+                      </form>
                  </div>
             </div>
         </div>
