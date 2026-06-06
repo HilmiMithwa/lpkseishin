@@ -9,7 +9,7 @@
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('teacher.modules.show', $evaluasi->id_modul) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">{{ $evaluasi->judul }}</h1>
@@ -17,13 +17,13 @@
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                 <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.batch.show', $evaluasi->modul->mapel->batch->id_batch ?? 2) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $evaluasi->modul->mapel->batch->nama_batch ?? 'Batch' }}</a>
+                <a href="{{ route('teacher.batch.show', $batchId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.subjects.show', $evaluasi->modul->id_mapel ?? 1) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $evaluasi->modul->mapel->nama_mapel ?? 'Mapel' }}</a>
+                <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.modules.show', $evaluasi->id_modul) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Modul {{ $evaluasi->id_modul }}</a>
+                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Modul {{ $moduleIndex }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-[#d62828] font-semibold">Detail Evaluasi</span>
+                <span class="text-[#d62828] font-bold">{{ $evaluasi->judul }}</span>
             </nav>
         </div>
         <div class="flex items-center gap-2 sm:gap-3 self-start">

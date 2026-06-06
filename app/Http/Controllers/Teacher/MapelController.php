@@ -13,7 +13,7 @@ class MapelController extends Controller
     public function show($id_mapel)
     {
         $classData = Mapel::with('batch')->findOrFail($id_mapel);
-        $modules = Modul::where('id_mapel', $id_mapel)->get();
+        $modules = Modul::where('id_mapel', $id_mapel)->orderBy('id_modul', 'asc')->get();
         $announcements = $classData->announcements;
 
         return view('teacher.class-detail', compact('classData', 'modules', 'announcements'));

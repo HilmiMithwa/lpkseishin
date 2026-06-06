@@ -15,7 +15,16 @@ class EvaluasiController extends Controller
 {
     public function create($id_modul)
     {
-        return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
+        $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
+        $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
+        $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
+        $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+
+        return view('teacher.evaluation-create', compact('modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className'));
     }
 
     public function store(Request $request, $id_modul)
@@ -115,8 +124,17 @@ class EvaluasiController extends Controller
     public function show($id_modul, $id)
     {
         $evaluasi = Evaluasi::with(['modul.mapel.batch', 'questions.images'])->findOrFail($id);
-        
-        return view('teacher.evaluation-show', compact('evaluasi', 'id_modul'));
+        $modul = $evaluasi->modul;
+
+        $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
+        $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
+        $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+
+        return view('teacher.evaluation-show', compact('evaluasi', 'id_modul', 'modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className'));
     }
 
     public function destroy($id_modul, $id)
