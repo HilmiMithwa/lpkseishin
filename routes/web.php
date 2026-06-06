@@ -208,9 +208,6 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
     Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
 
-    Route::get('/progress-report', function () {
-        return view('teacher.progress-report');
-    })->name('progress-report');
 
     Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
     Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
