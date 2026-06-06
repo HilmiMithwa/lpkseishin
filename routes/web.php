@@ -112,6 +112,7 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
     Route::get('/students/vocabulary-mastery', [StudentController::class, 'vocabularyMastery'])->name('students.vocabulary-mastery');
+    Route::get('/students/vocabulary-mastery/favorites', [StudentController::class, 'vocabularyFavorites'])->name('students.vocabulary-favorites');
     Route::get('/students/vocabulary-mastery/level/{id}', [StudentController::class, 'vocabularyLevel'])->name('students.vocabulary-level');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-mastered', [StudentController::class, 'toggleMastered'])->name('students.vocabulary.toggle-mastered');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-favorite', [StudentController::class, 'toggleFavorite'])->name('students.vocabulary.toggle-favorite');
