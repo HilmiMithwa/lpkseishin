@@ -14,11 +14,19 @@ class MapelController extends Controller
     {
         $classData = Mapel::with('batch')->findOrFail($id_mapel);
         $modules = Modul::where('id_mapel', $id_mapel)->get();
+        $announcements = $classData->announcements->pluck('title')->toArray();
+        
+        if (empty($announcements)) {
+            $announcements = ['Belum ada pengumuman.'];
+        };
 
-        return view('teacher.class-detail', compact('classData', 'modules'));
+        return view('teacher.class-detail', compact('classData', 'modules', 'announcements'));
+
+        
     }
 
-    public function addModul(StoreModulRequest $request) {
+    public function addModul(StoreModulRequest $request)
+    {
         $data = $request->validated();
 
         // 1. Pemetaan Nama Field (Form Request: teori/praktik -> DB: jp_teori/jp_praktik)
