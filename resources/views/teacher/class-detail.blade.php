@@ -28,7 +28,7 @@
         ];
     }
 
-    if (!isset($modules) || (is_countable($modules) && count($modules) == 0)) {
+    if (!isset($modules)) {
         $modules = [
             (object)[
                 'id_modul' => 1,
@@ -474,16 +474,18 @@
                      </div>
 
                      <!-- Form Grid (Single Column) -->
-                     <form class="space-y-6">
+                     <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
+                         @csrf
+                         <input type="hidden" name="id_mapel" value="{{ $classData->id_mapel }}">
                          
                          <div>
                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Judul Modul:</label>
-                             <input type="text" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                             <input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
                          </div>
 
                          <div>
                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Alokasi Durasi (JP):</label>
-                             <input type="text" placeholder="cth., 22" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                             <input type="number" name="jp" required placeholder="cth., 22" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
                          </div>
 
                          <div>
@@ -514,7 +516,7 @@
 
                          <div>
                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi Modul:</label>
-                             <textarea rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]"></textarea>
+                             <textarea name="module_description" rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]"></textarea>
                          </div>
 
                          <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
@@ -533,7 +535,7 @@
                              <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
                                  Batal
                              </button>
-                             <button type="button" @click="open = false" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base">
+                             <button type="submit" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base">
                                  Buat Modul
                              </button>
                          </div>

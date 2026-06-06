@@ -115,13 +115,10 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.batch-detail');
     })->name('batch.show');
 
-    Route::get('/subjects/{id_mapel}', function ($id_mapel) {
-        return view('teacher.class-detail');
-    })->name('subjects.show');
+    Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
+    Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
 
-    Route::get('/modules/{id_modul}', function ($id_modul) {
-        return view('teacher.module-detail');
-    })->name('modules.show');
+    Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
 
     Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
         return view('teacher.material-create', ['currentModuleId' => $id_modul]);

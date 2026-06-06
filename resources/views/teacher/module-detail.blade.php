@@ -4,33 +4,46 @@
 
 @section('content')
 @php
-    $currentModuleId = request()->route('id_modul') ?? 2;
+    if (isset($module)) {
+        $currentModuleId = $module->id_modul;
+        $className = $module->mapel->nama_mapel ?? 'Kelas';
+        $batchName = $module->mapel->batch->nama_batch ?? 'Batch';
+        $moduleTitle = $module->nama_modul;
+        $moduleDescription = $module->module_description;
+    } else {
+        $currentModuleId = request()->route('id_modul') ?? 2;
+        $batchName = 'Batch 2';
+        $className = 'N4 Mastering';
+        $moduleTitle = 'Modul ' . $currentModuleId . ': Vocabulary & Reading (Kotoba & Dokkai)';
+        $moduleDescription = 'Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4. Fokus pembelajaran tidak hanya ditujukan untuk mencapai kelulusan sertifikasi, tetapi juga secara khusus membekali siswa agar mampu membaca dan memahami instruksi kerja tertulis, manual operasional dasar, serta pengumuman sehari-hari yang sangat krusial saat bermukim dan bekerja di Jepang nanti.';
 
-    // Dummy Data
-    $batchName = 'Batch 2';
-    $className = 'N4 Mastering';
-    $moduleTitle = 'Modul ' . $currentModuleId . ': Vocabulary & Reading (Kotoba & Dokkai)';
-    
-    $modules = [
-        (object)['id' => 1, 'name' => 'Modul 1'],
-        (object)['id' => 2, 'name' => 'Modul 2'],
-        (object)['id' => 3, 'name' => 'Modul 3'],
-        (object)['id' => 4, 'name' => 'Modul 4'],
-        (object)['id' => 5, 'name' => 'Modul 5'],
-        (object)['id' => 6, 'name' => 'Modul 6'],
-        (object)['id' => 7, 'name' => 'Modul 7'],
-        (object)['id' => 8, 'name' => 'Modul 8'],
-    ];
+        if (!isset($modules)) {
+            $modules = [
+                (object)['id' => 1, 'name' => 'Modul 1'],
+                (object)['id' => 2, 'name' => 'Modul 2'],
+                (object)['id' => 3, 'name' => 'Modul 3'],
+                (object)['id' => 4, 'name' => 'Modul 4'],
+                (object)['id' => 5, 'name' => 'Modul 5'],
+                (object)['id' => 6, 'name' => 'Modul 6'],
+                (object)['id' => 7, 'name' => 'Modul 7'],
+                (object)['id' => 8, 'name' => 'Modul 8'],
+            ];
+        }
 
-    $materials = [
-        (object)['id' => 1, 'title' => 'Intro to N4 and Kanji', 'type' => 'Theory', 'status' => 'completed'],
-        (object)['id' => 2, 'title' => 'Intro to N4 and Kanji', 'type' => 'Practice', 'status' => 'practice'],
-    ];
+        if (!isset($materials)) {
+            $materials = [
+                (object)['id' => 1, 'title' => 'Intro to N4 and Kanji', 'type' => 'Theory', 'status' => 'completed'],
+                (object)['id' => 2, 'title' => 'Intro to N4 and Kanji', 'type' => 'Practice', 'status' => 'practice'],
+            ];
+        }
 
-    $tasks = [
-        (object)['id' => 1, 'title' => 'N4 Exercise', 'due_date' => '8 Mei 2026, 23:59'],
-        (object)['id' => 2, 'title' => 'Kanji Writing Exercise', 'due_date' => '9 Mei 2026, 23:59'],
-    ];
+        if (!isset($tasks)) {
+            $tasks = [
+                (object)['id' => 1, 'title' => 'N4 Exercise', 'due_date' => '8 Mei 2026, 23:59'],
+                (object)['id' => 2, 'title' => 'Kanji Writing Exercise', 'due_date' => '9 Mei 2026, 23:59'],
+            ];
+        }
+    }
 @endphp
 
 <div class="p-4 sm:p-6 lg:p-10">
@@ -39,7 +52,7 @@
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('teacher.subjects.show', 1) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <a href="{{ route('teacher.subjects.show', $module->id_mapel ?? 1) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">{{ $moduleTitle }}</h1>
@@ -47,9 +60,9 @@
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                 <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.batch.show', 2) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
+                <a href="{{ route('teacher.batch.show', $module->mapel->id_batch ?? 2) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $batchName }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.subjects.show', 1) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
+                <a href="{{ route('teacher.subjects.show', $module->id_mapel ?? 1) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $className }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 <span class="text-[#d62828] font-semibold">Modul {{ $currentModuleId }}</span>
             </nav>
@@ -71,7 +84,7 @@
                 <div class="mb-8">
                     <h3 class="text-base sm:text-lg font-bold font-ibm text-gray-900 mb-3">Deskripsi Modul</h3>
                     <p class="text-sm font-karla text-gray-600 leading-relaxed">
-                        Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4. Fokus pembelajaran tidak hanya ditujukan untuk mencapai kelulusan sertifikasi, tetapi juga secara khusus membekali siswa agar mampu membaca dan memahami instruksi kerja tertulis, manual operasional dasar, serta pengumuman sehari-hari yang sangat krusial saat bermukim dan bekerja di Jepang nanti.
+                        {{ $moduleDescription }}
                     </p>
                 </div>
 
@@ -82,9 +95,15 @@
                         <h3 class="text-base sm:text-lg font-bold font-ibm text-gray-900 mb-4">Materi Pembelajaran</h3>
                         <div class="space-y-3">
                             @foreach($materials as $material)
+                            @php
+                                $materialId = $material->id_bahan_ajar ?? $material->id;
+                                $materialTitle = $material->nama_bahan_ajar ?? $material->title;
+                                $materialType = $material->type ?? 'Theory';
+                                $isCompleted = isset($material->status) ? ($material->status == 'completed') : ($materialType == 'practice');
+                            @endphp
                             <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex items-center justify-between gap-4">
                                 <div class="flex items-center gap-3">
-                                    @if($material->status == 'completed')
+                                    @if($isCompleted)
                                     <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
                                         <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                     </div>
@@ -94,16 +113,16 @@
                                     </div>
                                     @endif
                                     <div>
-                                        <h4 class="text-sm font-bold font-karla text-gray-900">{{ $material->title }}</h4>
-                                        <p class="text-[11px] font-karla text-gray-500 mt-0.5">{{ $material->type }}</p>
+                                        <h4 class="text-sm font-bold font-karla text-gray-900">{{ $materialTitle }}</h4>
+                                        <p class="text-[11px] font-karla text-gray-500 mt-0.5">{{ ucfirst($materialType) }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <a href="{{ route('teacher.materials.show', ['id_modul' => $currentModuleId, 'id_materi' => $material->id]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
+                                    <a href="{{ route('teacher.materials.show', ['id_modul' => $currentModuleId, 'id_materi' => $materialId]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
                                         Lihat
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </a>
-                                    <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $material->id }}, name: '{{ addslashes($material->title) }}', type: 'Materi' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                    <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $materialId }}, name: '{{ addslashes($materialTitle) }}', type: 'Materi' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
@@ -138,22 +157,29 @@
                     <h3 class="text-base sm:text-lg font-bold font-ibm text-gray-900 mb-4">Tugas</h3>
                     <div class="space-y-3">
                         @foreach($tasks as $task)
+                        @php
+                            $taskId = $task->id_tugas ?? $task->id;
+                            $taskTitle = $task->judul_tugas ?? $task->title;
+                            $taskDueDate = isset($task->waktu_pengumpulan) 
+                                ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y, H:i') 
+                                : ($task->due_date ?? '-');
+                        @endphp
                         <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4">
                                 <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
                                     <svg class="w-5 h-5 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold font-karla text-gray-900">{{ $task->title }}</h4>
-                                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-yellow-50 text-yellow-700 text-[10px] sm:text-[11px] font-bold font-karla mt-1">Due: {{ $task->due_date }}</span>
+                                    <h4 class="text-sm font-bold font-karla text-gray-900">{{ $taskTitle }}</h4>
+                                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-yellow-50 text-yellow-700 text-[10px] sm:text-[11px] font-bold font-karla mt-1">Due: {{ $taskDueDate }}</span>
                                 </div>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <a href="{{ route('teacher.tasks.show', ['id_modul' => $currentModuleId, 'id_tugas' => $task->id]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
+                                <a href="{{ route('teacher.tasks.show', ['id_modul' => $currentModuleId, 'id_tugas' => $taskId]) }}" class="inline-flex items-center gap-1.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-1.5 px-3 rounded-lg text-xs transition shadow-sm">
                                     Lihat
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
-                                <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $task->id }}, name: '{{ addslashes($task->title) }}', type: 'Tugas' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $taskId }}, name: '{{ addslashes($taskTitle) }}', type: 'Tugas' })" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
@@ -177,14 +203,18 @@
                 
                 <div class="space-y-2">
                     @foreach($modules as $m)
-                    @if($m->id == $currentModuleId)
+                    @php
+                        $mId = $m->id_modul ?? $m->id;
+                        $mName = $m->nama_modul ?? $m->name;
+                    @endphp
+                    @if($mId == $currentModuleId)
                     <div class="w-full px-4 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm shadow-md flex items-center justify-between">
-                        {{ $m->name }}
+                        {{ $mName }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                     @else
-                    <a href="{{ route('teacher.modules.show', $m->id) }}" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:shadow-sm text-gray-700 hover:text-[#d62828] font-bold font-karla text-sm flex items-center justify-between transition-all">
-                        {{ $m->name }}
+                    <a href="{{ route('teacher.modules.show', $mId) }}" class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:shadow-sm text-gray-700 hover:text-[#d62828] font-bold font-karla text-sm flex items-center justify-between transition-all">
+                        {{ $mName }}
                     </a>
                     @endif
                     @endforeach
@@ -363,7 +393,7 @@
 
                          <div>
                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Alokasi Durasi (JP):</label>
-                             <input type="text" value="16" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                             <input type="text" value="{{ isset($module) ? ($module->jp_teori + $module->jp_praktik) : 16 }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
                          </div>
 
                          <div>
@@ -388,7 +418,7 @@
 
                          <div>
                              <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi Modul:</label>
-                             <textarea rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]">Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4.</textarea>
+                             <textarea rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $moduleDescription }}</textarea>
                          </div>
 
                          <div class="mt-4 flex items-center gap-4 pt-6 border-t border-gray-100">
