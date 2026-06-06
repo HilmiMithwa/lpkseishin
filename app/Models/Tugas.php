@@ -19,11 +19,8 @@ class Tugas extends Model
         'waktu_pengumpulan',
         'status_tugas',
         'id_rps',
-        'id_modul'
-    ];
-
-    protected $casts = [
-        'waktu_pengumpulan' => 'datetime',
+        'id_modul',
+        'file_path_tugas'
     ];
 
     public function rps() {
