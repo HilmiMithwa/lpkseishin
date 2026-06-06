@@ -18,7 +18,9 @@ class Modul extends Model
         'jp_praktik',
         'module_description',
         'id_mapel',
-        'id_rps'
+        'id_rps',
+        'icon_type',
+        'is_sequential'
     ];
 
     public function mapel() {

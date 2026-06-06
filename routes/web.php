@@ -135,9 +135,14 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/classes', [BatchController::class, 'index'])->name('classes');
     Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
     Route::post('/classes/{id_batch}/add', [BatchController::class, 'storeClass'])->name('classes.store');
+    Route::put('/students/{id_studentbatch}/status', [BatchController::class, 'updateStudentStatus'])->name('students.status.update');
 
     Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
+    Route::delete('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroy'])->name('subjects.destroy');
     Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
+    Route::delete('/subjects/modules/{id_modul}', [\App\Http\Controllers\Teacher\MapelController::class, 'deleteModul'])->name('modules.destroy');
+    Route::post('/subjects/{id_mapel}/announcements', [\App\Http\Controllers\Teacher\MapelController::class, 'storeAnnouncement'])->name('announcements.store');
+    Route::delete('/announcements/{id}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroyAnnouncement'])->name('announcements.destroy');
 
     Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
 

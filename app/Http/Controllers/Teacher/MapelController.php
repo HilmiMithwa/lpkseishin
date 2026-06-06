@@ -14,15 +14,9 @@ class MapelController extends Controller
     {
         $classData = Mapel::with('batch')->findOrFail($id_mapel);
         $modules = Modul::where('id_mapel', $id_mapel)->get();
-        $announcements = $classData->announcements->pluck('title')->toArray();
-        
-        if (empty($announcements)) {
-            $announcements = ['Belum ada pengumuman.'];
-        };
+        $announcements = $classData->announcements;
 
         return view('teacher.class-detail', compact('classData', 'modules', 'announcements'));
-
-        
     }
 
     public function addModul(StoreModulRequest $request)
@@ -70,5 +64,62 @@ class MapelController extends Controller
         // 4. Redirect ke detail kelas (subjects.show)
         return redirect()->route('teacher.subjects.show', $data['id_mapel'])
             ->with('success', 'Modul berhasil ditambahkan');
+    }
+
+    public function storeAnnouncement(Request $request, $id_mapel)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $announcement = \App\Models\Announcement::create([
+            'title' => $request->title,
+            'date_formatted' => now()->format('Y-m-d'),
+            'id_mapel' => $id_mapel,
+            'id_guru' => \Illuminate\Support\Facades\Auth::id(),
+        ]);
+
+        return response()->json(['success' => true, 'id' => $announcement->id]);
+    }
+
+    public function destroyAnnouncement($id)
+    {
+        $announcement = \App\Models\Announcement::findOrFail($id);
+        $announcement->delete();
+        
+        return response()->json(['success' => true]);
+    }
+
+    public function destroy($id_mapel)
+    {
+        $mapel = Mapel::findOrFail($id_mapel);
+        $id_batch = $mapel->id_batch;
+        
+        // Delete related records manually to avoid foreign key constraint errors if ON DELETE CASCADE is missing
+        \App\Models\Modul::where('id_mapel', $id_mapel)->delete();
+        \App\Models\Rps::where('id_mapel', $id_mapel)->delete();
+        \App\Models\Announcement::where('id_mapel', $id_mapel)->delete();
+        \App\Models\Enrollment_List::where('id_mapel', $id_mapel)->delete();
+
+        $mapel->delete();
+
+        return redirect()->route('teacher.batch.show', $id_batch)->with('success', 'Kelas berhasil dihapus');
+    }
+    public function deleteModul($id_modul)
+    {
+        try {
+            $modul = Modul::findOrFail($id_modul);
+            $modul->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Modul berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus modul: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

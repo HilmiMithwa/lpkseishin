@@ -14,7 +14,14 @@ class BatchController extends Controller
     // Menampilkan list batch guru
     public function index()
     {
-        $batches = Batch::all();
+        $teacherId = Auth::id();
+        
+        // Find batch IDs where this teacher teaches at least one class
+        $batchIds = Mapel::where('id_guru', $teacherId)->pluck('id_batch')->unique();
+        
+        // Get the actual batches assigned to this teacher
+        $batches = Batch::whereIn('id_batch', $batchIds)->get();
+
         return view('teacher.classes', compact('batches'));
     }
 
@@ -48,24 +55,66 @@ class BatchController extends Controller
             $query->select('id_guru')->from('mapel')->where('id_batch', $id_batch);
         })->get();
 
-        // Ambil data siswa yang terdaftar di kelas guru tersebut
-        $students = DB::table('enrollment_access')
-            ->join('users', 'enrollment_access.id_user', '=', 'users.id')
-            ->whereIn('enrollment_access.id_mapel', $batchClasses->pluck('id_mapel'))
-            ->select('users.id', 'users.name')
-            ->distinct()
-            ->get()
-            ->map(function ($student, $index) {
-                return (object)[
-                    'no' => $index + 1,
-                    'id_siswa' => 'SIS-' . str_pad($student->id, 3, '0', STR_PAD_LEFT),
-                    'name' => $student->name,
-                    'module_progress' => 50,
-                    'avg_task' => 75,
-                    'eval_score' => 80,
-                    'status' => 'Active',
-                ];
+        // Ambil data siswa yang terdaftar di batch ini
+        $query = DB::table('student_list_batch')
+            ->join('users', 'student_list_batch.user_id', '=', 'users.id')
+            ->where('student_list_batch.id_batch', $id_batch)
+            ->select('users.id', 'users.name', 'student_list_batch.status', 'student_list_batch.id_studentbatch')
+            ->distinct();
+
+        // Filter berdasarkan pencarian nama atau ID siswa
+        $searchData = request('search');
+        $searchValue = is_array($searchData) ? ($searchData['value'] ?? '') : $searchData;
+        
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('users.name', 'ilike', "%{$searchValue}%")
+                  ->orWhereRaw("CONCAT('SIS-', LPAD(CAST(users.id AS text), 3, '0')) ILIKE ?", ["%{$searchValue}%"]);
             });
+        }
+
+        // Filter berdasarkan status
+        if (request()->filled('status') && request('status') !== 'all') {
+            $query->where('student_list_batch.status', ucfirst(request('status')));
+        }
+
+        if (request()->ajax() || request()->has('draw')) {
+            return datatables()->of($query)
+                ->addIndexColumn()
+                ->addColumn('id_siswa', function ($row) {
+                    return 'SIS-' . str_pad($row->id, 3, '0', STR_PAD_LEFT);
+                })
+                ->addColumn('module_progress', function ($row) {
+                    return 0;
+                })
+                ->addColumn('average_task', function ($row) {
+                    return 0;
+                })
+                ->addColumn('eval_score', function ($row) {
+                    return 0;
+                })
+                ->addColumn('status_badge', function ($row) {
+                    if ($row->status === 'Active') {
+                        return '<span class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-md bg-green-50 text-green-600 border border-green-200">ACTIVE</span>';
+                    } elseif ($row->status === 'Inactive') {
+                        return '<span class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-md bg-red-50 text-[#d62828] border border-red-200">INACTIVE</span>';
+                    } elseif ($row->status === 'Completed') {
+                        return '<span class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-md bg-blue-50 text-blue-600 border border-blue-200">COMPLETED</span>';
+                    }
+                    return '<span class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-md bg-gray-50 text-gray-600 border border-gray-200">' . strtoupper($row->status) . '</span>';
+                })
+                ->addColumn('action', function ($row) {
+                    $name = htmlspecialchars(addslashes($row->name));
+                    return '<button @click="$dispatch(\'open-student-sidebar\', { id: \''.$row->id_studentbatch.'\', name: \''.$name.'\', status: \''.$row->status.'\' })" class="p-2 text-gray-400 hover:text-[#d62828] hover:bg-red-50 rounded-lg transition" title="Lihat Detail & Status">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>';
+                })
+                ->rawColumns(['status_badge', 'action'])
+                ->make(true);
+        }
+
+        // Jika bukan AJAX (inisial load), tidak perlu query student lengkap, DataTables akan mengambilnya via AJAX
+        $students = []; // Placeholder
 
         return view('teacher.batch-detail', compact('batch', 'batchClasses', 'students', 'senseis'));
     }
@@ -92,5 +141,21 @@ class BatchController extends Controller
             'min_score' => $request->min_score,
         ]);
         return redirect()->back()->with('success', 'Kelas baru berhasil ditambahkan!');
+    }
+
+    public function updateStudentStatus(Request $request, $id_studentbatch)
+    {
+        $request->validate([
+            'status' => 'required|string|in:Active,Inactive,Completed',
+        ]);
+
+        DB::table('student_list_batch')
+            ->where('id_studentbatch', $id_studentbatch)
+            ->update([
+                'status' => $request->status,
+                'updated_at' => now(),
+            ]);
+
+        return redirect()->back()->with('success', 'Status siswa berhasil diperbarui!');
     }
 }

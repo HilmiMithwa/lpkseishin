@@ -27,11 +27,72 @@
         </div>
         
         {{-- Right: Edit Button (Spans 1/4) --}}
-        <div class="lg:col-span-1 flex sm:justify-end items-start mt-2 sm:mt-0 lg:mt-1">
+        <div class="lg:col-span-1 flex sm:justify-end items-start mt-2 sm:mt-0 lg:mt-1 gap-3" x-data="{ showDeleteClassModal: false, confirmText: '', isDeletingClass: false }">
+            <button @click="showDeleteClassModal = true; confirmText = ''" class="inline-flex items-center gap-2 bg-white border border-red-200 hover:bg-red-50 text-[#d62828] font-bold font-karla py-2.5 px-5 rounded-lg text-xs sm:text-sm transition shadow-sm">
+                Hapus Kelas
+            </button>
             <button @click="$dispatch('open-edit-modal')" class="inline-flex items-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla py-2.5 px-5 rounded-lg text-xs sm:text-sm transition shadow-sm">
                 Edit Kelas
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
             </button>
+
+            <template x-teleport="body">
+                <div x-show="showDeleteClassModal" style="display: none;" class="fixed inset-0 z-[110] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    
+                    <div x-show="showDeleteClassModal" 
+                         x-transition:enter="ease-out duration-300"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="ease-in duration-200"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
+                         @click="if(!isDeletingClass) showDeleteClassModal = false"></div>
+
+                    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                        <div x-show="showDeleteClassModal" 
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-100 p-6 sm:p-8">
+                             
+                             <div class="sm:flex sm:items-start gap-5">
+                                 <div class="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-red-50 sm:mx-0 sm:h-12 sm:w-12">
+                                     <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                     </svg>
+                                 </div>
+                                 <div class="mt-4 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                     <h3 class="text-xl font-bold font-ibm text-gray-900" id="modal-title">Hapus Kelas</h3>
+                                     <div class="mt-2 space-y-3">
+                                         <p class="text-sm font-karla text-gray-500 leading-relaxed">Apakah Anda yakin ingin menghapus kelas <span class="font-bold text-gray-700">{{ $classData->nama_mapel }}</span>? Semua data (modul, materi, dll) akan lenyap.</p>
+                                         
+                                         <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+                                             <label class="block text-xs font-bold text-red-800 mb-1">Ketik HAPUS untuk konfirmasi:</label>
+                                             <input type="text" x-model="confirmText" placeholder="HAPUS" class="w-full px-3 py-2 border border-red-200 rounded-lg text-sm focus:ring-red-500 focus:border-red-500 outline-none text-center font-bold tracking-widest uppercase">
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             
+                             <div class="mt-8 sm:mt-6 sm:flex sm:flex-row-reverse gap-3">
+                                 <form action="{{ route('teacher.subjects.destroy', $classData->id_mapel) }}" method="POST" class="inline-block w-full sm:w-auto" @submit="isDeletingClass = true">
+                                     @csrf
+                                     @method('DELETE')
+                                     <button type="submit" :disabled="confirmText !== 'HAPUS' || isDeletingClass" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold font-karla text-white shadow-sm hover:bg-red-500 sm:w-auto transition items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                         <svg x-show="isDeletingClass" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                         <span x-text="isDeletingClass ? 'Menghapus...' : 'Ya, Hapus Kelas'"></span>
+                                     </button>
+                                 </form>
+                                 <button type="button" @click="showDeleteClassModal = false" :disabled="isDeletingClass" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-bold font-karla text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition disabled:opacity-50">Batal</button>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 
@@ -74,7 +135,7 @@
                             </div>
                             <div>
                                 <p class="text-[11px] sm:text-xs text-gray-500 font-karla font-medium leading-tight mb-1">Target Sertifikasi</p>
-                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->certification_target ?? 'JLPT N4' }}</p>
+                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->target ?? 'JLPT N4' }}</p>
                             </div>
                         </div>
 
@@ -85,7 +146,7 @@
                             </div>
                             <div>
                                 <p class="text-[11px] sm:text-xs text-gray-500 font-karla font-medium leading-tight mb-1">Total Durasi</p>
-                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->total_duration ?? '264 JP' }}</p>
+                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->jp ?? '264' }} JP</p>
                             </div>
                         </div>
 
@@ -100,7 +161,7 @@
                             </div>
                             <div>
                                 <p class="text-[11px] sm:text-xs text-gray-500 font-karla font-medium leading-tight mb-1">Jadwal</p>
-                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->schedule ?? 'Senin - Jumat' }}</p>
+                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->jadwal ?? 'Senin - Jumat' }}</p>
                             </div>
                         </div>
 
@@ -113,7 +174,7 @@
                             </div>
                             <div>
                                 <p class="text-[11px] sm:text-xs text-gray-500 font-karla font-medium leading-tight mb-1">Syarat Kelulusan</p>
-                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->pass_requirement ?? 'Min. Skor 80' }}</p>
+                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">Min. Skor {{ $classData->min_score ?? '80' }}</p>
                             </div>
                         </div>
                     </div>
@@ -140,7 +201,15 @@
                         <div class="flex items-center gap-4 flex-1 min-w-0">
                             {{-- Module Icon --}}
                             <div class="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                                <span class="text-[#d62828] font-bold font-ibm text-sm">あa</span>
+                                @if($module->icon_type == 1)
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                                @elseif($module->icon_type == 3)
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a1.5 1.5 0 01-1.5 1.5H9c-.443 0-.792-.35-.792-.792 0-.214-.078-.415-.224-.555C7.755 6 7.424 6 7.125 6c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401h0a1.5 1.5 0 011.5 1.5v2.625c0 .443-.35.792-.792.792-.214 0-.415.078-.555.224C10 16.245 10 16.576 10 16.875c0 1.036 1.007 1.875 2.25 1.875s2.25-.84 2.25-1.875c0-.369-.128-.713-.349-1.003-.215-.283-.401-.604-.401-.959v0a1.5 1.5 0 011.5-1.5h2.625c.443 0 .792.35.792.792 0 .214.078.415.224.555.229.229.56.229.859.229 1.036 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401h0a1.5 1.5 0 01-1.5-1.5V6.087z" /></svg>
+                                @elseif($module->icon_type == 4)
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
+                                @else
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                @endif
                             </div>
 
                             {{-- Module Info --}}
@@ -148,7 +217,7 @@
                                 <h4 class="text-sm sm:text-base font-bold font-karla text-gray-900 leading-snug truncate">{{ $module->nama_modul }}</h4>
                                 <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-500 mt-0.5 truncate">
                                     @if(!empty($module->kode_modul))
-                                        {{ $module->kode_modul }} | Teori ({{ $module->teori_jp }} JP) & Praktik ({{ $module->praktik_jp }} JP) {{ $module->note }}
+                                        {{ $module->kode_modul }} | Teori ({{ $module->jp_teori ?? 0 }} JP) & Praktik ({{ $module->jp_praktik ?? 0 }} JP) {{ $module->note }}
                                     @else
                                         {{ $module->note }}
                                     @endif
@@ -182,17 +251,64 @@
         <div class="lg:col-span-1 flex flex-col gap-6 lg:gap-8">
             
             {{-- Column 3: Announcements --}}
-            <div x-data="{ isAdding: false, isLoading: false, newAnnouncement: '', addedAnnouncements: [] }" class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col">
+            <div x-data="{ 
+                isAdding: false, 
+                isLoading: false, 
+                newAnnouncement: '', 
+                addedAnnouncements: [],
+                showDeleteModal: false,
+                itemToDelete: null,
+                isDeleting: false,
+                confirmDelete(id, isNew = false, index = null) {
+                    this.itemToDelete = { id, isNew, index };
+                    this.showDeleteModal = true;
+                },
+                executeDelete() {
+                    if(!this.itemToDelete) return;
+                    this.isDeleting = true;
+                    fetch('/teacher/announcements/' + this.itemToDelete.id, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    }).then(res => res.json()).then(data => {
+                        if(data.success) {
+                            if(this.itemToDelete.isNew) {
+                                this.addedAnnouncements.splice(this.itemToDelete.index, 1);
+                            } else {
+                                const el = document.getElementById('announcement-' + this.itemToDelete.id);
+                                if(el) el.remove();
+                            }
+                            $dispatch('show-toast', { message: 'Pengumuman dihapus!' });
+                        }
+                        this.showDeleteModal = false;
+                        this.itemToDelete = null;
+                        this.isDeleting = false;
+                    });
+                }
+            }" class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col relative">
                 <h3 class="text-sm sm:text-base font-bold font-ibm text-gray-900 mb-4">Pengumuman</h3>
                 
                 <div class="space-y-3 flex-1">
-                    @foreach($announcements as $announcement)
-                    <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug border-b border-gray-100 pb-2.5 last:border-0">{{ $announcement }}</p>
-                    @endforeach
+                    @forelse($announcements as $announcement)
+                    <div id="announcement-{{ $announcement->id }}" class="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5 last:border-0 group">
+                        <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug">{{ $announcement->title }}</p>
+                        <button @click="confirmDelete({{ $announcement->id }})" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" title="Hapus">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    @empty
+                    <p id="empty-announcement" class="text-[11px] sm:text-xs font-karla font-medium text-gray-400 italic">Belum ada pengumuman.</p>
+                    @endforelse
                     
                     {{-- Dynamically Added Announcements --}}
                     <template x-for="(announcement, index) in addedAnnouncements" :key="index">
-                        <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug border-b border-gray-100 pb-2.5 last:border-0" x-text="announcement"></p>
+                        <div class="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5 last:border-0 group">
+                            <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug" x-text="announcement.title"></p>
+                            <button @click="confirmDelete(announcement.id, true, index)" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" title="Hapus">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
                     </template>
                 </div>
 
@@ -213,19 +329,67 @@
                         <button @click="
                             if(!newAnnouncement.trim()) return;
                             isLoading = true;
-                            setTimeout(() => {
-                                addedAnnouncements.push(newAnnouncement);
-                                newAnnouncement = '';
-                                isAdding = false;
+                            fetch('{{ route('teacher.announcements.store', $classData->id_mapel) }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ title: newAnnouncement })
+                            }).then(response => response.json())
+                            .then(data => {
+                                if(data.success) {
+                                    addedAnnouncements.push({ id: data.id, title: newAnnouncement });
+                                    newAnnouncement = '';
+                                    isAdding = false;
+                                    $dispatch('show-toast', { message: 'Pengumuman ditambahkan!' });
+                                    const emptyMsg = document.getElementById('empty-announcement');
+                                    if(emptyMsg) emptyMsg.style.display = 'none';
+                                }
+                            }).finally(() => {
                                 isLoading = false;
-                                $dispatch('show-toast', { message: 'Pengumuman ditambahkan!' });
-                            }, 600);
+                            });
                         " :disabled="isLoading || !newAnnouncement.trim()" class="px-3 py-1.5 rounded-md bg-[#d62828] text-white text-[11px] font-bold font-karla hover:bg-red-700 transition flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed">
                             <svg x-show="isLoading" class="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             <span x-text="isLoading ? 'Menyimpan...' : 'Simpan'"></span>
                         </button>
                     </div>
                 </div>
+
+                {{-- Delete Announcement Modal --}}
+                <template x-teleport="body">
+                    <div x-show="showDeleteModal" style="display: none;" class="fixed inset-0 z-[110] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div x-show="showDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" @click="if(!isDeleting) showDeleteModal = false"></div>
+
+                        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                            <div x-show="showDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-xl transition-all sm:my-8 w-full max-w-sm border border-gray-100 p-6">
+                                
+                                <div class="flex items-start gap-4">
+                                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-50">
+                                        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    </div>
+                                    <div class="mt-1">
+                                        <h3 class="text-lg font-bold font-ibm text-gray-900" id="modal-title">Hapus Pengumuman</h3>
+                                        <div class="mt-2">
+                                            <p class="text-xs font-karla text-gray-500 leading-relaxed">Yakin ingin menghapus pengumuman ini? Tindakan ini tidak bisa dibatalkan.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 flex flex-row-reverse gap-3">
+                                    <button type="button" @click="executeDelete()" :disabled="isDeleting" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-4 py-2 text-sm font-bold font-karla text-white shadow-sm hover:bg-red-500 sm:w-auto transition items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                        <svg x-show="isDeleting" class="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        <span x-text="isDeleting ? 'Menghapus...' : 'Hapus'"></span>
+                                    </button>
+                                    <button type="button" @click="showDeleteModal = false" :disabled="isDeleting" class="inline-flex w-full justify-center rounded-xl bg-white px-4 py-2 text-sm font-bold font-karla text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto transition disabled:opacity-70 disabled:cursor-not-allowed">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
             </div>
             
         </div>
@@ -314,24 +478,24 @@
                                      <div class="relative">
                                          <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
                                              <option value="" disabled>Pilih Target Sertifikasi</option>
-                                             <option value="JLPT N4" {{ $classData->certification_target == 'JLPT N4' ? 'selected' : '' }}>JLPT N4</option>
-                                             <option value="JLPT N5" {{ $classData->certification_target == 'JLPT N5' ? 'selected' : '' }}>JLPT N5</option>
-                                             <option value="JFT-Basic A2" {{ $classData->certification_target == 'JFT-Basic A2' ? 'selected' : '' }}>JFT-Basic A2</option>
+                                             <option value="JLPT N4" {{ $classData->target == 'JLPT N4' ? 'selected' : '' }}>JLPT N4</option>
+                                             <option value="JLPT N5" {{ $classData->target == 'JLPT N5' ? 'selected' : '' }}>JLPT N5</option>
+                                             <option value="JFT-Basic A2" {{ $classData->target == 'JFT-Basic A2' ? 'selected' : '' }}>JFT-Basic A2</option>
                                          </select>
                                          <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                      </div>
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Total Durasi (JP):</x-input-label>
-                                     <x-text-input type="text" required value="{{ preg_replace('/[^0-9]/', '', $classData->total_duration) }}" placeholder="cth., 264" class="w-full" />
+                                     <x-text-input type="text" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Jadwal:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->schedule }}" placeholder="cth., Senin - Jumat" class="w-full" />
+                                     <x-text-input type="text" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
-                                     <x-text-input type="text" required value="{{ preg_replace('/[^0-9]/', '', $classData->pass_requirement) }}" placeholder="cth., 80" class="w-full" />
+                                     <x-text-input type="text" required value="{{ $classData->min_score }}" placeholder="cth., 80" class="w-full" />
                                  </div>
                              </div>
 
@@ -400,6 +564,8 @@
                      <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
                          @csrf
                          <input type="hidden" name="id_mapel" value="{{ $classData->id_mapel }}">
+                         <input type="hidden" name="icon_type" x-model="selectedIcon">
+                         <input type="hidden" name="is_sequential" x-bind:value="sequential ? 1 : 0">
                          
                          <div class="space-y-1.5">
                              <x-input-label>Judul Modul:</x-input-label>
@@ -515,12 +681,29 @@
                  <div class="mt-8 sm:mt-6 sm:flex sm:flex-row-reverse gap-3">
                      <button type="button" @click="
                          isLoading = true;
-                         setTimeout(() => {
+                         fetch(`/teacher/subjects/modules/${moduleId}`, {
+                             method: 'DELETE',
+                             headers: {
+                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                 'Accept': 'application/json'
+                             }
+                         })
+                         .then(response => response.json())
+                         .then(data => {
                              isLoading = false;
-                             open = false;
-                             $dispatch('module-deleted', { id: moduleId });
-                             $dispatch('show-toast', { message: 'Modul berhasil dihapus' });
-                         }, 800);
+                             if (data.success) {
+                                 open = false;
+                                 $dispatch('module-deleted', { id: moduleId });
+                                 $dispatch('show-toast', { message: data.message || 'Modul berhasil dihapus' });
+                             } else {
+                                 alert(data.message || 'Gagal menghapus modul');
+                             }
+                         })
+                         .catch(error => {
+                             isLoading = false;
+                             alert('Terjadi kesalahan jaringan.');
+                             console.error('Error:', error);
+                         });
                      " :disabled="isLoading" class="inline-flex w-full justify-center rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold font-karla text-white shadow-sm hover:bg-red-500 sm:w-auto transition items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
                          <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                          <span x-text="isLoading ? 'Menghapus...' : 'Ya, Hapus'"></span>
