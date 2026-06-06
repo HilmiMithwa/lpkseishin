@@ -526,6 +526,57 @@
         setInterval(updateClock, 1000);
         updateClock();
     </script>
+    
+    {{-- Global Page Loading Transition --}}
+    <div x-data="{ pageLoading: false }"
+         @page-loading.window="pageLoading = true"
+         @page-loaded.window="pageLoading = false"
+         x-show="pageLoading"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[9999] bg-[#FFF9F4]/90 backdrop-blur-md flex flex-col items-center justify-center"
+         style="display: none;" x-cloak>
+         
+         <div class="relative flex items-center justify-center w-24 h-24 mb-4">
+             <div class="absolute inset-0 bg-[#d62828]/20 rounded-full animate-ping opacity-75 duration-1000"></div>
+             <img src="https://res.cloudinary.com/dz8fs7rp1/image/upload/v1780409565/logo-notext_kywvap.png" class="w-14 h-14 object-contain relative z-10" alt="LPK Seishin">
+         </div>
+         <h2 class="text-xs font-bold font-ibm text-[#d62828] tracking-[0.2em] uppercase animate-pulse mt-2">Memuat...</h2>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore state if returning from history
+            window.dispatchEvent(new CustomEvent('page-loaded'));
+            
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    const target = link.getAttribute('target');
+                    if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                        window.dispatchEvent(new CustomEvent('page-loading'));
+                    }
+                });
+            });
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if(!e.defaultPrevented) {
+                        window.dispatchEvent(new CustomEvent('page-loading'));
+                    }
+                });
+            });
+            
+            window.addEventListener('pageshow', (e) => {
+                window.dispatchEvent(new CustomEvent('page-loaded'));
+            });
+        });
+    </script>
+
     @stack('modals')
     @stack('scripts')
 </body>

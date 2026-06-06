@@ -64,10 +64,10 @@
                 <span class="text-[#d62828] font-semibold">Tambah Materi</span>
             </nav>
         </div>
-        <button @click="$dispatch('open-publish-modal')" class="inline-flex items-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition shadow-sm self-start">
+        <x-primary-button @click="$dispatch('open-publish-modal')" class="self-start gap-2">
             Terbitkan Materi
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-        </button>
+        </x-primary-button>
     </div>
 
     {{-- Main Content Grid --}}
@@ -159,34 +159,34 @@
                                         <div class="flex bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition mb-3">
                                             <input type="text" x-model="linkInput" placeholder="Enter video url..." class="w-full px-4 py-3 bg-transparent border-none focus:ring-0 text-sm font-karla outline-none">
                                         </div>
-                                        <button @click="if(linkInput) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true; linkInput = '' }, 500) }" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs flex items-center gap-2 transition ml-auto">
+                                        <x-primary-button @click="if(linkInput) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true; linkInput = '' }, 500) }" class="ml-auto gap-2">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                             Tambah Link
-                                        </button>
+                                        </x-primary-button>
                                     </div>
                                 </div>
                                 
                                 {{-- Right Side: Form --}}
                                 <div class="md:col-span-3 space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Judul Video</label>
-                                        <input type="text" placeholder="cth., N4 Level Conversation - Dialogue" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Judul Video</x-input-label>
+                                        <x-text-input type="text" placeholder="cth., N4 Level Conversation - Dialogue" />
                                     </div>
-                                    <div>
-                                        <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Fokus Skill</label>
-                                        <input type="text" placeholder="cth., Speaking (Kaiwa)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Fokus Skill</x-input-label>
+                                        <x-text-input type="text" placeholder="cth., Speaking (Kaiwa)" />
                                     </div>
-                                    <div>
-                                        <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Poin Utama</label>
-                                        <input type="text" placeholder="cth., Jikoshoukai, Etika Ojigi" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Poin Utama</x-input-label>
+                                        <x-text-input type="text" placeholder="cth., Jikoshoukai, Etika Ojigi" />
                                     </div>
-                                    <div>
-                                        <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Tujuan</label>
-                                        <textarea rows="2" placeholder="Siswa mampu memahami informasi penting..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla resize-y outline-none transition"></textarea>
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Tujuan</x-input-label>
+                                        <textarea rows="2" placeholder="Siswa mampu memahami informasi penting..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
                                     </div>
-                                    <div>
-                                        <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Catatan Sensei</label>
-                                        <textarea rows="2" placeholder="Fokuskan perhatian pada pola kalimat..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla resize-y outline-none transition"></textarea>
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Catatan Sensei</x-input-label>
+                                        <textarea rows="2" placeholder="Fokuskan perhatian pada pola kalimat..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
                                     </div>
                                     
                                     <div class="flex justify-end pt-2">
@@ -222,21 +222,21 @@
                 <div x-show="showTaskForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5">
-                            <div class="h-full">
-                                <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Deskripsi Tugas</label>
-                                <textarea name="task_description" rows="6" placeholder="Bacalah dokumen PDF terlampir..." class="w-full h-full min-h-[140px] px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla resize-y outline-none transition"></textarea>
+                            <div class="h-full space-y-1.5">
+                                <x-input-label>Deskripsi Tugas</x-input-label>
+                                <textarea name="task_description" rows="6" placeholder="Bacalah dokumen PDF terlampir..." class="w-full h-full min-h-[140px] px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y outline-none transition"></textarea>
                             </div>
                         </div>
                         <div class="space-y-5">
-                            <div>
-                                <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">Batas Waktu</label>
+                            <div class="space-y-1.5">
+                                <x-input-label>Batas Waktu</x-input-label>
                                 <div class="relative">
                                     <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <input type="text" placeholder="DD-MM-YYYY 00:00" class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <input type="text" placeholder="DD-MM-YYYY 00:00" class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm">
                                 </div>
                             </div>
                             <div x-data="{ isUploading: false, showFile: false }">
-                                <label class="block text-xs font-bold font-karla text-gray-700 mb-1.5">File Pendukung</label>
+                                <x-input-label>File Pendukung</x-input-label>
                                 <input type="file" name="task_file" x-ref="taskFile" class="hidden" accept=".pdf,.doc,.docx" @change="if($refs.taskFile.files.length > 0) { isUploading = true; setTimeout(() => { isUploading = false; showFile = true }, 1500) }">
                                 <button type="button" x-show="!showFile" @click="$refs.taskFile.click()" class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center transition mb-4 relative overflow-hidden">
                                     <div x-show="!isUploading" class="flex items-center gap-2">
@@ -287,8 +287,8 @@
                 <h3 class="text-base font-bold font-ibm text-gray-900 mb-6">Pengaturan Materi</h3>
                 
                 <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Tipe</label>
+                    <div class="space-y-1.5">
+                        <x-input-label>Tipe</x-input-label>
                         <div class="relative">
                             <select x-model="materialType" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla bg-white outline-none transition cursor-pointer appearance-none bg-none">
                                 <option value="Theory">Teori</option>
@@ -300,8 +300,8 @@
                         </div>
                     </div>
                     
-                    <div x-data="{ isUploading: false, showResource: false }">
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Tambah Sumber Daya</label>
+                    <div class="space-y-1.5" x-data="{ isUploading: false, showResource: false }">
+                        <x-input-label>Tambah Sumber Daya</x-input-label>
                         <input type="file" name="resource_file" x-ref="resourceFile" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx" @change="if($refs.resourceFile.files.length > 0) { isUploading = true; setTimeout(() => { isUploading = false; showResource = true }, 1500) }">
                         <div x-show="!showResource" @click="$refs.resourceFile.click()" class="border-2 border-dashed border-red-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-red-50 transition cursor-pointer mb-4 min-h-[140px] relative">
                             <div x-show="!isUploading" class="flex flex-col items-center">
@@ -358,7 +358,7 @@
             <p class="text-sm text-gray-500 font-karla text-center mb-6">Materi ini akan segera tersedia untuk semua siswa di dalam kelas.</p>
             <div class="flex gap-3">
                 <button @click="showPublishModal = false" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold font-karla text-sm hover:bg-gray-50 transition">Batal</button>
-                <button @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId) }}'" class="flex-1 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm hover:bg-red-700 transition">Terbitkan</button>
+                <x-primary-button @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId) }}'" class="flex-1 justify-center py-3">Terbitkan</x-primary-button>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Portal Guru - LPK Seishin')</title>
+    <title>@yield('title', 'Portal Admin - LPK Seishin')</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -116,33 +116,59 @@
         </div>
 
         <div class="px-4 mt-2 flex-1">
-            <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest uppercase transition-opacity">Ringkasan</p>
+            <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest uppercase transition-opacity">RINGKASAN</p>
             <nav class="space-y-1">
-                <a href="{{ route('teacher.dashboard') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('teacher.dashboard') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-bold text-sm transition">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('admin.dashboard') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-bold text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Beranda</span>
                 </a>
-                <a href="{{ route('teacher.classes') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*']) ? 'bold' : 'semibold' }} text-sm transition">
-                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span class="sidebar-text whitespace-nowrap">Kelas Saya</span>
-                </a>
-                <a href="{{ route('teacher.assignments') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.assignments']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.assignments']) ? 'bold' : 'semibold' }} text-sm transition">
-                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    <span class="sidebar-text whitespace-nowrap">Manajemen Tugas</span>
-                </a>
-                <a href="{{ route('teacher.vocabulary') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.vocabulary', 'teacher.vocabulary.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.vocabulary', 'teacher.vocabulary.*']) ? 'bold' : 'semibold' }} text-sm transition">
-                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    <span class="sidebar-text whitespace-nowrap">Database Kosakata</span>
-                </a>
-                <a href="{{ route('teacher.progress-report') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.progress-report']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.progress-report']) ? 'bold' : 'semibold' }} text-sm transition">
-                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    <span class="sidebar-text whitespace-nowrap">Laporan Perkembangan</span>
-                </a>
             </nav>
 
-            <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest mt-6 uppercase transition-opacity">Sistem</p>
+            <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest mt-6 uppercase transition-opacity">SISTEM</p>
             <nav class="space-y-1">
-                <a href="{{ route('teacher.profile') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('teacher.profile') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs('teacher.profile') ? 'bold' : 'semibold' }} text-sm transition">
+                <div x-data="{ open: {{ request()->routeIs(['admin.users', 'admin.users.*']) ? 'true' : 'false' }} }" class="space-y-1">
+                    <button @click="open = !open; if(document.getElementById('sidebar').classList.contains('minimized')) document.getElementById('desktop-sidebar-toggle').click()" type="button" class="w-full nav-link flex items-center justify-between {{ request()->routeIs(['admin.users', 'admin.users.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.users', 'admin.users.*']) ? 'bold' : 'semibold' }} text-sm transition focus:outline-none">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <span class="sidebar-text whitespace-nowrap">Manajemen Pengguna</span>
+                        </div>
+                        <svg class="w-4 h-4 sidebar-text transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200" 
+                         x-transition:enter-start="opacity-0 -translate-y-2" 
+                         x-transition:enter-end="opacity-100 translate-y-0" 
+                         x-transition:leave="transition ease-in duration-150" 
+                         x-transition:leave-start="opacity-100 translate-y-0" 
+                         x-transition:leave-end="opacity-0 -translate-y-2" 
+                         class="pl-12 pr-4 py-2 space-y-3 sidebar-text" style="display: none;">
+                        <a href="{{ route('admin.users') }}?role=siswa" class="block text-[13.5px] font-medium {{ request('role') == 'siswa' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
+                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'siswa' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
+                            Data Siswa
+                        </a>
+                        <a href="{{ route('admin.users') }}?role=guru" class="block text-[13.5px] font-medium {{ request('role') == 'guru' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
+                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
+                            Data Guru
+                        </a>
+                        <a href="{{ route('admin.users') }}?role=admin" class="block text-[13.5px] font-medium {{ request('role') == 'admin' ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
+                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ request('role') == 'admin' ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
+                            Data Admin
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="{{ route('admin.batches') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Manajemen Batch</span>
+                </a>
+
+                <a href="{{ route('admin.payments') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.payments', 'admin.payments.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.payments', 'admin.payments.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Manajemen Pembayaran</span>
+                </a>
+
+                <a href="{{ route('admin.profile') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('admin.profile') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs('admin.profile') ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Profil</span>
                 </a>
@@ -151,12 +177,11 @@
 
         <div class="p-4 border-t border-gray-100/50">
             <div class="user-card bg-white border border-gray-100/50 rounded-2xl p-3 flex items-center gap-3 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] mb-3 transition-all duration-300">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                 <div class="sidebar-text overflow-hidden">
-                    <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name }}</h4>
-                    <p class="text-[10px] text-[#666666] truncate">Sensei (Guru)</p>
+                    <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name ?? 'Admin' }}</h4>
                     <p class="text-[10px] text-[#666666] truncate flex items-center gap-1 mt-0.5">
-                        <span class="text-[#d62828] font-bold text-[11px]">@</span> <span class="truncate">{{ Auth::user()->email ?? '[Data: user.email]' }}</span>
+                        <span class="text-[#d62828] font-bold text-[11px]">@</span> <span class="truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</span>
                     </p>
                 </div>
             </div>
@@ -190,61 +215,26 @@
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full bg-white shadow-sm border border-gray-100 focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">3</span>
+                            <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">2</span>
                         </button>
                         
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-72 sm:w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                                <h3 class="font-bold text-slate-800">Notifikasi</h3>
-                                <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Baru</span>
+                                <h3 class="font-bold text-slate-800">Notifikasi Admin</h3>
+                                <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">2 Baru</span>
                             </div>
-                            
-                            <!-- Notification List -->
-                            <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-blue-600 transition">Tugas Baru Ditambahkan</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Modul 3: Pemahaman Dasar Kanji telah dibuka. Silakan cek tugas Anda.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">5 menit yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-green-600 transition">Evaluasi Selesai</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Selamat! Anda telah menyelesaikan evaluasi Modul 2 dengan nilai 90.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">2 jam yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-amber-600 transition">Peringatan Jatuh Tempo</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Tugas Membaca Bab 4 harus dikumpulkan besok pukul 23:59.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">1 hari yang lalu</p>
-                                    </div>
-                                </a>
-                            </div>
-                            
                             <!-- Footer -->
                             <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-700 transition">Lihat Semua Notifikasi</a>
+                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-800 transition">Lihat Semua Notifikasi</a>
                             </div>
                         </div>
                     </div>
                     
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn focus:outline-none flex items-center group">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-[#d62828]/20 transition">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -252,10 +242,10 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
-                                    <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name }}</p>
-                                    <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email }}</p>
+                                    <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
+                                    <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>
                                 </div>
                             </div>
                             
@@ -287,7 +277,7 @@
             <div class="flex flex-col lg:flex-row lg:items-center justify-between w-full gap-4">
                 <!-- Left: Greeting -->
                 <div class="flex items-center gap-4">
-                    <button id="desktop-sidebar-toggle" class="hidden lg:flex p-1.5 text-[#666666] hover:text-[#222222] bg-white border border-gray-200 rounded-lg shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500/20" title="Toggle Sidebar">
+                    <button id="desktop-sidebar-toggle" class="hidden lg:flex p-1.5 text-[#666666] hover:text-[#222222] bg-white border border-gray-200 rounded-lg shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20" title="Toggle Sidebar">
                         <svg class="w-5 h-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none" />
                             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 16.75a3.5 3.5 0 0 1-3.5 3.5h-9.5a3.5 3.5 0 0 1-3.5-3.5v-9.5a3.5 3.5 0 0 1 3.5-3.5h9.5a3.5 3.5 0 0 1 3.5 3.5zm-5.797 3.5V3.75M8.96 14.25L6.75 12m0 0l2.21-2.25M6.75 12h4.7" />
@@ -296,8 +286,8 @@
                     <div>
                         <h2 class="text-xl lg:text-lg font-bold text-[#222222] flex items-center gap-1">
                             こんにちわ, 
-                            <span class="hidden sm:inline">{{ Auth::user()->name }}! 👋</span>
-                            <span class="sm:hidden">{{ substr(Auth::user()->name, 0, 10) }}! 👋</span>
+                            <span class="hidden sm:inline">{{ Auth::user()->name ?? 'Admin' }}! 👋</span>
+                            <span class="sm:hidden">{{ substr(Auth::user()->name ?? 'Admin', 0, 10) }}! 👋</span>
                         </h2>
                         <p id="realtime-clock" class="text-xs text-[#666666] font-medium mt-0.5">Memuat waktu...</p>
                     </div>
@@ -305,58 +295,31 @@
 
                 <!-- Right: Desktop Notifications & Profile -->
                 <div class="hidden lg:flex items-center justify-end gap-5 w-full lg:w-auto">
+                    
+                    <!-- Language Switcher -->
+                    <div class="flex items-center gap-1 text-[#666666] hover:text-[#222222] transition cursor-pointer font-bold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                        <span>ID</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+
                     <!-- Notifications Dropdown -->
                     <div class="relative dropdown-container">
-                        <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full hover:bg-white shadow-sm focus:outline-none">
+                        <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full hover:bg-white shadow-sm focus:outline-none border border-transparent hover:border-gray-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">3</span>
+                            <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">2</span>
                         </button>
                         
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-72 sm:w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                                <h3 class="font-bold text-slate-800">Notifikasi</h3>
-                                <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Baru</span>
+                                <h3 class="font-bold text-slate-800">Notifikasi Admin</h3>
+                                <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">2 Baru</span>
                             </div>
-                            
-                            <!-- Notification List -->
-                            <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-blue-600 transition">Tugas Baru Ditambahkan</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Modul 3: Pemahaman Dasar Kanji telah dibuka. Silakan cek tugas Anda.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">5 menit yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-green-600 transition">Evaluasi Selesai</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Selamat! Anda telah menyelesaikan evaluasi Modul 2 dengan nilai 90.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">2 jam yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-amber-600 transition">Peringatan Jatuh Tempo</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Tugas Membaca Bab 4 harus dikumpulkan besok pukul 23:59.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">1 hari yang lalu</p>
-                                    </div>
-                                </a>
-                            </div>
-                            
                             <!-- Footer -->
                             <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-700 transition">Lihat Semua Notifikasi</a>
+                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-800 transition">Lihat Semua Notifikasi</a>
                             </div>
                         </div>
                     </div>
@@ -364,8 +327,8 @@
                     <!-- Small Profile -->
                     <div class="relative hidden sm:flex items-center pl-3 border-l border-gray-200 dropdown-container">
                         <button class="dropdown-btn flex items-center gap-3 focus:outline-none group">
-                            <span class="text-sm font-bold text-[#222222] group-hover:text-[#d62828] transition">{{ Auth::user()->name }}</span>
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-[#d62828]/20 transition">
+                            <span class="text-sm font-bold text-[#222222] group-hover:text-[#d62828] transition">{{ Auth::user()->name ?? 'Admin' }}</span>
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -373,10 +336,10 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
-                                    <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name }}</p>
-                                    <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email }}</p>
+                                    <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
+                                    <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>
                                 </div>
                             </div>
                             
@@ -405,7 +368,7 @@
             </div>
         </header>
 
-        <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] lg:mx-8 mb-0 lg:mb-4 overflow-y-auto shadow-sm custom-scrollbar relative">
+        <main class="flex-1 bg-white rounded-t-[20px] lg:rounded-[40px] lg:mx-8 mb-0 lg:mb-4 overflow-y-auto shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] custom-scrollbar relative">
             @yield('content')
         </main>
     </div>
@@ -577,6 +540,47 @@
             });
         });
     </script>
+    {{-- Global Toast Notification --}}
+    <div x-data="{ show: false, message: '' }" 
+         @show-toast.window="
+            message = $event.detail.message;
+            show = true;
+            setTimeout(() => show = false, 3000);
+         "
+         class="fixed bottom-6 right-6 z-[110] flex flex-col gap-2 pointer-events-none"
+         style="z-index: 99999;">
+        
+        <div x-show="show" style="display: none;"
+             x-transition:enter="transform ease-out duration-300 transition"
+             x-transition:enter-start="translate-y-4 opacity-0 sm:translate-y-0 sm:translate-x-4"
+             x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 flex items-center p-4 gap-4 border border-gray-100">
+             
+             <!-- Success Icon -->
+             <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
+                 <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                 </svg>
+             </div>
+             
+             <!-- Text -->
+             <div class="flex-1">
+                 <p class="text-sm font-bold font-ibm text-gray-900" x-text="message"></p>
+                 <p class="text-xs font-karla text-gray-500 mt-0.5">Berhasil diproses.</p>
+             </div>
+             
+             <!-- Close -->
+             <button @click="show = false" class="text-gray-400 hover:text-gray-500 transition">
+                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                 </svg>
+             </button>
+        </div>
+    </div>
+
     @stack('modals')
     @stack('scripts')
 </body>
