@@ -6,7 +6,7 @@
 @php
     // Dummy Data untuk Design
     if (!isset($needReviewCount)) $needReviewCount = 12;
-    if (!isset($activeClassesCount)) $activeClassesCount = 3;
+    if (!isset($activeClassesCount)) $activeClassesCount = 1;
     if (!isset($totalStudentsCount)) $totalStudentsCount = 45;
     if (!isset($todayScheduleCount)) $todayScheduleCount = 2;
 
@@ -44,7 +44,7 @@
         ];
     }
 
-    if (!isset($pendingTasks) || (is_countable($pendingTasks) && count($pendingTasks) == 0)) {
+    if (!isset($pendingTasks)) {
         $pendingTasks = [
             (object)[
                 'student' => (object)['name' => 'Roronoa Z'],
@@ -243,20 +243,24 @@
 
                         <div class="space-y-3">
                             @forelse($todaySchedules as $schedule)
-                            <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center gap-4">
-                                <div class="w-10 sm:w-12 h-10 sm:h-12 border-none shadow-[0_4px_12px_rgba(214,40,40,0.1)] bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                            <a href="{{ route('teacher.classes') }}" class="block bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-red-100 transition flex items-center gap-4 group">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 border-none shadow-[0_4px_12px_rgba(214,40,40,0.1)] bg-white rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                                     <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm sm:text-base font-bold text-gray-900 leading-snug">
-                                        Mengajar di Kelas {{ $schedule->batch->nama_batch ?? 'Batch' }}
+                                    <h4 class="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#d62828] transition-colors">
+                                        {{ $schedule->judul_pertemuan ?? ('Mengajar di Kelas ' . ($schedule->batch->nama_batch ?? 'Batch')) }}
                                     </h4>
                                     <p class="text-[10px] sm:text-xs text-gray-500 font-semibold mt-1.5 flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        {{ $schedule->jam_mulai ?? '00.00' }} - {{ $schedule->jam_selesai ?? '00.00' }}
+                                        @if(isset($schedule->start_time) && isset($schedule->end_time))
+                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H.i') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H.i') }}
+                                        @else
+                                            {{ $schedule->jam_mulai ?? '00.00' }} - {{ $schedule->jam_selesai ?? '00.00' }}
+                                        @endif
                                     </p>
                                 </div>
-                            </div>
+                            </a>
                             @empty
                             <div class="text-center py-8 sm:py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
                                 <p class="text-gray-500 italic text-xs sm:text-sm">Tidak ada jadwal hari ini.</p>
@@ -273,7 +277,7 @@
                             <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             <h3 class="font-bold text-gray-800 text-sm">Tugas Menunggu Diperiksa</h3>
                         </div>
-                        <a href="#" class="text-red-500 text-xs font-bold flex items-center gap-1 hover:text-red-700 transition">
+                        <a href="{{ route('teacher.assignments') }}" class="text-red-500 text-xs font-bold flex items-center gap-1 hover:text-red-700 transition">
                             Lihat Semua Tugas
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
@@ -287,7 +291,8 @@
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tl-xl">Siswa</th>
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Angkatan</th>
                                         <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Modul Tugas</th>
-                                        <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tr-xl">Dikirim</th>
+                                        <th class="text-left text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4">Dikirim</th>
+                                        <th class="text-right text-[10px] sm:text-xs font-bold text-gray-800 px-4 sm:px-6 py-3 sm:py-4 rounded-tr-xl">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
@@ -305,10 +310,16 @@
                                         <td class="px-4 sm:px-6 py-3 sm:py-4">
                                             <span class="text-xs sm:text-sm text-gray-500">{{ $task->submitted_at ? $task->submitted_at->diffForHumans() : '[Data: submitted_at]' }}</span>
                                         </td>
+                                        <td class="px-4 sm:px-6 py-3 sm:py-4 text-right">
+                                            <a href="{{ route('teacher.tasks.show', ['id_modul' => $task->modul->id_modul ?? 1, 'id_tugas' => $task->id_tugas ?? 1]) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#d62828] hover:text-red-700 transition">
+                                                Nilai
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                            </a>
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-8 sm:py-10 text-gray-500 italic text-xs sm:text-sm">
+                                        <td colspan="5" class="text-center py-8 sm:py-10 text-gray-500 italic text-xs sm:text-sm">
                                             Tidak ada tugas yang perlu direview.
                                         </td>
                                     </tr>

@@ -32,12 +32,18 @@ class TeacherDashboardController extends Controller
             ->distinct('id_user')
             ->count('id_user');
 
+        $needReviewCount = Pengiriman_Tugas::where('status', 'dikirim')
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
+                $q->where('id_guru', $teacher->id);
+            })
+            ->count();
+
         $pendingTasks = Pengiriman_Tugas::where('status', 'dikirim')
             ->with([
                 'user:id,name',
-                'tugas.rps.modul.mapel',
+                'tugas.modul.mapel.batch',
             ])
-            ->whereHas('tugas.rps.modul.mapel', function ($q) use ($teacher) {
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
                 $q->where('id_guru', $teacher->id);
             })
             ->latest('submitted_at')
@@ -45,12 +51,10 @@ class TeacherDashboardController extends Controller
             ->get();
 
         $pendingTasks->each(function ($task) {
-            $task->batch  = optional($task->tugas->rps->modul->mapel)->batch;
-            $task->modul  = $task->tugas->rps->modul ?? null;
+            $task->batch  = optional($task->tugas->modul->mapel)->batch;
+            $task->modul  = $task->tugas->modul ?? null;
             $task->student = $task->user;
         });
-
-        $needReviewCount = $pendingTasks->count();
 
         $todaySchedules = Jadwal::where('id_guru', $teacher->id)->get();
         $todayScheduleCount = $todaySchedules->count();

@@ -49,9 +49,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::get('/users', function() {
-        return view('admin.users.index');
-    })->name('users');
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users');
+    Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/users/{id}/edit', function($id) {
         return view('admin.users.edit', ['id' => $id]);
@@ -61,9 +62,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.payments.index');
     })->name('payments');
 
-    Route::get('/batches', function() {
-        return view('admin.batches.index');
-    })->name('batches');
+    Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
+    Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
+    Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
+    Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
     Route::get('/programs', function() {
         return view('admin.programs.index');
@@ -188,7 +190,8 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/profile', function () {
         return view('teacher.profile');
     })->name('profile');
-
+    Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 

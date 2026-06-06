@@ -53,28 +53,34 @@
         <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col">
             <h3 class="text-lg font-bold text-[#222222] mb-6">Detail Pribadi</h3>
 
-            <form action="#" method="POST" class="flex flex-col justify-between flex-1">
+            <form action="{{ route('teacher.profile.update') }}" method="POST" class="flex flex-col justify-between flex-1">
+                @csrf
+                @method('PATCH')
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                     <div class="space-y-1.5 text-left">
                         <x-input-label for="name" value="Nama Lengkap:" />
-                        <x-text-input id="name" name="name" type="text" :value="Auth::user()->name ?? 'Ahmad Hidayat'" />
+                        <x-text-input id="name" name="name" type="text" :value="old('name', Auth::user()->name)" required />
+                        <x-input-error :messages="$errors->get('name')" class="mt-1" />
                     </div>
                     <div class="space-y-1.5 text-left">
                         <x-input-label for="email" value="Email:" />
-                        <x-text-input id="email" name="email" type="email" :value="Auth::user()->email ?? 'madd.hdyt@gmail.com'" />
+                        <x-text-input id="email" name="email" type="email" :value="old('email', Auth::user()->email)" required />
+                        <x-input-error :messages="$errors->get('email')" class="mt-1" />
                     </div>
                     <div class="space-y-1.5 text-left">
-                        <x-input-label for="phone" value="Nomor Telepon:" />
-                        <x-text-input id="phone" name="phone" type="text" value="+62 0831 9210 3301" />
+                        <x-input-label for="nomor_telepon" value="Nomor Telepon:" />
+                        <x-text-input id="nomor_telepon" name="nomor_telepon" type="text" :value="old('nomor_telepon', Auth::user()->nomor_telepon)" />
+                        <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-1" />
                     </div>
                     <div class="space-y-1.5 text-left">
-                        <x-input-label for="dob" value="Tanggal Lahir:" />
-                        <x-text-input id="dob" name="dob" type="text" value="04 Juli 2004" />
+                        <x-input-label for="tanggal_lahir" value="Tanggal Lahir:" />
+                        <x-text-input id="tanggal_lahir" name="tanggal_lahir" type="date" :value="old('tanggal_lahir', Auth::user()->tanggal_lahir)" />
+                        <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-1" />
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-auto">
-                    <x-primary-button type="button">
+                    <x-primary-button type="submit">
                         Simpan Perubahan
                     </x-primary-button>
                 </div>
@@ -101,22 +107,27 @@
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
         <h3 class="text-lg font-bold text-[#222222] mb-6">Ubah Kata Sandi</h3>
 
-        <form action="#" method="POST">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
+        <form action="{{ route('teacher.profile.password.update') }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-start">
                 <div class="space-y-1.5 text-left">
                     <x-input-label for="current_password" value="Kata Sandi Saat Ini" />
-                    <x-text-input id="current_password" name="current_password" type="password" />
+                    <x-text-input id="current_password" name="current_password" type="password" required />
+                    <x-input-error :messages="$errors->get('current_password')" class="mt-1" />
                 </div>
                 <div class="space-y-1.5 text-left">
                     <x-input-label for="password" value="Kata Sandi Baru" />
-                    <x-text-input id="password" name="password" type="password" />
+                    <x-text-input id="password" name="password" type="password" required />
+                    <x-input-error :messages="$errors->get('password')" class="mt-1" />
                 </div>
                 <div class="space-y-1.5 text-left">
                     <x-input-label for="password_confirmation" value="Konfirmasi Kata Sandi" />
-                    <x-text-input id="password_confirmation" name="password_confirmation" type="password" />
+                    <x-text-input id="password_confirmation" name="password_confirmation" type="password" required />
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
                 </div>
-                <div>
-                    <x-primary-button type="button" class="w-full">
+                <div class="pt-6">
+                    <x-primary-button type="submit" class="w-full">
                         Perbarui Kata Sandi
                     </x-primary-button>
                 </div>
