@@ -19,4 +19,9 @@ class Batch extends Model
         'durasi',
         'jadwal',
     ];
+
+    public function getNamaBatchAttribute()
+    {
+        return $this->nama;
+    }
 }

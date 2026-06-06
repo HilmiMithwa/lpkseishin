@@ -24,4 +24,8 @@ class Tugas extends Model
     public function rps() {
         return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
     }
+
+    public function modul() {
+        return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
+    }
 }

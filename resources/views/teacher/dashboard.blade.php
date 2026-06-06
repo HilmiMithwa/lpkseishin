@@ -44,7 +44,7 @@
         ];
     }
 
-    if (!isset($pendingTasks) || (is_countable($pendingTasks) && count($pendingTasks) == 0)) {
+    if (!isset($pendingTasks)) {
         $pendingTasks = [
             (object)[
                 'student' => (object)['name' => 'Roronoa Z'],
