@@ -187,6 +187,15 @@ class StudentController extends Controller
             abort(404, 'File lampiran tidak ditemukan');
         }
 
+        $disk = env('FILESYSTEM_DISK', 'local');
+        
+        if (\Illuminate\Support\Facades\Storage::disk($disk)->exists($task->file_path_tugas)) {
+            if ($disk === 's3') {
+                return redirect(\Illuminate\Support\Facades\Storage::disk('s3')->url($task->file_path_tugas));
+            }
+            return \Illuminate\Support\Facades\Storage::disk($disk)->download($task->file_path_tugas);
+        }
+
         // The file path in DB is likely prefixed with 'materials/tasks/' inside the public disk
         // We can just use the public storage path
         $filePath = storage_path('app/public/' . $task->file_path_tugas);

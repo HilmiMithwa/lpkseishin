@@ -103,9 +103,10 @@
                         <div class="h-px bg-gray-100 w-full"></div>
 
                         {{-- Attachments --}}
-                        <div class="space-y-1.5" x-data="{ isUploading: false, showResource: {{ isset($task) && $task->file_path_tugas ? 'true' : 'false' }}, fileName: '{{ isset($task) && $task->file_path_tugas ? addslashes(basename($task->file_path_tugas)) : '' }}' }">
+                        <div class="space-y-1.5" x-data="{ isUploading: false, showResource: {{ isset($task) && $task->file_path_tugas ? 'true' : 'false' }}, fileName: '{{ isset($task) && $task->file_path_tugas ? addslashes(basename($task->file_path_tugas)) : '' }}', removeResource: false }">
                             <x-input-label>Tambah Sumber Daya</x-input-label>
-                            <input type="file" name="resource_file" x-ref="resourceFile" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.png" @change="if($refs.resourceFile.files.length > 0) { fileName = $refs.resourceFile.files[0].name; isUploading = true; setTimeout(() => { isUploading = false; showResource = true }, 1500) }">
+                            <input type="file" name="resource_file" x-ref="resourceFile" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.png" @change="if($refs.resourceFile.files.length > 0) { fileName = $refs.resourceFile.files[0].name; isUploading = true; removeResource = false; setTimeout(() => { isUploading = false; showResource = true }, 1500) }">
+                            <input type="hidden" name="remove_resource" :value="removeResource ? '1' : '0'">
                             
                             {{-- Dropzone Area --}}
                             <div x-show="!showResource" @click="$refs.resourceFile.click()" class="border-2 border-dashed border-red-200 bg-white hover:bg-red-50 hover:border-red-300 rounded-[20px] p-8 flex flex-col items-center justify-center text-center transition cursor-pointer min-h-[160px]">
@@ -134,7 +135,7 @@
                                             <p class="text-[13px] font-bold text-gray-900 truncate mb-0.5" x-text="fileName"></p>
                                         </div>
                                     </div>
-                                    <button type="button" @click="$refs.resourceFile.value = ''; showResource = false; fileName = ''" class="text-gray-400 hover:text-red-500 p-2 rounded-lg hover:bg-gray-50 transition flex-shrink-0">
+                                    <button type="button" @click="$refs.resourceFile.value = ''; showResource = false; fileName = ''; removeResource = true" class="text-gray-400 hover:text-red-500 p-2 rounded-lg hover:bg-gray-50 transition flex-shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
