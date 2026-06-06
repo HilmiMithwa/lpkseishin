@@ -130,7 +130,7 @@
                     <button @click="open = !open; if(document.getElementById('sidebar').classList.contains('minimized')) document.getElementById('desktop-sidebar-toggle').click()" type="button" class="w-full nav-link flex items-center justify-between {{ request()->routeIs(['admin.users', 'admin.users.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.users', 'admin.users.*']) ? 'bold' : 'semibold' }} text-sm transition focus:outline-none">
                         <div class="flex items-center gap-3">
                             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <span class="sidebar-text whitespace-nowrap">Manajemen Pengguna</span>
+                            <span class="sidebar-text whitespace-nowrap">Manajemen User</span>
                         </div>
                         <svg class="w-4 h-4 sidebar-text transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
@@ -142,10 +142,10 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 -translate-y-2" 
-                         class="pl-11 pr-4 py-2 space-y-1 sidebar-text" style="display: none;">
-                        <a href="{{ route('admin.users') }}?role=siswa" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'siswa' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
-                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'siswa' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
-                            <span>Data Siswa</span>
+                         class="pl-12 pr-4 py-2 space-y-3 sidebar-text" style="display: none;">
+                        <a href="{{ route('admin.users') }}?role=siswa" class="block text-[13.5px] font-medium {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
+                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
+                            Data Siswa
                         </a>
                         <a href="{{ route('admin.users') }}?role=guru" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'guru' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
                             <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
@@ -161,6 +161,11 @@
                 <a href="{{ route('admin.batches') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Manajemen Batch</span>
+                </a>
+
+                <a href="{{ route('admin.programs') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.programs', 'admin.programs.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.programs', 'admin.programs.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Manajemen Program</span>
                 </a>
 
                 <a href="{{ route('admin.payments') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.payments', 'admin.payments.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.payments', 'admin.payments.*']) ? 'bold' : 'semibold' }} text-sm transition">
@@ -296,12 +301,7 @@
                 <!-- Right: Desktop Notifications & Profile -->
                 <div class="hidden lg:flex items-center justify-end gap-5 w-full lg:w-auto">
                     
-                    <!-- Language Switcher -->
-                    <div class="flex items-center gap-1 text-[#666666] hover:text-[#222222] transition cursor-pointer font-bold text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                        <span>ID</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
+
 
                     <!-- Notifications Dropdown -->
                     <div class="relative dropdown-container">
@@ -413,8 +413,8 @@
         if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMenu);
         if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeMenu);
 
-        // Don't auto-close menu on desktop when clicking links
-        document.querySelectorAll('#sidebar .nav-link').forEach(link => {
+        // Don't auto-close menu on desktop when clicking links, and only close on anchor tags
+        document.querySelectorAll('#sidebar a.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 if(window.innerWidth < 1024) { // Only auto close on mobile
                     closeMenu();

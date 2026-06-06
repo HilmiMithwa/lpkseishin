@@ -52,6 +52,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
 
+    Route::get('/users/{id}/edit', function($id) {
+        return view('admin.users.edit', ['id' => $id]);
+    })->name('users.edit');
+
     Route::get('/payments', function() {
         return view('admin.payments.index');
     })->name('payments');
@@ -60,6 +64,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
     Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
+
+    Route::get('/programs', function() {
+        return view('admin.programs.index');
+    })->name('programs');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');
@@ -137,9 +145,14 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.material-create', ['currentModuleId' => $id_modul]);
     })->name('materials.create');
 
-    Route::get('/modules/{id_modul}/materials/{id_materi}', function ($id_modul, $id_materi) {
-        return view('teacher.material-detail', ['currentModuleId' => $id_modul, 'id_materi' => $id_materi]);
-    })->name('materials.show');
+    Route::post('/modules/{id_modul}/materials', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'store'])->name('materials.store');
+
+    Route::get('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'show'])->name('materials.show');
+
+    Route::put('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'update'])->name('materials.update');
+
+    Route::delete('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'destroy'])->name('materials.destroy');
+
 
     Route::get('/modules/{id_modul}/evaluations/create', function ($id_modul) {
         return view('teacher.evaluation-create', ['currentModuleId' => $id_modul]);
