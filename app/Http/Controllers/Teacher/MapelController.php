@@ -40,10 +40,18 @@ class MapelController extends Controller
 
         // 2. Generate kode_modul secara otomatis jika kosong
         if (empty($data['kode_modul'])) {
+            $mapel = Mapel::findOrFail($data['id_mapel']);
+            $level = 'MOD';
+            if (preg_match('/N[3-5]/i', $mapel->target, $matches)) {
+                $level = strtoupper($matches[0]);
+            } elseif (preg_match('/N[3-5]/i', $mapel->nama_mapel, $matches)) {
+                $level = strtoupper($matches[0]);
+            }
+
             $count = Modul::where('id_mapel', $data['id_mapel'])->count();
             do {
                 $count++;
-                $kode_modul = 'MDL-' . $data['id_mapel'] . '-' . str_pad($count, 3, '0', STR_PAD_LEFT);
+                $kode_modul = 'MDL-' . $level . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
             } while (Modul::where('kode_modul', $kode_modul)->exists());
             $data['kode_modul'] = $kode_modul;
         }
