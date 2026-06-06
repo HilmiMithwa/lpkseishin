@@ -18,7 +18,7 @@ class TugasController extends Controller
 
         $batches = Batch::all();
 
-        $query = Tugas::with(['modul.mapel.batch']);
+        $query = Tugas::with(['modul.mapel.batch', 'submissions']);
 
         if ($selectedBatchId) {
             $query->whereHas('modul.mapel.batch', function ($q) use ($selectedBatchId) {
@@ -32,12 +32,26 @@ class TugasController extends Controller
             });
         }
 
-        $assignments = $query->get();
+        $allAssignments = $query->get();
+
+        $now = \Carbon\Carbon::now();
+
+        $belumDiperiksa = $allAssignments->filter(function($task) {
+            return $task->submissions->where('status', 'dikirim')->count() > 0;
+        });
+
+        $aktifBerjalan = $allAssignments->filter(function($task) use ($now) {
+            return empty($task->waktu_pengumpulan) || \Carbon\Carbon::parse($task->waktu_pengumpulan)->greaterThanOrEqualTo($now);
+        })->diff($belumDiperiksa);
+
+        $selesai = $allAssignments->filter(function($task) use ($now) {
+            return !empty($task->waktu_pengumpulan) && \Carbon\Carbon::parse($task->waktu_pengumpulan)->lessThan($now);
+        })->diff($belumDiperiksa);
 
         $classes = Mapel::all();
         $allModules = Modul::all();
 
-        return view('teacher.assignments', compact('assignments', 'batches', 'selectedBatchId', 'selectedMapelId', 'classes', 'allModules'));
+        return view('teacher.assignments', compact('belumDiperiksa', 'aktifBerjalan', 'selesai', 'batches', 'selectedBatchId', 'selectedMapelId', 'classes', 'allModules'));
     }
 
     public function createAssignment(CreateAssignmentRequest $request) {
