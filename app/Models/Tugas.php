@@ -19,11 +19,8 @@ class Tugas extends Model
         'waktu_pengumpulan',
         'status_tugas',
         'id_rps',
-        'id_modul'
-    ];
-
-    protected $casts = [
-        'waktu_pengumpulan' => 'datetime',
+        'id_modul',
+        'file_path_tugas'
     ];
 
     public function rps() {
@@ -32,5 +29,9 @@ class Tugas extends Model
 
     public function modul() {
         return $this->belongsTo(Modul::class, 'id_modul', 'id_modul');
+    }
+
+    public function submissions() {
+        return $this->hasMany(Pengiriman_Tugas::class, 'id_tugas', 'id_tugas');
     }
 }

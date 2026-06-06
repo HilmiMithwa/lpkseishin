@@ -9,6 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    public function index()
+    {
+        $teacher = Auth::user();
+        
+        $assignedBatches = \App\Models\Batch::whereIn('id_batch', function($query) use ($teacher) {
+            $query->select('id_batch')
+                  ->from('mapel')
+                  ->where('id_guru', $teacher->id);
+        })->get();
+
+        return view('teacher.profile', compact('assignedBatches'));
+    }
+
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -41,5 +54,43 @@ class ProfileController extends Controller
         ]);
 
         return redirect()->route('teacher.profile')->with('success', 'Kata sandi berhasil diperbarui');
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('photo')) {
+            if ($user->profile_photo_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
+            $path = $request->file('photo')->store('profile-photos', 'public');
+            
+            $user->update([
+                'profile_photo_path' => $path,
+            ]);
+        }
+
+        return back()->with('success', 'Foto profil berhasil diperbarui');
+    }
+
+    public function destroyPhoto(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->profile_photo_path) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_photo_path);
+            
+            $user->update([
+                'profile_photo_path' => null,
+            ]);
+        }
+
+        return back()->with('success', 'Foto profil berhasil dihapus');
     }
 }

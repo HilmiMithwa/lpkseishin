@@ -4,10 +4,21 @@
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+    activeTab: 'belum_diperiksa', 
+    showCreateModal: false,
     selectedBatch: '',
     selectedClass: '',
-    activeTab: 'belum_diperiksa',
-    showCreateModal: false
+    batchesData: {{ json_encode($batches) }},
+    classesData: {{ json_encode($classes) }},
+    modulesData: {{ json_encode($allModules) }},
+    get filteredClasses() {
+        if (!this.selectedBatch) return [];
+        return this.classesData.filter(c => c.id_batch == this.selectedBatch);
+    },
+    get filteredModules() {
+        if (!this.selectedClass) return [];
+        return this.modulesData.filter(m => m.id_mapel == this.selectedClass);
+    }
 }">
 
     <!-- Header & Action -->
@@ -23,132 +34,73 @@
     </div>
 
     <!-- Filter Section (Select Batch & Class) -->
-    <div class="bg-white rounded-[24px] border border-gray-100 p-5 shadow-sm flex flex-col sm:flex-row items-center gap-4 mb-8">
-        <div class="flex-1 w-full relative z-20 space-y-1.5">
+    <form method="GET" action="{{ route('teacher.assignments') }}" class="bg-white rounded-[24px] border border-gray-100 p-5 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <div class="space-y-1.5">
             <x-input-label>Pilih Batch</x-input-label>
-            <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false" type="button" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold flex items-center justify-between transition focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] shadow-sm" :class="selectedBatch === '' ? 'text-gray-400' : 'text-[#222222]'">
-                    <span x-text="selectedBatch === '' ? 'Pilih Batch...' : selectedBatch"></span>
-                    <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180 text-[#222222]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
-                    <ul class="py-1">
-                        {{-- TODO Backend: Looping data batch di sini --}}
-                        <li><button type="button" @click="selectedBatch = 'Batch 3'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === 'Batch 3' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Batch 3</button></li>
-                        <li><button type="button" @click="selectedBatch = 'Batch 2'; open = false; selectedClass = ''" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedBatch === 'Batch 2' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Batch 2</button></li>
-                    </ul>
-                </div>
-            </div>
+            <select name="batch_id" onchange="this.form.submit()" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] transition">
+                <option value="">Semua Batch</option>
+                @foreach($batches as $batch)
+                    <option value="{{ $batch->id_batch }}" {{ $selectedBatchId == $batch->id_batch ? 'selected' : '' }}>{{ $batch->nama }}</option>
+                @endforeach
+            </select>
         </div>
-        <div class="flex-1 w-full relative z-10 space-y-1.5">
+        <div class="space-y-1.5">
             <x-input-label>Pilih Kelas</x-input-label>
-            <div class="relative" x-data="{ open: false }">
-                <button @click="if(selectedBatch !== '') open = !open" @click.away="open = false" type="button" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold flex items-center justify-between transition focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] shadow-sm" :class="[selectedClass === '' ? 'text-gray-400' : 'text-[#222222]', selectedBatch === '' ? 'bg-gray-50 border-gray-100 cursor-not-allowed opacity-70' : '']">
-                    <span x-text="selectedClass === '' ? 'Pilih Kelas...' : selectedClass"></span>
-                    <svg class="w-4 h-4 transition-transform duration-200" :class="[open ? 'rotate-180 text-[#222222]' : 'text-gray-400', selectedBatch === '' ? 'opacity-50' : '']" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
-                    <ul class="py-1">
-                        {{-- TODO Backend: Looping data kelas di sini --}}
-                        <li><button type="button" @click="selectedClass = '4 Mastering'; open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedClass === '4 Mastering' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">4 Mastering</button></li>
-                        <li><button type="button" @click="selectedClass = '3 Beginner'; open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="selectedClass === '3 Beginner' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">3 Beginner</button></li>
-                    </ul>
-                </div>
-            </div>
+            <select name="mapel_id" onchange="this.form.submit()" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] transition">
+                <option value="">Semua Kelas</option>
+                @foreach($classes as $class)
+                    <option value="{{ $class->id_mapel }}" {{ $selectedMapelId == $class->id_mapel ? 'selected' : '' }}>{{ $class->nama_mapel }}</option>
+                @endforeach
+            </select>
         </div>
-    </div>
+    </form>
 
-    <!-- Empty State Notification -->
-    <div x-show="selectedBatch === '' || selectedClass === ''" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="flex flex-col items-center justify-center bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm min-h-[400px]">
-        <div class="w-24 h-24 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mb-6 border-4 border-red-100/50">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Kelas Terpilih</h3>
-        <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Silakan pilih <span class="font-bold text-gray-700">Batch</span> dan <span class="font-bold text-gray-700">Kelas</span> pada menu di atas terlebih dahulu untuk memuat daftar Tugas.</p>
-    </div>
 
-    <!-- Main Content (Shows only when selected) -->
-    <div x-show="selectedBatch !== '' && selectedClass !== ''" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;" x-cloak>
+    <!-- Main Content -->
+    <div>
         
         <!-- Tab Navigation -->
         <div class="flex items-end gap-4 mb-6 border-b border-gray-200 overflow-x-auto custom-scrollbar">
             <button @click="activeTab = 'belum_diperiksa'" :class="activeTab === 'belum_diperiksa' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-2">
                 Belum Diperiksa
-                <span class="bg-[#d62828] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
+                <span class="bg-[#d62828] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{{ $belumDiperiksa->count() }}</span>
             </button>
-            <button @click="activeTab = 'aktif'" :class="activeTab === 'aktif' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition">
+            <button @click="activeTab = 'aktif'" :class="activeTab === 'aktif' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-1">
                 Aktif berjalan
+                @if($aktifBerjalan->count() > 0)
+                <span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">{{ $aktifBerjalan->count() }}</span>
+                @endif
             </button>
-            <button @click="activeTab = 'selesai'" :class="activeTab === 'selesai' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition">
+            <button @click="activeTab = 'selesai'" :class="activeTab === 'selesai' ? 'text-[#d62828] border-[#d62828]' : 'text-gray-500 border-transparent hover:text-gray-800 hover:border-gray-300'" class="whitespace-nowrap px-1 py-3 font-bold text-sm border-b-2 -mb-px transition flex items-center gap-1">
                 Selesai
+                @if($selesai->count() > 0)
+                <span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">{{ $selesai->count() }}</span>
+                @endif
             </button>
         </div>
 
         <!-- Tab 1: Belum Diperiksa -->
         <div x-show="activeTab === 'belum_diperiksa'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <!-- Task Card 1 -->
-                <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col h-full group relative overflow-hidden">
-                    
-                    <div class="flex items-center justify-end mb-4 relative z-10">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded-lg">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Jatuh tempo kemarin
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug relative z-10">Tugas Menulis Kanji Bab 4: Kata Sifat</h3>
-                    <p class="text-xs font-semibold text-gray-500 mb-5 flex-1 relative z-10">Bab 4 - Modul Dasar</p>
-                    
-                    <div class="mb-5 relative z-10">
-                        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
-                            <span class="text-gray-500">Terkumpul</span>
-                            <span class="text-gray-800">18/20 Siswa</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-[#d62828] h-1.5 rounded-full" style="width: 90%"></div>
-                        </div>
-                    </div>
-                    
-                    <a href="{{ route('teacher.assignments.grade') }}" class="w-full mt-auto bg-red-50 hover:bg-[#d62828] text-[#d62828] hover:text-white border border-red-100 hover:border-[#d62828] font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10">
-                        Periksa 18 Kiriman
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </a>
+            @if($belumDiperiksa->isEmpty())
+            <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm min-h-[300px] flex flex-col items-center justify-center">
+                <div class="w-24 h-24 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mb-6 border-4 border-red-100/50">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 </div>
-
-                <!-- Task Card 2 -->
-                <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col h-full group relative overflow-hidden">
-                    
-                    <div class="flex items-center justify-end mb-4 relative z-10">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-gray-50 px-2 py-1 rounded-lg">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            Tenggat: 4 Jun 2026
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug relative z-10">Rekaman Percakapan Perkenalan Diri (Jikoshoukai)</h3>
-                    <p class="text-xs font-semibold text-gray-500 mb-5 flex-1 relative z-10">Bab 2 - Modul Dasar</p>
-                    
-                    <div class="mb-5 relative z-10">
-                        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
-                            <span class="text-gray-500">Terkumpul</span>
-                            <span class="text-gray-800">20/20 Siswa</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-[#d62828] h-1.5 rounded-full" style="width: 100%"></div>
-                        </div>
-                    </div>
-                    
-                    <a href="{{ route('teacher.assignments.grade') }}" class="w-full mt-auto bg-red-50 hover:bg-[#d62828] text-[#d62828] hover:text-white border border-red-100 hover:border-[#d62828] font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10">
-                        Periksa 20 Kiriman
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </a>
-                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Tugas</h3>
+                <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Saat ini tidak ada tugas yang perlu diperiksa atau dinilai.</p>
             </div>
+            @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($belumDiperiksa as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
+                @endforeach
+            </div>
+            @endif
         </div>
 
         <!-- Tab 2: Aktif Berjalan -->
         <div x-show="activeTab === 'aktif'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            @if($aktifBerjalan->isEmpty())
             <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[300px]">
                 <div class="w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mb-4">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -156,28 +108,32 @@
                 <h3 class="text-lg font-bold text-gray-800 mb-1">Tidak Ada Tugas Aktif</h3>
                 <p class="text-sm text-gray-500 max-w-sm">Semua tugas sudah melewati masa tenggat waktu. Silakan buat tugas baru.</p>
             </div>
+            @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($aktifBerjalan as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
+                @endforeach
+            </div>
+            @endif
         </div>
 
         <!-- Tab 3: Selesai -->
         <div x-show="activeTab === 'selesai'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <!-- Task Card 3 -->
-                <div class="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm flex flex-col h-full group relative overflow-hidden">
-                    <div class="flex items-center justify-end mb-4">
-                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg uppercase tracking-wide">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Selesai Dinilai
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-snug">Latihan Tata Bahasa Partikel Wa, Ga, O</h3>
-                    <p class="text-xs font-semibold text-gray-500 mb-5 flex-1">Bab 1 - Modul Dasar</p>
-                    
-                    <button class="w-full mt-auto bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 font-bold py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
-                        Lihat Rekap Nilai
-                    </button>
+            @if($selesai->isEmpty())
+            <div class="bg-white rounded-[32px] border border-gray-100 p-12 text-center shadow-sm min-h-[300px] flex flex-col items-center justify-center">
+                <div class="w-24 h-24 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mb-6 border-4 border-red-100/50">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Tugas Selesai</h3>
+                <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Tugas yang sudah selesai diperiksa dan melewati batas waktu akan muncul di sini.</p>
             </div>
+            @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($selesai as $task)
+                @include('teacher.partials.task-card', ['task' => $task])
+                @endforeach
+            </div>
+            @endif
         </div>
 
     </div>
@@ -204,18 +160,18 @@
 
             <!-- Modal Body -->
             <div class="px-6 py-6 overflow-y-auto custom-scrollbar flex-1 bg-gray-50/30">
-                <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form id="createAssignmentForm" action="{{ route('teacher.assignments.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     
                     <!-- Judul & Tenggat Waktu -->
                     <div class="space-y-5">
                         <div class="space-y-1.5">
                             <x-input-label>Judul Tugas</x-input-label>
-                            <x-text-input type="text" name="title" required placeholder="Misal: Menulis Kanji Bab 5" class="w-full" />
+                            <x-text-input type="text" name="judul_tugas" required placeholder="Misal: Menulis Kanji Bab 5" class="w-full" />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Tenggat Waktu (Due Date)</x-input-label>
-                            <x-text-input type="datetime-local" name="due_date" required class="w-full" />
+                            <x-text-input type="datetime-local" name="waktu_pengumpulan" required class="w-full" />
                         </div>
                     </div>
 
@@ -224,26 +180,27 @@
                         <x-input-label class="mb-3">Terbitkan Untuk Kelas & Modul</x-input-label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <select name="batch_id" x-model="selectedBatch" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors">
+                                <select name="batch_id" x-model="selectedBatch" @change="selectedClass = ''" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors">
                                     <option value="">Pilih Batch...</option>
-                                    <option value="Batch 3">Batch 3</option>
-                                    <option value="Batch 2">Batch 2</option>
-                                    <option value="Batch 1">Batch 1</option>
+                                    <template x-for="batch in batchesData" :key="batch.id_batch">
+                                        <option :value="batch.id_batch" x-text="batch.nama"></option>
+                                    </template>
                                 </select>
                             </div>
                             <div>
                                 <select name="class_id" x-model="selectedClass" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors" :disabled="selectedBatch === ''" :class="selectedBatch === '' ? 'opacity-70 cursor-not-allowed' : ''">
                                     <option value="">Pilih Kelas...</option>
-                                    <option value="4 Mastering">4 Mastering</option>
-                                    <option value="3 Beginner">3 Beginner</option>
+                                    <template x-for="kelas in filteredClasses" :key="kelas.id_mapel">
+                                        <option :value="kelas.id_mapel" x-text="kelas.nama_mapel"></option>
+                                    </template>
                                 </select>
                             </div>
                             <div>
-                                <select name="module_id" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors" :disabled="selectedClass === ''" :class="selectedClass === '' ? 'opacity-70 cursor-not-allowed' : ''">
+                                <select name="id_modul" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors" :disabled="selectedClass === ''" :class="selectedClass === '' ? 'opacity-70 cursor-not-allowed' : ''">
                                     <option value="">Pilih Modul...</option>
-                                    <option value="Modul 1">Modul 1: Vocabulary</option>
-                                    <option value="Modul 2">Modul 2: Grammar</option>
-                                    <option value="Modul 3">Modul 3: Kanji</option>
+                                    <template x-for="modul in filteredModules" :key="modul.id_modul">
+                                        <option :value="modul.id_modul" x-text="modul.nama_modul"></option>
+                                    </template>
                                 </select>
                             </div>
                         </div>
@@ -253,7 +210,7 @@
                     <!-- Deskripsi -->
                     <div class="space-y-1.5">
                         <x-input-label>Instruksi (Opsional)</x-input-label>
-                        <textarea name="instruction" rows="3" placeholder="Tambahkan instruksi pengerjaan jika ada..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm"></textarea>
+                        <textarea name="deskripsi_tugas" rows="3" placeholder="Tambahkan instruksi pengerjaan jika ada..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm"></textarea>
                     </div>
 
                     <!-- Upload -->
@@ -261,7 +218,7 @@
                         <x-input-label>Lampiran Soal / Materi (Opsional)</x-input-label>
                         
                         <!-- File Input (Hidden) -->
-                        <input type="file" id="assignment_file" name="attachment" class="hidden" 
+                        <input type="file" id="assignment_file" name="file_path_tugas" class="hidden" 
                                @change="fileName = $event.target.files[0] ? $event.target.files[0].name : null">
                                
                         <!-- Dropzone -->
@@ -308,7 +265,7 @@
                 <button @click="showCreateModal = false" type="button" class="px-5 py-2.5 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-100 transition-colors">
                     Batal
                 </button>
-                <x-primary-button type="button" x-data="{ loading: false }" @click="loading = true; setTimeout(() => { loading = false; showCreateModal = false; }, 800)" class="px-5 py-2.5 gap-2 shadow-sm">
+                <x-primary-button type="submit" form="createAssignmentForm" x-data="{ loading: false }" @click="loading = true" class="px-5 py-2.5 gap-2 shadow-sm">
                     <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                     <svg x-show="loading" class="w-4 h-4 animate-spin" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     <span x-text="loading ? 'Menerbitkan...' : 'Terbitkan Tugas'"></span>

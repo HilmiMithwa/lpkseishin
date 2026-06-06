@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
+use App\Http\Controllers\Teacher\TugasController;
 
 
 
@@ -106,13 +107,12 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 
-    Route::get('/students/enrolled', function () {
-        return view('students.enrolled');
-    })->name('students.enrolled');
+    Route::get('/students/enrolled', [\App\Http\Controllers\Student\StudentController::class, 'enrolled'])->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
     Route::get('/students/vocabulary-mastery', [StudentController::class, 'vocabularyMastery'])->name('students.vocabulary-mastery');
+    Route::get('/students/vocabulary-mastery/favorites', [StudentController::class, 'vocabularyFavorites'])->name('students.vocabulary-favorites');
     Route::get('/students/vocabulary-mastery/level/{id}', [StudentController::class, 'vocabularyLevel'])->name('students.vocabulary-level');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-mastered', [StudentController::class, 'toggleMastered'])->name('students.vocabulary.toggle-mastered');
     Route::post('/students/vocabulary/{id_vocabulary}/toggle-favorite', [StudentController::class, 'toggleFavorite'])->name('students.vocabulary.toggle-favorite');
@@ -169,31 +169,50 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
     })->name('tasks.show');
 
-    Route::get('/vocabulary', function () {
-        return view('teacher.vocabulary');
-    })->name('vocabulary');
+    Route::get('/vocabulary', [\App\Http\Controllers\Teacher\VocabularyController::class, 'index'])->name('vocabulary');
+    Route::put('/vocabulary/level/{level}/update', [\App\Http\Controllers\Teacher\VocabularyController::class, 'updateLevel'])->name('vocabulary.level.update');
+    Route::delete('/vocabulary/level/{level}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroyLevel'])->name('vocabulary.level.destroy');
 
     Route::get('/vocabulary/level/{id}', function ($id) {
-        return view('teacher.vocabulary-level', ['level_id' => $id]);
+        $query = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc');
+        
+        if (request()->has('search') && request('search') != '') {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('kanji', 'ilike', "%{$search}%")
+                  ->orWhere('furigana', 'ilike', "%{$search}%")
+                  ->orWhere('romaji', 'ilike', "%{$search}%")
+                  ->orWhere('meaning_id', 'ilike', "%{$search}%");
+            });
+        }
+        
+        if (request()->has('category') && request('category') != '') {
+            $query->where('category', request('category'));
+        }
+        
+        $words = $query->paginate(18)->appends(request()->query());
+        
+        return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
+
+    Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
+    Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
+    Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
 
     Route::get('/progress-report', function () {
         return view('teacher.progress-report');
     })->name('progress-report');
 
-    Route::get('/assignments', function () {
-        return view('teacher.assignments');
-    })->name('assignments');
-    
+    Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
+    Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
     // Preview: Grading Workspace
-    Route::get('/assignments/grade', function () {
-        return view('teacher.grade-submission');
-    })->name('assignments.grade');
+    Route::get('/assignments/{id}/grade', [TugasController::class, 'gradePage'])->name('assignments.grade');
+    Route::post('/submissions/{id}/grade', [TugasController::class, 'gradeAssignment'])->name('assignments.grade.store');
 
-    Route::get('/profile', function () {
-        return view('teacher.profile');
-    })->name('profile');
+    Route::get('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'index'])->name('profile');
     Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+    Route::delete('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
     Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
