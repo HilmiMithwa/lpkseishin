@@ -53,6 +53,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
         return view('admin.users.index');
     })->name('users');
 
+    Route::get('/users/{id}/edit', function($id) {
+        return view('admin.users.edit', ['id' => $id]);
+    })->name('users.edit');
+
     Route::get('/payments', function() {
         return view('admin.payments.index');
     })->name('payments');
@@ -60,6 +64,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::get('/batches', function() {
         return view('admin.batches.index');
     })->name('batches');
+
+    Route::get('/programs', function() {
+        return view('admin.programs.index');
+    })->name('programs');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');
