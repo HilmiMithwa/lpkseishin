@@ -24,6 +24,7 @@ class VocabularyController extends Controller
             'furigana' => $request->furigana,
             'romaji' => $request->romaji,
             'meaning_id' => $request->meaning_id,
+            'category' => $request->category,
             'meaning_en' => $request->meaning_en ?? '-',
             'level' => $level_id,
             'definition_id' => $request->definition_id ?? 'Tindakan untuk belajar atau mempelajari sesuatu hal baru.', // Default
@@ -50,6 +51,7 @@ class VocabularyController extends Controller
             'furigana' => $request->furigana,
             'romaji' => $request->romaji,
             'meaning_id' => $request->meaning_id,
+            'category' => $request->category,
             'meaning_en' => $request->meaning_en ?? $vocab->meaning_en,
             'definition_id' => $request->definition_id ?? $vocab->definition_id,
             'contextual_usage' => $request->context_jp,

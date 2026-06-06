@@ -183,6 +183,10 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
             });
         }
         
+        if (request()->has('category') && request('category') != '') {
+            $query->where('category', request('category'));
+        }
+        
         $words = $query->paginate(18)->appends(request()->query());
         
         return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);

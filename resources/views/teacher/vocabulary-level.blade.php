@@ -42,8 +42,8 @@
             </div>
             
             <div class="relative">
-                <button type="button" @click="showFilter = !showFilter" class="px-5 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition">
-                    Filter
+                <button type="button" @click="showFilter = !showFilter" class="px-5 py-2 border rounded-full text-sm font-bold flex items-center gap-2 transition {{ request('category') ? 'text-[#d62828] bg-red-50 border-red-200' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                    {{ request('category') ? (request('category') == 'meishi' ? 'Kata Benda' : (request('category') == 'doushi' ? 'Kata Kerja' : 'Kata Sifat')) : 'Filter' }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                 </button>
                 <div x-show="showFilter" @click.away="showFilter = false" class="absolute left-0 sm:right-0 sm:left-auto mt-2 w-56 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 p-2 z-20" x-cloak style="display: none;" x-transition>
@@ -126,6 +126,7 @@
                     arti: '{{ addslashes($w->meaning_id) }}',
                     en: '{{ addslashes($w->meaning_en) }}',
                     definition: '{{ addslashes($w->definition_id) }}',
+                    category: '{{ addslashes($w->category ?? '') }}',
                     context_jp: '{{ addslashes($w->contextual_usage) }}',
                     context_id: '',
                     id: {{ $w->id_vocabulary }}

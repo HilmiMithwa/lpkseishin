@@ -10,7 +10,7 @@ class Vocabulary extends Model
     protected $primaryKey = 'id_vocabulary';
  
     protected $fillable = [
-        'kanji', 'furigana', 'romaji', 'meaning_en', 'meaning_id', 'level', 'definition_id', 'contextual_usage',
+        'kanji', 'furigana', 'romaji', 'meaning_en', 'meaning_id', 'level', 'definition_id', 'contextual_usage', 'category'
     ];
  
     protected $casts = [
