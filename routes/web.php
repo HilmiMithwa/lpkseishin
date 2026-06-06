@@ -141,9 +141,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
 
-    Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
-        return view('teacher.material-create', ['currentModuleId' => $id_modul]);
-    })->name('materials.create');
+    Route::get('/modules/{id_modul}/materials/create', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'create'])->name('materials.create');
 
     Route::post('/modules/{id_modul}/materials', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'store'])->name('materials.store');
 
