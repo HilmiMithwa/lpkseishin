@@ -18,7 +18,9 @@ class Modul extends Model
         'jp_praktik',
         'module_description',
         'id_mapel',
-        'id_rps'
+        'id_rps',
+        'icon_type',
+        'is_sequential'
     ];
 
     public function mapel() {
@@ -27,5 +29,9 @@ class Modul extends Model
 
     public function rps() {
         return $this->belongsTo(Rps::class, 'id_rps', 'id_rps');
+    }
+
+    public function bahanAjar() {
+        return $this->hasMany(BahanAjar::class, 'id_modul', 'id_modul');
     }
 }

@@ -1,16 +1,16 @@
 @extends('layouts.student')
 
-@section('title', 'Level ' . $level_id . ' - Penguasaan Kosakata')
+@section('title', 'Kosakata Favorit - Penguasaan Kosakata')
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10 flex-1 flex flex-col">
     
     <div class="mb-8 text-left">
-        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Level {{ $level_id }}</h1>
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Kosakata Favorit</h1>
         <div class="flex items-center gap-2 text-sm font-medium text-[#666666] mt-2">
             <a href="{{ route('students.vocabulary-mastery') }}" class="hover:text-[#d62828] transition">Penguasaan Kosakata</a>
             <span class="text-gray-300">></span>
-            <span class="text-[#d62828]">Level {{ $level_id }}</span>
+            <span class="text-[#d62828]">Kosakata Favorit</span>
         </div>
     </div>
 
@@ -45,11 +45,6 @@
                         <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
                             <input type="radio" name="filter_status" value="belum" class="w-4 h-4 text-[#d62828] border-gray-300 focus:ring-[#d62828]">
                             <span class="text-sm font-semibold text-slate-700 group-hover:text-[#d62828] transition-colors">Belum Dikuasai</span>
-                        </label>
-                        <div class="h-px bg-gray-100 my-1 mx-2"></div>
-                        <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer transition group">
-                            <input type="checkbox" name="filter_fav" class="w-4 h-4 text-[#FFB700] border-gray-300 focus:ring-[#FFB700] rounded">
-                            <span class="text-sm font-semibold text-slate-700 group-hover:text-[#FFB700] transition-colors">Hanya Favorit</span>
                         </label>
                     </div>
                 </div>
@@ -175,7 +170,6 @@
     function applyFilters() {
         const searchVal    = document.getElementById('search-input').value.toLowerCase().trim();
         const statusFilter = document.querySelector('input[name="filter_status"]:checked').value;
-        const favOnly      = document.querySelector('input[name="filter_fav"]').checked;
  
         filteredCards = allCards.filter(card => {
             // Filter pencarian: cocokkan kanji, furigana, romaji, atau arti
@@ -193,10 +187,8 @@
                 statusFilter === 'belum'    ? card.status === 'Belum Dikuasai' :
                 true;
  
-            // Filter favorit
-            const matchFav = !favOnly || card.is_fav;
- 
-            return matchSearch && matchStatus && matchFav;
+            // Hanya tampilkan jika masih favorit
+            return matchSearch && matchStatus && card.is_fav;
         });
  
         currentPage = 1;
@@ -432,7 +424,6 @@
     // Filter Interaction Logic
     const filterBtn = document.getElementById('filter-toggle-btn');
     const filterRadios = document.querySelectorAll('input[name="filter_status"]');
-    const filterFav = document.querySelector('input[name="filter_fav"]');
     const activeFiltersContainer = document.getElementById('active-filters-container');
 
     document.getElementById('search-input').addEventListener('input', applyFilters);
@@ -448,11 +439,6 @@
                 activeFilters.push({ id: 'status', label: label });
             }
         });
-
-        if (filterFav.checked) {
-            hasActiveFilter = true;
-            activeFilters.push({ id: 'fav', label: 'Hanya Favorit' });
-        }
 
         // Update button appearance
         if (hasActiveFilter) {
@@ -483,14 +469,11 @@
     window.removeFilter = function(id) {
         if (id === 'status') {
             document.querySelector('input[name="filter_status"][value="semua"]').checked = true;
-        } else if (id === 'fav') {
-            filterFav.checked = false;
         }
         updateFilterState();
     };
 
     filterRadios.forEach(radio => radio.addEventListener('change', updateFilterState));
-    filterFav.addEventListener('change', updateFilterState);
 
     // Initial check
     updateFilterState();

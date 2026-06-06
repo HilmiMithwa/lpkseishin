@@ -30,7 +30,9 @@ class StoreModulRequest extends FormRequest
             'jp' => 'nullable|integer|min:0', // Alokasi Durasi (JP)
             'module_description' => 'nullable|string',
             'id_mapel' => 'required|exists:mapel,id_mapel',
-            'id_rps' => 'nullable|exists:rps,id_rps'
+            'id_rps' => 'nullable|exists:rps,id_rps',
+            'icon_type' => 'nullable|integer|in:1,2,3,4',
+            'is_sequential' => 'nullable|boolean'
         ];
     }
 

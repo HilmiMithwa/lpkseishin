@@ -13,17 +13,21 @@ class ModulController extends Controller
 {
     public function showModule($id_modul)
     {
-        // Fetch module with its associated mapel
-        $module = Modul::with(['mapel', 'mapel.batch'])->findOrFail($id_modul);
-
+        $modul = Modul::with(['mapel.batch', 'mapel.modul', 'bahanAjar'])->findOrFail($id_modul);
+        
+        $currentModuleId = $modul->id_modul;
+        $batchName = $modul->mapel->batch->nama_batch ?? 'Unknown Batch';
+        $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+        $moduleTitle = 'Modul ' . $currentModuleId . ': ' . $modul->nama_modul;
+        
         // Fetch all modules of this mapel/class for the sidebar list
-        $modules = Modul::where('id_mapel', $module->id_mapel)->get();
+        $modules = $modul->mapel->modul; 
 
         // Fetch materials and tasks
-        $materials = BahanAjar::where('id_modul', $id_modul)->get();
+        $materials = $modul->bahanAjar;
         $tasks = Tugas::where('id_modul', $id_modul)->get();
 
-        return view('teacher.module-detail', compact('module', 'modules', 'materials', 'tasks'));
+        return view('teacher.module-detail', compact('modul', 'currentModuleId', 'batchName', 'className', 'moduleTitle', 'modules', 'materials', 'tasks'));
     }
 
     public function store(StoreModulRequest $request)
@@ -31,6 +35,4 @@ class ModulController extends Controller
         Modul::create($request->validated());
         return redirect()->route('teacher.dashboardmodul')->with('success', 'Modul Berhasil ditambahkan!'); //buat routingan dashboard guru ini aku serahin lagi ke kamu zan. Ini sebagai contoh doang
     }
-
-
 }

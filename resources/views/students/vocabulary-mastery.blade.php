@@ -120,9 +120,9 @@
                 </div>
                 <h2 class="text-3xl font-bold text-[#222222] tracking-tight">{{ $statFavourite }} Kata</h2>
             </div>
-            <button class="w-12 h-12 bg-[#d62828] hover:bg-red-700 text-white rounded-full flex items-center justify-center transition shadow-sm hover:-translate-y-0.5 duration-200 flex-shrink-0">
+            <a href="{{ route('students.vocabulary-favorites') }}" class="w-12 h-12 bg-[#d62828] hover:bg-red-700 text-white rounded-full flex items-center justify-center transition shadow-sm hover:-translate-y-0.5 duration-200 flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </button>
+            </a>
         </div>
 
     </div>
