@@ -38,8 +38,19 @@ class PengirimanTugasController extends Controller
             $filePath = Storage::disk($disk)->putFile('submissions', $file);
         }
 
+        $textContent = $request->input('text_content');
+        if ($request->has('task_links') && is_array($request->input('task_links'))) {
+            $links = $request->input('task_links');
+            $linksStr = implode("\n", $links);
+            if (!empty($textContent)) {
+                $textContent .= "\n\nTautan Lampiran:\n" . $linksStr;
+            } else {
+                $textContent = "Tautan Lampiran:\n" . $linksStr;
+            }
+        }
+
         Pengiriman_Tugas::create([
-            'text_content' => $request->input('text_content'),
+            'text_content' => $textContent,
             'file_path' => $filePath,
             'submitted_at' => Carbon::now(),
             'status' => $status,

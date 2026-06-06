@@ -92,12 +92,17 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/evaluations/{id}/start', [StudentController::class, 'showEvaluation'])->name('evaluations.start');
 
+    Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/evaluations/{id}/submit', [StudentController::class, 'submitEvaluation'])->name('evaluations.submit');
+
     Route::get('/students/evaluations/result', function () {
         return view('students.evaluation-result');
     })->name('students.evaluation-result');
 
     // rute detail materi
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/materials/{id_materi}', [BahanAjarController::class, 'showMaterial'])->name('materials.show');
+
+    // rute download materi
+    Route::get('/students/materials/{id_materi}/download', [BahanAjarController::class, 'downloadMaterial'])->name('materials.download');
 
     //mark materi sebagai selesai (update progress)
     Route::post('/students/materials/{id_materi}/complete', [BahanAjarController::class, 'completeMaterial'])->name('materials.complete');
@@ -111,6 +116,7 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::get('/students/enrolled', [\App\Http\Controllers\Student\StudentController::class, 'enrolled'])->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
+    Route::get('/students/tasks/{id_tugas}/download', [StudentController::class, 'downloadTaskAttachment'])->name('students.tasks.download');
 
     Route::get('/students/vocabulary-mastery', [StudentController::class, 'vocabularyMastery'])->name('students.vocabulary-mastery');
     Route::get('/students/vocabulary-mastery/favorites', [StudentController::class, 'vocabularyFavorites'])->name('students.vocabulary-favorites');

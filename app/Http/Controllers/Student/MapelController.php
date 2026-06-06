@@ -42,15 +42,28 @@ class MapelController extends Controller
                 ->where('pengiriman_tugas.status', 'dikirim')
                 ->count();
             $taskClear = ($totalTask == $completedTask);
-            if ($totalMaterial == 0 && $totalTask == 0) {
+
+            $evaluasis = \App\Models\Evaluasi::where('id_modul', $modul->id_modul)->get();
+            $totalEvaluasi = $evaluasis->count();
+            $completedEvaluasi = 0;
+            foreach($evaluasis as $ev) {
+                if(DB::table('catatan_evaluasi')->where('id_user', $userId)->where('id_mapel', $id_mapel)->where('nama_evaluasi', $ev->judul)->exists()) {
+                    $completedEvaluasi++;
+                }
+            }
+            $evaluasiClear = ($totalEvaluasi == $completedEvaluasi);
+
+            $totalItems = $totalMaterial + $totalTask + $totalEvaluasi;
+            
+            if ($totalItems == 0) {
                 $completedModulesCount++;
-            } elseif($materialClear && $taskClear) {
+            } elseif($materialClear && $taskClear && $evaluasiClear) {
                 $completedModulesCount++;
             }
         }
 
         // Ambil data mapel dan announcements untuk navigasi sidebar kanan
-        $subject = Mapel::with(['modul', 'announcements'])->findOrFail($id_mapel);
+        $subject = Mapel::with(['modul', 'announcements', 'guru'])->findOrFail($id_mapel);
         $modul_count = $subject->modul->count();
         $remainingModulesCount = max(0, $modul_count - $completedModulesCount);
         $overallProgress = $modul_count > 0 ? round(($completedModulesCount / $modul_count) * 100) : 0;
@@ -72,8 +85,17 @@ class MapelController extends Controller
                 ->where('pengiriman_tugas.status', 'dikirim')
                 ->count();
 
-            $totalItems = $modul->total_material + $modul->total_task;
-            $completedItems = $modul->completed_material + $modul->completed_task;
+            $evaluasis = \App\Models\Evaluasi::where('id_modul', $modul->id_modul)->get();
+            $modul->total_evaluasi = $evaluasis->count();
+            $modul->completed_evaluasi = 0;
+            foreach($evaluasis as $ev) {
+                if(DB::table('catatan_evaluasi')->where('id_user', $userId)->where('id_mapel', $id_mapel)->where('nama_evaluasi', $ev->judul)->exists()) {
+                    $modul->completed_evaluasi++;
+                }
+            }
+
+            $totalItems = $modul->total_material + $modul->total_task + $modul->total_evaluasi;
+            $completedItems = $modul->completed_material + $modul->completed_task + $modul->completed_evaluasi;
 
             if ($totalItems > 0) {
                 $modul->progress_percentage = round(($completedItems / $totalItems) * 100);

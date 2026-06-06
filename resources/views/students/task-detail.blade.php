@@ -68,28 +68,27 @@
                     <li>Sistem Revisi: Jika nilai di bawah 80, kamu diberikan kesempatan revisi setelah mendapat feedback.</li>
                 </ul>
 
-                @php
-                    $resourceName = !empty($task->resource_file_name) ? $task->resource_file_name : 'Template__N4__Exercise__01.pdf';
-                @endphp
-                <h3 class="text-[15px] font-bold text-[#222222] mb-4 mt-8">Lampiran Materi</h3>
-                <div class="p-4 bg-white border border-gray-100 rounded-2xl flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-4 min-w-0">
-                        <!-- Red Box styling exactly like design -->
-                        <div class="w-12 h-12 bg-[#ef4444] text-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
-                            </svg>
+                @if(!empty($task->file_path_tugas))
+                    <h3 class="text-[15px] font-bold text-[#222222] mb-4 mt-8">Lampiran Materi</h3>
+                    <div class="p-4 bg-white border border-gray-100 rounded-2xl flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <!-- Red Box styling exactly like design -->
+                            <div class="w-12 h-12 bg-[#ef4444] text-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+                                </svg>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[13px] font-bold text-[#222222] truncate">{{ basename($task->file_path_tugas) }}</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">Lampiran</p>
+                            </div>
                         </div>
-                        <div class="min-w-0">
-                            <p class="text-[13px] font-bold text-[#222222] truncate">{{ $resourceName }}</p>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">PDF</p>
-                        </div>
+                        <a href="{{ route('students.tasks.download', $task->id_tugas) }}" class="px-5 py-2.5 bg-white border border-[#d62828] text-[#d62828] hover:bg-red-50 rounded-[10px] font-bold text-[12px] transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Unduh
+                        </a>
                     </div>
-                    <a href="#" class="px-5 py-2.5 bg-white border border-[#d62828] text-[#d62828] hover:bg-red-50 rounded-[10px] font-bold text-[12px] transition flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh
-                    </a>
-                </div>
+                @endif
             </div>
 
         </div>

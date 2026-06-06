@@ -60,7 +60,7 @@
                     <span class="bg-[#d62828] text-white text-[10px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wide shadow-sm">Main Course</span>
                 </div>
                 <div>
-                    <h3 class="text-lg sm:text-xl font-bold font-ibm text-white leading-snug mb-5">{{ $activeBatch->nama_pelatihan ?? 'Batch 5 - Pelatihan LPK Seishin' }}</h3>
+                    <h3 class="text-lg sm:text-xl font-bold font-ibm text-white leading-snug mb-5">{{ $activeBatch->nama ?? 'Pelatihan LPK Seishin' }}</h3>
                     <button class="w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 sm:py-3.5 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
                         Lanjutkan Pelajaran
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -212,8 +212,7 @@
                     </div>
                     <h4 class="text-base font-bold font-ibm text-[#222222] mb-2 leading-snug line-clamp-2">{{ $subject->nama_mapel }}</h4>
                     <p class="text-[11px] text-[#666666] leading-relaxed mb-6 line-clamp-3">
-                        <!-- Use a generic description if none exists in backend to match design aesthetic -->
-                        Program pembelajaran dengan fokus praktik intensif. Mencakup unit kompetensi persiapan hingga ujian akhir evaluasi materi ini.
+                        {{ $subject->deskripsi_mapel ?? 'Program pembelajaran dengan fokus praktik intensif. Mencakup unit kompetensi persiapan hingga ujian akhir evaluasi materi ini.' }}
                     </p>
                 </div>
 

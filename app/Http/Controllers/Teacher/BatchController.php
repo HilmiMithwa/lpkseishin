@@ -79,7 +79,7 @@ class BatchController extends Controller
         }
 
         if (request()->ajax() || request()->has('draw')) {
-            return datatables()->of($query)
+            return \Yajra\DataTables\Facades\DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('id_siswa', function ($row) {
                     return 'SIS-' . str_pad($row->id, 3, '0', STR_PAD_LEFT);
