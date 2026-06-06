@@ -166,9 +166,9 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
         return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
     })->name('tasks.show');
 
-    Route::get('/vocabulary', function () {
-        return view('teacher.vocabulary');
-    })->name('vocabulary');
+    Route::get('/vocabulary', [\App\Http\Controllers\Teacher\VocabularyController::class, 'index'])->name('vocabulary');
+    Route::put('/vocabulary/level/{level}/update', [\App\Http\Controllers\Teacher\VocabularyController::class, 'updateLevel'])->name('vocabulary.level.update');
+    Route::delete('/vocabulary/level/{level}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroyLevel'])->name('vocabulary.level.destroy');
 
     Route::get('/vocabulary/level/{id}', function ($id) {
         $query = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc');
