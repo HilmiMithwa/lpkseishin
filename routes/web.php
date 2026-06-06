@@ -177,16 +177,15 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/profile', function () {
         return view('teacher.profile');
     })->name('profile');
+    Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 
-<<<<<<< HEAD
 
 //buat ngetes API
 Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
-=======
->>>>>>> a26d60bfda34928d435637d7483508501238343f
 require __DIR__.'/auth.php';
 
 // Route to download submission files (authenticated users)
