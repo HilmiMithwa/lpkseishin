@@ -15,9 +15,9 @@
 
         <!-- Email Address -->
         <div>
-            <input 
+            <x-text-input 
                 id="email" 
-                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}" 
+                class="block w-full py-3.5 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('email') ? '!border-red-400 !bg-red-50' : '' }}" 
                 type="email" 
                 name="email" 
                 :value="old('email')" 
@@ -36,9 +36,9 @@
 
         <!-- Password -->
         <div class="relative">
-            <input 
+            <x-text-input 
                 id="password" 
-                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 pr-12 border {{ $errors->has('password') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}"
+                class="block w-full py-3.5 pr-12 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('password') ? '!border-red-400 !bg-red-50' : '' }}"
                 type="password"
                 name="password"
                 required 
@@ -84,12 +84,12 @@
         </div>
 
         <!-- Submit Button -->
-        <button 
+        <x-primary-button 
             type="submit"
-            class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-red-500/25 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm"
+            class="w-full justify-center py-3.5"
         >
             Masuk
-        </button>
+        </x-primary-button>
 
         <!-- Register Link -->
         <div class="text-center pt-2">

@@ -279,19 +279,19 @@
                      <!-- Form Grid (Single Column) -->
                      <form class="space-y-6">
                          
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Judul Modul:</label>
-                             <input type="text" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                         <div class="space-y-1.5">
+                             <x-input-label>Judul Modul:</x-input-label>
+                             <x-text-input type="text" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" />
                          </div>
 
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Alokasi Durasi (JP):</label>
-                             <input type="text" placeholder="cth., 22" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                         <div class="space-y-1.5">
+                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
+                             <x-text-input type="text" placeholder="cth., 22" />
                          </div>
 
                          <div>
                              <div class="mb-3">
-                                 <label class="block text-sm font-bold font-karla text-gray-700">Pilih Ikon Modul:</label>
+                                 <x-input-label>Pilih Ikon Modul:</x-input-label>
                                  <p class="text-xs font-karla text-gray-500 mt-1">Pilih ikon yang paling sesuai untuk ditampilkan pada daftar modul siswa.</p>
                              </div>
                              
@@ -315,14 +315,14 @@
                              </div>
                          </div>
 
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi Modul:</label>
-                             <textarea rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]"></textarea>
+                         <div class="space-y-1.5">
+                             <x-input-label>Deskripsi Modul:</x-input-label>
+                             <textarea rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y min-h-[120px] shadow-sm"></textarea>
                          </div>
 
                          <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
                              <div>
-                                 <label class="block text-sm font-bold font-karla text-gray-700 mb-1">Akses Berurutan</label>
+                                 <x-input-label class="mb-1">Akses Berurutan</x-input-label>
                                  <p class="text-[13px] font-karla text-gray-600 leading-snug">Kunci modul ini (Siswa harus menyelesaikan modul sebelumnya untuk membuka akses).</p>
                              </div>
                              <button type="button" @click="sequential = !sequential" :class="sequential ? 'bg-[#d62828]' : 'bg-gray-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none">
@@ -336,9 +336,9 @@
                              <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
                                  Batal
                              </button>
-                             <button type="button" @click="open = false" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base">
+                             <x-primary-button type="button" @click="open = false" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
                                  Buat Modul
-                             </button>
+                             </x-primary-button>
                          </div>
                      </form>
                  </div>
@@ -386,19 +386,19 @@
                      </div>
 
                      <form class="space-y-6">
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Judul Modul:</label>
-                             <input type="text" value="{{ $moduleTitle }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                         <div class="space-y-1.5">
+                             <x-input-label>Judul Modul:</x-input-label>
+                             <x-text-input type="text" value="{{ $moduleTitle }}" />
                          </div>
 
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Alokasi Durasi (JP):</label>
-                             <input type="text" value="{{ isset($module) ? ($module->jp_teori + $module->jp_praktik) : 16 }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                         <div class="space-y-1.5">
+                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
+                             <x-text-input type="text" value="16" />
                          </div>
 
                          <div>
                              <div class="mb-3">
-                                 <label class="block text-sm font-bold font-karla text-gray-700">Pilih Ikon Modul:</label>
+                                 <x-input-label>Pilih Ikon Modul:</x-input-label>
                              </div>
                              <div class="flex items-center gap-4">
                                  <button type="button" @click="selectedIcon = 1" :class="selectedIcon === 1 ? 'border-[#d62828] bg-red-50' : 'border-gray-200 hover:border-red-200'" class="w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-colors text-[#d62828]">
@@ -416,26 +416,26 @@
                              </div>
                          </div>
 
-                         <div>
-                             <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi Modul:</label>
-                             <textarea rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $moduleDescription }}</textarea>
+                         <div class="space-y-1.5">
+                             <x-input-label>Deskripsi Modul:</x-input-label>
+                             <textarea rows="4" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y min-h-[120px] shadow-sm">Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4.</textarea>
                          </div>
 
                          <div class="mt-4 flex items-center gap-4 pt-6 border-t border-gray-100">
                              <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
                                  Batal
                              </button>
-                             <button type="button" @click="
+                             <x-primary-button type="button" @click="
                                  isLoading = true;
                                  setTimeout(() => {
                                      isLoading = false;
                                      open = false;
                                      $dispatch('show-toast', { message: 'Modul berhasil diperbarui' });
                                  }, 800);
-                             " :disabled="isLoading" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base flex justify-center items-center gap-2">
+                             " x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center gap-2 text-sm sm:text-base py-3">
                                  <svg x-show="isLoading" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                  <span x-text="isLoading ? 'Menyimpan...' : 'Simpan Perubahan'"></span>
-                             </button>
+                             </x-primary-button>
                          </div>
                      </form>
                  </div>

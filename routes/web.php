@@ -42,10 +42,30 @@ Route::middleware('auth')->group(function () {
 });
 
 //Dashboard Admin
-Route::middleware(['auth', 'checkRole:admin'])->group(function () {
-    Route::get('/admin/dashboard', function() {
-        return view ('admin.dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/users', function() {
+        return view('admin.users.index');
+    })->name('users');
+
+    Route::get('/payments', function() {
+        return view('admin.payments.index');
+    })->name('payments');
+
+    Route::get('/batches', function() {
+        return view('admin.batches.index');
+    })->name('batches');
+
+    Route::get('/announcements', function() {
+        return view('admin.announcements.index');
+    })->name('announcements');
+    
+    Route::get('/profile', function() {
+        return view('admin.profile');
+    })->name('profile');
 });
 
 //Dashboard Siswa
@@ -139,7 +159,33 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/modules/{id_modul}/tasks/{id_tugas}', function ($id_modul, $id_tugas) {
         return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
     })->name('tasks.show');
+
+    Route::get('/vocabulary', function () {
+        return view('teacher.vocabulary');
+    })->name('vocabulary');
+
+    Route::get('/vocabulary/level/{id}', function ($id) {
+        return view('teacher.vocabulary-level', ['level_id' => $id]);
+    })->name('vocabulary.level');
+
+    Route::get('/progress-report', function () {
+        return view('teacher.progress-report');
+    })->name('progress-report');
+
+    Route::get('/assignments', function () {
+        return view('teacher.assignments');
+    })->name('assignments');
+    
+    // Preview: Grading Workspace
+    Route::get('/assignments/grade', function () {
+        return view('teacher.grade-submission');
+    })->name('assignments.grade');
+
+    Route::get('/profile', function () {
+        return view('teacher.profile');
+    })->name('profile');
 });
+
 
 
 //buat ngetes API

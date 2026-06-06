@@ -93,20 +93,19 @@
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">{{ $batch->nama_batch }}</h1>
             </div>
-            <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
-                <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
-                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-[#d62828] font-semibold">{{ $batch->nama_batch }}</span>
-            </nav>
+            <x-breadcrumbs :links="[
+                'Kelas Saya' => route('teacher.classes'),
+                $batch->nama_batch => '#'
+            ]" />
         </div>
-        <button @click="$dispatch('open-create-modal')" class="inline-flex items-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-lg text-xs sm:text-sm transition shadow-sm self-start">
+        <button @click="$dispatch('open-modal', 'create-modal')" class="inline-flex items-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-lg text-xs sm:text-sm transition shadow-sm self-start">
             Buat Kelas Baru
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         </button>
     </div>
 
     {{-- Batch Information Card --}}
-    <div class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-sm mb-8 relative">
+    <x-card class="mb-8 relative">
         
         {{-- Card Title + Status --}}
         <div class="flex items-center justify-between mb-6">
@@ -206,7 +205,7 @@
             </div>
 
         </div>
-    </div>
+    </x-card>
 
     {{-- Tabs: Class List / Student List --}}
     <div class="mb-6" x-data="{ activeTab: 'class-list' }">
@@ -330,11 +329,11 @@
                                 <td class="px-4 py-4 text-sm font-semibold text-gray-700">{{ $student->eval_score }}</td>
                                 <td class="px-4 py-4">
                                     @if($student->status === 'Active')
-                                        <span class="inline-block px-3 py-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full">Active</span>
+                                        <x-badge type="success">Active</x-badge>
                                     @elseif($student->status === 'Inactive')
-                                        <span class="inline-block px-3 py-1 text-[11px] font-bold text-red-500 bg-red-50 border border-red-200 rounded-full">Inactive</span>
+                                        <x-badge type="danger">Inactive</x-badge>
                                     @elseif($student->status === 'Completed')
-                                        <span class="inline-block px-3 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 rounded-full">Completed</span>
+                                        <x-badge type="info">Completed</x-badge>
                                     @endif
                                 </td>
                                 <td class="px-4 py-4">
@@ -353,54 +352,21 @@
         </div>
 
 @push('modals')
-    {{-- Modal Create New Class --}}
-    <div x-data="{ open: false }" 
-         x-show="open" 
-         @open-create-modal.window="open = true"
-         style="display: none;"
-         class="fixed inset-0 z-[100] overflow-y-auto" 
-         aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        
-        <!-- Background overlay -->
-        <div x-show="open" 
-             x-transition:enter="ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" 
-             @click="open = false"></div>
-
-        <!-- Modal panel -->
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div x-show="open" 
-                 x-transition:enter="ease-out duration-300"
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave="ease-in duration-200"
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="relative transform overflow-hidden rounded-[32px] bg-white text-left shadow-xl transition-all w-full max-w-4xl border border-gray-100">
-                 
-                 <!-- Close Button -->
-                 <button @click="open = false" class="absolute top-6 right-6 p-2 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                 </button>
-
-                 <!-- Content -->
-                 <div class="p-6 sm:p-8 lg:p-10">
-                     <div class="flex items-center gap-3 mb-8">
-                         <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900" id="modal-title">Tambah Kelas Baru</h3>
-                         <span class="px-3 py-1 rounded-full bg-gray-200 text-xs font-bold font-karla text-gray-700">Ditambahkan ke: {{ $batch->nama_batch }}</span>
-                     </div>
-
-                     <!-- Form Grid -->
+    <x-modal name="create-modal" maxWidth="4xl">
+        <div class="p-6 sm:p-8 lg:p-10 relative">
+            <!-- Close Button -->
+            <button @click="$dispatch('close')" class="absolute top-6 right-6 p-2 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center gap-3 mb-8">
+                <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900" id="modal-title">Tambah Kelas Baru</h3>
+                <span class="px-3 py-1 rounded-full bg-gray-200 text-xs font-bold font-karla text-gray-700">Ditambahkan ke: {{ $batch->nama_batch }}</span>
+            </div>
                      <form @submit.prevent="
                          isLoading = true;
                          setTimeout(() => {
                              isLoading = false;
-                             open = false;
+                             $dispatch('close');
                              $dispatch('show-toast', { message: 'Kelas berhasil ditambahkan!' });
                          }, 1000);
                      " x-data="{ isLoading: false }">
@@ -408,16 +374,16 @@
                              
                              <!-- Left Column -->
                              <div class="space-y-6">
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Nama Kelas:</label>
-                                     <input type="text" required placeholder="cth., N4 Mastering - Kelas A" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Nama Kelas:</x-input-label>
+                                     <x-text-input type="text" required placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
                                  </div>
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Deskripsi:</label>
-                                     <textarea rows="5" required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm resize-y min-h-[120px]"></textarea>
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Deskripsi:</x-input-label>
+                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
                                  </div>
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Mentor Sensei:</label>
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Mentor Sensei:</x-input-label>
                                      <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
                                          <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
                                          <span class="text-sm font-bold font-karla text-gray-900">{{ Auth::user()->name }}</span>
@@ -427,29 +393,29 @@
 
                              <!-- Right Column -->
                              <div class="space-y-6">
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Target Sertifikasi:</label>
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Target Sertifikasi:</x-input-label>
                                      <div class="relative">
-                                         <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
+                                         <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
                                              <option value="" disabled selected>Pilih Target Sertifikasi</option>
-                                             <option>JLPT N4</option>
-                                             <option>JLPT N5</option>
-                                             <option>JFT-Basic A2</option>
+                                             <option value="JLPT N4">JLPT N4</option>
+                                             <option value="JLPT N5">JLPT N5</option>
+                                             <option value="JFT-Basic A2">JFT-Basic A2</option>
                                          </select>
                                          <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                      </div>
                                  </div>
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Total Durasi (JP):</label>
-                                     <input type="text" required placeholder="cth., 264" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Total Durasi (JP):</x-input-label>
+                                     <x-text-input type="text" required placeholder="cth., 264" class="w-full" />
                                  </div>
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Jadwal:</label>
-                                     <input type="text" required placeholder="cth., Senin - Jumat" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Jadwal:</x-input-label>
+                                     <x-text-input type="text" required placeholder="cth., Senin - Jumat" class="w-full" />
                                  </div>
-                                 <div>
-                                     <label class="block text-sm font-bold font-karla text-gray-700 mb-2">Nilai Kelulusan Minimum:</label>
-                                     <input type="text" required placeholder="cth., 80" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition font-karla text-sm">
+                                 <div class="space-y-1.5">
+                                     <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
+                                     <x-text-input type="text" required placeholder="cth., 80" class="w-full" />
                                  </div>
                              </div>
 
@@ -457,19 +423,18 @@
 
                          <!-- Actions -->
                          <div class="mt-2 flex items-center gap-4 pt-6">
-                             <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
+                             <x-outline-button @click="$dispatch('close')" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
                                  Batal
-                             </button>
-                             <button type="submit" :disabled="isLoading" class="px-6 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla hover:bg-red-700 shadow-sm transition w-full sm:w-auto sm:flex-[2.5] text-sm sm:text-base flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-                                 <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                 <span x-text="isLoading ? 'Memproses...' : 'Buat Kelas'"></span>
-                             </button>
+                             </x-outline-button>
+                             <x-primary-button type="submit" x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3 disabled:opacity-70 disabled:cursor-not-allowed">
+                                 <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                 <span x-show="!isLoading">Simpan Kelas</span>
+                                 <span x-show="isLoading">Menyimpan...</span>
+                             </x-primary-button>
                          </div>
                      </form>
-                 </div>
-            </div>
         </div>
-    </div>
+    </x-modal>
 
     {{-- Global Toast Notification --}}
     <div x-data="{ show: false, message: '' }" 
