@@ -130,7 +130,10 @@
     </x-card>
 
     {{-- Tabs: Class List / Student List --}}
-    <div class="mb-6" x-data="{ activeTab: 'class-list' }">
+    @php
+        $isStudentTabActive = request()->hasAny(['search', 'status', 'page', 'per_page']);
+    @endphp
+    <div class="mb-6" x-data="{ activeTab: '{{ $isStudentTabActive ? 'student-list' : 'class-list' }}' }">
         
         {{-- Tab Headers --}}
         <div class="flex items-center gap-0 border-b border-gray-200 mb-6">
@@ -192,83 +195,73 @@
         {{-- Tab Content: Student List --}}
         <div x-show="activeTab === 'student-list'" x-cloak x-transition>
             
-            {{-- Search & Status Filter --}}
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-5">
-                <div class="relative flex-1 sm:flex-initial">
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" id="search-student" placeholder="Cari Siswa..." class="w-full sm:w-72 pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition placeholder:text-gray-400">
-                </div>
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
-                        Status
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div x-show="open" @click.away="open = false" x-transition class="absolute left-0 top-full mt-2 w-40 bg-white border border-gray-100 rounded-2xl shadow-lg p-2 z-20">
-                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition" data-status="all">Semua</button>
-                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-emerald-600 hover:bg-gray-50 rounded-xl transition" data-status="active">Active</button>
-                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-red-500 hover:bg-gray-50 rounded-xl transition" data-status="inactive">Inactive</button>
-                        <button class="status-filter-btn w-full text-left px-3 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-50 rounded-xl transition" data-status="completed">Completed</button>
+            {{-- Search & Status Filter (AJAX) --}}
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+                    {{-- Search Input --}}
+                    <div class="relative flex-1 sm:flex-initial w-full sm:w-72">
+                        <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" id="dt-search" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition placeholder:text-gray-400">
+                    </div>
+                    
+                    {{-- Status Filter --}}
+                    <div class="relative w-full sm:w-auto">
+                        <select id="dt-status" class="w-full sm:w-auto px-4 py-2.5 bg-white bg-none border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 focus:outline-none focus:border-red-300 focus:ring-2 focus:ring-red-500/20 appearance-none pr-8 cursor-pointer">
+                            <option value="all">Semua Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <svg class="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                 </div>
             </div>
 
             {{-- Student Table --}}
-            <div class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+            <div class="bg-white border border-gray-100 rounded-2xl lg:rounded-3xl shadow-sm overflow-hidden p-0">
+                <div class="overflow-x-auto w-full">
+                    <table id="students-table" class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider w-12">No</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">ID</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Siswa</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Module Progress</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Average Task</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Evaluation Score</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider w-16">Action</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider w-12 whitespace-nowrap">No</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">ID</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Siswa</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Module Progress</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Average Task</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Evaluation Score</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
+                                <th class="px-4 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider w-16 whitespace-nowrap text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
-                            @foreach($students as $student)
-                            <tr class="student-row hover:bg-gray-50/50 transition" 
-                                data-name="{{ strtolower($student->name) }}" 
-                                data-status="{{ strtolower($student->status) }}">
-                                <td class="px-4 py-4 text-sm font-semibold text-gray-500">{{ $student->no }}</td>
-                                <td class="px-4 py-4 text-sm font-semibold text-gray-700">{{ $student->id_siswa }}</td>
-                                <td class="px-4 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($student->name) }}&background=f3f4f6&color=d62828&bold=true&size=32" class="w-8 h-8 rounded-full object-cover border border-gray-100 flex-shrink-0" alt="{{ $student->name }}">
-                                        <span class="text-sm font-semibold text-gray-800 whitespace-nowrap">{{ $student->name }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4">
-                                    <div class="flex items-center gap-2.5">
-                                        <div class="w-20 bg-gray-100 rounded-full h-2 flex-shrink-0">
-                                            <div class="bg-gradient-to-r from-[#d62828] to-[#e85d5d] h-2 rounded-full" style="width: {{ $student->module_progress }}%"></div>
-                                        </div>
-                                        <span class="text-xs font-bold text-gray-700 whitespace-nowrap">{{ $student->module_progress }}%</span>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm font-semibold text-gray-700">{{ $student->avg_task }}</td>
-                                <td class="px-4 py-4 text-sm font-semibold text-gray-700">{{ $student->eval_score }}</td>
-                                <td class="px-4 py-4">
-                                    @if($student->status === 'Active')
-                                        <x-badge type="success">Active</x-badge>
-                                    @elseif($student->status === 'Inactive')
-                                        <x-badge type="danger">Inactive</x-badge>
-                                    @elseif($student->status === 'Completed')
-                                        <x-badge type="info">Completed</x-badge>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-4">
-                                    <button class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition" title="Lihat Detail">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
                         </tbody>
                     </table>
+                </div>
+                
+                {{-- Custom Pagination Footer (Tailwind) --}}
+                <div class="px-6 py-4 border-t border-gray-100 bg-white flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium text-gray-600">
+                    <div id="custom-dt-info" class="w-full md:w-auto text-center md:text-left">
+                        Menampilkan 0 - 0 dari 0 data.
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full md:w-auto">
+                        <div class="flex items-center gap-2">
+                            <span>Rows per page:</span>
+                            <div class="relative">
+                                <select id="custom-dt-length" class="pl-3 pr-8 py-1.5 bg-white bg-none border border-gray-200 rounded-lg text-sm font-bold text-gray-700 focus:outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828]/20 appearance-none cursor-pointer">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                <svg class="w-4 h-4 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                        
+                        {{-- Dynamic Pagination Container --}}
+                        <div id="custom-dt-pagination" class="flex items-center gap-2">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -389,53 +382,215 @@
                  </svg>
              </button>
         </div>
+     </div>
+
+    {{-- Student Detail Sidebar --}}
+    <div x-data="{ 
+            open: false, 
+            studentId: '', 
+            studentName: '', 
+            studentStatus: '',
+            isLoading: false
+         }"
+         @open-student-sidebar.window="
+            studentId = $event.detail.id;
+            studentName = $event.detail.name;
+            studentStatus = $event.detail.status;
+            open = true;
+         "
+         class="fixed inset-0 z-[110] flex justify-end"
+         x-show="open"
+         style="display: none;"
+         aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+         
+         <div x-show="open" 
+              x-transition:enter="ease-in-out duration-300"
+              x-transition:enter-start="opacity-0"
+              x-transition:enter-end="opacity-100"
+              x-transition:leave="ease-in-out duration-300"
+              x-transition:leave-start="opacity-100"
+              x-transition:leave-end="opacity-0"
+              class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
+              @click="if(!isLoading) open = false"></div>
+
+         <div x-show="open" 
+              x-transition:enter="transform transition ease-in-out duration-300"
+              x-transition:enter-start="translate-x-full"
+              x-transition:enter-end="translate-x-0"
+              x-transition:leave="transform transition ease-in-out duration-300"
+              x-transition:leave-start="translate-x-0"
+              x-transition:leave-end="translate-x-full"
+              class="relative w-full max-w-md h-full bg-white shadow-2xl flex flex-col pointer-events-auto">
+              
+              {{-- Sidebar Header --}}
+              <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                  <h2 class="text-lg font-bold font-ibm text-gray-900" id="slide-over-title">Detail & Status Siswa</h2>
+                  <button type="button" @click="open = false" class="p-2 -mr-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </button>
+              </div>
+
+              {{-- Sidebar Content --}}
+              <div class="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar flex flex-col">
+                  
+                  <div class="flex items-center gap-4 mb-8">
+                      <img :src="'https://ui-avatars.com/api/?name=' + encodeURIComponent(studentName) + '&background=f3f4f6&color=d62828&bold=true&size=56'" class="w-14 h-14 rounded-full border-2 border-white shadow-sm" alt="">
+                      <div>
+                          <h3 class="text-base font-bold font-ibm text-gray-900" x-text="studentName"></h3>
+                          <p class="text-xs font-karla text-gray-500 mt-0.5">Siswa LPK Seishin</p>
+                      </div>
+                  </div>
+
+                  <form :action="'{{ url('/teacher/students') }}/' + studentId + '/status'" method="POST" @submit="isLoading = true" class="flex flex-col flex-1">
+                      @csrf
+                      @method('PUT')
+                      
+                      <div class="space-y-2 mb-8">
+                          <x-input-label>Ubah Status Siswa:</x-input-label>
+                          <div class="relative">
+                              <select name="status" x-model="studentStatus" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white shadow-sm cursor-pointer font-bold" :class="{ 'text-emerald-600': studentStatus === 'Active', 'text-red-500': studentStatus === 'Inactive', 'text-blue-500': studentStatus === 'Completed' }">
+                                  <option value="Active" class="text-gray-900">Active</option>
+                                  <option value="Inactive" class="text-gray-900">Inactive</option>
+                                  <option value="Completed" class="text-gray-900">Completed</option>
+                              </select>
+                              <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                          </div>
+                          <p class="text-[11px] font-karla text-gray-500 mt-1 leading-snug">Mengubah status Inactive akan menangguhkan akses siswa ke modul dan tugas di seluruh kelas dalam batch ini.</p>
+                      </div>
+
+                      {{-- Save Button --}}
+                      <div class="pt-4 border-t border-gray-100 mt-auto">
+                          <x-primary-button type="submit" class="w-full justify-center py-3" x-bind:disabled="isLoading">
+                              <svg x-show="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" style="display: none;"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                              <span x-text="isLoading ? 'Menyimpan...' : 'Simpan Perubahan'"></span>
+                          </x-primary-button>
+                      </div>
+                  </form>
+              </div>
+         </div>
     </div>
 @endpush
 
 </div>
+
+@push('styles')
+@endpush
+
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-student');
-        const statusButtons = document.querySelectorAll('.status-filter-btn');
-        const studentRows = document.querySelectorAll('.student-row');
-        let currentStatus = 'all';
-        let currentQuery = '';
-
-        function filterStudents() {
-            studentRows.forEach(row => {
-                const name = row.dataset.name || '';
-                const status = row.dataset.status || '';
-                
-                const matchesQuery = name.includes(currentQuery);
-                const matchesStatus = (currentStatus === 'all') || (status === currentStatus);
-
-                if (matchesQuery && matchesStatus) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+    $(document).ready(function() {
+        let table = $('#students-table').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('teacher.batch.show', $batch->id_batch) }}",
+                data: function (d) {
+                    d.status = $('#dt-status').val() || 'all';
+                    d.search.value = $('#dt-search').val() || ''; 
                 }
-            });
-        }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4 text-sm font-semibold text-gray-500'); } },
+                { data: 'id_siswa', name: 'users.id', createdCell: function(td) { $(td).addClass('px-4 py-4 text-sm font-semibold text-gray-700'); } },
+                { data: 'name', name: 'users.name', createdCell: function(td) { $(td).addClass('px-4 py-4'); }, render: function(data, type, row) {
+                    return `<div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(data)}&background=f3f4f6&color=d62828&bold=true&size=32" class="w-8 h-8 rounded-full object-cover border border-gray-100 flex-shrink-0" alt="${data}">
+                                <span class="text-sm font-semibold text-gray-800 whitespace-nowrap">${data}</span>
+                            </div>`;
+                }},
+                { data: 'module_progress', name: 'module_progress', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4'); }, render: function(data) {
+                    return `<div class="flex items-center gap-2.5">
+                                <div class="w-20 bg-gray-100 rounded-full h-2 flex-shrink-0">
+                                    <div class="bg-gradient-to-r from-[#d62828] to-[#e85d5d] h-2 rounded-full" style="width: ${data}%"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700 whitespace-nowrap">${data}%</span>
+                            </div>`;
+                }},
+                { data: 'average_task', name: 'average_task', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4 text-sm font-semibold text-gray-700'); } },
+                { data: 'eval_score', name: 'eval_score', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4 text-sm font-semibold text-gray-700'); } },
+                { data: 'status_badge', name: 'status_badge', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4'); } },
+                { data: 'action', name: 'action', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-4 py-4 text-center text-gray-400'); } }
+            ],
+            dom: '<"w-full overflow-x-auto"t>',
+            drawCallback: function(settings) {
+                var api = this.api();
+                var info = api.page.info();
+                
+                $('#custom-dt-info').html(
+                    'Menampilkan ' + (info.recordsDisplay > 0 ? info.start + 1 : 0) + ' - ' + info.end + ' dari ' + info.recordsDisplay + ' data.'
+                );
+                
+                // Custom Pagination rendering
+                let paginationHtml = '';
+                let currentPage = info.page;
+                let totalPages = info.pages;
 
-        // Event pencarian
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                currentQuery = this.value.toLowerCase();
-                filterStudents();
-            });
-        }
+                if (totalPages > 0) {
+                    // Prev Button
+                    let prevDisabled = currentPage === 0;
+                    let prevClass = prevDisabled 
+                        ? 'bg-red-50 text-red-300 cursor-not-allowed opacity-70' 
+                        : 'bg-red-50 text-[#d62828] hover:bg-red-100 cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] transition ${prevClass}" data-action="previous" ${prevDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>`;
 
-        // Event filter status
-        statusButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                currentStatus = this.dataset.status;
-                filterStudents();
-            });
+                    // Pages
+                    let startPage = Math.max(0, currentPage - 1);
+                    let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                    if (currentPage === 0) endPage = Math.min(totalPages - 1, 2);
+                    if (currentPage === totalPages - 1) startPage = Math.max(0, totalPages - 3);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        let activeClass = i === currentPage 
+                            ? 'bg-[#d62828] text-white shadow-md shadow-red-500/20 border-transparent' 
+                            : 'bg-white text-gray-600 border border-transparent hover:bg-gray-50';
+                            
+                        paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] text-sm font-semibold transition ${activeClass}" data-action="${i}">
+                            ${i + 1}
+                        </button>`;
+                    }
+
+                    // Next Button
+                    let nextDisabled = currentPage === totalPages - 1;
+                    let nextClass = nextDisabled 
+                        ? 'bg-[#d62828]/50 text-white cursor-not-allowed' 
+                        : 'bg-[#d62828] text-white hover:bg-[#b02121] cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] transition ${nextClass}" data-action="next" ${nextDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>`;
+                }
+
+                $('#custom-dt-pagination').html(paginationHtml);
+            }
+        });
+
+        $('#dt-search').on('keyup', function() { table.draw(); });
+        $('#dt-status').on('change', function() { table.draw(); });
+        
+        $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });
+        
+        // Dynamic Pagination Click Event
+        $('#custom-dt-pagination').on('click', '.dt-paginate-btn', function() {
+            let action = $(this).data('action');
+            if (action !== undefined) {
+                if (action === 'previous') {
+                    table.page('previous').draw('page');
+                } else if (action === 'next') {
+                    table.page('next').draw('page');
+                } else {
+                    table.page(parseInt(action)).draw('page');
+                }
+            }
         });
     });
 </script>
 @endpush
-
 
 @endsection
