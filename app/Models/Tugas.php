@@ -18,7 +18,9 @@ class Tugas extends Model
         'deskripsi_tugas',
         'waktu_pengumpulan',
         'status_tugas',
-        'id_rps'
+        'id_rps',
+        'id_modul',
+        'file_path_tugas'
     ];
 
     public function rps() {
