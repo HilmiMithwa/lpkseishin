@@ -171,7 +171,20 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     })->name('vocabulary');
 
     Route::get('/vocabulary/level/{id}', function ($id) {
-        $words = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc')->paginate(18);
+        $query = \App\Models\Vocabulary::where('level', $id)->orderBy('id_vocabulary', 'asc');
+        
+        if (request()->has('search') && request('search') != '') {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('kanji', 'ilike', "%{$search}%")
+                  ->orWhere('furigana', 'ilike', "%{$search}%")
+                  ->orWhere('romaji', 'ilike', "%{$search}%")
+                  ->orWhere('meaning_id', 'ilike', "%{$search}%");
+            });
+        }
+        
+        $words = $query->paginate(18)->appends(request()->query());
+        
         return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
 
