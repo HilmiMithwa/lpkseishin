@@ -397,16 +397,18 @@
                      </div>
 
                      <!-- Form Grid (Single Column) -->
-                     <form class="space-y-6">
+                     <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
+                         @csrf
+                         <input type="hidden" name="id_mapel" value="{{ $classData->id_mapel }}">
                          
                          <div class="space-y-1.5">
                              <x-input-label>Judul Modul:</x-input-label>
-                             <x-text-input type="text" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full" />
+                             <x-text-input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full" />
                          </div>
 
                          <div class="space-y-1.5">
                              <x-input-label>Alokasi Durasi (JP):</x-input-label>
-                             <x-text-input type="text" placeholder="cth., 22" class="w-full" />
+                             <x-text-input type="number" name="jp" required placeholder="cth., 22" class="w-full" />
                          </div>
 
                          <div>
@@ -437,7 +439,7 @@
 
                          <div class="space-y-1.5">
                              <x-input-label>Deskripsi Modul:</x-input-label>
-                             <textarea rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
+                             <textarea name="module_description" rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
                          </div>
 
                          <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
@@ -456,7 +458,7 @@
                              <x-outline-button @click="open = false" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
                                  Batal
                              </x-outline-button>
-                             <x-primary-button type="button" @click="open = false" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
+                             <x-primary-button type="submit" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
                                  Buat Modul
                              </x-primary-button>
                          </div>

@@ -31,7 +31,7 @@ class MapelController extends Controller
                 ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
                 ->where('bahan_ajar.id_modul', $modul->id_modul)
                 ->where('bahan_ajar_progress.id_user', $userId)
-                ->where('bahan_ajar_progress.is_complete', true)
+                ->where('bahan_ajar_progress.is_complete', DB::raw('true'))
                 ->count();
             
             $materialClear = ($totalMaterial == $completedMaterial);
@@ -62,7 +62,7 @@ class MapelController extends Controller
                 ->join('bahan_ajar_progress', 'bahan_ajar.id_bahan_ajar', '=', 'bahan_ajar_progress.id_bahan_ajar')
                 ->where('bahan_ajar.id_modul', $modul->id_modul)
                 ->where('bahan_ajar_progress.id_user', $userId)
-                ->where('bahan_ajar_progress.is_complete', true)
+                ->where('bahan_ajar_progress.is_complete', DB::raw('true'))
                 ->count();
 
             $modul->total_task = Tugas::where('id_modul', $modul->id_modul)->count();

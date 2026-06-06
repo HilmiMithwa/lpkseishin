@@ -6,71 +6,61 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mapel;
 use App\Models\Modul;
+use App\Http\Requests\Teacher\StoreModulRequest;
 
 class MapelController extends Controller
 {
-    /**
-     * Display the class (mapel) detail page for the teacher.
-     */
     public function show($id_mapel)
     {
-        // Fetch the subject with its batch, modules, and announcements
-        $subject = Mapel::with(['batch', 'modul', 'announcements'])->findOrFail($id_mapel);
+        $classData = Mapel::with('batch')->findOrFail($id_mapel);
+        $modules = Modul::where('id_mapel', $id_mapel)->get();
 
-        // Map subject data to the format expected by the view
-        $classData = (object)[
-            'id_mapel'              => $subject->id_mapel,
-            'nama_mapel'            => $subject->nama_mapel,
-            'deskripsi'             => $subject->deskripsi_mapel ?? '',
-            'batch'                 => $subject->batch,
-            'certification_target'  => $subject->target ?? '-',
-            'total_duration'        => ($subject->jp ?? 0) . ' JP',
-            'schedule'              => $subject->jadwal ?? '-',
-            'pass_requirement'      => 'Min. Skor ' . ($subject->min_score ?? 0),
-        ];
-
-        // Map modules to the format expected by the view
-        $modules = $subject->modul->map(function ($modul) {
-            return (object)[
-                'id_modul'    => $modul->id_modul,
-                'nama_modul'  => $modul->nama_modul,
-                'kode_modul'  => $modul->kode_modul ?? '',
-                'teori_jp'    => $modul->jp_teori ?? 0,
-                'praktik_jp'  => $modul->jp_praktik ?? 0,
-                'note'        => $modul->module_description ?? '',
-            ];
-        });
-
-        // Get announcements (as simple strings array)
-        $announcements = $subject->announcements->pluck('title')->toArray();
-        if (empty($announcements)) {
-            $announcements = ['Belum ada pengumuman.'];
-        }
-
-        return view('teacher.class-detail', compact('classData', 'modules', 'announcements'));
+        return view('teacher.class-detail', compact('classData', 'modules'));
     }
 
-    /**
-     * Store a new module for a subject.
-     */
-    public function addModul(Request $request)
-    {
-        $request->validate([
-            'id_mapel'    => 'required|exists:mapel,id_mapel',
-            'nama_modul'  => 'required|string|max:255',
-            'jp_teori'    => 'nullable|integer|min:0',
-            'jp_praktik'  => 'nullable|integer|min:0',
-            'module_description' => 'nullable|string',
-        ]);
+    public function addModul(StoreModulRequest $request) {
+        $data = $request->validated();
 
-        Modul::create([
-            'id_mapel'           => $request->id_mapel,
-            'nama_modul'         => $request->nama_modul,
-            'jp_teori'           => $request->jp_teori ?? 0,
-            'jp_praktik'         => $request->jp_praktik ?? 0,
-            'module_description' => $request->module_description ?? '',
-        ]);
+        // 1. Pemetaan Nama Field (Form Request: teori/praktik -> DB: jp_teori/jp_praktik)
+        $data['jp_teori'] = $data['teori'] ?? null;
+        $data['jp_praktik'] = $data['praktik'] ?? null;
 
-        return redirect()->back()->with('success', 'Modul berhasil ditambahkan!');
+        // Hapus key lama agar tidak mengotori array payload
+        unset($data['teori'], $data['praktik']);
+
+        // Jika teori dan praktik tidak diisi, gunakan fallback jp (dibagi 1/3 teori dan 2/3 praktik)
+        if (is_null($data['jp_teori']) && is_null($data['jp_praktik'])) {
+            $total_jp = $data['jp'] ?? 0;
+            $data['jp_teori'] = (int) ceil($total_jp / 3);
+            $data['jp_praktik'] = $total_jp - $data['jp_teori'];
+        } else {
+            $data['jp_teori'] = $data['jp_teori'] ?? 0;
+            $data['jp_praktik'] = $data['jp_praktik'] ?? 0;
+        }
+
+        // 2. Generate kode_modul secara otomatis jika kosong
+        if (empty($data['kode_modul'])) {
+            $mapel = Mapel::findOrFail($data['id_mapel']);
+            $level = 'MOD';
+            if (preg_match('/N[3-5]/i', $mapel->target, $matches)) {
+                $level = strtoupper($matches[0]);
+            } elseif (preg_match('/N[3-5]/i', $mapel->nama_mapel, $matches)) {
+                $level = strtoupper($matches[0]);
+            }
+
+            $count = Modul::where('id_mapel', $data['id_mapel'])->count();
+            do {
+                $count++;
+                $kode_modul = 'MDL-' . $level . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
+            } while (Modul::where('kode_modul', $kode_modul)->exists());
+            $data['kode_modul'] = $kode_modul;
+        }
+
+        // 3. Simpan ke database
+        Modul::create($data);
+
+        // 4. Redirect ke detail kelas (subjects.show)
+        return redirect()->route('teacher.subjects.show', $data['id_mapel'])
+            ->with('success', 'Modul berhasil ditambahkan');
     }
 }
