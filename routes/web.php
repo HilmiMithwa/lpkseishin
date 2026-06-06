@@ -12,6 +12,8 @@ use App\Http\Controllers\Student\PengirimanTugasController;
 use App\Http\Controllers\Student\MapelController;
 use App\Http\Controllers\Student\EditProfile;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\BatchController;
+
 
 
 Route::get('/', [SesiController::class, 'index']);
@@ -94,7 +96,9 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::post('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}/cancel', [PengirimanTugasController::class, 'cancel'])->name('tasks.cancel');
 
-    Route::get('/students/enrolled', [StudentController::class, 'enrolled'])->name('students.enrolled');
+    Route::get('/students/enrolled', function () {
+        return view('students.enrolled');
+    })->name('students.enrolled');
 
     Route::get('/students/my-tasks', [StudentController::class, 'myTasks'])->name('students.tasks');
 
@@ -118,21 +122,14 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/classes', function () {
-        return view('teacher.classes');
-    })->name('classes');
+    Route::get('/classes', [BatchController::class, 'index'])->name('classes');
+    Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
+    Route::post('/classes/{id_batch}/add', [BatchController::class, 'storeClass'])->name('classes.store');
 
-    Route::get('/classes/{id_batch}', function ($id_batch) {
-        return view('teacher.batch-detail');
-    })->name('batch.show');
+    Route::get('/subjects/{id_mapel}', [\App\Http\Controllers\Teacher\MapelController::class, 'show'])->name('subjects.show');
+    Route::post('/subjects/modules', [\App\Http\Controllers\Teacher\MapelController::class, 'addModul'])->name('modules.store');
 
-    Route::get('/subjects/{id_mapel}', function ($id_mapel) {
-        return view('teacher.class-detail');
-    })->name('subjects.show');
-
-    Route::get('/modules/{id_modul}', function ($id_modul) {
-        return view('teacher.module-detail');
-    })->name('modules.show');
+    Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
 
     Route::get('/modules/{id_modul}/materials/create', function ($id_modul) {
         return view('teacher.material-create', ['currentModuleId' => $id_modul]);
@@ -153,8 +150,38 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::get('/modules/{id_modul}/tasks/{id_tugas}', function ($id_modul, $id_tugas) {
         return view('teacher.task-detail', ['currentModuleId' => $id_modul, 'currentTaskId' => $id_tugas]);
     })->name('tasks.show');
+
+    Route::get('/vocabulary', function () {
+        return view('teacher.vocabulary');
+    })->name('vocabulary');
+
+    Route::get('/vocabulary/level/{id}', function ($id) {
+        return view('teacher.vocabulary-level', ['level_id' => $id]);
+    })->name('vocabulary.level');
+
+    Route::get('/progress-report', function () {
+        return view('teacher.progress-report');
+    })->name('progress-report');
+
+    Route::get('/assignments', function () {
+        return view('teacher.assignments');
+    })->name('assignments');
+    
+    // Preview: Grading Workspace
+    Route::get('/assignments/grade', function () {
+        return view('teacher.grade-submission');
+    })->name('assignments.grade');
+
+    Route::get('/profile', function () {
+        return view('teacher.profile');
+    })->name('profile');
+
 });
 
+
+
+//buat ngetes API
+Route::get('/vocabulary', [StudentController::class, 'getVocabulary']);
 
 require __DIR__.'/auth.php';
 
@@ -162,5 +189,3 @@ require __DIR__.'/auth.php';
 Route::get('/submissions/{id_pengiriman}/download', [PengirimanTugasController::class, 'download'])
     ->name('submissions.download')
     ->middleware('auth');
-
-

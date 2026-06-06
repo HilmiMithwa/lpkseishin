@@ -97,6 +97,7 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'laravel',
             'sslmode' => 'prefer',
+            'prepare' => false,
         ],
 
         'sqlsrv' => [
