@@ -170,7 +170,7 @@
     let currentPage = 1;
 
     let filteredCards = [...allCards];
-    let activeCardIndex = null; 
+    let activeCardId = null; 
 
     function applyFilters() {
         const searchVal    = document.getElementById('search-input').value.toLowerCase().trim();
@@ -286,8 +286,8 @@
     const masterBtn = document.getElementById('modal-master-btn');
 
     function openFlashcardModal(index) {
-        activeCardIndex = index;
-        const card = filteredCards[index]; // [FIX] Baca dari filteredCards
+        const card = filteredCards[index]; // Baca dari filteredCards
+        activeCardId = card.id_vocabulary;
  
         document.getElementById('modal-title').innerText = `Detail Kata: ${card.kanji} (${card.romaji})`;
         document.getElementById('modal-kanji').innerText    = card.kanji;
@@ -350,8 +350,9 @@
     }
 
     function toggleMastered() {
-        if (activeCardIndex === null) return;
-        const card = filteredCards[activeCardIndex];
+        if (!activeCardId) return;
+        const card = allCards.find(c => c.id_vocabulary === activeCardId);
+        if (!card) return;
  
         fetch(`/students/vocabulary/${card.id_vocabulary}/toggle-mastered`, {
             method: 'POST',
@@ -361,7 +362,13 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(res => res.json())
+        .then(async res => {
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || res.statusText);
+            }
+            return res.json();
+        })
         .then(data => {
             // Update state di allCards dan filteredCards agar sinkron
             card.status = data.status;
@@ -374,12 +381,17 @@
  
             // Re-render grid agar perubahan status langsung tercermin (penting saat filter aktif)
             applyFilters();
+        })
+        .catch(error => {
+            console.error("Gagal update status:", error);
+            alert("Terjadi kesalahan sistem. " + error.message);
         });
     }
 
     function toggleFavorite() {
-        if (activeCardIndex === null) return;
-        const card = filteredCards[activeCardIndex];
+        if (!activeCardId) return;
+        const card = allCards.find(c => c.id_vocabulary === activeCardId);
+        if (!card) return;
  
         fetch(`/students/vocabulary/${card.id_vocabulary}/toggle-favorite`, {
             method: 'POST',
@@ -389,7 +401,13 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(res => res.json())
+        .then(async res => {
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || res.statusText);
+            }
+            return res.json();
+        })
         .then(data => {
             // Update state di allCards dan filteredCards agar sinkron
             card.is_fav = data.is_favorite;
@@ -401,6 +419,10 @@
  
             // Re-render grid agar warna kartu (kuning/putih) langsung berubah
             applyFilters();
+        })
+        .catch(error => {
+            console.error("Gagal update favorit:", error);
+            alert("Terjadi kesalahan sistem. " + error.message);
         });
     }
 
