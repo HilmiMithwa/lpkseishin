@@ -19,6 +19,7 @@ class Pengiriman_Tugas extends Model
         'submitted_at',
         'status',
         'nilai',
+        'feedback',
         'id_tugas',
         'id_user'
     ];
