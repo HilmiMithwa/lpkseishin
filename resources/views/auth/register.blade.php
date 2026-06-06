@@ -8,9 +8,9 @@
 
         <!-- Name -->
         <div>
-            <input 
+            <x-text-input 
                 id="name" 
-                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 border {{ $errors->has('name') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}" 
+                class="block w-full py-3.5 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('name') ? '!border-red-400 !bg-red-50' : '' }}" 
                 type="text" 
                 name="name" 
                 :value="old('name')" 
@@ -29,9 +29,9 @@
 
         <!-- Email Address -->
         <div>
-            <input 
+            <x-text-input 
                 id="email" 
-                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}" 
+                class="block w-full py-3.5 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('email') ? '!border-red-400 !bg-red-50' : '' }}" 
                 type="email" 
                 name="email" 
                 :value="old('email')" 
@@ -49,9 +49,9 @@
 
         <!-- Password -->
         <div class="relative">
-            <input 
+            <x-text-input 
                 id="password" 
-                class="block w-full px-4 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:bg-white transition-all duration-200 placeholder-gray-400 pr-12 border {{ $errors->has('password') ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50 focus:border-red-400' }}"
+                class="block w-full py-3.5 pr-12 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('password') ? '!border-red-400 !bg-red-50' : '' }}"
                 type="password"
                 name="password"
                 required 
@@ -76,9 +76,9 @@
 
         <!-- Confirm Password -->
         <div class="relative">
-            <input 
+            <x-text-input 
                 id="password_confirmation" 
-                class="block w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-400 focus:bg-white transition-all duration-200 placeholder-gray-400 pr-12"
+                class="block w-full py-3.5 pr-12 bg-gray-50 focus:bg-white placeholder-gray-400 {{ $errors->has('password_confirmation') ? '!border-red-400 !bg-red-50' : '' }}"
                 type="password"
                 name="password_confirmation"
                 required 
@@ -102,12 +102,12 @@
         </div>
 
         <!-- Submit Button -->
-        <button 
+        <x-primary-button 
             type="submit"
-            class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-red-500/25 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm"
+            class="w-full justify-center py-3.5"
         >
             Daftar
-        </button>
+        </x-primary-button>
 
         <!-- Login Link -->
         <div class="text-center pt-2">

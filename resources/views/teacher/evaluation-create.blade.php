@@ -26,10 +26,10 @@
                 </div>
             </div>
             
-            <button @click="$dispatch('open-publish-modal')" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-sm flex items-center gap-2 transition shadow-lg shadow-red-200">
+            <x-primary-button @click="$dispatch('open-publish-modal')" class="gap-2 shadow-lg shadow-red-200 py-3">
                 Terbitkan Evaluasi
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-            </button>
+            </x-primary-button>
         </div>
 
         {{-- Form Content --}}
@@ -38,21 +38,21 @@
             <div class="mb-10">
                 <h3 class="text-base font-bold font-ibm text-gray-900 mb-6">Detail Evaluasi</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Judul Evaluasi</label>
-                        <input type="text" x-model="evalTitle" placeholder="Misal: Ujian Akhir Kompetensi" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                    <div class="space-y-1.5">
+                        <x-input-label>Judul Evaluasi</x-input-label>
+                        <x-text-input type="text" x-model="evalTitle" placeholder="Misal: Ujian Akhir Kompetensi" />
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Bahasa</label>
-                        <input type="text" x-model="language" placeholder="Misal: Bahasa Jepang N4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                    <div class="space-y-1.5">
+                        <x-input-label>Bahasa</x-input-label>
+                        <x-text-input type="text" x-model="language" placeholder="Misal: Bahasa Jepang N4" />
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Durasi (Menit)</label>
-                        <input type="number" x-model="duration" placeholder="Misal: 120" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                    <div class="space-y-1.5">
+                        <x-input-label>Durasi (Menit)</x-input-label>
+                        <x-text-input type="number" x-model="duration" placeholder="Misal: 120" />
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold font-karla text-gray-700 mb-2">Tipe</label>
-                        <select x-model="evalType" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla bg-white outline-none transition cursor-pointer">
+                    <div class="space-y-1.5">
+                        <x-input-label>Tipe</x-input-label>
+                        <select x-model="evalType" class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-200 focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm cursor-pointer">
                             <option value="Multiple Choice and Essay">Pilihan Ganda & Esai</option>
                             <option value="Multiple Choice Only">Pilihan Ganda Saja</option>
                             <option value="Essay Only">Esai Saja</option>
@@ -85,13 +85,13 @@
                 </div>
 
                 <div x-show="isAddingGuide" x-transition.opacity class="flex gap-3">
-                    <input type="text" x-model="newGuideText" @keydown.enter="addGuide" placeholder="Misal: Pastikan koneksi internet stabil" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
-                    <button @click="isAddingGuide = false; newGuideText = ''" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl text-sm transition flex-shrink-0">
+                    <x-text-input type="text" x-model="newGuideText" @keydown.enter="addGuide" placeholder="Misal: Pastikan koneksi internet stabil" class="flex-1" />
+                    <button @click="isAddingGuide = false; newGuideText = ''" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 px-6 rounded-xl text-sm transition flex-shrink-0">
                         Batal
                     </button>
-                    <button @click="addGuide" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition flex-shrink-0">
+                    <x-primary-button @click="addGuide" class="flex-shrink-0 px-8 py-2.5">
                         Simpan
-                    </button>
+                    </x-primary-button>
                 </div>
             </div>
             
@@ -206,9 +206,9 @@
                         {{-- Accordion Body --}}
                         <div x-show="activeMcqIndex === index" x-collapse>
                             <div class="p-5 pt-2 border-t border-gray-100 bg-white space-y-5">
-                                <div>
-                                    <label class="block text-[11px] font-bold font-karla text-gray-500 mb-2">Pertanyaan:</label>
-                                    <textarea x-model="mcq.question" rows="4" placeholder="Ketikkan soal di sini..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla resize-y outline-none transition"></textarea>
+                                <div class="space-y-1.5">
+                                    <x-input-label>Pertanyaan:</x-input-label>
+                                    <textarea x-model="mcq.question" rows="4" placeholder="Ketikkan soal di sini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
                                     
                                     <div class="mt-3" x-data="imageUploader()">
                                         <input type="file" multiple :name="'mcq_images['+index+'][]'" :id="'mcq-img-'+index" x-ref="fileInput" class="hidden" accept="image/*" @change="handleFileChange">
@@ -237,21 +237,21 @@
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-[11px] font-bold font-karla text-gray-500 mb-1.5">Pilihan A:</label>
-                                        <input type="text" x-model="mcq.options[0]" placeholder="Opsi A" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Pilihan A:</x-input-label>
+                                        <x-text-input type="text" x-model="mcq.options[0]" placeholder="Opsi A" />
                                     </div>
-                                    <div>
-                                        <label class="block text-[11px] font-bold font-karla text-gray-500 mb-1.5">Pilihan B:</label>
-                                        <input type="text" x-model="mcq.options[1]" placeholder="Opsi B" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Pilihan B:</x-input-label>
+                                        <x-text-input type="text" x-model="mcq.options[1]" placeholder="Opsi B" />
                                     </div>
-                                    <div>
-                                        <label class="block text-[11px] font-bold font-karla text-gray-500 mb-1.5">Pilihan C:</label>
-                                        <input type="text" x-model="mcq.options[2]" placeholder="Opsi C" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Pilihan C:</x-input-label>
+                                        <x-text-input type="text" x-model="mcq.options[2]" placeholder="Opsi C" />
                                     </div>
-                                    <div>
-                                        <label class="block text-[11px] font-bold font-karla text-gray-500 mb-1.5">Pilihan D:</label>
-                                        <input type="text" x-model="mcq.options[3]" placeholder="Opsi D" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla outline-none transition">
+                                    <div class="space-y-1.5">
+                                        <x-input-label>Pilihan D:</x-input-label>
+                                        <x-text-input type="text" x-model="mcq.options[3]" placeholder="Opsi D" />
                                     </div>
                                 </div>
 
@@ -260,9 +260,9 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         Hapus
                                     </button>
-                                    <button @click="mcqDrawerOpen = false" class="flex-1 py-3 bg-[#d62828] hover:bg-red-700 text-white rounded-xl font-bold font-karla text-sm transition shadow-md shadow-red-200">
+                                    <x-primary-button @click="mcqDrawerOpen = false" class="flex-1 justify-center py-3 shadow-md shadow-red-200">
                                         Simpan
-                                    </button>
+                                    </x-primary-button>
                                 </div>
                             </div>
                         </div>
@@ -309,9 +309,9 @@
                         {{-- Accordion Body --}}
                         <div x-show="activeEssayIndex === index" x-collapse>
                             <div class="p-5 pt-2 border-t border-gray-100 bg-white space-y-5">
-                                <div>
-                                    <label class="block text-[11px] font-bold font-karla text-gray-500 mb-2">Pertanyaan:</label>
-                                    <textarea x-model="essay.question" rows="4" placeholder="Tuliskan soal esai di sini..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-sm font-karla resize-y outline-none transition"></textarea>
+                                <div class="space-y-1.5">
+                                    <x-input-label>Pertanyaan:</x-input-label>
+                                    <textarea x-model="essay.question" rows="4" placeholder="Ketikkan soal essay di sini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm resize-y"></textarea>
                                     
                                     <div class="mt-3" x-data="imageUploader()">
                                         <input type="file" multiple :name="'essay_images['+index+'][]'" :id="'essay-img-'+index" x-ref="fileInput" class="hidden" accept="image/*" @change="handleFileChange">
@@ -344,9 +344,9 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         Hapus
                                     </button>
-                                    <button @click="essayDrawerOpen = false" class="flex-1 py-3 bg-[#d62828] hover:bg-red-700 text-white rounded-xl font-bold font-karla text-sm transition shadow-md shadow-red-200">
+                                    <x-primary-button @click="essayDrawerOpen = false" class="flex-1 justify-center py-3 shadow-md shadow-red-200">
                                         Simpan
-                                    </button>
+                                    </x-primary-button>
                                 </div>
                             </div>
                         </div>
@@ -381,7 +381,7 @@
             <p class="text-sm text-gray-500 font-karla text-center mb-6">Evaluasi ini akan langsung tersedia untuk semua siswa di kelas.</p>
             <div class="flex gap-3">
                 <button @click="showPublishModal = false" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold font-karla text-sm hover:bg-gray-50 transition">Batal</button>
-                <button @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId ?? 2) }}'" class="flex-1 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm hover:bg-red-700 transition">Terbitkan</button>
+                <x-primary-button @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId ?? 2) }}'" class="flex-1 justify-center py-3">Terbitkan</x-primary-button>
             </div>
         </div>
     </div>
