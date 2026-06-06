@@ -58,9 +58,9 @@ class ProfileController extends Controller
 
             $path = $request->file('photo')->store('profile-photos', 'public');
             
-            $user->forceFill([
+            $user->update([
                 'profile_photo_path' => $path,
-            ])->save();
+            ]);
         }
 
         return back()->with('success', 'Foto profil berhasil diperbarui');
