@@ -221,6 +221,9 @@
         </div>
 
     </div>
+
+
+
 </div>
 
 <style>
@@ -236,7 +239,13 @@
     .quill-content pre { background-color: #f3f4f6; padding: 1em; border-radius: 0.5rem; overflow-x: auto; font-family: monospace; font-size: 0.875em; margin-bottom: 1em; }
     .quill-content strong { font-weight: 700; color: #111; }
     .quill-content em { font-style: italic; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
 </style>
+
+
 @endsection
 
 @push('modals')
