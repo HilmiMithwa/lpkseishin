@@ -133,6 +133,10 @@
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Penguasaan Kosakata</span>
                 </a>
+                <a href="{{ route('students.meetings.index') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('students.meetings.index') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-semibold text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Video Conference</span>
+                </a>
             </nav>
 
             <p class="sidebar-text text-[10px] font-bold text-[#666666] mb-3 px-2 tracking-widest mt-6 uppercase transition-opacity">System</p>

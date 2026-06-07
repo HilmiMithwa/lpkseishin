@@ -136,11 +136,20 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::post('/students/payment/store', [\App\Http\Controllers\PaymentController::class, 'studentStore'])->name('students.payment.store');
     Route::get('/students/invoice', [\App\Http\Controllers\PaymentController::class, 'studentInvoice'])->name('students.invoice');
     Route::get('/students/invoice/{id}', [\App\Http\Controllers\PaymentController::class, 'historyInvoice'])->name('students.invoice.history');
+
+    Route::get('/students/meetings', [\App\Http\Controllers\Student\MeetingController::class, 'index'])->name('students.meetings.index');
+    Route::get('/students/meetings/{id}/join', [\App\Http\Controllers\Student\MeetingController::class, 'join'])->name('students.meetings.join');
+
 });
 
 //Dashboard Guru
 Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/meetings', [\App\Http\Controllers\Teacher\MeetingController::class, 'index'])->name('meetings.index');
+    Route::post('/meetings', [\App\Http\Controllers\Teacher\MeetingController::class, 'store'])->name('meetings.store');
+    Route::delete('/meetings/{id}', [\App\Http\Controllers\Teacher\MeetingController::class, 'destroy'])->name('meetings.destroy');
+    Route::get('/meetings/{id}/join', [\App\Http\Controllers\Teacher\MeetingController::class, 'join'])->name('meetings.join');
 
     Route::get('/classes', [BatchController::class, 'index'])->name('classes');
     Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
