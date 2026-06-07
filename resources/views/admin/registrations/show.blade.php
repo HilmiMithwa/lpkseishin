@@ -163,8 +163,12 @@
                         <div>
                             <p class="text-xs font-bold text-[#666666] uppercase mb-2">{{ $label }}</p>
                             @if($registration->$key)
-                                <a href="{{ Storage::url($registration->$key) }}" target="_blank" class="inline-block">
-                                    <img src="{{ Storage::url($registration->$key) }}" alt="{{ $label }}" class="h-40 w-full object-cover rounded-lg border border-gray-200 hover:border-[#d62828] transition cursor-pointer">
+                                @php
+                                    $path = $registration->$key;
+                                    $url = Str::startsWith($path, ['http://', 'https://']) ? $path : (Storage::disk('public')->exists($path) ? Storage::url($path) : Storage::disk('s3')->url($path));
+                                @endphp
+                                <a href="{{ $url }}" target="_blank" class="inline-block w-full">
+                                    <img src="{{ $url }}" alt="{{ $label }}" class="h-40 w-full object-cover rounded-xl border border-gray-200 hover:border-[#d62828] transition cursor-pointer shadow-sm">
                                 </a>
                             @else
                                 <div class="h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
@@ -205,9 +209,9 @@
                             <textarea name="notes" rows="3" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition text-sm resize-none" placeholder="Tambahkan catatan..."></textarea>
                         </div>
 
-                        <button type="submit" class="w-full px-4 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        <button type="submit" class="w-full px-5 py-3 bg-[#2b9348] hover:bg-green-700 text-white text-sm font-bold rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                             </svg>
                             Terima & Buat Akun
                         </button>
@@ -223,9 +227,9 @@
                             <textarea name="rejection_reason" rows="3" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition text-sm resize-none" placeholder="Jelaskan alasan penolakan..." required></textarea>
                         </div>
 
-                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menolak pendaftar ini?')" class="w-full px-4 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menolak pendaftar ini?')" class="w-full px-5 py-3 bg-white text-[#d62828] border border-red-200 hover:bg-red-50 text-sm font-bold rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                             Tolak Pendaftar
                         </button>
