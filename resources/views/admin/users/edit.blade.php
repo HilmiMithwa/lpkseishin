@@ -303,10 +303,64 @@
         </form>
     </div>
 
-    <!-- Tab Content Placeholder: Pembayaran -->
-    <div x-show="tab === 'pembayaran'" style="display: none;">
-        <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] text-center text-slate-500 py-16">
-            Riwayat pembayaran siswa akan ditampilkan di sini.
+    <!-- Tab Content: Pembayaran -->
+    <div x-show="tab === 'pembayaran'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+        <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+            <h3 class="text-lg font-bold text-[#222222] mb-6">Riwayat Pembayaran</h3>
+            
+            <div class="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead>
+                        <tr class="bg-[#F9FAFB] border-b border-gray-100">
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Tanggal</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Untuk</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Jumlah</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Metode</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222]">Catatan Admin</th>
+                            <th class="py-4 px-6 text-sm font-bold text-[#222222] text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($payments as $payment)
+                            <tr class="hover:bg-gray-50/50 transition">
+                                <td class="py-4 px-6 text-sm font-semibold text-[#666666]">{{ \Carbon\Carbon::parse($payment->payment_date)->format('d M Y') }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-[#444444]">{{ $payment->payment_for }} <br> <span class="text-xs text-gray-500">{{ optional($payment->batch)->nama }}</span></td>
+                                <td class="py-4 px-6 text-sm font-bold text-[#444444]">Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 text-sm font-medium text-[#666666]">{{ $payment->payment_method }}</td>
+                                <td class="py-4 px-6">
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full 
+                                        {{ match($payment->status) {
+                                            'lunas' => 'bg-green-100 text-green-700',
+                                            'menunggu' => 'bg-amber-100 text-amber-600',
+                                            'ditolak' => 'bg-red-100 text-red-600',
+                                            default => 'bg-gray-100 text-gray-600'
+                                        } }}">
+                                        {{ strtoupper($payment->status) }}
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-xs text-gray-500 max-w-[200px] truncate" title="{{ $payment->admin_note ?? '-' }}">
+                                    {{ $payment->admin_note ?? '-' }}
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    @if($payment->status === 'lunas')
+                                        <a href="{{ route('students.invoice.history', $payment->id) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#d62828] bg-red-50 border border-red-100 rounded-lg shadow-sm hover:bg-[#d62828] hover:text-white transition" title="Unduh Invoice">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            Invoice
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-gray-400">-</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-8 text-gray-500">Belum ada riwayat pembayaran.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     @endif
