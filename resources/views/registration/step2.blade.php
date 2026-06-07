@@ -16,15 +16,29 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <!-- Education Level -->
-                <div>
+                <div x-data="{ open: false, selected: '{{ $registration['education_level'] ?? old('education_level') }}' }" class="relative">
                     <label for="education_level" class="block text-sm font-semibold text-[#222222] mb-2">Tingkat Pendidikan Terakhir *</label>
-                    <select id="education_level" name="education_level" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition" required>
-                        <option value="">Pilih Tingkat Pendidikan</option>
-                        <option value="SMP" {{ ($registration['education_level'] ?? old('education_level')) == 'SMP' ? 'selected' : '' }}>SMP</option>
-                        <option value="SMA" {{ ($registration['education_level'] ?? old('education_level')) == 'SMA' ? 'selected' : '' }}>SMA</option>
-                        <option value="SMK" {{ ($registration['education_level'] ?? old('education_level')) == 'SMK' ? 'selected' : '' }}>SMK</option>
-                        <option value="Kuliah" {{ ($registration['education_level'] ?? old('education_level')) == 'Kuliah' ? 'selected' : '' }}>Kuliah</option>
-                    </select>
+                    <input type="hidden" name="education_level" x-model="selected" required>
+                    
+                    <button type="button" @click="open = !open" @click.away="open = false" 
+                        class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition flex items-center justify-between bg-white hover:bg-gray-50 text-left"
+                        :class="{ 'text-gray-900': selected, 'text-gray-400': !selected }">
+                        <span x-text="selected ? selected : 'Pilih Tingkat Pendidikan'"></span>
+                        <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <div x-show="open" x-transition.opacity.duration.200ms
+                        class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden" style="display: none;">
+                        <div class="p-1">
+                            <template x-for="option in ['SMP', 'SMA', 'SMK', 'Kuliah']" :key="option">
+                                <button type="button" @click="selected = option; open = false" 
+                                    class="w-full px-4 py-2.5 text-left text-sm font-medium rounded-lg transition-colors"
+                                    :class="{ 'bg-red-50 text-[#d62828]': selected === option, 'text-gray-700 hover:bg-gray-50 hover:text-gray-900': selected !== option }">
+                                    <span x-text="option"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
                     @error('education_level')
                         <p class="text-red-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror
@@ -78,7 +92,7 @@
         </div>
 
         <!-- Japanese Language Section -->
-        <div class="mb-8">
+        <div class="mb-8" x-data="{ japaneseAbility: '{{ $registration['japanese_ability'] ?? old('japanese_ability') ?? '' }}', levelOpen: false, selectedLevel: '{{ $registration['japanese_level'] ?? old('japanese_level') }}' }">
             <h3 class="text-base font-bold font-ibm text-[#222222] mb-4 pb-3 border-b border-gray-200">Kemampuan Bahasa Jepang</h3>
             
             <div class="space-y-6">
@@ -86,12 +100,12 @@
                 <div>
                     <p class="text-sm font-semibold text-[#222222] mb-3">Apakah Anda bisa bahasa Jepang? *</p>
                     <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50" onclick="selectJapanesability(this)">
-                            <input type="radio" id="japanese_yes" name="japanese_ability" value="yes" {{ ($registration['japanese_ability'] ?? old('japanese_ability')) == 'yes' ? 'checked' : '' }} class="w-4 h-4 accent-[#d62828] cursor-pointer" onchange="toggleJapaneseLevel()">
+                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer transition-colors" :class="{ 'bg-red-50 border-red-200': japaneseAbility === 'yes', 'hover:bg-gray-50': japaneseAbility !== 'yes' }" @click="japaneseAbility = 'yes'">
+                            <input type="radio" id="japanese_yes" name="japanese_ability" value="yes" x-model="japaneseAbility" class="w-4 h-4 accent-[#d62828] cursor-pointer">
                             <label for="japanese_yes" class="text-sm text-[#222222] font-semibold cursor-pointer flex-1">Ya, saya bisa bahasa Jepang</label>
                         </div>
-                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50" onclick="selectJapanesability(this)">
-                            <input type="radio" id="japanese_no" name="japanese_ability" value="no" {{ ($registration['japanese_ability'] ?? old('japanese_ability')) == 'no' ? 'checked' : '' }} class="w-4 h-4 accent-[#d62828] cursor-pointer" onchange="toggleJapaneseLevel()">
+                        <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer transition-colors" :class="{ 'bg-red-50 border-red-200': japaneseAbility === 'no', 'hover:bg-gray-50': japaneseAbility !== 'no' }" @click="japaneseAbility = 'no'; selectedLevel = ''">
+                            <input type="radio" id="japanese_no" name="japanese_ability" value="no" x-model="japaneseAbility" class="w-4 h-4 accent-[#d62828] cursor-pointer">
                             <label for="japanese_no" class="text-sm text-[#222222] font-semibold cursor-pointer flex-1">Tidak, saya tidak bisa bahasa Jepang</label>
                         </div>
                     </div>
@@ -100,17 +114,30 @@
                     @enderror
                 </div>
 
-                <!-- Japanese Level Dropdown (hidden by default) -->
-                <div id="japaneseLevel" class="hidden">
+                <!-- Japanese Level Dropdown -->
+                <div x-show="japaneseAbility === 'yes'" x-transition class="relative" style="display: none;">
                     <label for="japanese_level" class="block text-sm font-semibold text-[#222222] mb-2">Level Bahasa / Kemampuan *</label>
-                    <select id="japanese_level" name="japanese_level" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition">
-                        <option value="">Pilih Level</option>
-                        <option value="N5" {{ ($registration['japanese_level'] ?? old('japanese_level')) == 'N5' ? 'selected' : '' }}>N5 (Beginner)</option>
-                        <option value="N4" {{ ($registration['japanese_level'] ?? old('japanese_level')) == 'N4' ? 'selected' : '' }}>N4 (Elementary)</option>
-                        <option value="N3" {{ ($registration['japanese_level'] ?? old('japanese_level')) == 'N3' ? 'selected' : '' }}>N3 (Intermediate)</option>
-                        <option value="N2" {{ ($registration['japanese_level'] ?? old('japanese_level')) == 'N2' ? 'selected' : '' }}>N2 (Advanced)</option>
-                        <option value="N1" {{ ($registration['japanese_level'] ?? old('japanese_level')) == 'N1' ? 'selected' : '' }}>N1 (Proficiency)</option>
-                    </select>
+                    <input type="hidden" name="japanese_level" x-model="selectedLevel" :required="japaneseAbility === 'yes'">
+                    
+                    <button type="button" @click="levelOpen = !levelOpen" @click.away="levelOpen = false" 
+                        class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition flex items-center justify-between bg-white hover:bg-gray-50 text-left"
+                        :class="{ 'text-gray-900': selectedLevel, 'text-gray-400': !selectedLevel }">
+                        <span x-text="selectedLevel ? selectedLevel : 'Pilih Level'"></span>
+                        <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': levelOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <div x-show="levelOpen" x-transition.opacity.duration.200ms
+                        class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden" style="display: none;">
+                        <div class="p-1">
+                            <template x-for="option in ['N5 (Beginner)', 'N4 (Elementary)', 'N3 (Intermediate)', 'N2 (Advanced)', 'N1 (Proficiency)']" :key="option">
+                                <button type="button" @click="selectedLevel = option.split(' ')[0]; levelOpen = false" 
+                                    class="w-full px-4 py-2.5 text-left text-sm font-medium rounded-lg transition-colors"
+                                    :class="{ 'bg-red-50 text-[#d62828]': selectedLevel === option.split(' ')[0], 'text-gray-700 hover:bg-gray-50 hover:text-gray-900': selectedLevel !== option.split(' ')[0] }">
+                                    <span x-text="option"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
                     @error('japanese_level')
                         <p class="text-red-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror
@@ -130,28 +157,5 @@
     </form>
 </div>
 
-<script>
-    function selectJapanesability(element) {
-        const radio = element.querySelector('input[type="radio"]');
-        radio.checked = true;
-        toggleJapaneseLevel();
-    }
 
-    function toggleJapaneseLevel() {
-        const japaneseLevel = document.getElementById('japaneseLevel');
-        const japaneseYes = document.getElementById('japanese_yes').checked;
-        
-        if (japaneseYes) {
-            japaneseLevel.classList.remove('hidden');
-            document.getElementById('japanese_level').required = true;
-        } else {
-            japaneseLevel.classList.add('hidden');
-            document.getElementById('japanese_level').required = false;
-            document.getElementById('japanese_level').value = '';
-        }
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', toggleJapaneseLevel);
-</script>
 @endsection

@@ -2,6 +2,18 @@
 
 @section('title', 'Step 4: Pembayaran - Pendaftaran Siswa LPK Seishin')
 
+@php
+    function getPreviewUrl($path) {
+        if (!$path) return '';
+        if (Str::startsWith($path, ['http://', 'https://'])) return $path;
+        try {
+            return Storage::disk('public')->exists($path) ? Storage::url($path) : Storage::disk('s3')->url($path);
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+@endphp
+
 @section('content')
 <div>
     <h2 class="text-xl sm:text-2xl font-bold font-ibm text-[#222222] mb-1">Pembayaran Komitmen</h2>
@@ -70,27 +82,43 @@
         <div class="mb-8">
             <h3 class="text-base font-bold font-ibm text-[#222222] mb-4 pb-3 border-b border-gray-200">Bukti Pembayaran</h3>
             
-            <div class="p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition" id="paymentDropZone" data-upload-field="payment_proof">
-                <label for="payment_proof" class="cursor-pointer block">
-                    <div class="text-center">
-                        <div class="mb-3 flex justify-center">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
+            <div x-data="fileUpload('{{ getPreviewUrl($registration['payment_proof'] ?? null) }}')">
+                <div class="relative p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition overflow-hidden min-h-[160px] flex items-center justify-center cursor-pointer" 
+                     :class="{ '!border-[#d62828] !bg-red-50': isDragging, 'p-0': previewUrl }"
+                     @dragover.prevent="isDragging = true"
+                     @dragleave.prevent="isDragging = false"
+                     @drop.prevent="isDragging = false; handleDrop($event)"
+                     @click="$refs.fileInput.click()">
+                    
+                    <!-- Preview Image -->
+                    <template x-if="previewUrl">
+                        <div class="absolute inset-0 w-full h-full group">
+                            <img :src="previewUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold text-sm bg-black/50 px-4 py-2 rounded-full">Ganti Bukti Pembayaran</span>
                             </div>
                         </div>
-                        <p class="text-sm font-bold text-[#222222] mb-1">Unggah Bukti Pembayaran</p>
-                        <p class="text-xs text-[#666666]">Klik atau drag & drop screenshot/foto bukti pembayaran</p>
-                        <p class="text-xs text-[#999999] mt-1">(JPG, PNG, max 2MB)</p>
-                    </div>
-                    <input type="file" id="payment_proof" name="payment_proof" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['payment_proof']) ? '' : 'required' }}>
-                </label>
-                <div class="feedback-container">
-                    @if(isset($registration['payment_proof']))
-                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
-                    @endif
+                    </template>
+
+                    <!-- Default Content -->
+                    <template x-if="!previewUrl">
+                        <div class="text-center w-full">
+                            <div class="mb-3 flex justify-center">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-sm font-bold text-[#222222] mb-1">Unggah Bukti Pembayaran</p>
+                            <p class="text-xs text-[#666666]">Klik atau drag & drop screenshot/foto bukti pembayaran</p>
+                            <p class="text-xs text-[#999999] mt-1">(JPG, PNG, max 2MB)</p>
+                        </div>
+                    </template>
+
+                    <input type="file" id="payment_proof" name="payment_proof" x-ref="fileInput" @change="handleFileChange($event)" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['payment_proof']) ? '' : 'required' }}>
                 </div>
+                <template x-if="errorMsg">
+                    <p class="text-red-600 text-xs font-semibold mt-2" x-text="errorMsg"></p>
+                </template>
                 @error('payment_proof')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
@@ -123,85 +151,45 @@
 </div>
 
 <script>
-    // Payment proof file upload with drag-drop
-    const input = document.getElementById('payment_proof');
-    const dropZone = document.getElementById('paymentDropZone');
-    const feedbackContainer = dropZone.querySelector('.feedback-container');
-    
-    // Handle click to select file
-    dropZone.addEventListener('click', (e) => {
-        // Only trigger file picker if not clicking on feedback text
-        if (!e.target.closest('.feedback-container')) {
-            input.click();
-        }
-    });
-    
-    // Prevent default drag behaviors
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, preventDefaults, false);
-        document.body.addEventListener(eventName, preventDefaults, false);
-    });
-    
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-    
-    // Highlight on drag
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropZone.addEventListener(eventName, highlight, false);
-    });
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, unhighlight, false);
-    });
-    
-    function highlight(e) {
-        dropZone.classList.add('!border-[#d62828]', '!bg-red-50');
-    }
-    
-    function unhighlight(e) {
-        dropZone.classList.remove('!border-[#d62828]', '!bg-red-50');
-    }
-    
-    // Handle drop
-    dropZone.addEventListener('drop', handleDrop, false);
-    
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        handleFiles(files);
-    }
-    
-    // Handle file input change (from click)
-    input.addEventListener('change', function() {
-        handleFiles(this.files);
-    });
-    
-    function handleFiles(files) {
-        // Validate file
-        if (files.length > 0) {
-            const file = files[0];
-            const validTypes = ['image/jpeg', 'image/png'];
-            const maxSize = 2 * 1024 * 1024; // 2MB
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('fileUpload', (initialUrl = '') => ({
+            previewUrl: initialUrl,
+            isDragging: false,
+            errorMsg: '',
             
-            if (!validTypes.includes(file.type)) {
-                alert('Format file harus JPEG atau PNG');
-                return;
+            handleFileChange(e) {
+                this.processFile(e.target.files[0]);
+            },
+            
+            handleDrop(e) {
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    this.$refs.fileInput.files = dataTransfer.files;
+                    this.processFile(file);
+                }
+            },
+            
+            processFile(file) {
+                if (!file) return;
+                
+                this.errorMsg = '';
+                const validTypes = ['image/jpeg', 'image/png'];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                
+                if (!validTypes.includes(file.type)) {
+                    this.errorMsg = 'Format file harus JPEG atau PNG';
+                    return;
+                }
+                if (file.size > maxSize) {
+                    this.errorMsg = 'Ukuran file terlalu besar (maksimal 2MB)';
+                    return;
+                }
+                
+                this.previewUrl = URL.createObjectURL(file);
             }
-            
-            if (file.size > maxSize) {
-                alert('Ukuran file terlalu besar (maksimal 2MB)');
-                return;
-            }
-            
-            // Use DataTransfer to properly set files
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            input.files = dataTransfer.files;
-            
-            // Show file name in feedback container (outside clickable label)
-            feedbackContainer.innerHTML = '<p class="text-xs text-green-600 font-semibold mt-2">✓ ' + file.name + ' (' + (file.size / 1024).toFixed(1) + 'KB)</p>';
-        }
-    }
+        }));
+    });
 </script>
 @endsection
