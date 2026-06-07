@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'checkRole' => \App\Http\Middleware\RoleManager::class,
         ]);
+
+        // Tambahkan baris ini untuk mengatasi Mixed Content di Railway
+        $middleware->trustProxies(at: '*'); 
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
