@@ -43,7 +43,7 @@ class RegistrationController extends Controller
     public function show($id)
     {
         $registration = StudentRegistration::findOrFail($id);
-        $batches = Batch::where('status', 'active')->get();
+        $batches = Batch::whereIn('status', ['active', 'pendaftaran', 'Active'])->get();
         
         return view('admin.registrations.show', compact('registration', 'batches'));
     }
@@ -83,6 +83,7 @@ class RegistrationController extends Controller
             'user_id' => $user->id,
             'id_batch' => $validated['id_batch'],
             'status' => 'Active',
+            'register_date' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

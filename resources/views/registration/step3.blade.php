@@ -25,9 +25,13 @@
                         <p class="text-sm font-bold text-[#222222] mb-1">Foto KTP</p>
                         <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
                     </div>
-                    <input type="file" id="ktp_photo" name="ktp_photo" accept="image/jpeg,image/png" class="hidden" required>
+                    <input type="file" id="ktp_photo" name="ktp_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['ktp_photo']) ? '' : 'required' }}>
                 </label>
-                <div class="feedback-container"></div>
+                <div class="feedback-container">
+                    @if(isset($registration['ktp_photo']))
+                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
+                    @endif
+                </div>
                 @error('ktp_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
@@ -47,9 +51,13 @@
                         <p class="text-sm font-bold text-[#222222] mb-1">Kartu Keluarga</p>
                         <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
                     </div>
-                    <input type="file" id="family_card_photo" name="family_card_photo" accept="image/jpeg,image/png" class="hidden" required>
+                    <input type="file" id="family_card_photo" name="family_card_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['family_card_photo']) ? '' : 'required' }}>
                 </label>
-                <div class="feedback-container"></div>
+                <div class="feedback-container">
+                    @if(isset($registration['family_card_photo']))
+                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
+                    @endif
+                </div>
                 @error('family_card_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
@@ -69,9 +77,13 @@
                         <p class="text-sm font-bold text-[#222222] mb-1">Akte Kelahiran</p>
                         <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
                     </div>
-                    <input type="file" id="birth_certificate_photo" name="birth_certificate_photo" accept="image/jpeg,image/png" class="hidden" required>
+                    <input type="file" id="birth_certificate_photo" name="birth_certificate_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['birth_certificate_photo']) ? '' : 'required' }}>
                 </label>
-                <div class="feedback-container"></div>
+                <div class="feedback-container">
+                    @if(isset($registration['birth_certificate_photo']))
+                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
+                    @endif
+                </div>
                 @error('birth_certificate_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
@@ -92,9 +104,13 @@
                         <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
                         <p class="text-xs text-[#666666] mt-1">(Ukuran 4x6 cm, latar belakang merah)</p>
                     </div>
-                    <input type="file" id="passport_photo" name="passport_photo" accept="image/jpeg,image/png" class="hidden" required>
+                    <input type="file" id="passport_photo" name="passport_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['passport_photo']) ? '' : 'required' }}>
                 </label>
-                <div class="feedback-container"></div>
+                <div class="feedback-container">
+                    @if(isset($registration['passport_photo']))
+                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
+                    @endif
+                </div>
                 @error('passport_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror

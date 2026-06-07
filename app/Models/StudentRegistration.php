@@ -55,6 +55,5 @@ class StudentRegistration extends Model
         'birth_date' => 'date',
         'requirement_one' => 'boolean',
         'requirement_two' => 'boolean',
-        'japanese_ability' => 'boolean',
     ];
 }

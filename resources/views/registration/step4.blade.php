@@ -84,9 +84,13 @@
                         <p class="text-xs text-[#666666]">Klik atau drag & drop screenshot/foto bukti pembayaran</p>
                         <p class="text-xs text-[#999999] mt-1">(JPG, PNG, max 2MB)</p>
                     </div>
-                    <input type="file" id="payment_proof" name="payment_proof" accept="image/jpeg,image/png" class="hidden" required>
+                    <input type="file" id="payment_proof" name="payment_proof" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['payment_proof']) ? '' : 'required' }}>
                 </label>
-                <div class="feedback-container"></div>
+                <div class="feedback-container">
+                    @if(isset($registration['payment_proof']))
+                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
+                    @endif
+                </div>
                 @error('payment_proof')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
