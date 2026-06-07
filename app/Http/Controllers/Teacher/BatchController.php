@@ -56,24 +56,25 @@ class BatchController extends Controller
             ->select('users.id', 'users.name', 'users.profile_photo_path', 'student_list_batch.status', 'student_list_batch.id_studentbatch')
             ->distinct();
 
-        // Filter berdasarkan pencarian nama atau ID siswa
-        $searchData = request('search');
-        $searchValue = is_array($searchData) ? ($searchData['value'] ?? '') : $searchData;
-        
-        if (!empty($searchValue)) {
-            $query->where(function ($q) use ($searchValue) {
-                $q->where('users.name', 'ilike', "%{$searchValue}%")
-                  ->orWhereRaw("CONCAT('SIS-', LPAD(CAST(users.id AS text), 3, '0')) ILIKE ?", ["%{$searchValue}%"]);
-            });
-        }
-
-        // Filter berdasarkan status
-        if (request()->filled('status') && request('status') !== 'all') {
-            $query->where('student_list_batch.status', ucfirst(request('status')));
-        }
-
         if (request()->ajax() || request()->has('draw')) {
             return \Yajra\DataTables\Facades\DataTables::of($query)
+                ->filter(function ($query) {
+                    // Filter berdasarkan status
+                    if (request()->filled('status') && request('status') !== 'all') {
+                        $query->where('student_list_batch.status', ucfirst(request('status')));
+                    }
+
+                    // Filter pencarian
+                    $searchData = request('search');
+                    $searchValue = is_array($searchData) ? ($searchData['value'] ?? '') : $searchData;
+                    
+                    if (!empty($searchValue)) {
+                        $query->where(function ($q) use ($searchValue) {
+                            $q->where('users.name', 'ilike', "%{$searchValue}%")
+                              ->orWhereRaw("CONCAT('SIS-', LPAD(CAST(users.id AS text), 3, '0')) ILIKE ?", ["%{$searchValue}%"]);
+                        });
+                    }
+                })
                 ->addIndexColumn()
                 ->addColumn('id_siswa', function ($row) {
                     return 'SIS-' . str_pad($row->id, 3, '0', STR_PAD_LEFT);
