@@ -47,4 +47,8 @@ class Mapel extends Model
         return $this->hasMany(Enrollment_List::class, 'id_mapel', 'id_mapel');
     }
 
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class, 'id_mapel', 'id_mapel');
+    }
 }
