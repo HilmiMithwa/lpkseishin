@@ -30,24 +30,16 @@
             <span class="text-gray-800">{{ $task->waktu_pengumpulan ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y') : '-' }}</span>
         </div>
         @php
-            $percentage = 0;
-            if ($task->waktu_pengumpulan) {
-                $end = \Carbon\Carbon::parse($task->waktu_pengumpulan)->timestamp;
-                $now = \Carbon\Carbon::now()->timestamp;
-                
-                if ($now >= $end) {
-                    $percentage = 100;
-                } elseif ($task->created_at) {
-                    $start = \Carbon\Carbon::parse($task->created_at)->timestamp;
-                    if ($end > $start && $now > $start) {
-                        $percentage = (($now - $start) / ($end - $start)) * 100;
-                    }
-                }
-                $percentage = max(0, min(100, $percentage));
-            }
+            $submittedStudents = $task->submissions->whereIn('status', ['dikirim', 'dinilai', 'terlambat'])->count();
+            $totalStudents = \Illuminate\Support\Facades\DB::table('student_list_batch')->where('id_batch', $task->modul->mapel->id_batch)->where('status', 'Active')->count();
+            $percentage = $totalStudents > 0 ? ($submittedStudents / $totalStudents) * 100 : 0;
         @endphp
+        <div class="flex items-center justify-between text-[10px] font-bold mb-1 mt-3">
+            <span class="text-gray-400 uppercase tracking-wider">Terkumpul</span>
+            <span class="text-gray-800">{{ $submittedStudents }}/{{ $totalStudents }} Siswa</span>
+        </div>
         <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-            <div class="bg-[#d62828] h-1.5 rounded-full transition-all duration-500" style="width: {{ round($percentage) }}%"></div>
+            <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ round($percentage) }}%"></div>
         </div>
     </div>
     <a href="{{ route('teacher.assignments.grade', $task->id_tugas) }}" class="w-full mt-auto bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 font-bold py-2.5 rounded-xl text-sm transition-colors duration-300 flex items-center justify-center gap-2 relative z-10 shadow-sm">

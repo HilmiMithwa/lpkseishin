@@ -153,7 +153,7 @@
                 <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                 <div class="sidebar-text overflow-hidden">
                     <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name }}</h4>
-                    <p class="text-[10px] text-[#666666] truncate">{{ $enrollment->level ?? '[Data: enrollment.level]' }}</p>
+                    <p class="text-[10px] text-[#666666] truncate">{{ Auth::user()->level ?? 'Belum ada level' }}</p>
                     <p class="text-[10px] text-[#666666] truncate flex items-center gap-1 mt-0.5">
                         <span class="text-[#d62828] font-bold text-[11px]">@</span> <span class="truncate">{{ Auth::user()->email ?? '[Data: user.email]' }}</span>
                     </p>

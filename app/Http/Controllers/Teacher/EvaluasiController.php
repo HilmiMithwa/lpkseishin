@@ -29,6 +29,59 @@ class EvaluasiController extends Controller
 
     public function store(Request $request, $id_modul)
     {
+        // 1. Validasi Input Dasar
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'bahasa' => 'required|string|max:100',
+            'durasi_menit' => 'required|integer|min:1',
+            'tipe' => 'required|string|in:Multiple Choice Only,Essay Only,Campuran (Multiple Choice & Essay)',
+        ]);
+
+        $tipe = $request->input('tipe');
+        $hasValidMcq = false;
+        $hasValidEssay = false;
+
+        // 2. Cek eksistensi soal Multiple Choice jika diperlukan
+        if ($tipe !== 'Essay Only') {
+            $mcqsStr = $request->input('mcqs');
+            if ($mcqsStr) {
+                $mcqs = json_decode($mcqsStr, true);
+                if (is_array($mcqs)) {
+                    foreach ($mcqs as $mcqData) {
+                        if (!empty(trim($mcqData['question'] ?? ''))) {
+                            $hasValidMcq = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3. Cek eksistensi soal Essay jika diperlukan
+        if ($tipe !== 'Multiple Choice Only') {
+            $essaysStr = $request->input('essays');
+            if ($essaysStr) {
+                $essays = json_decode($essaysStr, true);
+                if (is_array($essays)) {
+                    foreach ($essays as $essayData) {
+                        if (!empty(trim($essayData['question'] ?? ''))) {
+                            $hasValidEssay = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. Tolak jika soal kosong sesuai tipe
+        if (($tipe === 'Multiple Choice Only' || $tipe === 'Campuran (Multiple Choice & Essay)') && !$hasValidMcq) {
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan: Anda harus mengisi minimal 1 soal Multiple Choice.');
+        }
+
+        if (($tipe === 'Essay Only' || $tipe === 'Campuran (Multiple Choice & Essay)') && !$hasValidEssay) {
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan: Anda harus mengisi minimal 1 soal Essay.');
+        }
+
         // Start database transaction to ensure atomicity
         DB::beginTransaction();
 

@@ -179,8 +179,17 @@ class MapelController extends Controller
             
             // 1. Delete Bahan Ajar files
             foreach ($modul->bahanAjar as $materi) {
-                if (\Storage::disk('public')->exists($materi->file_path)) {
-                    \Storage::disk('public')->delete($materi->file_path);
+                if ($materi->path_file_dokumen_ajar) {
+                    $path = str_replace('/storage/', '', $materi->path_file_dokumen_ajar);
+                    if (\Storage::disk('public')->exists($path)) {
+                        \Storage::disk('public')->delete($path);
+                    }
+                }
+                if ($materi->video_url && str_starts_with($materi->video_url, '/storage/')) {
+                    $path = str_replace('/storage/', '', $materi->video_url);
+                    if (\Storage::disk('public')->exists($path)) {
+                        \Storage::disk('public')->delete($path);
+                    }
                 }
                 $materi->delete();
             }

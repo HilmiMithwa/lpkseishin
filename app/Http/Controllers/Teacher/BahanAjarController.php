@@ -28,8 +28,22 @@ class BahanAjarController extends Controller
     {
         $rules = [
             'nama_bahan_ajar' => 'required|string|max:255',
-            'type' => 'required|string|in:theory,practice',
-            'bahan_ajar_description' => 'required|string',
+            'type' => 'required|string|in:theory,practice,video',
+            'video_title' => 'nullable|string|max:255',
+            'video_url' => 'nullable|string',
+            'video_file' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:102400', // Max 100MB
+            'focus_skill' => 'nullable|string|max:255',
+            'key_points' => 'nullable|string',
+            'objective' => 'nullable|string',
+            'sensei_note' => 'nullable|string',
+            'bahan_ajar_description' => 'nullable|string',
+            'resource_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar|max:51200', // Max 50MB
+            
+            // For practice tasks
+            'task_title' => 'nullable|string|max:255',
+            'task_description' => 'nullable|string',
+            'task_deadline' => 'nullable|date',
+            'task_file' => 'nullable|file|max:51200', // Max 50MB
         ];
 
         $messages = [
