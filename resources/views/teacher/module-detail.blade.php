@@ -278,9 +278,15 @@
                              <x-text-input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full" />
                          </div>
 
-                         <div class="space-y-1.5">
-                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
-                             <x-text-input type="number" name="jp" required placeholder="cth., 22" class="w-full" />
+                         <div class="grid grid-cols-2 gap-4">
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Teori:</x-input-label>
+                                 <x-text-input type="number" name="teori" value="0" min="0" required class="w-full" />
+                             </div>
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Praktik:</x-input-label>
+                                 <x-text-input type="number" name="praktik" value="0" min="0" required class="w-full" />
+                             </div>
                          </div>
 
                          <div>
@@ -375,20 +381,30 @@
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                  </button>
 
-                 <div class="p-6 sm:p-8 lg:p-10" x-data="{ selectedIcon: 2, sequential: false }">
+                 <div class="p-6 sm:p-8 lg:p-10" x-data="{ selectedIcon: {{ $modul->icon_type ?? 2 }}, sequential: {{ $modul->is_sequential ? 'true' : 'false' }} }">
                      <div class="mb-8">
                          <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900">Edit Modul</h3>
                      </div>
 
-                     <form class="space-y-6">
+                     <form action="{{ route('teacher.modules.update', $modul->id_modul) }}" method="POST" class="space-y-6" @submit="isLoading = true">
+                         @csrf
+                         @method('PUT')
+                         <input type="hidden" name="icon_type" x-model="selectedIcon">
+                         
                          <div class="space-y-1.5">
                              <x-input-label>Judul Modul:</x-input-label>
-                             <x-text-input type="text" value="{{ $moduleTitle }}" />
+                             <x-text-input type="text" name="nama_modul" value="{{ $modul->nama_modul }}" required class="w-full" />
                          </div>
 
-                         <div class="space-y-1.5">
-                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
-                             <x-text-input type="text" value="16" />
+                         <div class="grid grid-cols-2 gap-4">
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Teori:</x-input-label>
+                                 <x-text-input type="number" name="teori" value="{{ $modul->jp_teori ?? 0 }}" min="0" required class="w-full" />
+                             </div>
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Praktik:</x-input-label>
+                                 <x-text-input type="number" name="praktik" value="{{ $modul->jp_praktik ?? 0 }}" min="0" required class="w-full" />
+                             </div>
                          </div>
 
                          <div>
@@ -413,22 +429,15 @@
 
                          <div class="space-y-1.5">
                              <x-input-label>Deskripsi Modul:</x-input-label>
-                             <textarea rows="4" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y min-h-[120px] shadow-sm">Modul ini dirancang untuk memperkuat penguasaan kosakata (Kotoba) esensial dan kemampuan pemahaman bacaan (Dokkai) level N4.</textarea>
+                             <textarea name="module_description" rows="4" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-medium text-sm resize-y min-h-[120px] shadow-sm">{{ $modul->module_description }}</textarea>
                          </div>
 
                          <div class="mt-4 flex items-center gap-4 pt-6 border-t border-gray-100">
                              <button type="button" @click="open = false" class="px-6 py-3 rounded-xl border border-[#d62828] text-[#d62828] font-bold font-karla hover:bg-red-50 transition w-full sm:w-auto sm:flex-1 text-sm sm:text-base">
                                  Batal
                              </button>
-                             <x-primary-button type="button" @click="
-                                 isLoading = true;
-                                 setTimeout(() => {
-                                     isLoading = false;
-                                     open = false;
-                                     $dispatch('show-toast', { message: 'Modul berhasil diperbarui' });
-                                 }, 800);
-                             " x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center gap-2 text-sm sm:text-base py-3">
-                                 <svg x-show="isLoading" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                             <x-primary-button type="submit" x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center gap-2 text-sm sm:text-base py-3">
+                                 <svg x-show="isLoading" style="display: none;" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                  <span x-text="isLoading ? 'Menyimpan...' : 'Simpan Perubahan'"></span>
                              </x-primary-button>
                          </div>

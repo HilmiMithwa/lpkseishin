@@ -25,7 +25,6 @@ class MapelController extends Controller
             'nama_mapel' => 'required|string|max:255',
             'deskripsi_mapel' => 'required|string',
             'target' => 'required|string',
-            'jp' => 'required|numeric',
             'jadwal' => 'required|string',
             'min_score' => 'required|numeric',
         ]);
@@ -35,7 +34,6 @@ class MapelController extends Controller
             'nama_mapel' => $request->nama_mapel,
             'deskripsi_mapel' => $request->deskripsi_mapel,
             'target' => $request->target,
-            'jp' => $request->jp,
             'jadwal' => $request->jadwal,
             'min_score' => $request->min_score,
         ]);
