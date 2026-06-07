@@ -56,7 +56,64 @@ class TeacherDashboardController extends Controller
             $task->student = $task->user;
         });
 
-        $todaySchedules = Jadwal::where('id_guru', $teacher->id)->get();
+        $indonesianDays = [
+            'Sunday'    => 'Minggu',
+            'Monday'    => 'Senin',
+            'Tuesday'   => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday'  => 'Kamis',
+            'Friday'    => 'Jumat',
+            'Saturday'  => 'Sabtu'
+        ];
+        
+        $todayEnglish = \Carbon\Carbon::now()->format('l');
+        $todayIndonesian = $indonesianDays[$todayEnglish];
+        
+        $daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        
+        $todaySchedules = collect();
+        
+        foreach ($teacherSubjects as $subject) {
+            if ($subject->status === 'Aktif') {
+                $batch = $subject->batch;
+                if ($batch && $batch->jadwal) {
+                    $isToday = false;
+                    $jadwalStr = $batch->jadwal;
+                    
+                    if (str_contains($jadwalStr, '-')) {
+                        $parts = array_map('trim', explode('-', $jadwalStr));
+                        if (count($parts) == 2) {
+                            $startDayIndex = array_search($parts[0], $daysOfWeek);
+                            $endDayIndex = array_search($parts[1], $daysOfWeek);
+                            $todayIndex = array_search($todayIndonesian, $daysOfWeek);
+                            
+                            if ($startDayIndex !== false && $endDayIndex !== false && $todayIndex !== false) {
+                                if ($startDayIndex <= $endDayIndex) {
+                                    $isToday = ($todayIndex >= $startDayIndex && $todayIndex <= $endDayIndex);
+                                } else { 
+                                    $isToday = ($todayIndex >= $startDayIndex || $todayIndex <= $endDayIndex);
+                                }
+                            }
+                        }
+                    } else if (str_contains(strtolower($jadwalStr), strtolower($todayIndonesian))) {
+                        $isToday = true;
+                    }
+                    
+                    if ($isToday) {
+                        $todaySchedules->push((object)[
+                            'id_mapel' => $subject->id_mapel,
+                            'judul_pertemuan' => $subject->nama_mapel,
+                            'lokasi_pertemuan' => $batch->nama,
+                            'start_time' => $batch->jam_mulai ?? '08:00:00',
+                            'end_time' => $batch->jam_selesai ?? '10:00:00',
+                        ]);
+                    }
+                }
+            }
+        }
+        
+        // Sort by start_time
+        $todaySchedules = $todaySchedules->sortBy('start_time')->values();
         $todayScheduleCount = $todaySchedules->count();
 
         $notificationCount = $needReviewCount;
