@@ -31,6 +31,7 @@ class User extends Authenticatable
         'tanggal_lahir',
         'profile_photo_path',
         'level',
+        'status',
     ];
 
     public function role()

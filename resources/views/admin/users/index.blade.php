@@ -79,8 +79,14 @@
                             <p class="text-sm font-semibold text-slate-700">{{ $user->nomor_telepon ?? '-' }}</p>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                            @php
+                                $status = $user->status ?? 'Active';
+                                $bgClass = $status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : ($status === 'Inactive' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100');
+                                $dotClass = $status === 'Active' ? 'bg-emerald-500' : ($status === 'Inactive' ? 'bg-rose-500' : 'bg-blue-500');
+                                $label = $status === 'Active' ? 'Aktif' : ($status === 'Inactive' ? 'Tidak Aktif' : 'Selesai');
+                            @endphp
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold border {{ $bgClass }}">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span> {{ $label }}
                             </span>
                         </td>
                         <td class="px-6 py-4">

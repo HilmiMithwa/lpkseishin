@@ -88,7 +88,10 @@ class UserController extends Controller
                 'level' => 'required|string|max:50',
             ]);
 
-            $user->update(['level' => $request->level]);
+            $user->update([
+                'level' => $request->level,
+                'status' => $request->status_keaktifan
+            ]);
 
             \Illuminate\Support\Facades\DB::table('student_list_batch')->updateOrInsert(
                 ['user_id' => $user->id],
@@ -132,6 +135,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => ['required', 'string', 'max:20'],
             'role' => ['required', 'string', 'in:admin,siswa,guru'],
+            'status' => ['nullable', 'string', 'in:Active,Inactive,Completed'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -145,6 +149,10 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->nomor_telepon = $validated['phone'];
         $user->role_id = $roleId;
+
+        if ($request->has('status')) {
+            $user->status = $validated['status'];
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($validated['password']);

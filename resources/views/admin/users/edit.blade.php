@@ -112,6 +112,25 @@
                                 <x-input-label for="phone" value="Nomor Telepon:" />
                                 <x-text-input id="phone" name="phone" type="text" value="{{ old('phone', $user->nomor_telepon) }}" />
                             </div>
+                            @if($user->role_id != 2)
+                            <div class="space-y-1.5 text-left">
+                                <x-input-label for="status" value="Status:" />
+                                <div class="relative" x-data="{ open: false, selected: '{{ old('status', $user->status ?? 'Active') }}', options: { 'Active': 'Aktif', 'Inactive': 'Tidak Aktif', 'Completed': 'Selesai' } }" @click.outside="open = false">
+                                    <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-xl p-3 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
+                                        <span x-text="options[selected]"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
+                                        <template x-for="(label, value) in options" :key="value">
+                                            <button type="button" @click="selected = value; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === value ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
+                                                <span x-text="label"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <input type="hidden" name="status" :value="selected">
+                                </div>
+                            </div>
+                            @endif
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="dob" value="Tanggal Lahir:" />
                                 <x-text-input id="dob" name="dob" type="date" value="{{ old('dob', $user->tanggal_lahir) }}" />
