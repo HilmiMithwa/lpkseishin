@@ -21,6 +21,9 @@ class MeetingController extends Controller
         $mapels = Mapel::where('id_guru', $teacherId)->get();
         $mapelIds = $mapels->pluck('id_mapel');
 
+        // Delete ended meetings based on WIB (+7)
+        Meeting::where('waktu_selesai', '<', now()->addHours(7))->delete();
+
         $meetings = Meeting::whereIn('id_mapel', $mapelIds)
             ->with('mapel')
             ->orderBy('waktu_mulai', 'desc')

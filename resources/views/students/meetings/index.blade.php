@@ -12,9 +12,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse($meetings as $meeting)
             <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition flex flex-col relative overflow-hidden">
-                @if($meeting->status == 'ongoing')
+                @if($meeting->status == 'ongoing' || ($meeting->waktu_mulai <= now()->addHours(7) && $meeting->waktu_selesai >= now()->addHours(7)))
                     <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider animate-pulse">Live Now</div>
-                @elseif($meeting->waktu_mulai > now())
+                @elseif($meeting->waktu_mulai > now()->addHours(7))
                     <div class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Upcoming</div>
                 @else
                     <div class="absolute top-0 right-0 bg-gray-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Ended</div>

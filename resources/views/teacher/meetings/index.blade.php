@@ -3,13 +3,13 @@
 @section('title', 'Video Conference - LPK Seishin')
 
 @section('content')
-<div class="p-4 sm:p-6 lg:p-10">
+<div x-data="{ showCreateModal: false }" class="p-4 sm:p-6 lg:p-10">
     <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
             <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Video Conference</h1>
             <p class="text-sm text-[#666666] font-medium mt-2">Kelola jadwal pertemuan virtual untuk kelas Anda.</p>
         </div>
-        <button onclick="document.getElementById('createMeetingModal').classList.remove('hidden')" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
+        <button @click="showCreateModal = true" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
             Jadwalkan Meeting Baru
         </button>
@@ -25,9 +25,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse($meetings as $meeting)
             <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition flex flex-col relative overflow-hidden">
-                @if($meeting->status == 'ongoing')
+                @if($meeting->status == 'ongoing' || ($meeting->waktu_mulai <= now()->addHours(7) && $meeting->waktu_selesai >= now()->addHours(7)))
                     <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider animate-pulse">Live Now</div>
-                @elseif($meeting->waktu_mulai > now())
+                @elseif($meeting->waktu_mulai > now()->addHours(7))
                     <div class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Upcoming</div>
                 @else
                     <div class="absolute top-0 right-0 bg-gray-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Ended</div>
@@ -70,18 +70,19 @@
             </div>
         @endforelse
     </div>
-</div>
 
-<!-- Modal Create Meeting -->
-<div id="createMeetingModal" class="fixed inset-0 z-[100] hidden">
-    <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"></div>
-    <div class="fixed inset-0 z-10 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <!-- Create Meeting Modal overlay -->
+    <template x-teleport="body">
+        <div x-show="showCreateModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto overflow-x-hidden p-4 sm:p-6" x-cloak>
+            <!-- Backdrop -->
+            <div x-show="showCreateModal" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100 backdrop-blur-md" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 backdrop-blur-md" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/60 backdrop-blur-md" @click="showCreateModal = false"></div>
+
+            <!-- Modal Panel -->
+            <div x-show="showCreateModal" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4 sm:translate-y-0" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4 sm:translate-y-0" class="relative w-full max-w-lg bg-white rounded-3xl shadow-xl overflow-hidden z-10 flex flex-col max-h-full text-left transition-all sm:my-8">
                 <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 border-b border-gray-100">
                     <div class="flex items-center justify-between">
                         <h3 class="text-xl font-bold font-ibm text-[#222222]">Jadwalkan Video Conference</h3>
-                        <button onclick="document.getElementById('createMeetingModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-500">
+                        <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-500">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
@@ -115,11 +116,12 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6">
                         <button type="submit" class="w-full sm:w-auto inline-flex justify-center rounded-xl border border-transparent bg-[#d62828] px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-red-700 sm:ml-3">Buat Jadwal</button>
-                        <button type="button" onclick="document.getElementById('createMeetingModal').classList.add('hidden')" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-xl border border-gray-300 bg-white px-6 py-2.5 text-sm font-bold text-[#444444] shadow-sm hover:bg-gray-50 sm:mt-0">Batal</button>
+                        <button type="button" @click="showCreateModal = false" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-xl border border-gray-300 bg-white px-6 py-2.5 text-sm font-bold text-[#444444] shadow-sm hover:bg-gray-50 sm:mt-0">Batal</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+    </template>
 </div>
 @endsection
+
