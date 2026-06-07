@@ -56,9 +56,7 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
 
-    Route::get('/users/{id}/edit', function($id) {
-        return view('admin.users.edit', ['id' => $id]);
-    })->name('users.edit');
+    Route::get('/users/{id}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
 
     Route::get('/payments', function() {
         return view('admin.payments.index');

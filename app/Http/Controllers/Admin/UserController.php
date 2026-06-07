@@ -63,9 +63,69 @@ class UserController extends Controller
             ->with('success', 'Data pengguna berhasil disimpan!');
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $studentBatch = \Illuminate\Support\Facades\DB::table('student_list_batch')
+            ->where('user_id', $user->id)
+            ->first();
+        $batches = \App\Models\Batch::all();
+        $mapels = \App\Models\Mapel::with('batch')->get();
+        $guruMapels = \App\Models\Mapel::where('id_guru', $user->id)->pluck('id_mapel')->toArray();
+
+        return view('admin.users.edit', compact('user', 'studentBatch', 'batches', 'mapels', 'guruMapels'));
+    }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
+        if ($request->input('form_type') === 'akademik') {
+            $request->validate([
+                'batch_id' => 'required|exists:batch,id_batch',
+                'register_date' => 'required|date',
+                'status_keaktifan' => 'required|in:Active,Inactive,Completed',
+                'level' => 'required|string|max:50',
+            ]);
+
+            $user->update(['level' => $request->level]);
+
+            \Illuminate\Support\Facades\DB::table('student_list_batch')->updateOrInsert(
+                ['user_id' => $user->id],
+                [
+                    'id_batch' => $request->batch_id,
+                    'register_date' => $request->register_date,
+                    'status' => $request->status_keaktifan,
+                    'updated_at' => now(),
+                ]
+            );
+
+            return redirect()->route('admin.users', ['role' => 'siswa'])
+                ->with('success', 'Data akademik berhasil disimpan!');
+        }
+
+        if ($request->input('form_type') === 'guru_mapel') {
+            $request->validate([
+                'mapels' => 'nullable|array',
+                'mapels.*' => 'exists:mapel,id_mapel',
+            ]);
+
+            $selectedMapels = $request->input('mapels', []);
+
+            // Set id_guru to null for mapels previously assigned to this guru but now unchecked
+            \App\Models\Mapel::where('id_guru', $user->id)
+                ->whereNotIn('id_mapel', $selectedMapels)
+                ->update(['id_guru' => null]);
+
+            // Set id_guru to this user for the checked mapels
+            if (!empty($selectedMapels)) {
+                \App\Models\Mapel::whereIn('id_mapel', $selectedMapels)
+                    ->update(['id_guru' => $user->id]);
+            }
+
+            return redirect()->route('admin.users', ['role' => 'guru'])
+                ->with('success', 'Mata Pelajaran berhasil ditugaskan!');
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
