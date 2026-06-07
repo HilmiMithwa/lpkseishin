@@ -230,19 +230,36 @@
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full bg-white shadow-sm border border-gray-100 focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">2</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">{{ auth()->user()->unreadNotifications->count() }}</span>
+                            @endif
                         </button>
                         
                         <!-- Dropdown Menu -->
-                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-72 sm:w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
+                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-80 sm:w-96 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <h3 class="font-bold text-slate-800">Notifikasi Admin</h3>
-                                <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">2 Baru</span>
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ auth()->user()->unreadNotifications->count() }} Baru</span>
+                                @endif
                             </div>
-                            <!-- Footer -->
-                            <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-800 transition">Lihat Semua Notifikasi</a>
+                            <!-- Notification List -->
+                            <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                @forelse(auth()->user()->notifications()->take(5)->get() as $notification)
+                                    <div class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group {{ is_null($notification->read_at) ? 'bg-blue-50/30' : '' }}">
+                                        <div class="flex-1">
+                                            <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-[#d62828] transition">{{ $notification->data['title'] ?? 'Notifikasi Baru' }}</p>
+                                            <p class="text-[12px] text-slate-500 leading-snug">{{ $notification->data['message'] ?? '' }}</p>
+                                            <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="p-8 text-center">
+                                        <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                        <p class="text-sm font-medium text-gray-500">Belum ada notifikasi.</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -317,19 +334,36 @@
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full hover:bg-white shadow-sm focus:outline-none border border-transparent hover:border-gray-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">2</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">{{ auth()->user()->unreadNotifications->count() }}</span>
+                            @endif
                         </button>
                         
                         <!-- Dropdown Menu -->
-                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-72 sm:w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
+                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-80 sm:w-96 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <h3 class="font-bold text-slate-800">Notifikasi Admin</h3>
-                                <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">2 Baru</span>
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ auth()->user()->unreadNotifications->count() }} Baru</span>
+                                @endif
                             </div>
-                            <!-- Footer -->
-                            <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-800 transition">Lihat Semua Notifikasi</a>
+                            <!-- Notification List -->
+                            <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                @forelse(auth()->user()->notifications()->take(5)->get() as $notification)
+                                    <div class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group {{ is_null($notification->read_at) ? 'bg-blue-50/30' : '' }}">
+                                        <div class="flex-1">
+                                            <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-[#d62828] transition">{{ $notification->data['title'] ?? 'Notifikasi Baru' }}</p>
+                                            <p class="text-[12px] text-slate-500 leading-snug">{{ $notification->data['message'] ?? '' }}</p>
+                                            <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="p-8 text-center">
+                                        <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                        <p class="text-sm font-medium text-gray-500">Belum ada notifikasi.</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
