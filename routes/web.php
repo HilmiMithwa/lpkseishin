@@ -280,6 +280,8 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::post('/progress-report/evaluation-log', [ProgressReportController::class, 'storeEvaluationLog'])->name('progress-report.evaluation-log.store');
     Route::put('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'updateEvaluationLog'])->name('progress-report.evaluation-log.update');
     Route::delete('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'destroyEvaluationLog'])->name('progress-report.evaluation-log.destroy');
+    Route::get('/progress-report/online-evaluations/{classId}', [ProgressReportController::class, 'getOnlineEvaluations'])->name('progress-report.online-evaluations');
+    Route::get('/progress-report/online-submissions/{classId}', [ProgressReportController::class, 'getEvaluationSubmissions'])->name('progress-report.online-submissions');
     Route::post('/vocabulary/level/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'storeLevel'])->name('vocabulary.level.store');
     Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
     Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
