@@ -39,7 +39,7 @@ class UserController extends Controller
                     return '<p class="text-sm font-semibold text-slate-700">' . htmlspecialchars($row->nomor_telepon ?? '-') . '</p>';
                 })
                 ->addColumn('status_badge', function ($row) {
-                    $status = $row->status ?? 'Active';
+                    $status = ucfirst(strtolower($row->status ?? 'Active'));
                     $bgClass = $status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : ($status === 'Inactive' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100');
                     $dotClass = $status === 'Active' ? 'bg-emerald-500' : ($status === 'Inactive' ? 'bg-rose-500' : 'bg-blue-500');
                     $label = $status === 'Active' ? 'Aktif' : ($status === 'Inactive' ? 'Tidak Aktif' : 'Selesai');

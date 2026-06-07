@@ -40,7 +40,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">12</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $total_siswa_aktif }}</h3>
             </div>
         </x-card>
 
@@ -51,7 +51,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">3</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $batch_berjalan }}</h3>
             </div>
         </x-card>
 
@@ -62,7 +62,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">94%</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $tingkat_kelulusan }}%</h3>
             </div>
         </x-card>
 
@@ -74,8 +74,8 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div class="text-right">
-                    <h3 class="text-xl font-bold text-slate-800 tracking-tight">Rp 15.500.000</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5">8 Siswa</p>
+                    <h3 class="text-xl font-bold text-slate-800 tracking-tight">Rp {{ number_format($menunggu_pembayaran, 0, ',', '.') }}</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5">{{ $siswaMenungguPembayaranCount }} Siswa</p>
                 </div>
             </div>
         </x-card>
@@ -87,7 +87,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">2</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $total_sensei }}</h3>
             </div>
         </x-card>
 
@@ -98,7 +98,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">5</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $total_alumni }}</h3>
             </div>
         </x-card>
 
@@ -109,7 +109,7 @@
                 <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#d62828]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <h3 class="text-3xl font-bold text-slate-800">4</h3>
+                <h3 class="text-3xl font-bold text-slate-800">{{ $siswa_berisiko }}</h3>
             </div>
         </x-card>
 
@@ -121,7 +121,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
                 <div class="text-right">
-                    <h3 class="text-xl font-bold text-slate-800 tracking-tight">Rp 25.500.000</h3>
+                    <h3 class="text-xl font-bold text-slate-800 tracking-tight">Rp {{ number_format($pendapatan_bulanan, 0, ',', '.') }}</h3>
                 </div>
             </div>
         </x-card>
@@ -132,7 +132,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-8">
         <!-- Enrollment Trends -->
         <div>
-            <h3 class="font-bold text-sm text-slate-800 mb-3 px-1">Tren Pendaftaran</h3>
+            <div class="flex items-center justify-between mb-3 px-1">
+                <h3 class="font-bold text-sm text-slate-800">Tren Pendaftaran</h3>
+                <form action="{{ route('admin.dashboard') }}" method="GET" class="inline-block">
+                    <select name="year" onchange="this.form.submit()" class="text-xs font-semibold text-slate-600 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d62828] focus:border-transparent py-1 pl-2 pr-6 cursor-pointer hover:bg-slate-50 transition shadow-sm">
+                        @foreach($availableYears as $y)
+                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>Tahun {{ $y }}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
             <x-card class="p-6 h-[320px] flex items-center justify-center">
                 <div class="w-full h-full relative">
                     <canvas id="enrollmentChart"></canvas>
@@ -181,12 +190,8 @@
     updateBannerClock();
 
     // Data dari Controller (Backend Integration Point)
-    @php
-        $defaultEnrollment = [10, 25, 5, 35, 50, 25, 35, 75, 55, 45, 60, 40];
-        $defaultPayment = [80000000, 23529411, 53333333];
-    @endphp
-    const enrollmentData = @json($enrollmentData ?? $defaultEnrollment);
-    const paymentData = @json($paymentData ?? $defaultPayment); // Nilai Rupiah: Lunas, Cicilan Lancar, Menunggak
+    const enrollmentData = @json($enrollmentData ?? []);
+    const paymentData = @json($paymentData ?? [0, 0, 0]); // Nilai Rupiah: Lunas, Cicilan Lancar, Menunggak
 
     // Format Rupiah
     const formatRupiah = (number) => {

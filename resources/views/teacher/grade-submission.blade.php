@@ -55,9 +55,7 @@
                         <button @click="activeStudent = student.id" class="w-full text-left p-3 rounded-xl transition-all flex items-center gap-3 border"
                             :class="activeStudent === student.id ? 'bg-red-50/50 border-red-100 shadow-[0_2px_10px_-4px_rgba(214,40,40,0.2)]' : 'bg-transparent border-transparent hover:bg-gray-50'">
                             <!-- Avatar -->
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
-                                :class="activeStudent === student.id ? 'bg-[#d62828] text-white' : 'bg-gray-100 text-gray-600'" x-text="student.avatar">
-                            </div>
+                            <img :src="student.avatar_url" :onerror="`this.onerror=null; this.src='${student.fallback_avatar_url}'`" class="w-10 h-10 rounded-full object-cover flex-shrink-0" :class="activeStudent === student.id ? 'border-2 border-[#d62828]' : 'border border-gray-100'">
                             <!-- Info -->
                             <div class="flex-1 overflow-hidden">
                                 <p class="font-bold text-sm truncate transition-colors" :class="activeStudent === student.id ? 'text-[#d62828]' : 'text-gray-800'" x-text="student.name"></p>
@@ -88,7 +86,7 @@
                     <div class="bg-white rounded-[32px] border border-gray-100 shadow-sm p-6 sm:p-8">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                             <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xl text-gray-600" x-text="student.avatar"></div>
+                                <img :src="student.avatar_url" :onerror="`this.onerror=null; this.src='${student.fallback_avatar_url}'`" class="w-14 h-14 rounded-full object-cover shadow-sm border border-gray-100">
                                 <div>
                                     <h2 class="text-xl font-bold text-gray-800" x-text="student.name"></h2>
                                     <p class="text-sm font-semibold text-gray-500 mt-0.5 flex items-center gap-1.5">

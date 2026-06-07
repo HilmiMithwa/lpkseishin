@@ -81,7 +81,7 @@ class RegistrationController extends Controller
             'nomor_telepon' => $registration->whatsapp_number,
             'tanggal_lahir' => $registration->birth_date,
             'role_id' => 2, // Siswa
-            'status' => 'active',
+            'status' => 'Active',
             'level' => $registration->japanese_level ?? 'N5',
         ]);
 

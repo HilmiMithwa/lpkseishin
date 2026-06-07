@@ -143,7 +143,8 @@ class TugasController extends Controller
                 'name' => $sub->user->name,
                 'status' => $sub->status === 'dikirim' ? 'belum_dinilai' : ($sub->status === 'dinilai' ? 'selesai' : 'terlambat'),
                 'submitted_at' => $sub->submitted_at ? $sub->submitted_at->translatedFormat('d M Y, H:i') : '-',
-                'avatar' => strtoupper(substr($sub->user->name, 0, 2)),
+                'avatar_url' => $sub->user->avatar_url,
+                'fallback_avatar_url' => $sub->user->fallback_avatar_url,
                 'attachment' => $sub->file_path ? [
                     'type' => 'document', 
                     'url' => route('submissions.download', $sub->id_pengiriman_tugas),

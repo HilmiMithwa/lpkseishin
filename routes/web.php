@@ -77,8 +77,78 @@ Route::middleware('auth')->group(function () {
 
 //Dashboard Admin
 Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
+    Route::get('/dashboard', function(\Illuminate\Http\Request $request) {
+        $year = $request->query('year', date('Y'));
+        
+        $enrollmentData = array_fill(0, 12, 0);
+        $users = \App\Models\User::where('role_id', 2)
+            ->whereYear('created_at', $year)
+            ->get();
+        foreach ($users as $user) {
+            $month = $user->created_at->format('n') - 1;
+            $enrollmentData[$month]++;
+        }
+
+        $total_siswa_aktif = \App\Models\User::where('role_id', 2)->whereRaw('LOWER(status) = ?', ['active'])->count();
+        $batch_berjalan = \App\Models\Batch::whereRaw('LOWER(status) IN (?, ?)', ['active', 'pendaftaran'])->count();
+        $total_sensei = \App\Models\User::where('role_id', 3)->count();
+        $total_alumni = \App\Models\User::where('role_id', 2)->whereRaw('LOWER(status) = ?', ['completed'])->count();
+        $siswa_berisiko = 4; // Dummy
+        $tingkat_kelulusan = 94; // Dummy
+
+        // Calculate Menunggu Pembayaran and Pendapatan Bulanan
+        $activeStudents = \App\Models\User::where('role_id', 2)->whereRaw('LOWER(status) = ?', ['active'])->with('studentBatches')->get();
+        $totalSppExpected = 0;
+        foreach ($activeStudents as $student) {
+            foreach ($student->studentBatches as $batch) {
+                $totalSppExpected += $batch->spp_nominal;
+            }
+        }
+        $totalSppPaid = \App\Models\Payment::whereIn('id_user', $activeStudents->pluck('id'))
+                          ->where('status', 'lunas')
+                          ->sum('amount');
+        
+        $menunggu_pembayaran = max(0, $totalSppExpected - $totalSppPaid);
+        $pendapatan_bulanan = $totalSppExpected;
+
+        $siswaMenungguPembayaranCount = 0;
+        foreach ($activeStudents as $student) {
+            $expected = $student->studentBatches->sum('spp_nominal');
+            $paid = \App\Models\Payment::where('id_user', $student->id)->where('status', 'lunas')->sum('amount');
+            if ($expected > $paid) {
+                $siswaMenungguPembayaranCount++;
+            }
+        }
+
+        $paymentData = [(int) $totalSppPaid, 0, (int) $menunggu_pembayaran];
+
+        $dbYears = \App\Models\User::where('role_id', 2)
+            ->selectRaw('EXTRACT(YEAR FROM created_at) as year')
+            ->distinct()
+            ->pluck('year')
+            ->toArray();
+            
+        $currentYear = (int) date('Y');
+        $generatedYears = [$currentYear - 2, $currentYear - 1, $currentYear, $currentYear + 1];
+        
+        $availableYears = array_unique(array_merge($generatedYears, $dbYears));
+        rsort($availableYears);
+
+        return view('admin.dashboard', compact(
+            'enrollmentData', 
+            'total_siswa_aktif', 
+            'batch_berjalan', 
+            'total_sensei', 
+            'total_alumni', 
+            'siswa_berisiko', 
+            'tingkat_kelulusan', 
+            'menunggu_pembayaran', 
+            'pendapatan_bulanan',
+            'siswaMenungguPembayaranCount',
+            'paymentData',
+            'year',
+            'availableYears'
+        ));
     })->name('dashboard');
 
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users');
