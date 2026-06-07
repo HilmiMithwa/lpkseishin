@@ -29,15 +29,22 @@
         
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 w-full">
             <div class="text-left">
-                <h2 class="text-3xl lg:text-[32px] font-bold text-[#222222] tracking-tight">Total Estimasi: {{ $activeBill->total }}</h2>
-                <p class="text-sm font-semibold text-[#666666] mt-1">{{ $activeBill->description }}</p>
+                @if($isFullyPaid)
+                    <h2 class="text-3xl lg:text-[32px] font-bold text-emerald-600 tracking-tight">SPP bulan ini sudah lunas</h2>
+                    <p class="text-sm font-semibold text-[#666666] mt-1">Terima kasih atas pembayaran Anda.</p>
+                @else
+                    <h2 class="text-3xl lg:text-[32px] font-bold text-[#222222] tracking-tight">Total Estimasi: Rp {{ number_format($activeBill->total, 0, ',', '.') }}</h2>
+                    <p class="text-sm font-semibold text-[#666666] mt-1">{{ $activeBill->description }}</p>
+                @endif
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                <button class="bg-white border border-gray-200 text-[#444444] hover:bg-gray-50 font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                @if(!$isFullyPaid)
+                <a href="{{ route('students.invoice') }}" target="_blank" class="bg-white border border-gray-200 text-[#444444] hover:bg-gray-50 font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm">
                     <svg class="w-5 h-5 text-[#d62828]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
                     Unduh Invoice
-                </button>
+                </a>
+                @endif
                 <button @click="showPaymentModal = true" class="bg-[#d62828] text-white hover:bg-[#b01e1e] font-bold py-3 px-8 rounded-xl text-sm transition shadow-sm">
                     Bayar Manual
                 </button>
@@ -61,6 +68,7 @@
                         <th class="py-4 px-6 text-sm font-bold text-[#222222]">Metode</th>
                         <th class="py-4 px-6 text-sm font-bold text-[#222222]">Status</th>
                         <th class="py-4 px-6 text-sm font-bold text-[#222222]">Catatan Admin</th>
+                        <th class="py-4 px-6 text-sm font-bold text-[#222222] text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
@@ -83,6 +91,14 @@
                             </td>
                             <td class="py-4 px-6 text-xs text-gray-500 max-w-[200px] truncate">
                                 {{ $payment->admin_note ?? '-' }}
+                            </td>
+                            <td class="py-4 px-6 text-center">
+                                @if($payment->status === 'lunas')
+                                    <a href="{{ route('students.invoice.history', $payment->id) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#d62828] bg-red-50 border border-red-100 rounded-lg shadow-sm hover:bg-[#d62828] hover:text-white transition" title="Unduh Invoice">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        Invoice
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @empty

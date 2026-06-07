@@ -77,7 +77,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <p class="text-sm font-semibold text-slate-700">{{ $startDateFormatted }} - {{ $endDateFormatted }}</p>
-                            <p class="text-[11px] font-medium text-slate-500 mt-0.5">{{ $batch->durasi }}</p>
+                            <p class="text-[11px] font-medium text-slate-500 mt-0.5">{{ $batch->durasi }} | SPP: Rp {{ number_format($batch->spp_nominal ?? 0, 0, ',', '.') }}</p>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
@@ -104,7 +104,7 @@
                         </td>
                         <td class="px-6 py-4 text-center" x-data>
                             <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button x-on:click="$dispatch('open-edit-batch-modal', { batch: { id: '{{ $batch->id_batch }}', batch_name: '{{ addslashes($batch->nama) }}', description: '{{ addslashes($batch->deskripsi) }}', start_date: '{{ $batch->waktu_mulai }}', end_date: '{{ $batch->waktu_berakhir }}', status: '{{ $batch->status ?? 'pendaftaran' }}', quota: '{{ $batch->quota ?? 30 }}', jadwal: '{{ addslashes($batch->jadwal) }}', jam_mulai: '{{ $batch->jam_mulai ? \Carbon\Carbon::parse($batch->jam_mulai)->format('H:i') : '' }}', jam_selesai: '{{ $batch->jam_selesai ? \Carbon\Carbon::parse($batch->jam_selesai)->format('H:i') : '' }}' } })" class="p-1.5 text-slate-400 hover:text-[#d62828] bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 transition" title="Edit">
+                                <button x-on:click="$dispatch('open-edit-batch-modal', { batch: { id: '{{ $batch->id_batch }}', batch_name: '{{ addslashes($batch->nama) }}', description: '{{ addslashes($batch->deskripsi) }}', start_date: '{{ $batch->waktu_mulai }}', end_date: '{{ $batch->waktu_berakhir }}', status: '{{ $batch->status ?? 'pendaftaran' }}', quota: '{{ $batch->quota ?? 30 }}', spp_nominal: '{{ $batch->spp_nominal ?? 0 }}', jadwal: '{{ addslashes($batch->jadwal) }}', jam_mulai: '{{ $batch->jam_mulai ? \Carbon\Carbon::parse($batch->jam_mulai)->format('H:i') : '' }}', jam_selesai: '{{ $batch->jam_selesai ? \Carbon\Carbon::parse($batch->jam_selesai)->format('H:i') : '' }}' } })" class="p-1.5 text-slate-400 hover:text-[#d62828] bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 transition" title="Edit">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </button>
                                 <button x-on:click="$dispatch('open-delete-batch-modal', { id: '{{ $batch->id_batch }}' })" class="p-1.5 text-slate-400 hover:text-rose-600 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 transition" title="Hapus">
@@ -145,9 +145,9 @@
     <!-- Modal Tambah/Edit Batch -->
     <x-modal name="add-batch-modal" focusable maxWidth="2xl">
         <form method="POST" :action="isEdit ? '{{ url('admin/batches') }}/' + batchId : '{{ route('admin.batches.store') }}'" 
-              x-data="{ isEdit: {{ old('batchId') ? 'true' : 'false' }}, batch_name: '{{ old('batch_name') }}', description: '{{ old('description') }}', start_date: '{{ old('start_date') }}', end_date: '{{ old('end_date') }}', status: '{{ old('status', 'pendaftaran') }}', quota: '{{ old('quota') }}', jadwal: '{{ old('jadwal', 'Senin - Kamis') }}', jam_mulai: '{{ old('jam_mulai') }}', jam_selesai: '{{ old('jam_selesai') }}', batchId: '{{ old('batchId') }}' }" 
-              @open-add-batch-modal.window="isEdit = false; batch_name = ''; description = ''; start_date = ''; end_date = ''; status = 'pendaftaran'; quota = ''; jadwal = 'Senin - Kamis'; jam_mulai = ''; jam_selesai = ''; batchId = ''; $dispatch('open-modal', 'add-batch-modal')"
-              @open-edit-batch-modal.window="isEdit = true; batch_name = $event.detail.batch.batch_name; description = $event.detail.batch.description; start_date = $event.detail.batch.start_date; end_date = $event.detail.batch.end_date; status = $event.detail.batch.status; quota = $event.detail.batch.quota; jadwal = $event.detail.batch.jadwal; jam_mulai = $event.detail.batch.jam_mulai; jam_selesai = $event.detail.batch.jam_selesai; batchId = $event.detail.batch.id; $dispatch('open-modal', 'add-batch-modal')">
+              x-data="{ isEdit: {{ old('batchId') ? 'true' : 'false' }}, batch_name: '{{ old('batch_name') }}', description: '{{ old('description') }}', start_date: '{{ old('start_date') }}', end_date: '{{ old('end_date') }}', status: '{{ old('status', 'pendaftaran') }}', quota: '{{ old('quota') }}', spp_nominal: '{{ old('spp_nominal') }}', jadwal: '{{ old('jadwal', 'Senin - Kamis') }}', jam_mulai: '{{ old('jam_mulai') }}', jam_selesai: '{{ old('jam_selesai') }}', batchId: '{{ old('batchId') }}' }" 
+              @open-add-batch-modal.window="isEdit = false; batch_name = ''; description = ''; start_date = ''; end_date = ''; status = 'pendaftaran'; quota = ''; spp_nominal = ''; jadwal = 'Senin - Kamis'; jam_mulai = ''; jam_selesai = ''; batchId = ''; $dispatch('open-modal', 'add-batch-modal')"
+              @open-edit-batch-modal.window="isEdit = true; batch_name = $event.detail.batch.batch_name; description = $event.detail.batch.description; start_date = $event.detail.batch.start_date; end_date = $event.detail.batch.end_date; status = $event.detail.batch.status; quota = $event.detail.batch.quota; spp_nominal = $event.detail.batch.spp_nominal; jadwal = $event.detail.batch.jadwal; jam_mulai = $event.detail.batch.jam_mulai; jam_selesai = $event.detail.batch.jam_selesai; batchId = $event.detail.batch.id; $dispatch('open-modal', 'add-batch-modal')">
             @csrf
             
             <!-- Hidden inputs -->
@@ -231,7 +231,7 @@
                 </div>
                 
                 <!-- Status & Quota -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div>
                         <label for="status" class="block text-[13px] font-bold text-slate-500 mb-2">Status Pendaftaran:</label>
                         <select x-model="status" id="status" name="status" class="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-2xl focus:ring-[#d62828] focus:border-[#d62828] p-3.5 transition-shadow">
@@ -247,6 +247,13 @@
                         <label for="quota" class="block text-[13px] font-bold text-slate-500 mb-2">Maksimal Kuota Siswa:</label>
                         <input x-model="quota" id="quota" type="number" name="quota" placeholder="e.g., 30" class="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-2xl focus:ring-[#d62828] focus:border-[#d62828] p-3.5 transition-shadow placeholder-slate-400">
                         @error('quota')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="spp_nominal" class="block text-[13px] font-bold text-slate-500 mb-2">Nominal SPP (Rp):</label>
+                        <input x-model="spp_nominal" id="spp_nominal" type="number" name="spp_nominal" placeholder="e.g., 500000" class="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-2xl focus:ring-[#d62828] focus:border-[#d62828] p-3.5 transition-shadow placeholder-slate-400">
+                        @error('spp_nominal')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>

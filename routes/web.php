@@ -129,6 +129,8 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/payment', [\App\Http\Controllers\PaymentController::class, 'studentIndex'])->name('students.payment');
     Route::post('/students/payment/store', [\App\Http\Controllers\PaymentController::class, 'studentStore'])->name('students.payment.store');
+    Route::get('/students/invoice', [\App\Http\Controllers\PaymentController::class, 'studentInvoice'])->name('students.invoice');
+    Route::get('/students/invoice/{id}', [\App\Http\Controllers\PaymentController::class, 'historyInvoice'])->name('students.invoice.history');
 });
 
 //Dashboard Guru

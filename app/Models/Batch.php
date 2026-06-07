@@ -22,6 +22,7 @@ class Batch extends Model
         'jam_selesai',
         'status',
         'quota',
+        'spp_nominal',
     ];
 
     public function mapel()

@@ -22,17 +22,25 @@ class PaymentController extends Controller
             ->get();
             
         // Fetch available batches for the dropdown
-        $batches = Batch::where('status', 'Active')->get();
+        $batches = $user->studentBatches; // Fetch batches the student is enrolled in
 
-        // Calculate total unpaid or pending bills if we had a billing system,
-        // for now we just show a static bill or simple calculation
+        $sppTotal = $batches->sum('spp_nominal');
+
         $activeBill = (object) [
-            'total' => 'Rp 1.500.000',
+            'total' => $sppTotal,
             'due_date' => date('t M Y'), // End of current month
-            'description' => 'Tagihan SPP / Pendaftaran'
+            'description' => 'Tagihan SPP',
+            'invoice_number' => 'INV/' . date('Ymd') . '/' . str_pad($user->id, 4, '0', STR_PAD_LEFT)
         ];
         
-        $isFullyPaid = false; // Add real logic here if needed
+        $isSppPaid = Payment::where('id_user', $user->id)
+            ->where('payment_for', 'Biaya Pendidikan')
+            ->whereMonth('payment_date', date('m'))
+            ->whereYear('payment_date', date('Y'))
+            ->where('status', 'lunas')
+            ->exists();
+
+        $isFullyPaid = $isSppPaid;
 
         return view('students.payment', compact('payments', 'batches', 'activeBill', 'isFullyPaid'));
     }
@@ -66,6 +74,42 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->route('students.payment')->with('success', 'Bukti pembayaran berhasil diunggah dan sedang menunggu verifikasi admin.');
+    }
+
+    public function studentInvoice()
+    {
+        $user = Auth::user();
+        
+        $batches = $user->studentBatches;
+        $sppTotal = $batches->sum('spp_nominal');
+
+        $activeBill = (object) [
+            'total' => $sppTotal,
+            'due_date' => date('t M Y'),
+            'description' => 'Tagihan SPP',
+            'invoice_number' => 'INV/' . date('Ymd') . '/' . str_pad($user->id, 4, '0', STR_PAD_LEFT),
+            'is_paid' => false
+        ];
+
+        return view('students.invoice', compact('user', 'activeBill'));
+    }
+
+    public function historyInvoice($id)
+    {
+        $user = Auth::user();
+        $payment = Payment::where('id_user', $user->id)->findOrFail($id);
+
+        $activeBill = (object) [
+            'total' => $payment->amount,
+            'due_date' => \Carbon\Carbon::parse($payment->payment_date)->format('d M Y'),
+            'description' => $payment->payment_for . ($payment->batch ? ' - ' . $payment->batch->nama : ''),
+            'invoice_number' => 'INV/' . \Carbon\Carbon::parse($payment->created_at)->format('Ymd') . '/' . str_pad($payment->id, 4, '0', STR_PAD_LEFT),
+            'is_paid' => true,
+            'payment_date' => \Carbon\Carbon::parse($payment->payment_date)->format('d M Y'),
+            'payment_method' => $payment->payment_method
+        ];
+
+        return view('students.invoice', compact('user', 'activeBill'));
     }
 
     // ====== ADMIN METHODS ====== //
