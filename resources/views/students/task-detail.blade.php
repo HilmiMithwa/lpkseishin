@@ -208,7 +208,7 @@
             <div class="p-6 bg-white border border-gray-100 rounded-[28px] shadow-sm space-y-4">
                 <h3 class="text-[14px] font-bold text-[#222222]">Umpan Balik Sensei</h3>
                 <div class="flex items-center gap-3">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($guru->name ?? 'Sensei') }}&background=f3f4f6&color=444&bold=true" class="w-10 h-10 rounded-full object-cover">
+                    <img src="{{ $guru->avatar_url ?? 'https://ui-avatars.com/api/?name=Sensei&background=f3f4f6&color=444&bold=true' }}" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Sensei&background=f3f4f6&color=444&bold=true'" class="w-10 h-10 rounded-full object-cover">
                     <div>
                         <p class="text-[13px] font-bold text-[#222222]">{{ $guru->name ?? 'Sensei' }}</p>
                         <p class="text-[10px] font-medium text-gray-400">Sensei</p>

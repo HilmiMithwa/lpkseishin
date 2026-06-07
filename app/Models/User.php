@@ -49,6 +49,20 @@ class User extends Authenticatable
         return $this->belongsToMany(Batch::class, 'student_list_batch', 'user_id', 'id_batch')->where('student_list_batch.status', 'Active');
     }
 
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->profile_photo_path) {
+            return \Illuminate\Support\Facades\Storage::disk('s3')->url($this->profile_photo_path);
+        }
+
+        return $this->fallback_avatar_url;
+    }
+
+    public function getFallbackAvatarUrlAttribute()
+    {
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=f3f4f6&color=d62828&bold=true';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
