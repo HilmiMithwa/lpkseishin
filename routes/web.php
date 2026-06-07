@@ -61,6 +61,11 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'adminIndex'])->name('payments');
     Route::post('/payments/{id}/verify', [\App\Http\Controllers\PaymentController::class, 'adminVerify'])->name('payments.verify');
 
+    Route::get('/bank-accounts', [\App\Http\Controllers\Admin\BankAccountController::class, 'index'])->name('bank_accounts');
+    Route::post('/bank-accounts', [\App\Http\Controllers\Admin\BankAccountController::class, 'store'])->name('bank_accounts.store');
+    Route::put('/bank-accounts/{id}', [\App\Http\Controllers\Admin\BankAccountController::class, 'update'])->name('bank_accounts.update');
+    Route::delete('/bank-accounts/{id}', [\App\Http\Controllers\Admin\BankAccountController::class, 'destroy'])->name('bank_accounts.destroy');
+
     Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
     Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');

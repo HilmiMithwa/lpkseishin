@@ -115,16 +115,13 @@
                 Silakan lakukan pembayaran melalui transfer bank ke salah satu rekening di bawah ini sebelum tanggal jatuh tempo. Setelah transfer, harap upload bukti pembayaran melalui menu <span class="font-bold">Bayar Manual</span> di sistem.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                @foreach($bankAccounts as $bank)
                 <div class="bg-white p-3 rounded-lg border border-amber-100/50">
-                    <p class="text-xs font-bold text-slate-400 uppercase">Bank BCA</p>
-                    <p class="text-sm font-bold text-slate-800 mt-0.5">8821 000 123</p>
-                    <p class="text-xs font-medium text-slate-500">a/n LPK Seishin Indonesia</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Bank {{ $bank->bank_name }}</p>
+                    <p class="text-sm font-bold text-slate-800 mt-0.5">{{ $bank->account_number }}</p>
+                    <p class="text-xs font-medium text-slate-500">a/n {{ $bank->account_name }}</p>
                 </div>
-                <div class="bg-white p-3 rounded-lg border border-amber-100/50">
-                    <p class="text-xs font-bold text-slate-400 uppercase">Bank Mandiri</p>
-                    <p class="text-sm font-bold text-slate-800 mt-0.5">130 00 1234 5678</p>
-                    <p class="text-xs font-medium text-slate-500">a/n LPK Seishin Indonesia</p>
-                </div>
+                @endforeach
             </div>
         </div>
         @endif

@@ -158,9 +158,9 @@
                         <div>
                             <x-input-label for="payment_method" value="Metode" />
                             <select name="payment_method" id="payment_method" required class="mt-1 block w-full border-gray-300 focus:border-[#d62828] focus:ring-[#d62828] rounded-md shadow-sm">
-                                <option value="Transfer Bank BCA">Transfer Bank BCA</option>
-                                <option value="Transfer Bank Mandiri">Transfer Bank Mandiri</option>
-                                <option value="Transfer Bank BRI">Transfer Bank BRI</option>
+                                @foreach($bankAccounts as $bank)
+                                    <option value="Transfer {{ $bank->bank_name }} ({{ $bank->account_number }})">Transfer {{ $bank->bank_name }} ({{ $bank->account_number }})</option>
+                                @endforeach
                                 <option value="Tunai (Di Kantor)">Tunai (Di Kantor)</option>
                             </select>
                         </div>
