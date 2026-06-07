@@ -588,7 +588,13 @@
             }
         });
 
-        $('#dt-search').on('keyup', function() { table.draw(); });
+        let searchTimer;
+        $('#dt-search').on('keyup', function() { 
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                table.draw(); 
+            }, 300); // Debounce delay 300ms
+        });
         $('#dt-status').on('change', function() { table.draw(); });
         
         $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });
