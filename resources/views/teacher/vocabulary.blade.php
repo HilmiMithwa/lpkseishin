@@ -165,7 +165,7 @@
     <div x-data="{ show: false }" @open-add-level.window="show = true" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" x-cloak style="display: none;">
         <div x-show="show" @click.away="show = false" class="bg-white rounded-[24px] w-full max-w-md mx-4 shadow-xl overflow-hidden transform transition-all" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             
-            <form action="#" method="GET" @submit.prevent="window.location.href = '{{ url('/teacher/vocabulary/level') }}/' + document.getElementById('level_input').value; show = false;">
+            <form action="{{ route('teacher.vocabulary.level.store') }}" method="POST">
                 @csrf
                 <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <h3 class="text-lg font-bold text-[#222222]">Tambah Level Baru</h3>

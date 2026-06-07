@@ -13,7 +13,7 @@ class VocabularyController extends Controller
         $totalWords = Vocabulary::count();
         $dailyWord = Vocabulary::inRandomOrder()->first();
         
-        $levels = Vocabulary::select('level')->distinct()->pluck('level')->sort();
+        $levels = \App\Models\VocabularyLevel::orderBy('level')->pluck('level');
         
         if ($levels->isEmpty()) {
             $levels = collect([1]); // Default empty state
@@ -100,19 +100,43 @@ class VocabularyController extends Controller
         return redirect()->back()->with('success', 'Flashcard berhasil dihapus!');
     }
 
+    public function storeLevel(Request $request)
+    {
+        $request->validate([
+            'level' => 'required|integer|min:1'
+        ]);
+
+        \App\Models\VocabularyLevel::firstOrCreate(['level' => $request->level]);
+
+        return redirect()->route('teacher.vocabulary.level', $request->level)->with('success', 'Level baru berhasil dibuat!');
+    }
+
     public function updateLevel(Request $request, $level_id)
     {
         $request->validate([
             'new_level' => 'required|integer|min:1'
         ]);
 
-        Vocabulary::where('level', $level_id)->update(['level' => $request->new_level]);
+        if ($level_id != $request->new_level) {
+            $exists = \App\Models\VocabularyLevel::where('level', $request->new_level)->exists();
+            
+            if ($exists) {
+                // Merge scenario: Move vocabularies and delete old level
+                Vocabulary::where('level', $level_id)->update(['level' => $request->new_level]);
+                \App\Models\VocabularyLevel::where('level', $level_id)->delete();
+            } else {
+                // Rename scenario: Update both
+                \App\Models\VocabularyLevel::where('level', $level_id)->update(['level' => $request->new_level]);
+                Vocabulary::where('level', $level_id)->update(['level' => $request->new_level]);
+            }
+        }
 
         return redirect()->back()->with('success', 'Level berhasil diperbarui!');
     }
 
     public function destroyLevel($level_id)
     {
+        \App\Models\VocabularyLevel::where('level', $level_id)->delete();
         Vocabulary::where('level', $level_id)->delete();
 
         return redirect()->back()->with('success', 'Level beserta isinya berhasil dihapus!');
