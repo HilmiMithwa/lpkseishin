@@ -17,6 +17,7 @@ use App\Http\Controllers\Teacher\ProgressReportController;
 use App\Http\Controllers\Teacher\TugasController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\SubjectDiscussionController;
 
 
 
@@ -97,9 +98,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
     Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
-    Route::get('/programs', function() {
-        return view('admin.programs.index');
-    })->name('programs');
+    Route::get('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'index'])->name('programs');
+    Route::post('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'store'])->name('programs.store');
+    Route::put('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'update'])->name('programs.update');
+    Route::delete('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'destroy'])->name('programs.destroy');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');
@@ -141,6 +143,11 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     //mark materi sebagai selesai (update progress)
     Route::post('/students/materials/{id_materi}/complete', [BahanAjarController::class, 'completeMaterial'])->name('materials.complete');
+
+    // Diskusi materi (chat) - Student
+    Route::get('/students/subjects/{id}/discussions', [SubjectDiscussionController::class, 'index'])->name('students.discussions.index');
+    Route::post('/students/subjects/{id}/discussions', [SubjectDiscussionController::class, 'store'])->name('students.discussions.store');
+    Route::get('/students/subjects/{id}/discussions/poll/{lastId}', [SubjectDiscussionController::class, 'poll'])->name('students.discussions.poll');
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
 
@@ -214,6 +221,10 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::delete('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'destroy'])->name('materials.destroy');
 
+    // Diskusi materi (chat) - Teacher
+    Route::get('/subjects/{id}/discussions', [SubjectDiscussionController::class, 'index'])->name('teacher.discussions.index');
+    Route::post('/subjects/{id}/discussions', [SubjectDiscussionController::class, 'store'])->name('teacher.discussions.store');
+    Route::get('/subjects/{id}/discussions/poll/{lastId}', [SubjectDiscussionController::class, 'poll'])->name('teacher.discussions.poll');
 
     Route::get('/modules/{id_modul}/evaluations/create', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'create'])->name('evaluations.create');
     Route::post('/modules/{id_modul}/evaluations', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'store'])->name('evaluations.store');
