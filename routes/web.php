@@ -170,6 +170,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::delete('/announcements/{id}', [\App\Http\Controllers\Teacher\MapelController::class, 'destroyAnnouncement'])->name('announcements.destroy');
 
     Route::get('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'showModule'])->name('modules.show');
+    Route::put('/modules/{id_modul}', [\App\Http\Controllers\Teacher\ModulController::class, 'update'])->name('modules.update');
 
     Route::get('/modules/{id_modul}/materials/create', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'create'])->name('materials.create');
 

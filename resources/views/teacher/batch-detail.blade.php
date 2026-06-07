@@ -335,10 +335,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="space-y-1.5">
-                            <x-input-label>Total Durasi (JP):</x-input-label>
-                            <x-text-input type="number" name="jp" required placeholder="cth., 264" class="w-full" />
-                        </div>
+
                         <div class="space-y-1.5">
                             <x-input-label>Jadwal:</x-input-label>
                             <x-text-input type="text" name="jadwal" required placeholder="cth., Senin - Jumat" class="w-full" />
