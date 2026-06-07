@@ -83,6 +83,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Mapel::class, 'enrollment_access', 'id_user', 'id_mapel' )->withTimestamps();
     }
 
+    public function activeMapels()
+    {
+        $activeBatchIds = $this->studentBatches()->pluck('batch.id_batch');
+        return Mapel::whereIn('id_batch', $activeBatchIds);
+    }
+
     public function moduls()
     {
         return $this->belongsToMany(Modul::class, 'enrollment_access', 'id_user', 'id_modul')->withTimestamps();

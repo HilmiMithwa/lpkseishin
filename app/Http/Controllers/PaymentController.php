@@ -42,7 +42,9 @@ class PaymentController extends Controller
 
         $isFullyPaid = $isSppPaid;
 
-        return view('students.payment', compact('payments', 'batches', 'activeBill', 'isFullyPaid'));
+        $bankAccounts = \App\Models\BankAccount::all();
+
+        return view('students.payment', compact('payments', 'batches', 'activeBill', 'isFullyPaid', 'bankAccounts'));
     }
 
     public function studentStore(Request $request)
@@ -91,7 +93,9 @@ class PaymentController extends Controller
             'is_paid' => false
         ];
 
-        return view('students.invoice', compact('user', 'activeBill'));
+        $bankAccounts = \App\Models\BankAccount::all();
+
+        return view('students.invoice', compact('user', 'activeBill', 'bankAccounts'));
     }
 
     public function historyInvoice($id)
@@ -109,7 +113,9 @@ class PaymentController extends Controller
             'payment_method' => $payment->payment_method
         ];
 
-        return view('students.invoice', compact('user', 'activeBill'));
+        $bankAccounts = \App\Models\BankAccount::all();
+
+        return view('students.invoice', compact('user', 'activeBill', 'bankAccounts'));
     }
 
     // ====== ADMIN METHODS ====== //

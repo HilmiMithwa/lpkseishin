@@ -33,7 +33,7 @@ class ModulController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $userId = $user->id;
-        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
+        $isEnrolled = $user->activeMapels()->where('id_mapel', $id_mapel)->exists();
 
         if (!$isEnrolled) {
             abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');

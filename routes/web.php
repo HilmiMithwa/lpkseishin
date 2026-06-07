@@ -61,6 +61,11 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'adminIndex'])->name('payments');
     Route::post('/payments/{id}/verify', [\App\Http\Controllers\PaymentController::class, 'adminVerify'])->name('payments.verify');
 
+    Route::get('/bank-accounts', [\App\Http\Controllers\Admin\BankAccountController::class, 'index'])->name('bank_accounts');
+    Route::post('/bank-accounts', [\App\Http\Controllers\Admin\BankAccountController::class, 'store'])->name('bank_accounts.store');
+    Route::put('/bank-accounts/{id}', [\App\Http\Controllers\Admin\BankAccountController::class, 'update'])->name('bank_accounts.update');
+    Route::delete('/bank-accounts/{id}', [\App\Http\Controllers\Admin\BankAccountController::class, 'destroy'])->name('bank_accounts.destroy');
+
     Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
     Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
@@ -131,11 +136,25 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
     Route::post('/students/payment/store', [\App\Http\Controllers\PaymentController::class, 'studentStore'])->name('students.payment.store');
     Route::get('/students/invoice', [\App\Http\Controllers\PaymentController::class, 'studentInvoice'])->name('students.invoice');
     Route::get('/students/invoice/{id}', [\App\Http\Controllers\PaymentController::class, 'historyInvoice'])->name('students.invoice.history');
+
+    Route::get('/students/meetings', [\App\Http\Controllers\Student\MeetingController::class, 'index'])->name('students.meetings.index');
+    Route::get('/students/meetings/{id}/join', [\App\Http\Controllers\Student\MeetingController::class, 'join'])->name('students.meetings.join');
+    
+    Route::post('/students/notifications/read', function() {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('students.notifications.read');
+
 });
 
 //Dashboard Guru
 Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/meetings', [\App\Http\Controllers\Teacher\MeetingController::class, 'index'])->name('meetings.index');
+    Route::post('/meetings', [\App\Http\Controllers\Teacher\MeetingController::class, 'store'])->name('meetings.store');
+    Route::delete('/meetings/{id}', [\App\Http\Controllers\Teacher\MeetingController::class, 'destroy'])->name('meetings.destroy');
+    Route::get('/meetings/{id}/join', [\App\Http\Controllers\Teacher\MeetingController::class, 'join'])->name('meetings.join');
 
     Route::get('/classes', [BatchController::class, 'index'])->name('classes');
     Route::get('/classes/{id_batch}', [BatchController::class, 'show'])->name('batch.show');
@@ -198,7 +217,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
             $query->where('category', request('category'));
         }
         
-        $words = $query->paginate(18)->appends(request()->query());
+        $words = $query->paginate(18)->appends(request()->except(['open_first', 'open_last']));
         
         return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
@@ -211,6 +230,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::post('/progress-report/evaluation-log', [ProgressReportController::class, 'storeEvaluationLog'])->name('progress-report.evaluation-log.store');
     Route::put('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'updateEvaluationLog'])->name('progress-report.evaluation-log.update');
     Route::delete('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'destroyEvaluationLog'])->name('progress-report.evaluation-log.destroy');
+    Route::post('/vocabulary/level/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'storeLevel'])->name('vocabulary.level.store');
     Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
     Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
     Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
