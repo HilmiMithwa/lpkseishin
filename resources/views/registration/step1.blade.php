@@ -34,13 +34,32 @@
                 </div>
 
                 <!-- Jenis Kelamin -->
-                <div>
+                <div x-data="{ open: false, selected: '{{ $registration['gender'] ?? old('gender') }}' }" class="relative">
                     <label for="gender" class="block text-sm font-semibold text-[#222222] mb-2">Jenis Kelamin *</label>
-                    <select id="gender" name="gender" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition" required>
-                        <option value="">Pilih Jenis Kelamin</option>
-                        <option value="Laki-laki" {{ ($registration['gender'] ?? old('gender')) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                        <option value="Perempuan" {{ ($registration['gender'] ?? old('gender')) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
-                    </select>
+                    <input type="hidden" name="gender" x-model="selected" required>
+                    
+                    <button type="button" @click="open = !open" @click.away="open = false" 
+                        class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition flex items-center justify-between bg-white hover:bg-gray-50 text-left"
+                        :class="{ 'text-gray-900': selected, 'text-gray-400': !selected }">
+                        <span x-text="selected ? selected : 'Pilih Jenis Kelamin'"></span>
+                        <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <div x-show="open" x-transition.opacity.duration.200ms
+                        class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden" style="display: none;">
+                        <div class="p-1">
+                            <button type="button" @click="selected = 'Laki-laki'; open = false" 
+                                class="w-full px-4 py-2.5 text-left text-sm font-medium rounded-lg transition-colors"
+                                :class="{ 'bg-red-50 text-[#d62828]': selected === 'Laki-laki', 'text-gray-700 hover:bg-gray-50 hover:text-gray-900': selected !== 'Laki-laki' }">
+                                Laki-laki
+                            </button>
+                            <button type="button" @click="selected = 'Perempuan'; open = false" 
+                                class="w-full px-4 py-2.5 text-left text-sm font-medium rounded-lg transition-colors"
+                                :class="{ 'bg-red-50 text-[#d62828]': selected === 'Perempuan', 'text-gray-700 hover:bg-gray-50 hover:text-gray-900': selected !== 'Perempuan' }">
+                                Perempuan
+                            </button>
+                        </div>
+                    </div>
                     @error('gender')
                         <p class="text-red-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror
@@ -65,9 +84,14 @@
                 </div>
 
                 <!-- Tanggal Lahir -->
-                <div>
+                <div x-data="{ init() { flatpickr(this.$refs.dateInput, { locale: 'id', dateFormat: 'Y-m-d', maxDate: 'today', altInput: true, altFormat: 'd F Y', allowInput: true }); } }">
                     <label for="birth_date" class="block text-sm font-semibold text-[#222222] mb-2">Tanggal Lahir *</label>
-                    <input type="date" id="birth_date" name="birth_date" value="{{ $registration['birth_date'] ?? old('birth_date') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition" required>
+                    <div class="relative">
+                        <input type="text" x-ref="dateInput" id="birth_date" name="birth_date" value="{{ $registration['birth_date'] ?? old('birth_date') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition bg-white" placeholder="Pilih Tanggal Lahir" required>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6"></path></svg>
+                        </div>
+                    </div>
                     @error('birth_date')
                         <p class="text-red-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror

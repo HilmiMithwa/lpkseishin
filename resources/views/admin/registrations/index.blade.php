@@ -1,4 +1,4 @@
-@extends('layouts.student')
+@extends('layouts.admin')
 
 @section('title', 'Verifikasi Pendaftar - Admin LPK Seishin')
 

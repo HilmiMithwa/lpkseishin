@@ -2,6 +2,18 @@
 
 @section('title', 'Step 3: Dokumen Pendukung - Pendaftaran Siswa LPK Seishin')
 
+@php
+    function getPreviewUrl($path) {
+        if (!$path) return '';
+        if (Str::startsWith($path, ['http://', 'https://'])) return $path;
+        try {
+            return Storage::disk('public')->exists($path) ? Storage::url($path) : Storage::disk('s3')->url($path);
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+@endphp
+
 @section('content')
 <div>
     <h2 class="text-xl sm:text-2xl font-bold font-ibm text-[#222222] mb-1">Dokumen Pendukung</h2>
@@ -10,107 +22,171 @@
     <form action="{{ route('registration.store-step3') }}" method="POST" enctype="multipart/form-data" id="step3Form">
         @csrf
         
-        <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- KTP Photo -->
-            <div class="p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition" data-upload-field="ktp_photo">
-                <label for="ktp_photo" class="cursor-pointer">
-                    <div class="text-center">
-                        <div class="mb-3 flex justify-center">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
+            <div x-data="fileUpload('{{ getPreviewUrl($registration['ktp_photo'] ?? null) }}')">
+                <div class="relative p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition overflow-hidden min-h-[160px] flex items-center justify-center cursor-pointer" 
+                     :class="{ '!border-[#d62828] !bg-red-50': isDragging, 'p-0': previewUrl }"
+                     @dragover.prevent="isDragging = true"
+                     @dragleave.prevent="isDragging = false"
+                     @drop.prevent="isDragging = false; handleDrop($event)"
+                     @click="$refs.fileInput.click()">
+                    
+                    <!-- Preview Image -->
+                    <template x-if="previewUrl">
+                        <div class="absolute inset-0 w-full h-full group">
+                            <img :src="previewUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold text-sm bg-black/50 px-4 py-2 rounded-full">Ganti Foto KTP</span>
                             </div>
                         </div>
-                        <p class="text-sm font-bold text-[#222222] mb-1">Foto KTP</p>
-                        <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
-                    </div>
-                    <input type="file" id="ktp_photo" name="ktp_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['ktp_photo']) ? '' : 'required' }}>
-                </label>
-                <div class="feedback-container">
-                    @if(isset($registration['ktp_photo']))
-                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
-                    @endif
+                    </template>
+
+                    <!-- Default Content -->
+                    <template x-if="!previewUrl">
+                        <div class="text-center w-full">
+                            <div class="mb-3 flex justify-center">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-sm font-bold text-[#222222] mb-1">Foto KTP</p>
+                            <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
+                        </div>
+                    </template>
+
+                    <input type="file" id="ktp_photo" name="ktp_photo" x-ref="fileInput" @change="handleFileChange($event)" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['ktp_photo']) ? '' : 'required' }}>
                 </div>
+                <template x-if="errorMsg">
+                    <p class="text-red-600 text-xs font-semibold mt-2" x-text="errorMsg"></p>
+                </template>
                 @error('ktp_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- Family Card Photo -->
-            <div class="p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition" data-upload-field="family_card_photo">
-                <label for="family_card_photo" class="cursor-pointer">
-                    <div class="text-center">
-                        <div class="mb-3 flex justify-center">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
+            <div x-data="fileUpload('{{ getPreviewUrl($registration['family_card_photo'] ?? null) }}')">
+                <div class="relative p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition overflow-hidden min-h-[160px] flex items-center justify-center cursor-pointer" 
+                     :class="{ '!border-[#d62828] !bg-red-50': isDragging, 'p-0': previewUrl }"
+                     @dragover.prevent="isDragging = true"
+                     @dragleave.prevent="isDragging = false"
+                     @drop.prevent="isDragging = false; handleDrop($event)"
+                     @click="$refs.fileInput.click()">
+                    
+                    <!-- Preview Image -->
+                    <template x-if="previewUrl">
+                        <div class="absolute inset-0 w-full h-full group">
+                            <img :src="previewUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold text-sm bg-black/50 px-4 py-2 rounded-full">Ganti Foto Kartu Keluarga</span>
                             </div>
                         </div>
-                        <p class="text-sm font-bold text-[#222222] mb-1">Kartu Keluarga</p>
-                        <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
-                    </div>
-                    <input type="file" id="family_card_photo" name="family_card_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['family_card_photo']) ? '' : 'required' }}>
-                </label>
-                <div class="feedback-container">
-                    @if(isset($registration['family_card_photo']))
-                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
-                    @endif
+                    </template>
+
+                    <!-- Default Content -->
+                    <template x-if="!previewUrl">
+                        <div class="text-center w-full">
+                            <div class="mb-3 flex justify-center">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-sm font-bold text-[#222222] mb-1">Kartu Keluarga</p>
+                            <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
+                        </div>
+                    </template>
+
+                    <input type="file" id="family_card_photo" name="family_card_photo" x-ref="fileInput" @change="handleFileChange($event)" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['family_card_photo']) ? '' : 'required' }}>
                 </div>
+                <template x-if="errorMsg">
+                    <p class="text-red-600 text-xs font-semibold mt-2" x-text="errorMsg"></p>
+                </template>
                 @error('family_card_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- Birth Certificate Photo -->
-            <div class="p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition" data-upload-field="birth_certificate_photo">
-                <label for="birth_certificate_photo" class="cursor-pointer">
-                    <div class="text-center">
-                        <div class="mb-3 flex justify-center">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
+            <div x-data="fileUpload('{{ getPreviewUrl($registration['birth_certificate_photo'] ?? null) }}')">
+                <div class="relative p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition overflow-hidden min-h-[160px] flex items-center justify-center cursor-pointer" 
+                     :class="{ '!border-[#d62828] !bg-red-50': isDragging, 'p-0': previewUrl }"
+                     @dragover.prevent="isDragging = true"
+                     @dragleave.prevent="isDragging = false"
+                     @drop.prevent="isDragging = false; handleDrop($event)"
+                     @click="$refs.fileInput.click()">
+                    
+                    <!-- Preview Image -->
+                    <template x-if="previewUrl">
+                        <div class="absolute inset-0 w-full h-full group">
+                            <img :src="previewUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold text-sm bg-black/50 px-4 py-2 rounded-full">Ganti Foto Akte Kelahiran</span>
                             </div>
                         </div>
-                        <p class="text-sm font-bold text-[#222222] mb-1">Akte Kelahiran</p>
-                        <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
-                    </div>
-                    <input type="file" id="birth_certificate_photo" name="birth_certificate_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['birth_certificate_photo']) ? '' : 'required' }}>
-                </label>
-                <div class="feedback-container">
-                    @if(isset($registration['birth_certificate_photo']))
-                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
-                    @endif
+                    </template>
+
+                    <!-- Default Content -->
+                    <template x-if="!previewUrl">
+                        <div class="text-center w-full">
+                            <div class="mb-3 flex justify-center">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-sm font-bold text-[#222222] mb-1">Akte Kelahiran</p>
+                            <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
+                        </div>
+                    </template>
+
+                    <input type="file" id="birth_certificate_photo" name="birth_certificate_photo" x-ref="fileInput" @change="handleFileChange($event)" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['birth_certificate_photo']) ? '' : 'required' }}>
                 </div>
+                <template x-if="errorMsg">
+                    <p class="text-red-600 text-xs font-semibold mt-2" x-text="errorMsg"></p>
+                </template>
                 @error('birth_certificate_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- Passport Photo -->
-            <div class="p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition" data-upload-field="passport_photo">
-                <label for="passport_photo" class="cursor-pointer">
-                    <div class="text-center">
-                        <div class="mb-3 flex justify-center">
-                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
+            <div x-data="fileUpload('{{ getPreviewUrl($registration['passport_photo'] ?? null) }}')">
+                <div class="relative p-6 border-2 border-dashed border-gray-300 rounded-2xl hover:border-[#d62828]/50 transition overflow-hidden min-h-[160px] flex items-center justify-center cursor-pointer" 
+                     :class="{ '!border-[#d62828] !bg-red-50': isDragging, 'p-0': previewUrl }"
+                     @dragover.prevent="isDragging = true"
+                     @dragleave.prevent="isDragging = false"
+                     @drop.prevent="isDragging = false; handleDrop($event)"
+                     @click="$refs.fileInput.click()">
+                    
+                    <!-- Preview Image -->
+                    <template x-if="previewUrl">
+                        <div class="absolute inset-0 w-full h-full group">
+                            <img :src="previewUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold text-sm bg-black/50 px-4 py-2 rounded-full">Ganti Pas Foto Terbaru</span>
                             </div>
                         </div>
-                        <p class="text-sm font-bold text-[#222222] mb-1">Pas Foto Terbaru</p>
-                        <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
-                        <p class="text-xs text-[#666666] mt-1">(Ukuran 4x6 cm, latar belakang merah)</p>
-                    </div>
-                    <input type="file" id="passport_photo" name="passport_photo" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['passport_photo']) ? '' : 'required' }}>
-                </label>
-                <div class="feedback-container">
-                    @if(isset($registration['passport_photo']))
-                        <p class="text-xs text-green-600 font-semibold mt-2">✓ File sudah diunggah</p>
-                    @endif
+                    </template>
+
+                    <!-- Default Content -->
+                    <template x-if="!previewUrl">
+                        <div class="text-center w-full">
+                            <div class="mb-3 flex justify-center">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#d62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-sm font-bold text-[#222222] mb-1">Pas Foto Terbaru</p>
+                            <p class="text-xs text-[#666666]">Klik atau drag & drop untuk mengunggah</p>
+                            <p class="text-xs text-[#666666] mt-1">(Ukuran 4x6 cm, latar belakang merah)</p>
+                        </div>
+                    </template>
+
+                    <input type="file" id="passport_photo" name="passport_photo" x-ref="fileInput" @change="handleFileChange($event)" accept="image/jpeg,image/png" class="hidden" {{ isset($registration['passport_photo']) ? '' : 'required' }}>
                 </div>
+                <template x-if="errorMsg">
+                    <p class="text-red-600 text-xs font-semibold mt-2" x-text="errorMsg"></p>
+                </template>
                 @error('passport_photo')
                     <p class="text-red-600 text-xs font-semibold mt-2">{{ $message }}</p>
                 @enderror
@@ -150,89 +226,45 @@
 </div>
 
 <script>
-    // Drag and drop functionality
-    const fileInputs = ['ktp_photo', 'family_card_photo', 'birth_certificate_photo', 'passport_photo'];
-    
-    fileInputs.forEach(inputId => {
-        const input = document.getElementById(inputId);
-        const dropZone = input.closest('[data-upload-field]');
-        const feedbackContainer = dropZone.querySelector('.feedback-container');
-        
-        // Handle click to select file
-        dropZone.addEventListener('click', (e) => {
-            // Only trigger file picker if not clicking on feedback text
-            if (!e.target.closest('.feedback-container')) {
-                input.click();
-            }
-        });
-        
-        // Prevent default drag behaviors
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        
-        // Highlight on drag
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, highlight, false);
-        });
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, unhighlight, false);
-        });
-        
-        function highlight(e) {
-            dropZone.classList.add('!border-[#d62828]', '!bg-red-50');
-        }
-        
-        function unhighlight(e) {
-            dropZone.classList.remove('!border-[#d62828]', '!bg-red-50');
-        }
-        
-        // Handle drop
-        dropZone.addEventListener('drop', handleDrop, false);
-        
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        }
-        
-        // Handle file input change (from click)
-        input.addEventListener('change', function() {
-            handleFiles(this.files);
-        });
-        
-        function handleFiles(files) {
-            // Validate file
-            if (files.length > 0) {
-                const file = files[0];
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('fileUpload', (initialUrl = '') => ({
+            previewUrl: initialUrl,
+            isDragging: false,
+            errorMsg: '',
+            
+            handleFileChange(e) {
+                this.processFile(e.target.files[0]);
+            },
+            
+            handleDrop(e) {
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    this.$refs.fileInput.files = dataTransfer.files;
+                    this.processFile(file);
+                }
+            },
+            
+            processFile(file) {
+                if (!file) return;
+                
+                this.errorMsg = '';
                 const validTypes = ['image/jpeg', 'image/png'];
                 const maxSize = 2 * 1024 * 1024; // 2MB
                 
                 if (!validTypes.includes(file.type)) {
-                    alert('Format file harus JPEG atau PNG');
+                    this.errorMsg = 'Format file harus JPEG atau PNG';
                     return;
                 }
-                
                 if (file.size > maxSize) {
-                    alert('Ukuran file terlalu besar (maksimal 2MB)');
+                    this.errorMsg = 'Ukuran file terlalu besar (maksimal 2MB)';
                     return;
                 }
                 
-                // Use DataTransfer to properly set files
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                input.files = dataTransfer.files;
-                
-                // Show file name in feedback container (outside clickable label)
-                feedbackContainer.innerHTML = '<p class="text-xs text-green-600 font-semibold mt-2">✓ ' + file.name + ' (' + (file.size / 1024).toFixed(1) + 'KB)</p>';
+                this.previewUrl = URL.createObjectURL(file);
             }
-        }
+        }));
     });
 </script>
 @endsection

@@ -63,13 +63,20 @@ class RegistrationController extends Controller
 
         // Generate username dan password
         $baseUsername = Str::slug($registration->full_name);
-        $username = $baseUsername . Str::random(4);
+        $username = $baseUsername;
+        
+        $counter = 1;
+        while (User::where('email', $username . '@lpkseishin.com')->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
         $tempPassword = Str::random(12);
 
         // Buat user baru dengan role siswa (role_id = 2)
         $user = User::create([
             'name' => $registration->full_name,
-            'email' => $username . '@lpkseishin.local',
+            'email' => $username . '@lpkseishin.com',
             'password' => Hash::make($tempPassword),
             'nomor_telepon' => $registration->whatsapp_number,
             'tanggal_lahir' => $registration->birth_date,
