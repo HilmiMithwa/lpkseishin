@@ -37,97 +37,88 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                <div class="space-y-3 flex flex-col">
-                    <div class="flex items-center gap-2 border-l-2 border-[#d62828] pl-2">
-                        <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Bahan Ajar</h3>
-                    </div>
-                    <div class="flex-1 bg-white border border-gray-100 rounded-[24px] p-4 shadow-sm flex flex-col justify-center min-h-[160px]">
+                <div class="space-y-4">
+                    <h3 class="text-base sm:text-lg font-bold font-ibm text-[#222222]">Bahan Ajar</h3>
+                    <div class="space-y-3">
                     @forelse($currentModul->materials ?? [] as $material)
-                        <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm mb-3 last:mb-0 gap-3">
+                        <div class="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-sm gap-4 transition hover:border-red-200 hover:shadow-md">
                             <div class="flex items-center gap-3 min-w-0">
                                 
                                 @if(($material->is_complete ?? $material->is_completed ?? 0) == 1)
-                                    <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#30CD30] flex-shrink-0">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center text-[#30CD30] flex-shrink-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                         </svg>
                                     </div>
                                 @else
-                                    <div class="w-12 h-12 bg-[#FFFADD] rounded-2xl flex items-center justify-center text-[#FFA100] flex-shrink-0">
-                                        <svg class="w-6 h-6 animate-[spin_30s_linear_infinite]" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24">
-                                            <path d="M12 3a9 9 0 0 1 0 18" />
-                                            <path d="M12 21a9 9 0 0 1 0-18" stroke-dasharray="1 6.2" />
-                                        </svg>
+                                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-500 flex-shrink-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </div>
                                 @endif
                                 
                                 <div class="min-w-0 text-left">
-                                    <p class="text-xs font-bold text-[#222222] truncate">
+                                    <p class="text-sm font-bold font-karla text-[#222222] truncate">
                                         {{ $material->nama_bahan_ajar ?? $material->title ?? '[Data: bahan_ajar.nama_bahan_ajar]' }}
                                     </p>
-                                    <p class="text-[10px] text-[#444444] font-medium truncate uppercase">
+                                    <p class="text-[11px] font-karla text-[#666666] mt-0.5 capitalize truncate">
                                         {{ $material->type ?? 'Teori' }}
                                     </p>
                                 </div>
                             </div>
                             
                             <a href="{{ route('materials.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id_materi' => $material->id_bahan_ajar ?? $material->id ?? $loop->iteration]) }}" 
-                            class="bg-[#d62828] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
-                                Detail 
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            class="bg-[#d62828] hover:bg-red-700 text-white text-xs font-bold font-karla px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition shadow-sm flex-shrink-0">
+                                Lihat 
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             </a>
                         </div>
                     @empty
-                        <div class="text-center py-6">
-                            <p class="text-xs font-bold text-[#666666]">[Data: modul.materials]</p>
+                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex items-center justify-center text-center">
+                            <p class="text-sm font-bold font-karla text-gray-500">Belum ada materi di sini!!</p>
                         </div>
                     @endforelse
                     </div>
                 </div>
 
-                <div class="space-y-3 flex flex-col">
-                    <div class="flex items-center gap-2 border-l-2 border-[#d62828] pl-2">
-                        <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Evaluasi</h3>
-                    </div>
-                    <div class="flex-1 bg-white border border-gray-100 rounded-[24px] p-4 shadow-sm flex flex-col justify-start min-h-[160px]">
+                <div class="space-y-4">
+                    <h3 class="text-base sm:text-lg font-bold font-ibm text-[#222222]">Evaluasi</h3>
+                    <div class="space-y-3">
                         @forelse($currentModul->evaluasis ?? [] as $evaluation)
-                            <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm gap-3 mb-3 last:mb-0">
+                            <div class="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-sm gap-4 transition hover:border-red-200 hover:shadow-md">
                                 <div class="flex items-center gap-3 min-w-0">
                                     @if(($evaluation->is_complete ?? false))
-                                        <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#30CD30] flex-shrink-0">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center text-[#30CD30] flex-shrink-0">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                         </div>
                                     @else
-                                        <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#d62828] flex-shrink-0">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24">
-                                                <path d="M12 3a9 9 0 0 1 0 18" />
-                                                <path d="M12 21a9 9 0 0 1 0-18" stroke-dasharray="1 6.2" />
-                                            </svg>
+                                        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-[#d62828] flex-shrink-0">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                         </div>
                                     @endif
                                     <div class="min-w-0">
-                                        <p class="text-xs font-bold text-[#222222] truncate">{{ $evaluation->judul }}</p>
-                                        <p class="text-[10px] text-[#444444] font-medium truncate">
-                                            {{ $evaluation->tipe ?? 'Ujian' }} • {{ $evaluation->created_at ? $evaluation->created_at->format('d M Y') : date('d M Y') }} • {{ $evaluation->durasi_menit }} Mnt
+                                        <h4 class="text-sm font-bold font-ibm text-gray-900 truncate" title="{{ $evaluation->judul }}">{{ $evaluation->judul }}</h4>
+                                        <p class="text-[11px] font-karla text-gray-500 flex items-center gap-2">
+                                            <span>{{ $evaluation->tipe ?? 'Ujian' }}</span>
+                                            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                                            <span>{{ $evaluation->durasi_menit }} Menit</span>
                                         </p>
                                     </div>
                                 </div>
                                 @if(($evaluation->is_complete ?? false))
-                                    <span class="bg-green-100 text-green-700 text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 flex-shrink-0">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="bg-green-100 text-green-700 text-xs font-bold font-karla px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm flex-shrink-0">
                                         Selesai
                                     </span>
                                 @else
-                                    <a href="{{ route('evaluations.start', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $evaluation->id_evaluasi]) }}" class="bg-[#d62828] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
-                                        Mulai <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    <a href="{{ route('evaluations.start', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $evaluation->id_evaluasi]) }}" class="bg-[#d62828] hover:bg-red-700 text-white text-xs font-bold font-karla px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition shadow-sm flex-shrink-0">
+                                        Mulai <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </a>
                                 @endif
                             </div>
                         @empty
-                            <div class="text-center py-6">
-                                <p class="text-xs font-bold text-[#666666]">Belum ada evaluasi</p>
+                            <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex items-center justify-center text-center">
+                                <p class="text-sm font-bold font-karla text-gray-500">Belum ada evaluasi di sini!!</p>
                             </div>
                         @endforelse
                     </div>
@@ -135,11 +126,9 @@
 
             </div>
 
-            <div class="space-y-3">
-                <div class="flex items-center gap-2 border-l-2 border-[#d62828] pl-2">
-                    <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Tugas</h3>
-                </div>
-                <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm">
+            <div class="space-y-4">
+                <h3 class="text-base sm:text-lg font-bold font-ibm text-[#222222]">Tugas</h3>
+                <div class="space-y-3">
                     @forelse($currentModul->tasks ?? [] as $task)
                         @php
                             $displayStatus = 'Belum Selesai';
@@ -148,48 +137,43 @@
                             }
                         @endphp
                         
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-white border border-gray-100 rounded-[24px] shadow-sm mb-4 last:mb-0 gap-4 relative">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-white border border-gray-100 rounded-xl shadow-sm gap-4 transition hover:border-red-200 hover:shadow-md">
                             
                             <div class="flex items-center gap-4 min-w-0">
-                                <div class="w-14 h-14 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#d62828] flex-shrink-0">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <div class="w-12 h-12 bg-[#FFDBDB] rounded-lg flex items-center justify-center text-[#d62828] flex-shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h4"></path>
                                     </svg>
                                 </div>
                                 
-                                <div class="space-y-1.5 min-w-0 text-left">
-                                    <h4 class="text-base font-bold text-[#222222] truncate tracking-tight">
+                                <div class="space-y-1 min-w-0 text-left">
+                                    <h4 class="text-sm font-bold font-ibm text-gray-900 truncate" title="{{ $task->judul_tugas }}">
                                         {{ $task->judul_tugas }}
                                     </h4>
-                                    <span class="inline-block bg-[#FFF3CD] text-[#856404] text-[11px] font-bold px-3 py-1 rounded-lg">
-                                        Tenggat: {{ \Carbon\Carbon::parse($task->waktu_pengumpulan)->format('d M Y, H:i') }}
+                                    <span class="inline-block bg-[#FFF3CD] text-[#856404] text-[10px] font-bold px-2.5 py-0.5 rounded-lg mt-1">
+                                        Tenggat: {{ $task->waktu_pengumpulan ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->format('d M Y, H:i') : 'Tidak ada tenggat' }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col items-end justify-between sm:h-20 w-full sm:w-auto self-stretch flex-shrink-0 gap-2 text-right">
-                                <span class="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+                            <div class="flex flex-col items-end justify-center w-full sm:w-auto flex-shrink-0 gap-2 text-right">
+                                <span class="text-[10px] font-bold {{ $displayStatus == 'Selesai' ? 'text-green-600' : 'text-gray-500' }} tracking-wide uppercase">
                                     {{ $displayStatus }}
                                 </span>
                                 
                                 <a href="{{ route('tasks.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id_tugas' => $task->id_tugas]) }}" 
-                                    class="bg-[#d62828] hover:bg-red-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition duration-200 shadow-sm w-full sm:w-auto justify-center">
+                                    class="bg-[#d62828] hover:bg-red-700 text-white text-xs font-bold font-karla py-2 px-4 rounded-lg flex items-center justify-center gap-1.5 transition shadow-sm w-full sm:w-auto">
                                     <span>Buka Tugas</span>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                                         <path d="M5 12h14M12 5l7 7-7 7" />
                                     </svg>
                                 </a>
-                            </div> </div> @empty
-                        <div class="text-center py-12 flex flex-col items-center justify-center">
-                            <div class="w-16 h-16 bg-[#FFDBDB] rounded-full flex items-center justify-center text-[#d62828] mb-4 shadow-sm">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                                    <path d="m9 13 2 2 4-4" />
-                                </svg>
                             </div>
-                            <p class="text-sm font-bold text-[#222222]">Hore! Tidak ada tugas di modul ini.</p>
+                        </div>
+                    @empty
+                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-8 flex flex-col items-center justify-center text-center">
+                            <p class="text-sm font-bold font-karla text-gray-500">Belum ada tugas di sini!!</p>
                         </div>
                     @endforelse
                 </div>
@@ -206,13 +190,23 @@
                             $isActive = $modul->id_modul === $currentModul->id_modul;
                         @endphp
                         
-                        <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
-                        class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
-                                {{ $modul->id_modul === $currentModul->id_modul 
-                                    ? 'bg-[#d62828] text-white shadow-md' 
-                                    : 'bg-white hover:bg-gray-50 text-[#222222] border border-gray-50' }}">
-                            <span>Modul {{ $index + 1 }}</span>
-                        </a>
+                        @if($modul->is_locked)
+                            <div class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold text-left bg-gray-50/50 border border-gray-100 opacity-60 cursor-not-allowed grayscale-[50%]">
+                                <span class="text-gray-500">Modul {{ $index + 1 }}</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                        @else
+                            <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
+                            class="w-full flex items-center justify-between p-3.5 rounded-xl text-sm font-bold transition text-left
+                                    {{ $isActive 
+                                        ? 'bg-[#d62828] text-white shadow-md' 
+                                        : 'bg-white hover:border-red-200 hover:shadow-sm text-[#222222] border border-gray-50' }}">
+                                <span>Modul {{ $index + 1 }}</span>
+                                @if($isActive)
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                @endif
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>

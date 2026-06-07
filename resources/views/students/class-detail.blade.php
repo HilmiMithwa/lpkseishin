@@ -34,7 +34,7 @@
                     <div class="z-10 text-center xl:text-left">
                         <h1 class="text-2xl sm:text-3xl font-black text-white mb-2">{{ $subject->nama_mapel }}</h1>
                         <p class="text-white/80 text-xs font-medium leading-relaxed">
-                            Program lanjutan dengan fokus praktik persiapan ujian level N4.
+                            {{ $subject->deskripsi_mapel ?? 'Deskripsi kelas belum tersedia.' }}
                         </p>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[10px] text-[#666666] font-bold uppercase tracking-wider truncate">Total Durasi</p>
-                                <p class="font-bold text-[#222222] truncate">{{ $subject->jp ?? '0' }} JP</p>
+                                <p class="font-bold text-[#222222] truncate">{{ $subject->modul->sum('jp_teori') + $subject->modul->sum('jp_praktik') }} JP</p>
                             </div>
                         </div>
 
@@ -115,44 +115,38 @@
                 <div class="space-y-4">
                     @forelse($subject->modul as $modul)
                         @php
-                            // Logika otomatis mendeteksi tipe modul berdasarkan kata kunci di namanya
-                            $namaModulKecil = strtolower($modul->nama_modul);
-                            
-                            if (str_contains($namaModulKecil, 'intro') || str_contains($namaModulKecil, 'kanji')) {
-                                $tipeModul = 'intro';
-                            } elseif (str_contains($namaModulKecil, 'practice') || str_contains($namaModulKecil, 'simulation') || str_contains($namaModulKecil, 'test')) {
-                                $tipeModul = 'test';
-                            } else {
-                                $tipeModul = 'materi'; // Default menggunakan icon buku
-                            }
+                            $isLocked = $modul->is_locked ?? false;
+                            $hrefUrl = $isLocked ? '#' : route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]);
+                            $lockedClasses = $isLocked ? 'opacity-60 cursor-not-allowed bg-gray-50/50 grayscale-[50%]' : 'hover:border-red-200 hover:shadow-md cursor-pointer bg-white';
                         @endphp
 
-                        <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
-                        class="block bg-white border border-gray-100 p-5 rounded-[24px] shadow-sm hover:border-red-200 hover:shadow-md transition duration-200 cursor-pointer">                                        
+                        <a href="{{ $hrefUrl }}" 
+                        class="block border border-gray-100 p-5 rounded-[24px] shadow-sm transition duration-200 {{ $lockedClasses }}">                                        
                             <div class="flex gap-4 items-start mb-4">
                                 
                                 <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#d62828] flex-shrink-0">
-                                    @if($tipeModul === 'intro')
+                                    @if($isLocked)
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                            <path d="m5 8 6 6M4 14h14M2 4h12M7 2v2M19 11l3.5 7.5M19 11l-3.5 7.5M16.5 16h5M11 5c0 3.5-2.5 7.5-6 9" />
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                         </svg>
-                                    @elseif($tipeModul === 'test')
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                            <rect x="3" y="4" width="11" height="16" rx="2" />
-                                            <path d="M7 8h3M7 12h3M7 16h2" />
-                                            <path d="M18 4l1 1-5 11h-2v-2l5-10z" />
-                                        </svg>
+                                    @elseif($modul->icon_type == 1)
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                                    @elseif($modul->icon_type == 3)
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a1.5 1.5 0 01-1.5 1.5H9c-.443 0-.792-.35-.792-.792 0-.214-.078-.415-.224-.555C7.755 6 7.424 6 7.125 6c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401h0a1.5 1.5 0 011.5 1.5v2.625c0 .443-.35.792-.792.792-.214 0-.415.078-.555.224C10 16.245 10 16.576 10 16.875c0 1.036 1.007 1.875 2.25 1.875s2.25-.84 2.25-1.875c0-.369-.128-.713-.349-1.003-.215-.283-.401-.604-.401-.959v0a1.5 1.5 0 011.5-1.5h2.625c.443 0 .792.35.792.792 0 .214.078.415.224.555.229.229.56.229.859.229 1.036 0 1.875-1.007 1.875-2.25s-.84-2.25-1.875-2.25c-.369 0-.713.128-1.003.349-.283.215-.604.401-.959.401h0a1.5 1.5 0 01-1.5-1.5V6.087z" /></svg>
+                                    @elseif($modul->icon_type == 4)
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
                                     @else
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                                        </svg>
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                                     @endif
                                 </div>
                                 
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="text-sm font-bold text-[#222222] leading-snug">
+                                    <h4 class="text-sm font-bold text-[#222222] leading-snug flex items-center gap-2">
                                         {{ $modul->nama_modul }}
+                                        @if($isLocked)
+                                            <span class="bg-gray-200 text-gray-500 text-[9px] font-black px-2 py-0.5 rounded-md tracking-widest uppercase">Terkunci</span>
+                                        @endif
                                     </h4>
                                     <p class="text-[11px] text-[#666666] mt-1 font-semibold tracking-wide">
                                         {{ $modul->kode_modul ?? '-' }} | 
@@ -224,31 +218,47 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-gray-100 rounded-[32px] p-6 text-center shadow-sm">
-                <h3 class="text-lg font-bold text-[#222222] mb-6 text-left">Mentor Sensei</h3>
-                
-                <div class="bg-[#FFDBDB] rounded-2xl p-6 mb-4 flex items-center justify-center">
-                    <svg class="w-24 h-24 text-[#d62828]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M3.5 3.5h16.5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11" />
-                        <path d="M13.5 9h4" />
-                        
-                        <circle cx="5.5" cy="7.5" r="2.5" />
-                        <path d="M3.0 21v-9h4v9" />
-                        <path d="M7.5 13h4.5" />
-                        <path d="M3.5 16h3.0" />
-                    </svg>
+            <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm flex flex-col items-center">
+                <div class="w-full text-left mb-6">
+                    <h3 class="text-lg font-bold text-[#222222]">Mentor Sensei</h3>
                 </div>
+                
+                @php
+                    $guruName = $subject->guru->name ?? 'Belum ada guru';
+                    $initials = collect(explode(' ', $guruName))->map(function($word) { return strtoupper(substr($word, 0, 1)); })->take(2)->join('');
+                    
+                    // Format WhatsApp Number (Ubah awalan 0 menjadi 62)
+                    $waNumber = $subject->guru->nomor_telepon ?? null;
+                    if ($waNumber) {
+                        $waNumber = preg_replace('/[^0-9]/', '', $waNumber); // Hapus karakter non-angka
+                        if (substr($waNumber, 0, 1) === '0') {
+                            $waNumber = '62' . substr($waNumber, 1);
+                        } elseif (substr($waNumber, 0, 2) !== '62') {
+                            $waNumber = '62' . $waNumber; // Jaga-jaga jika inputnya 812xxx
+                        }
+                    }
+                @endphp
 
-                <h4 class="font-bold text-[#222222] text-base sm:text-lg leading-snug">
-                    {{ $subject->guru->name ?? 'Belum ada guru' }}
+                @if($subject->guru && $subject->guru->profile_photo_path)
+                    <div class="w-24 h-24 rounded-full overflow-hidden shadow-sm ring-1 ring-gray-100 mb-4 border-4 border-white flex-shrink-0">
+                        <img src="{{ Storage::disk('public')->url($subject->guru->profile_photo_path) }}" alt="{{ $guruName }}" class="w-full h-full object-cover" onerror="this.outerHTML='<div class=\'w-full h-full bg-[#FFDBDB] text-[#d62828] flex items-center justify-center text-3xl font-black\'>{{ $initials }}</div>'">
+                    </div>
+                @else
+                    <div class="w-24 h-24 bg-[#FFDBDB] text-[#d62828] rounded-full flex items-center justify-center text-3xl font-black mb-4 border-4 border-white shadow-sm ring-1 ring-gray-100 flex-shrink-0">
+                        {{ $initials }}
+                    </div>
+                @endif
+
+                <h4 class="font-bold text-[#222222] text-lg leading-snug text-center">
+                    {{ $guruName }}
                 </h4>
                 
-                <p class="text-xs text-[#666666] font-medium mt-0.5 mb-5">
+                <p class="text-xs text-[#666666] font-medium mt-1 mb-6 text-center bg-gray-50 px-3 py-1 rounded-full">
                     Guru Bahasa Jepang
                 </p>
 
-                <div class="flex gap-2">
-                    <a href="{{ isset($subject->guru->nomor_telepon) ? 'https://wa.me/' . $subject->guru->nomor_telepon : '#' }}" 
+                <div class="flex gap-2 w-full mt-auto">
+                    <a href="{{ $waNumber ? 'https://wa.me/' . $waNumber : '#' }}" 
                     target="_blank" 
                     class="flex-1 bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
                         <span>Hubungi Sensei</span>
@@ -266,14 +276,14 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm">
+            <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm" x-data="{ limit: 3, total: {{ count($subject->announcements ?? []) }} }">
                 <h3 class="text-lg font-bold text-[#222222] mb-6 text-left">Pengumuman</h3>
                 
                 <div class="space-y-0">
-                    @forelse($subject->announcements ?? [] as $announcement)
-                        <div class="py-3.5 border-b border-gray-100 last:border-0">
-                            <p class="text-xs sm:text-sm font-medium text-[#222222] hover:text-[#d62828] transition cursor-pointer">
-                                {{ $announcement->title }} <span class="text-[#666666] font-normal">({{ $announcement->created_at ? $announcement->created_at->format('d M Y') : '' }})</span>
+                    @forelse($subject->announcements ?? [] as $index => $announcement)
+                        <div class="py-3.5 border-b border-gray-100 last:border-0" x-show="{{ $index }} < limit" x-transition.duration.300ms style="display: {{ $index < 3 ? 'block' : 'none' }};">
+                            <p class="text-xs sm:text-sm font-medium text-[#222222] hover:text-[#d62828] transition cursor-pointer break-words break-all">
+                                {{ $announcement->title }} <span class="text-[#666666] font-normal inline-block">({{ $announcement->created_at ? $announcement->created_at->format('d M Y') : '' }})</span>
                             </p>
                         </div>
                     @empty
@@ -285,11 +295,16 @@
                     @endforelse
                 </div>
 
+                @if(count($subject->announcements ?? []) > 3)
                 <div class="flex justify-end mt-4">
-                    <button class="text-xs font-bold text-[#d62828] hover:underline transition tracking-wide">
+                    <button @click="limit += 3" x-show="limit < total" class="text-xs font-bold text-[#d62828] hover:underline transition tracking-wide cursor-pointer" type="button">
                         Muat Lebih Banyak
                     </button>
+                    <span x-cloak x-show="limit >= total" class="text-[10px] font-bold text-gray-400 tracking-wide uppercase italic">
+                        Semua telah dimuat
+                    </span>
                 </div>
+                @endif
             </div>
 
             {{-- Chat Discussion Section --}}

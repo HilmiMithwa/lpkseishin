@@ -146,7 +146,7 @@
                             </div>
                             <div>
                                 <p class="text-[11px] sm:text-xs text-gray-500 font-karla font-medium leading-tight mb-1">Total Durasi</p>
-                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $classData->jp ?? '264' }} JP</p>
+                                <p class="text-sm sm:text-base font-bold font-ibm text-gray-900 leading-none">{{ $modules->sum('jp_teori') + $modules->sum('jp_praktik') }} JP</p>
                             </div>
                         </div>
 
@@ -295,7 +295,7 @@
                 <div class="space-y-3 flex-1">
                     @forelse($announcements as $announcement)
                     <div id="announcement-{{ $announcement->id }}" class="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5 last:border-0 group">
-                        <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug">{{ $announcement->title }}</p>
+                        <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug break-words break-all">{{ $announcement->title }}</p>
                         <button @click="confirmDelete({{ $announcement->id }})" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" title="Hapus">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
@@ -307,7 +307,7 @@
                     {{-- Dynamically Added Announcements --}}
                     <template x-for="(announcement, index) in addedAnnouncements" :key="index">
                         <div class="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5 last:border-0 group">
-                            <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug" x-text="announcement.title"></p>
+                            <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-600 leading-snug break-words break-all" x-text="announcement.title"></p>
                             <button @click="confirmDelete(announcement.id, true, index)" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" title="Hapus">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
@@ -590,10 +590,7 @@
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="space-y-1.5">
-                                     <x-input-label>Total Durasi (JP):</x-input-label>
-                                     <x-text-input type="text" name="jp" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
-                                 </div>
+
                                  <div class="space-y-1.5">
                                      <x-input-label>Jadwal:</x-input-label>
                                      <x-text-input type="text" name="jadwal" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
@@ -677,9 +674,15 @@
                              <x-text-input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full" />
                          </div>
 
-                         <div class="space-y-1.5">
-                             <x-input-label>Alokasi Durasi (JP):</x-input-label>
-                             <x-text-input type="number" name="jp" required placeholder="cth., 22" class="w-full" />
+                         <div class="grid grid-cols-2 gap-4">
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Teori:</x-input-label>
+                                 <x-text-input type="number" name="teori" value="0" min="0" required class="w-full" />
+                             </div>
+                             <div class="space-y-1.5">
+                                 <x-input-label>JP Praktik:</x-input-label>
+                                 <x-text-input type="number" name="praktik" value="0" min="0" required class="w-full" />
+                             </div>
                          </div>
 
                          <div>

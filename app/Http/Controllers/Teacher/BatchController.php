@@ -119,7 +119,6 @@ class BatchController extends Controller
             'nama_mapel' => 'required|string|max:255',
             'deskripsi_mapel' => 'required|string',
             'target' => 'required|string',
-            'jp' => 'required|integer',
             'jadwal' => 'required|string',
             'min_score' => 'required|integer',
         ]);
@@ -128,7 +127,7 @@ class BatchController extends Controller
             'nama_mapel' => $request->nama_mapel,
             'deskripsi_mapel' => $request->deskripsi_mapel,
             'id_guru' => Auth::id(), // otomatis guru yang sedang login
-            'jp' => $request->jp,
+            'jp' => 0,
             'status' => 'Aktif',
             'target' => $request->target,
             'jadwal' => $request->jadwal,
