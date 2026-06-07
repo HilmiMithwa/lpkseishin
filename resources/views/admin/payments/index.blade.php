@@ -17,31 +17,35 @@
     <x-card class="overflow-hidden" padding="none">
         
         <!-- Toolbar (Search & Filter) -->
-        <div class="p-5 lg:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <form method="GET" action="{{ route('admin.payments') }}" class="p-5 lg:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             
             <!-- Filters -->
             <div class="flex gap-2 w-full sm:w-auto">
-                <select class="border border-gray-200 text-slate-600 rounded-xl px-4 py-2 text-sm font-medium focus:ring-[#d62828]/20 focus:border-[#d62828] outline-none">
+                <select name="status" onchange="this.form.submit()" class="border border-gray-200 text-slate-600 rounded-xl px-4 py-2 text-sm font-medium focus:ring-[#d62828]/20 focus:border-[#d62828] outline-none">
                     <option value="">Semua Status</option>
-                    <option value="menunggu">Menunggu Verifikasi</option>
-                    <option value="lunas">Lunas</option>
-                    <option value="ditolak">Ditolak</option>
+                    <option value="menunggu" {{ request('status') == 'menunggu' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                    <option value="lunas" {{ request('status') == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                    <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                 </select>
-                <select class="border border-gray-200 text-slate-600 rounded-xl px-4 py-2 text-sm font-medium focus:ring-[#d62828]/20 focus:border-[#d62828] outline-none">
+                <select name="batch" onchange="this.form.submit()" class="border border-gray-200 text-slate-600 rounded-xl px-4 py-2 text-sm font-medium focus:ring-[#d62828]/20 focus:border-[#d62828] outline-none">
                     <option value="">Semua Batch</option>
-                    <option value="batch1">Batch 1</option>
-                    <option value="batch2">Batch 2</option>
+                    @foreach($batches as $batch)
+                    <option value="{{ $batch->id_batch }}" {{ request('batch') == $batch->id_batch ? 'selected' : '' }}>{{ $batch->nama }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <!-- Search Bar -->
-            <div class="relative w-full sm:w-64">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <div class="relative w-full sm:w-64 flex gap-2">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari siswa...">
                 </div>
-                <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari siswa...">
+                <button type="submit" class="px-4 py-2 bg-[#d62828] text-white rounded-xl text-sm font-bold hover:bg-[#b02121] transition">Cari</button>
             </div>
-        </div>
+        </form>
 
         <!-- Table -->
         <div class="overflow-x-auto">
@@ -117,7 +121,7 @@
         </div>
         
         <div class="p-4 border-t border-gray-100 bg-slate-50/50">
-            {{ $payments->links() }}
+            {{ $payments->appends(request()->query())->links() }}
         </div>
 
     </x-card>
