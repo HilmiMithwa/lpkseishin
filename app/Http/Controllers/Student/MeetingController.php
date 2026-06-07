@@ -14,7 +14,11 @@ class MeetingController extends Controller
         $user = Auth::user();
         
         // Get all mapel IDs the student is enrolled in through active batches
+        // Get all mapel IDs the student is enrolled in through active batches
         $enrolledMapelIds = $user->activeMapels()->pluck('id_mapel');
+
+        // Delete ended meetings based on WIB (+7)
+        Meeting::where('waktu_selesai', '<', now()->addHours(7))->delete();
 
         $meetings = Meeting::whereIn('id_mapel', $enrolledMapelIds)
             ->with(['mapel', 'mapel.guru'])

@@ -470,27 +470,27 @@
                     <div class="grid grid-cols-2 gap-4 mb-5">
                         <div class="space-y-1.5">
                             <x-input-label>Word</x-input-label>
-                            <x-text-input type="number" name="score_word" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_word" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Kotoba</x-input-label>
-                            <x-text-input type="number" name="score_kotoba" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_kotoba" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Bunpou</x-input-label>
-                            <x-text-input type="number" name="score_bunpou" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_bunpou" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Kanji</x-input-label>
-                            <x-text-input type="number" name="score_kanji" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_kanji" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Choukai</x-input-label>
-                            <x-text-input type="number" name="score_choukai" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_choukai" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Kaiwa</x-input-label>
-                            <x-text-input type="number" name="score_kaiwa" placeholder="1-100" class="w-full" required />
+                            <x-text-input type="number" name="score_kaiwa" placeholder="1-100" class="w-full" min="0" max="100" required />
                         </div>
                     </div>
                     <div class="flex gap-2">

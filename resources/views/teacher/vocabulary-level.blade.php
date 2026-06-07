@@ -58,14 +58,14 @@
 
         {{-- Grid --}}
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
-            @foreach($words as $index => $word)
-                <div @mouseenter="hoveredIndex = {{ $index }}" @mouseleave="hoveredIndex = null" @click="$dispatch('open-detail', { index: {{ $index }} })"
+            @foreach($words as $word)
+                <div @mouseenter="hoveredIndex = {{ $loop->index }}" @mouseleave="hoveredIndex = null" @click="$dispatch('open-detail', { index: {{ $loop->index }} })"
                      class="aspect-[4/3] sm:aspect-square border border-gray-200 rounded-[28px] flex items-center justify-center text-center p-4 cursor-pointer transition-colors duration-200"
-                     :class="hoveredIndex === {{ $index }} ? 'bg-[#d62828] text-white border-[#d62828] shadow-md' : 'bg-white text-[#222222] hover:bg-gray-50'">
+                     :class="hoveredIndex === {{ $loop->index }} ? 'bg-[#d62828] text-white border-[#d62828] shadow-md' : 'bg-white text-[#222222] hover:bg-gray-50'">
                     
-                    <span x-show="hoveredIndex !== {{ $index }}" class="text-3xl font-bold">{{ $word->kanji }}</span>
+                    <span x-show="hoveredIndex !== {{ $loop->index }}" class="text-3xl font-bold">{{ $word->kanji }}</span>
                     
-                    <div x-show="hoveredIndex === {{ $index }}" class="flex flex-col items-center justify-center w-full h-full gap-1" style="display:none;">
+                    <div x-show="hoveredIndex === {{ $loop->index }}" class="flex flex-col items-center justify-center w-full h-full gap-1" style="display:none;">
                         <span class="text-sm font-semibold">Buka<br>Flashcard</span>
                         <svg class="w-3.5 h-3.5 mt-1 self-end mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
                     </div>
