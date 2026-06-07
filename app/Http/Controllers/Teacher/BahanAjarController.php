@@ -61,6 +61,20 @@ class BahanAjarController extends Controller
             $rules['task_deadline'] = 'required|date';
         }
 
+        // Ensure video is provided if any video metadata is filled
+        $hasVideoDetails = $request->filled('video_title') || 
+                           $request->filled('focus_skill') || 
+                           $request->filled('key_points') || 
+                           $request->filled('objective') || 
+                           $request->filled('sensei_note');
+
+        if ($hasVideoDetails) {
+            $rules['video_url'] = 'required_without:video_file|nullable|string';
+            $rules['video_file'] = 'required_without:video_url|nullable|file|mimes:mp4,mov,avi,wmv|max:102400';
+            $messages['video_url.required_without'] = 'Anda mengisi detail/informasi video, sehingga Anda harus menyertakan URL video atau mengunggah file videonya.';
+            $messages['video_file.required_without'] = 'Anda mengisi detail/informasi video, sehingga Anda harus mengunggah file video atau menyertakan URL videonya.';
+        }
+
         $request->validate($rules, $messages);
 
         $modul = Modul::findOrFail($id_modul);
@@ -219,6 +233,20 @@ class BahanAjarController extends Controller
             $rules['task_description'] = 'required|string';
             $rules['task_deadline'] = 'required|date';
             $rules['task_file'] = 'nullable|file|max:51200';
+        }
+
+        // Ensure video is provided if any video metadata is filled
+        $hasVideoDetails = $request->filled('video_title') || 
+                           $request->filled('focus_skill') || 
+                           $request->filled('key_points') || 
+                           $request->filled('objective') || 
+                           $request->filled('sensei_note');
+
+        if ($hasVideoDetails) {
+            $rules['video_url'] = 'required_without:video_file|nullable|string';
+            $rules['video_file'] = 'required_without:video_url|nullable|file|mimes:mp4,mov,avi,wmv|max:102400';
+            $messages['video_url.required_without'] = 'Anda mengisi detail/informasi video, sehingga Anda harus menyertakan URL video atau mengunggah file videonya.';
+            $messages['video_file.required_without'] = 'Anda mengisi detail/informasi video, sehingga Anda harus mengunggah file video atau menyertakan URL videonya.';
         }
 
         $messages = [
