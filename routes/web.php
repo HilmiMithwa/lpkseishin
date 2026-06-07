@@ -58,9 +58,8 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
 
     Route::get('/users/{id}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
 
-    Route::get('/payments', function() {
-        return view('admin.payments.index');
-    })->name('payments');
+    Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'adminIndex'])->name('payments');
+    Route::post('/payments/{id}/verify', [\App\Http\Controllers\PaymentController::class, 'adminVerify'])->name('payments.verify');
 
     Route::get('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'index'])->name('batches');
     Route::post('/batches', [\App\Http\Controllers\Admin\BatchController::class, 'store'])->name('batches.store');
@@ -128,9 +127,8 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::patch('/students/profile', [EditProfile::class, 'update'])->name('students.profile.update');
 
-    Route::get('/students/payment', function () {
-        return view('students.payment');
-    })->name('students.payment');
+    Route::get('/students/payment', [\App\Http\Controllers\PaymentController::class, 'studentIndex'])->name('students.payment');
+    Route::post('/students/payment/store', [\App\Http\Controllers\PaymentController::class, 'studentStore'])->name('students.payment.store');
 });
 
 //Dashboard Guru
