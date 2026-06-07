@@ -325,7 +325,15 @@ class StudentController extends Controller
             }
         }
         
-        $score = $total_questions > 0 ? round(($correct / $total_questions) * 100) : 0;
+        $total_pg_questions = 0;
+        foreach ($evaluationModel->questions as $q) {
+            if (strtolower($q->tipe_soal) !== 'essay') {
+                $total_pg_questions++;
+            }
+        }
+        
+        $score_pg = $total_pg_questions > 0 ? round(($correct / $total_pg_questions) * 100) : 0;
+        $score = $score_pg;
         if ($hasEssay) {
             $score = 0; // Initialize score to 0 since Sensei needs to grade it
         }
@@ -357,6 +365,7 @@ class StudentController extends Controller
                 'nama_evaluasi' => $evaluationModel->judul,
                 'tipe_ujian' => 'Online',
                 'skor' => $score,
+                'skor_pg' => $score_pg,
                 'jawaban_siswa' => json_encode($savedAnswers),
                 'created_at' => now(),
                 'updated_at' => now()

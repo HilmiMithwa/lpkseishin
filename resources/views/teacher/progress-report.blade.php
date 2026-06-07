@@ -3,7 +3,9 @@
 @section('title', 'Laporan Perkembangan - LPK Seishin')
 
 @section('content')
-<div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+<div class="p-4 sm:p-6 lg:p-10" 
+     @open-delete.window="triggerDeleteModal($event.detail.id, $event.detail.type, $event.detail.name)"
+     x-data="{ 
     searchQuery: '',
     filterStatus: 'Semua Status',
     selectedBatch: '{{ $selectedBatchName }}',
@@ -38,6 +40,7 @@
     onlineSubmissions: [],
     selectedOnlineEval: '',
     loadingSubmissions: false,
+    currentTab: 'perkembangan',
     
     init() {
         this.$watch('currentTab', val => {
@@ -94,6 +97,7 @@
                     btn.classList.remove('bg-green-500');
                     btn.classList.add('bg-[#d62828]');
                 }, 2000);
+                this.fetchOnlineSubmissions();
             } else {
                 alert('Gagal menyimpan nilai.');
             }
@@ -225,12 +229,23 @@
         fetch(url, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-        }).then(() => {
-            if (type === 'evaluation_online') {
-                this.fetchOnlineSubmissions();
-            } else if (this.studentId) {
-                this.openStudentDetail(this.studentId);
+        }).then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        }).then(data => {
+            if (data.success) {
+                if (type === 'evaluation_online') {
+                    this.fetchOnlineSubmissions();
+                } else if (this.studentId) {
+                    this.openStudentDetail(this.studentId);
+                }
+            } else {
+                alert('Gagal menghapus data.');
             }
+        }).catch(err => {
+            console.error('Delete error:', err);
+            alert('Terjadi kesalahan jaringan atau server saat menghapus data.');
+        }).finally(() => {
             this.showDeleteConfirm = false;
         });
     },
@@ -339,27 +354,27 @@
     <div x-show="selectedBatch !== '' && selectedClass !== '' && currentTab === 'perkembangan'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" class="bg-white rounded-[32px] shadow-sm border border-gray-100 p-6 lg:p-8" style="display: none;" x-cloak>
         
         <!-- Toolbar -->
-        <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
-            <div class="relative w-full sm:w-80">
-                <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" x-model="searchQuery" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
-            </div>
-            
-            <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Status' }">
-                <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[130px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Status' ? 'text-gray-600' : 'text-[#d62828]'">
-                    <span x-text="statusFilter"></span>
-                    <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <!-- Search -->
+                <div class="relative w-full sm:w-72">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" x-model="searchQuery" placeholder="Cari nama siswa..." class="w-full pl-11 pr-4 py-2.5 text-sm font-semibold text-gray-800 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-400 transition placeholder-gray-400">
+                </div>
                 
-                <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Semua Status' }">
+                <!-- Status Filter -->
+                <div class="relative w-full sm:w-auto" x-data="{ openFilter: false }">
                     <input type="hidden" id="dt-status" value="all">
-                    <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[140px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Semua Status' ? 'text-gray-600' : 'text-[#d62828]'">
-                        <span x-text="statusFilter"></span>
-                        <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[150px] bg-white border border-gray-200 hover:border-[#d62828] hover:bg-red-50/50 rounded-xl px-4 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="filterStatus === 'Semua Status' ? 'text-gray-600' : 'text-[#d62828]'">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                            <span x-text="filterStatus"></span>
+                        </div>
+                        <svg class="w-4 h-4 ml-2 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     
                     <div x-show="openFilter" style="display: none;"
-                         class="absolute right-0 sm:left-0 z-50 w-full min-w-[140px] mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" 
+                         class="absolute right-0 sm:left-0 z-50 w-full min-w-[150px] mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" 
                          x-transition:enter="transition ease-out duration-100" 
                          x-transition:enter-start="opacity-0 -translate-y-2" 
                          x-transition:enter-end="opacity-100 translate-y-0" 
@@ -367,18 +382,19 @@
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 -translate-y-2">
                         <ul class="py-1">
-                            <li><button type="button" @click="statusFilter = 'Semua Status'; openFilter = false; $('#dt-status').val('all').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-50 text-gray-700" :class="statusFilter === 'Semua Status' ? 'bg-gray-50' : ''">Semua Status</button></li>
-                            <li><button type="button" @click="statusFilter = 'Aktif'; openFilter = false; $('#dt-status').val('Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-green-50 text-green-600" :class="statusFilter === 'Aktif' ? 'bg-green-50' : ''">Aktif</button></li>
-                            <li><button type="button" @click="statusFilter = 'Tidak Aktif'; openFilter = false; $('#dt-status').val('Tidak Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-red-50 text-red-600" :class="statusFilter === 'Tidak Aktif' ? 'bg-red-50' : ''">Tidak Aktif</button></li>
-                            <li><button type="button" @click="statusFilter = 'Selesai'; openFilter = false; $('#dt-status').val('Selesai').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-100 text-gray-800" :class="statusFilter === 'Selesai' ? 'bg-gray-100' : ''">Selesai</button></li>
+                            <li><button type="button" @click="filterStatus = 'Semua Status'; openFilter = false; $('#dt-status').val('all').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-50 text-gray-700" :class="filterStatus === 'Semua Status' ? 'bg-gray-50' : ''">Semua Status</button></li>
+                            <li><button type="button" @click="filterStatus = 'Aktif'; openFilter = false; $('#dt-status').val('Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-green-50 text-green-600" :class="filterStatus === 'Aktif' ? 'bg-green-50' : ''">Aktif</button></li>
+                            <li><button type="button" @click="filterStatus = 'Tidak Aktif'; openFilter = false; $('#dt-status').val('Tidak Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-red-50 text-red-600" :class="filterStatus === 'Tidak Aktif' ? 'bg-red-50' : ''">Tidak Aktif</button></li>
+                            <li><button type="button" @click="filterStatus = 'Selesai'; openFilter = false; $('#dt-status').val('Selesai').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-100 text-gray-800" :class="filterStatus === 'Selesai' ? 'bg-gray-100' : ''">Selesai</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Tampilkan:</span>
-                <select id="custom-dt-length" class="bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-lg focus:ring-[#d62828] focus:border-[#d62828] block p-2 transition shadow-sm">
+            <!-- Entries Length -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest text-[10px]">Tampilkan</span>
+                <select id="custom-dt-length" class="bg-gray-50/50 border border-gray-200 text-gray-700 text-sm font-bold rounded-xl focus:ring-red-100 focus:border-[#d62828] block p-2 px-3 transition cursor-pointer outline-none hover:bg-gray-50">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -387,59 +403,74 @@
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto min-h-[400px]">
+        <div class="overflow-x-auto min-h-[400px] border border-gray-100 rounded-[20px] shadow-sm">
             <table id="progress-table" class="w-full text-left border-collapse min-w-[900px]">
                 <thead>
-                    <tr class="border-b border-gray-100 bg-gray-50/50">
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider rounded-tl-xl">No</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">ID</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">Siswa</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">Progress Modul</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">Rata-rata Tugas</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">Nilai Evaluasi</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider">Status</th>
-                        <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider text-center rounded-tr-xl">Aksi</th>
+                    <tr class="bg-gray-50/80 border-b border-gray-100">
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">No</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">ID Siswa</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">Siswa</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">Progress Modul</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap text-center">Rata-rata Tugas</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap text-center">Nilai Ujian</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap text-center">Status</th>
+                        <th class="py-4 px-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody class="divide-y divide-gray-100">
                     @forelse($students as $index => $student)
-                    <tr x-show="(searchQuery === '' || '{{ strtolower($student->name) }}'.includes(searchQuery.toLowerCase())) && (filterStatus === 'Semua Status' || '{{ $student->status }}' === filterStatus)" class="hover:bg-gray-50/50 transition">
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
-                        <td class="py-4 px-4">
+                    <tr x-show="(searchQuery === '' || '{{ strtolower($student->name) }}'.includes(searchQuery.toLowerCase())) && (filterStatus === 'Semua Status' || '{{ $student->status }}' === filterStatus)" class="hover:bg-red-50/30 transition-colors duration-200">
+                        <td class="py-4 px-5 text-sm font-bold text-gray-500">{{ $index + 1 }}</td>
+                        <td class="py-4 px-5 text-sm font-semibold text-gray-500">{{ $student->id }}</td>
+                        <td class="py-4 px-5">
                             <div class="flex items-center gap-3">
-                                <img src="{{ $student->avatar }}" alt="{{ $student->name }}" class="w-8 h-8 rounded-full object-cover">
+                                <div class="w-9 h-9 rounded-full bg-red-50 text-[#d62828] flex items-center justify-center font-black text-xs border border-red-100 overflow-hidden shrink-0">
+                                    <img src="{{ $student->avatar }}" alt="{{ $student->name }}" class="w-full h-full object-cover">
+                                </div>
                                 <span class="text-sm font-bold text-gray-800">{{ $student->name }}</span>
                             </div>
                         </td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#d62828] rounded-full" style="width: {{ $student->progress_modul }}%"></div>
+                        <td class="py-4 px-5">
+                            <div class="flex items-center gap-3 w-40">
+                                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#d62828] rounded-full transition-all duration-500" style="width: {{ $student->progress_modul }}%"></div>
                                 </div>
-                                <span class="text-xs font-bold text-gray-600 w-8">{{ $student->progress_modul }}%</span>
+                                <span class="text-xs font-black text-gray-600 w-8 text-right">{{ $student->progress_modul }}%</span>
                             </div>
                         </td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->rata_rata_tugas }}</td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->nilai_evaluasi }}</td>
-                        <td class="py-4 px-4">
+                        <td class="py-4 px-5 text-center">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-black {{ $student->rata_rata_tugas > 0 ? 'bg-blue-50 text-blue-600' : 'text-gray-400' }}">
+                                {{ $student->rata_rata_tugas > 0 ? $student->rata_rata_tugas : '-' }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-5 text-center">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-black {{ $student->nilai_evaluasi > 0 ? 'bg-amber-50 text-amber-600' : 'text-gray-400' }}">
+                                {{ $student->nilai_evaluasi > 0 ? $student->nilai_evaluasi : '-' }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-5 text-center">
                             @if($student->status == 'Selesai')
-                            <span class="inline-flex px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            <span class="inline-flex px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-[10px] font-black tracking-widest uppercase">Selesai</span>
                             @elseif($student->status == 'Aktif')
-                            <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            <span class="inline-flex px-3 py-1 bg-green-50 text-green-600 border border-green-200 rounded-full text-[10px] font-black tracking-widest uppercase">Aktif</span>
                             @else
-                            <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            <span class="inline-flex px-3 py-1 bg-red-50 text-[#d62828] border border-red-200 rounded-full text-[10px] font-black tracking-widest uppercase">Tidak Aktif</span>
                             @endif
                         </td>
-                        <td class="py-4 px-4 text-center">
-                            <button @click="openStudentDetail({{ $student->user_id }})" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <td class="py-4 px-5 text-center">
+                            <button @click="openStudentDetail({{ $student->user_id }})" class="w-9 h-9 inline-flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-[#d62828] hover:shadow-md transition-all duration-200 group">
+                                <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="py-8 text-center text-gray-500 text-sm">Belum ada data siswa untuk kelas ini.</td>
+                        <td colspan="8" class="py-12 text-center">
+                            <div class="flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-12 h-12 mb-3 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                <p class="text-sm font-bold">Belum ada data siswa untuk kelas ini.</p>
+                            </div>
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -539,13 +570,25 @@
                                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                     </div>
                                                     <div>
-                                                        <h4 class="text-base font-bold text-gray-800 mb-0.5">Skor Saat Ini</h4>
-                                                        <p class="text-xs text-gray-500 font-medium">Kalkulasi otomatis pilihan ganda atau nilai yang terakhir disimpan.</p>
+                                                        <h4 class="text-base font-bold text-gray-800 mb-0.5">Rincian Skor</h4>
+                                                        <p class="text-xs text-gray-500 font-medium">Nilai akan otomatis dirata-ratakan.</p>
                                                     </div>
                                                 </div>
-                                                <div class="text-center sm:text-right w-full sm:w-auto">
-                                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-0.5">Total Poin</span>
-                                                    <span class="text-3xl font-black text-[#d62828]" x-text="sub.skor"></span>
+                                                <div class="text-center sm:text-right flex items-center gap-4 w-full sm:w-auto">
+                                                    <div class="flex-1 sm:flex-none">
+                                                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-0.5">Nilai PG</span>
+                                                        <span class="text-2xl font-black text-gray-800" x-text="sub.skor_pg !== null ? sub.skor_pg : sub.skor"></span>
+                                                    </div>
+                                                    <template x-if="essayAnswers.length > 0">
+                                                        <div class="flex-1 sm:flex-none">
+                                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-0.5">Nilai Essay</span>
+                                                            <span class="text-2xl font-black text-gray-800" x-text="sub.skor_essay !== null ? sub.skor_essay : '-'"></span>
+                                                        </div>
+                                                    </template>
+                                                    <div class="pl-4 border-l border-gray-200 flex-1 sm:flex-none">
+                                                        <span class="text-[10px] font-bold text-[#d62828] uppercase tracking-widest block mb-0.5">Total Akhir</span>
+                                                        <span class="text-3xl font-black text-[#d62828]" x-text="sub.skor"></span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -582,18 +625,36 @@
                                         <!-- Edit Score Form (Footer) -->
                                         <div class="bg-gray-50 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-5 border-t border-gray-100">
                                             <div class="w-full sm:w-auto text-center sm:text-left">
-                                                <h4 class="text-sm font-bold text-gray-800">Verifikasi Skor Akhir</h4>
-                                                <p class="text-xs font-semibold text-gray-500 mt-0.5">Berikan penyesuaian bobot nilai essay jika diperlukan.</p>
+                                                <template x-if="essayAnswers.length > 0">
+                                                    <div>
+                                                        <h4 class="text-sm font-bold text-gray-800">Verifikasi Nilai Essay</h4>
+                                                        <p class="text-xs font-semibold text-gray-500 mt-0.5">Input nilai essay (skala 1-100). Sistem akan otomatis merata-ratakan dengan nilai PG.</p>
+                                                    </div>
+                                                </template>
+                                                <template x-if="essayAnswers.length === 0">
+                                                    <div>
+                                                        <h4 class="text-sm font-bold text-gray-800">Verifikasi Skor Akhir</h4>
+                                                        <p class="text-xs font-semibold text-gray-500 mt-0.5">Berikan penyesuaian bobot nilai keseluruhan jika diperlukan.</p>
+                                                    </div>
+                                                </template>
                                             </div>
                                             <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-center sm:justify-end">
-                                                <button type="button" @click="$dispatch('open-delete', { id: sub.id_catatan_evaluasi, type: 'evaluation_online', name: 'Hasil Ujian ' + sub.student_name })" class="text-gray-500 hover:text-red-600 bg-white border border-gray-200 hover:border-red-200 hover:bg-red-50 px-4 py-3 rounded-xl text-sm font-bold transition-colors outline-none shadow-sm flex items-center gap-2" title="Hapus Ujian Siswa">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    <span class="hidden sm:inline">Hapus</span>
-                                                </button>
                                                 <form @submit.prevent="saveInlineScore(sub.id_catatan_evaluasi, $el)" class="flex items-center gap-3">
                                                     <input type="hidden" name="tipe_ujian" value="Online">
-                                                    <input type="number" name="skor" :value="sub.skor" min="0" max="100" class="w-20 sm:w-24 bg-white border border-gray-200 text-gray-800 text-lg rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#d62828] block p-2.5 font-black text-center shadow-sm" required>
-                                                    <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition shadow-sm whitespace-nowrap">Simpan Nilai</button>
+                                                    
+                                                    <template x-if="essayAnswers.length > 0">
+                                                        <div class="flex items-center gap-3">
+                                                            <input type="number" name="skor_essay" :value="sub.skor_essay || ''" min="0" max="100" class="w-20 sm:w-24 bg-white border border-gray-200 text-gray-800 text-lg rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#d62828] block p-2.5 font-black text-center shadow-sm" required placeholder="Essay">
+                                                            <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition shadow-sm whitespace-nowrap">Simpan Nilai Essay</button>
+                                                        </div>
+                                                    </template>
+                                                    
+                                                    <template x-if="essayAnswers.length === 0">
+                                                        <div class="flex items-center gap-3">
+                                                            <input type="number" name="skor" :value="sub.skor" min="0" max="100" class="w-20 sm:w-24 bg-white border border-gray-200 text-gray-800 text-lg rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#d62828] block p-2.5 font-black text-center shadow-sm" required>
+                                                            <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition shadow-sm whitespace-nowrap">Simpan Nilai</button>
+                                                        </div>
+                                                    </template>
                                                 </form>
                                             </div>
                                         </div>
