@@ -156,9 +156,14 @@
             <form id="eval-submit-form" action="{{ route('evaluations.submit', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $evaluation->id]) }}" method="POST">
                 @csrf
                 <div id="hidden-inputs"></div>
-                <button type="submit" class="block w-full bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-[0_8px_16px_rgba(214,40,40,0.25)]">
-                    Lihat Hasil Skor
-                </button>
+                <div id="modal-actions" class="flex flex-col sm:flex-row gap-3 mt-6">
+                    <button type="button" id="btn-cancel-modal" onclick="closeModal()" class="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3.5 px-6 rounded-xl transition shadow-sm hidden">
+                        Batal
+                    </button>
+                    <button type="submit" id="btn-submit-modal" class="flex-1 bg-[#d62828] hover:bg-red-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-[0_8px_16px_rgba(214,40,40,0.25)]">
+                        Kirim Jawaban
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -219,6 +224,8 @@
         const modal = document.getElementById('evaluation-modal');
         const content = document.getElementById('evaluation-modal-content');
         const iconContainer = document.getElementById('modal-icon-container');
+        const btnCancel = document.getElementById('btn-cancel-modal');
+        const btnSubmit = document.getElementById('btn-submit-modal');
         
         document.getElementById('modal-title').innerText = title;
         document.getElementById('modal-desc').innerText = desc;
@@ -226,9 +233,13 @@
         if (type === 'timeup') {
             iconContainer.className = "w-20 h-20 mx-auto mb-5 rounded-full flex items-center justify-center shadow-[0_8px_16px_rgba(250,204,21,0.3)] bg-gradient-to-br from-yellow-400 to-yellow-500";
             iconContainer.innerHTML = '<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
-        } else {
-            iconContainer.className = "w-20 h-20 mx-auto mb-5 rounded-full flex items-center justify-center shadow-[0_8px_16px_rgba(34,197,94,0.3)] bg-gradient-to-br from-green-400 to-green-500";
-            iconContainer.innerHTML = '<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>';
+            btnCancel.classList.add('hidden');
+            btnSubmit.innerText = 'Lihat Hasil';
+        } else if (type === 'confirm') {
+            iconContainer.className = "w-20 h-20 mx-auto mb-5 rounded-full flex items-center justify-center shadow-[0_8px_16px_rgba(59,130,246,0.3)] bg-gradient-to-br from-blue-400 to-blue-500";
+            iconContainer.innerHTML = '<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+            btnCancel.classList.remove('hidden');
+            btnSubmit.innerText = 'Kirim Jawaban';
         }
         
         // POPULATE ANSWERS UNTUK FORM SUBMIT
@@ -249,6 +260,17 @@
         }, 10);
     }
 
+    function closeModal() {
+        const modal = document.getElementById('evaluation-modal');
+        const content = document.getElementById('evaluation-modal-content');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
     function renderQuestion(index) {
         const q = questions[index];
         document.getElementById('q-title').innerText = `Pertanyaan ${q.number} dari ${totalQuestions}`;
@@ -257,26 +279,35 @@
         const optionsContainer = document.getElementById('q-options');
         optionsContainer.innerHTML = ''; 
 
-        q.options.forEach(opt => {
-            const isChecked = answers[index] === opt.id ? 'checked' : '';
-            const isActive = answers[index] === opt.id;
-            
-            const borderClass = isActive ? 'border-[#d62828] bg-red-50' : 'border-gray-100';
-            const circleBorderClass = isActive ? 'border-[#d62828]' : 'border-gray-300';
-            const dotDisplayClass = isActive ? 'block' : 'hidden';
-
-            optionsContainer.innerHTML += `
-                <div class="relative">
-                    <input type="radio" name="quiz_answer" id="opt_${opt.id}" class="hidden" value="${opt.id}" onchange="saveAnswer(${index}, '${opt.id}')" ${isChecked} />
-                    <label for="opt_${opt.id}" class="flex items-center p-5 border rounded-2xl cursor-pointer transition ${borderClass} hover:border-[#d62828] hover:bg-red-50">
-                        <div class="w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${circleBorderClass}">
-                            <div class="w-2.5 h-2.5 rounded-full bg-[#d62828] ${dotDisplayClass}"></div>
-                        </div>
-                        <span class="text-base font-bold text-[#222222]">${opt.value}</span>
-                    </label>
-                </div>
+        if (q.tipe_soal === 'essay') {
+            const currentAnswer = answers[index] || '';
+            optionsContainer.className = 'flex-1 mt-4';
+            optionsContainer.innerHTML = `
+                <textarea rows="6" class="w-full border border-gray-200 rounded-2xl p-5 focus:ring-[#d62828] focus:border-[#d62828] transition shadow-sm text-base text-[#222222] font-medium resize-y" placeholder="Tuliskan jawaban Anda secara rinci di sini..." oninput="saveAnswerText(${index}, this.value)">${currentAnswer}</textarea>
             `;
-        });
+        } else {
+            optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 flex-1';
+            q.options.forEach(opt => {
+                const isChecked = answers[index] === opt.id ? 'checked' : '';
+                const isActive = answers[index] === opt.id;
+                
+                const borderClass = isActive ? 'border-[#d62828] bg-red-50' : 'border-gray-100';
+                const circleBorderClass = isActive ? 'border-[#d62828]' : 'border-gray-300';
+                const dotDisplayClass = isActive ? 'block' : 'hidden';
+
+                optionsContainer.innerHTML += `
+                    <div class="relative">
+                        <input type="radio" name="quiz_answer" id="opt_${opt.id}" class="hidden" value="${opt.id}" onchange="saveAnswer(${index}, '${opt.id}')" ${isChecked} />
+                        <label for="opt_${opt.id}" class="flex items-center p-5 border rounded-2xl cursor-pointer transition ${borderClass} hover:border-[#d62828] hover:bg-red-50">
+                            <div class="w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${circleBorderClass}">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#d62828] ${dotDisplayClass}"></div>
+                            </div>
+                            <span class="text-base font-bold text-[#222222]">${opt.value}</span>
+                        </label>
+                    </div>
+                `;
+            });
+        }
 
         document.getElementById('btn-prev').disabled = (index === 0);
         
@@ -293,6 +324,11 @@
         answers[index] = optId; 
         renderGrid(); 
         renderQuestion(index);
+    }
+
+    function saveAnswerText(index, text) {
+        answers[index] = text;
+        renderGrid();
     }
 
     function renderGrid() {
@@ -318,11 +354,10 @@
             renderQuestion(currentIndex);
             renderGrid();
         } else {
-            clearInterval(countdownInterval); 
             showModal(
-                'success',
-                'Ujian Selesai!',
-                'Kerja bagus! Jawaban Anda berhasil dikirim. Mari kita lihat skor akhirnya.'
+                'confirm',
+                'Kirim Jawaban?',
+                'Apakah Anda sudah yakin dengan semua jawaban Anda? Pastikan tidak ada soal yang terlewat.'
             );
         }
     }
