@@ -70,10 +70,9 @@ class UserController extends Controller
             ->where('user_id', $user->id)
             ->first();
         $batches = \App\Models\Batch::all();
-        $mapels = \App\Models\Mapel::with('batch')->get();
-        $guruMapels = \App\Models\Mapel::where('id_guru', $user->id)->pluck('id_mapel')->toArray();
+        $guruBatches = $user->batches()->pluck('batch.id_batch')->toArray();
 
-        return view('admin.users.edit', compact('user', 'studentBatch', 'batches', 'mapels', 'guruMapels'));
+        return view('admin.users.edit', compact('user', 'studentBatch', 'batches', 'guruBatches'));
     }
 
     public function update(Request $request, $id)
@@ -107,27 +106,17 @@ class UserController extends Controller
                 ->with('success', 'Data akademik berhasil disimpan!');
         }
 
-        if ($request->input('form_type') === 'guru_mapel') {
+        if ($request->input('form_type') === 'guru_batch') {
             $request->validate([
-                'mapels' => 'nullable|array',
-                'mapels.*' => 'exists:mapel,id_mapel',
+                'batches' => 'nullable|array',
+                'batches.*' => 'exists:batch,id_batch',
             ]);
 
-            $selectedMapels = $request->input('mapels', []);
-
-            // Set id_guru to null for mapels previously assigned to this guru but now unchecked
-            \App\Models\Mapel::where('id_guru', $user->id)
-                ->whereNotIn('id_mapel', $selectedMapels)
-                ->update(['id_guru' => null]);
-
-            // Set id_guru to this user for the checked mapels
-            if (!empty($selectedMapels)) {
-                \App\Models\Mapel::whereIn('id_mapel', $selectedMapels)
-                    ->update(['id_guru' => $user->id]);
-            }
+            $selectedBatches = $request->input('batches', []);
+            $user->batches()->sync($selectedBatches);
 
             return redirect()->route('admin.users', ['role' => 'guru'])
-                ->with('success', 'Mata Pelajaran berhasil ditugaskan!');
+                ->with('success', 'Batch berhasil ditugaskan!');
         }
 
         $validated = $request->validate([

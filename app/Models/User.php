@@ -39,6 +39,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id', 'role_id');
     }
 
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_guru', 'id_guru', 'id_batch');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

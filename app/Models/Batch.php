@@ -29,6 +29,11 @@ class Batch extends Model
         return $this->hasMany(Mapel::class, 'id_batch', 'id_batch');
     }
 
+    public function gurus()
+    {
+        return $this->belongsToMany(User::class, 'batch_guru', 'id_batch', 'id_guru');
+    }
+
     public function getNamaBatchAttribute()
     {
         return $this->nama;
