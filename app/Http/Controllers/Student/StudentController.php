@@ -282,6 +282,7 @@ class StudentController extends Controller
                 'id_soal' => $q->id_soal,
                 'number' => $index + 1,
                 'text' => $q->pertanyaan,
+                'tipe_soal' => strtolower($q->tipe_soal),
                 'options' => $options
             ];
         }
@@ -299,20 +300,35 @@ class StudentController extends Controller
         $wrong = 0;
         $empty = 0;
         $total_questions = $evaluationModel->questions->count();
+        $hasEssay = false;
+        $savedAnswers = [];
         
         foreach ($evaluationModel->questions as $q) {
             $student_answer = $answers[$q->id_soal] ?? null;
             
+            if (strtolower($q->tipe_soal) === 'essay') {
+                $hasEssay = true;
+            }
+
+            $savedAnswers[] = [
+                'pertanyaan' => $q->pertanyaan,
+                'jawaban' => $student_answer,
+                'tipe' => $q->tipe_soal
+            ];
+            
             if ($student_answer === null || $student_answer === '') {
                 $empty++;
-            } else if ((string)$student_answer === (string)$q->kunci_jawaban) {
+            } else if (strtolower($q->tipe_soal) !== 'essay' && (string)$student_answer === (string)$q->kunci_jawaban) {
                 $correct++;
-            } else {
+            } else if (strtolower($q->tipe_soal) !== 'essay') {
                 $wrong++;
             }
         }
         
         $score = $total_questions > 0 ? round(($correct / $total_questions) * 100) : 0;
+        if ($hasEssay) {
+            $score = 0; // Initialize score to 0 since Sensei needs to grade it
+        }
         
         $modulName = 'Modul';
         $modulObj = Modul::find($id_modul);
@@ -330,7 +346,8 @@ class StudentController extends Controller
             'module_name' => $modulName,
             'is_passed' => $score >= 70,
             'id_mapel' => $id_mapel,
-            'id_modul' => $id_modul
+            'id_modul' => $id_modul,
+            'needs_grading' => $hasEssay
         ];
         
         try {
@@ -338,8 +355,9 @@ class StudentController extends Controller
                 'id_user' => Auth::id(),
                 'id_mapel' => $id_mapel,
                 'nama_evaluasi' => $evaluationModel->judul,
-                'tipe_ujian' => $evaluationModel->tipe,
+                'tipe_ujian' => 'Online',
                 'skor' => $score,
+                'jawaban_siswa' => json_encode($savedAnswers),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

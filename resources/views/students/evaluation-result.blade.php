@@ -34,59 +34,76 @@
 
         <div class="bg-white border border-gray-100 rounded-[32px] p-8 lg:p-12 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] text-center relative overflow-hidden">
             
-            <!-- Dekorasi Latar -->
-            <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b {{ $result->is_passed ? 'from-green-50 to-transparent' : 'from-red-50 to-transparent' }} opacity-50 pointer-events-none"></div>
-            
-            <!-- Lingkaran Skor -->
-            <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
-                <svg class="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                    <!-- Background Circle -->
-                    <path class="text-gray-100" stroke-width="3" stroke="currentColor" fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <!-- Progress Circle -->
-                    <path class="{{ $result->is_passed ? 'text-[#00C853]' : 'text-[#d62828]' }}" stroke-dasharray="{{ $result->score }}, 100" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none"
-                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-5xl font-black {{ $result->is_passed ? 'text-[#00C853]' : 'text-[#d62828]' }} tracking-tighter">{{ $result->score }}</span>
+            @if(!isset($result->needs_grading) || !$result->needs_grading)
+                <!-- Dekorasi Latar -->
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b {{ $result->is_passed ? 'from-green-50 to-transparent' : 'from-red-50 to-transparent' }} opacity-50 pointer-events-none"></div>
+                
+                <!-- Lingkaran Skor -->
+                <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
+                    <svg class="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                        <!-- Background Circle -->
+                        <path class="text-gray-100" stroke-width="3" stroke="currentColor" fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <!-- Progress Circle -->
+                        <path class="{{ $result->is_passed ? 'text-[#00C853]' : 'text-[#d62828]' }}" stroke-dasharray="{{ $result->score }}, 100" stroke-linecap="round" stroke-width="3" stroke="currentColor" fill="none"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-5xl font-black {{ $result->is_passed ? 'text-[#00C853]' : 'text-[#d62828]' }} tracking-tighter">{{ $result->score }}</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Pesan Kelulusan -->
-            <div class="mb-10">
-                @if($result->is_passed)
-                    <h2 class="text-2xl font-black text-[#222222] mb-2 tracking-tight">Luar Biasa! 🎉</h2>
-                    <p class="text-sm font-medium text-[#666666]">Kerja bagus, kamu berhasil menguasai materi ini dengan sangat baik. Pertahankan terus semangat belajarmu!</p>
-                @else
-                    <h2 class="text-2xl font-black text-[#222222] mb-2 tracking-tight">Jangan Menyerah! 💪</h2>
-                    <p class="text-sm font-medium text-[#666666]">Skor kamu masih di bawah target. Ayo pelajari kembali materinya dan coba lagi nanti!</p>
-                @endif
-            </div>
+                <!-- Pesan Kelulusan -->
+                <div class="mb-10">
+                    @if($result->is_passed)
+                        <h2 class="text-2xl font-black text-[#222222] mb-2 tracking-tight">Luar Biasa! 🎉</h2>
+                        <p class="text-sm font-medium text-[#666666]">Kerja bagus, kamu berhasil menguasai materi ini dengan sangat baik. Pertahankan terus semangat belajarmu!</p>
+                    @else
+                        <h2 class="text-2xl font-black text-[#222222] mb-2 tracking-tight">Jangan Menyerah! 💪</h2>
+                        <p class="text-sm font-medium text-[#666666]">Skor kamu masih di bawah target. Ayo pelajari kembali materinya dan coba lagi nanti!</p>
+                    @endif
+                </div>
 
-            <!-- Statistik Detail -->
-            <div class="grid grid-cols-3 gap-4 mb-10 max-w-lg mx-auto">
-                <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
-                    <span class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                    </span>
-                    <span class="text-2xl font-black text-[#222222]">{{ $result->correct }}</span>
-                    <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Benar</span>
+                <!-- Statistik Detail -->
+                <div class="grid grid-cols-3 gap-4 mb-10 max-w-lg mx-auto">
+                    <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
+                        <span class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                        </span>
+                        <span class="text-2xl font-black text-[#222222]">{{ $result->correct }}</span>
+                        <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Benar</span>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
+                        <span class="w-8 h-8 rounded-full bg-red-100 text-[#d62828] flex items-center justify-center mb-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </span>
+                        <span class="text-2xl font-black text-[#222222]">{{ $result->wrong }}</span>
+                        <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Salah</span>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
+                        <span class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"></path></svg>
+                        </span>
+                        <span class="text-2xl font-black text-[#222222]">{{ $result->empty }}</span>
+                        <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Kosong</span>
+                    </div>
                 </div>
-                <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
-                    <span class="w-8 h-8 rounded-full bg-red-100 text-[#d62828] flex items-center justify-center mb-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </span>
-                    <span class="text-2xl font-black text-[#222222]">{{ $result->wrong }}</span>
-                    <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Salah</span>
+            @else
+                <!-- Icon Menunggu (Simpler) -->
+                <div class="relative w-28 h-28 mx-auto mb-8 flex items-center justify-center">
+                    <div class="w-20 h-20 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center border-4 border-blue-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
                 </div>
-                <div class="bg-gray-50 border border-gray-100 rounded-2xl py-4 px-2 flex flex-col items-center shadow-sm">
-                    <span class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"></path></svg>
-                    </span>
-                    <span class="text-2xl font-black text-[#222222]">{{ $result->empty }}</span>
-                    <span class="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Kosong</span>
+
+                <!-- Pesan Menunggu -->
+                <div class="mb-10 max-w-md mx-auto">
+                    <h2 class="text-2xl font-black text-[#222222] mb-3 tracking-tight">Menunggu Penilaian Sensei</h2>
+                    <p class="text-sm font-medium text-[#666666] leading-relaxed">Ujian telah disubmit. Jawaban esai Anda sedang dalam proses pemeriksaan manual oleh Sensei. Harap tunggu.</p>
                 </div>
-            </div>
+            @endif
 
             <!-- Tombol Aksi -->
             <div class="flex flex-col sm:flex-row gap-3 justify-center">

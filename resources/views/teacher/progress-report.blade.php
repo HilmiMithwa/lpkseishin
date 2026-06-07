@@ -3,7 +3,8 @@
 @section('title', 'Laporan Perkembangan - LPK Seishin')
 
 @section('content')
-<div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+<div class="p-4 sm:p-6 lg:p-10" @open-delete.window="deleteId = $event.detail.id; deleteType = $event.detail.type; deleteTargetName = $event.detail.name; showDeleteConfirm = true" x-data="{ 
+    currentTab: 'perkembangan',
     selectedBatch: '{{ $selectedBatchName }}',
     selectedClass: '{{ $selectedClassName }}',
     detailOpen: false, 
@@ -19,6 +20,9 @@
     weeklyFormTitle: 'Draf - Minggu Baru',
     showAddEvaluation: false,
     evalFormTitle: 'Draf - Evaluasi Baru',
+    editEvalTipe: '',
+    editEvalObj: null,
+    editEvalJawaban: [],
     showDeleteConfirm: false,
     deleteTargetName: '',
     deleteTargetUrl: '#',
@@ -29,6 +33,71 @@
     evaluations: [],
     editWeeklyId: null,
     editEvalId: null,
+    onlineEvals: [],
+    onlineSubmissions: [],
+    selectedOnlineEval: '',
+    loadingSubmissions: false,
+    
+    init() {
+        this.$watch('currentTab', val => {
+            if (val === 'ujian') {
+                this.fetchOnlineEvals();
+            }
+        });
+    },
+    fetchOnlineEvals() {
+        if (!'{{ $selectedClassId }}') return;
+        fetch(`/teacher/progress-report/online-evaluations/{{ $selectedClassId }}`)
+            .then(res => res.json())
+            .then(data => {
+                this.onlineEvals = data;
+            });
+    },
+    fetchOnlineSubmissions() {
+        if (!this.selectedOnlineEval || !'{{ $selectedClassId }}') return;
+        this.loadingSubmissions = true;
+        fetch(`/teacher/progress-report/online-submissions/{{ $selectedClassId }}?eval_name=` + encodeURIComponent(this.selectedOnlineEval))
+            .then(res => res.json())
+            .then(data => {
+                this.onlineSubmissions = data.map(sub => {
+                    let jwb = [];
+                    try { jwb = JSON.parse(sub.jawaban_siswa); } catch(e){}
+                    sub.jawaban_parsed = jwb || [];
+                    return sub;
+                });
+                this.loadingSubmissions = false;
+            });
+    },
+    saveInlineScore(id_catatan, formElement) {
+        let formData = new FormData(formElement);
+        formData.append('_method', 'PUT');
+        formData.append('id_mapel', '{{ $selectedClassId }}');
+        // We need to keep tipe_ujian as Online so the controller knows
+        
+        let url = '/teacher/progress-report/evaluation-log/' + id_catatan;
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+        }).then(async (res) => {
+            if (res.ok) {
+                // Show success feedback
+                const btn = formElement.querySelector('button[type=submit]');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Tersimpan!';
+                btn.classList.add('bg-green-500');
+                btn.classList.remove('bg-[#d62828]');
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                    btn.classList.remove('bg-green-500');
+                    btn.classList.add('bg-[#d62828]');
+                }, 2000);
+            } else {
+                alert('Gagal menyimpan nilai.');
+            }
+        });
+    },
     openStudentDetail(userId) {
         this.studentId = userId;
         this.editWeeklyId = null;
@@ -124,7 +193,20 @@
     },
     openEditEval(evalLog) {
         this.editEvalId = evalLog.id_catatan_evaluasi;
-        this.evalFormTitle = 'Edit Catatan Evaluasi (' + evalLog.nama_evaluasi + ')';
+        this.evalFormTitle = evalLog.tipe_ujian && evalLog.tipe_ujian.toLowerCase() === 'online' 
+            ? 'Informasi Ujian (' + evalLog.nama_evaluasi + ')' 
+            : 'Edit Catatan Evaluasi (' + evalLog.nama_evaluasi + ')';
+        this.editEvalTipe = evalLog.tipe_ujian;
+        this.editEvalObj = evalLog;
+        
+        let jawabanParsed = [];
+        if (evalLog.jawaban_siswa) {
+            try {
+                jawabanParsed = typeof evalLog.jawaban_siswa === 'string' ? JSON.parse(evalLog.jawaban_siswa) : evalLog.jawaban_siswa;
+            } catch(e) {}
+        }
+        this.editEvalJawaban = jawabanParsed;
+        
         this.showAddEvaluation = true;
         
         this.$nextTick(() => {
@@ -143,15 +225,25 @@
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
         }).then(() => {
-            this.openStudentDetail(this.studentId);
+            if (type === 'evaluation_online') {
+                this.fetchOnlineSubmissions();
+            } else if (this.studentId) {
+                this.openStudentDetail(this.studentId);
+            }
             this.showDeleteConfirm = false;
         });
+    },
+    triggerDeleteModal(id, type, name) {
+        this.deleteId = id;
+        this.deleteType = type;
+        this.deleteTargetName = name;
+        this.showDeleteConfirm = true;
     }
 }">
 
     <div class="mb-8 text-left">
-        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Laporan Perkembangan</h1>
-        <p class="text-sm text-[#666666] font-medium mt-1">Laporan Perkembangan Siswa</p>
+        <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Penilaian Siswa</h1>
+        <p class="text-sm text-[#666666] font-medium mt-1">Penilaian dan Laporan Perkembangan Siswa</p>
     </div>
 
     <!-- 4 Top Cards -->
@@ -232,43 +324,65 @@
         <p class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">Silakan pilih <span class="font-bold text-gray-700">Batch</span> dan <span class="font-bold text-gray-700">Kelas</span> pada menu di atas terlebih dahulu untuk memuat data Laporan Perkembangan siswa.</p>
     </div>
 
-    <!-- Main Table Section -->
-    <div x-show="selectedBatch !== '' && selectedClass !== ''" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" class="bg-white rounded-[32px] shadow-sm border border-gray-100 p-6 lg:p-8" style="display: none;" x-cloak>
+    <!-- Tabs Navigation -->
+    <div x-show="selectedBatch !== '' && selectedClass !== ''" x-transition.opacity.duration.300ms style="display: none;" class="flex border-b border-gray-200 mb-6 overflow-x-auto no-scrollbar" x-cloak>
+        <button @click="currentTab = 'perkembangan'" :class="currentTab === 'perkembangan' ? 'border-[#d62828] text-[#d62828] font-bold' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold'" class="whitespace-nowrap py-4 px-6 border-b-2 text-sm transition-colors duration-200 outline-none">
+            Perkembangan Harian
+        </button>
+        <button @click="currentTab = 'ujian'" :class="currentTab === 'ujian' ? 'border-[#d62828] text-[#d62828] font-bold' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold'" class="whitespace-nowrap py-4 px-6 border-b-2 text-sm transition-colors duration-200 outline-none">
+            Penilaian Ujian
+        </button>
+    </div>
+
+    <!-- Tab 1: Perkembangan Harian -->
+    <div x-show="selectedBatch !== '' && selectedClass !== '' && currentTab === 'perkembangan'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" class="bg-white rounded-[32px] shadow-sm border border-gray-100 p-6 lg:p-8" style="display: none;" x-cloak>
         
         <!-- Toolbar -->
-        <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
-            <div class="relative w-full sm:w-80">
-                <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
-            </div>
-            
-            <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Status' }">
-                <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[130px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Status' ? 'text-gray-600' : 'text-[#d62828]'">
-                    <span x-text="statusFilter"></span>
-                    <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                
-                <div x-show="openFilter" style="display: none;"
-                     class="absolute right-0 z-50 w-full min-w-[130px] mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" 
-                     x-transition:enter="transition ease-out duration-100" 
-                     x-transition:enter-start="opacity-0 -translate-y-2" 
-                     x-transition:enter-end="opacity-100 translate-y-0" 
-                     x-transition:leave="transition ease-in duration-75" 
-                     x-transition:leave-start="opacity-100 translate-y-0" 
-                     x-transition:leave-end="opacity-0 -translate-y-2">
-                    <ul class="py-1">
-                        <li><button type="button" @click="statusFilter = 'Status'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-50 text-gray-700" :class="statusFilter === 'Status' ? 'bg-gray-50' : ''">Semua Status</button></li>
-                        <li><button type="button" @click="statusFilter = 'Aktif'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-green-50 text-green-600" :class="statusFilter === 'Aktif' ? 'bg-green-50' : ''">Aktif</button></li>
-                        <li><button type="button" @click="statusFilter = 'Tidak Aktif'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-red-50 text-red-600" :class="statusFilter === 'Tidak Aktif' ? 'bg-red-50' : ''">Tidak Aktif</button></li>
-                        <li><button type="button" @click="statusFilter = 'Selesai'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-100 text-gray-800" :class="statusFilter === 'Selesai' ? 'bg-gray-100' : ''">Selesai</button></li>
-                    </ul>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <div class="relative w-full sm:w-80">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" id="dt-search" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
                 </div>
+                
+                <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Semua Status' }">
+                    <input type="hidden" id="dt-status" value="all">
+                    <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[140px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Semua Status' ? 'text-gray-600' : 'text-[#d62828]'">
+                        <span x-text="statusFilter"></span>
+                        <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <div x-show="openFilter" style="display: none;"
+                         class="absolute right-0 sm:left-0 z-50 w-full min-w-[140px] mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" 
+                         x-transition:enter="transition ease-out duration-100" 
+                         x-transition:enter-start="opacity-0 -translate-y-2" 
+                         x-transition:enter-end="opacity-100 translate-y-0" 
+                         x-transition:leave="transition ease-in duration-75" 
+                         x-transition:leave-start="opacity-100 translate-y-0" 
+                         x-transition:leave-end="opacity-0 -translate-y-2">
+                        <ul class="py-1">
+                            <li><button type="button" @click="statusFilter = 'Semua Status'; openFilter = false; $('#dt-status').val('all').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-50 text-gray-700" :class="statusFilter === 'Semua Status' ? 'bg-gray-50' : ''">Semua Status</button></li>
+                            <li><button type="button" @click="statusFilter = 'Aktif'; openFilter = false; $('#dt-status').val('Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-green-50 text-green-600" :class="statusFilter === 'Aktif' ? 'bg-green-50' : ''">Aktif</button></li>
+                            <li><button type="button" @click="statusFilter = 'Tidak Aktif'; openFilter = false; $('#dt-status').val('Tidak Aktif').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-red-50 text-red-600" :class="statusFilter === 'Tidak Aktif' ? 'bg-red-50' : ''">Tidak Aktif</button></li>
+                            <li><button type="button" @click="statusFilter = 'Selesai'; openFilter = false; $('#dt-status').val('Selesai').trigger('change')" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-100 text-gray-800" :class="statusFilter === 'Selesai' ? 'bg-gray-100' : ''">Selesai</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Tampilkan:</span>
+                <select id="custom-dt-length" class="bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-lg focus:ring-[#d62828] focus:border-[#d62828] block p-2 transition shadow-sm">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
             </div>
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[900px]">
+        <div class="overflow-x-auto min-h-[400px]">
+            <table id="progress-table" class="w-full text-left border-collapse min-w-[900px]">
                 <thead>
                     <tr class="border-b border-gray-100 bg-gray-50/50">
                         <th class="py-4 px-4 text-[11px] font-bold text-gray-600 uppercase tracking-wider rounded-tl-xl">No</th>
@@ -282,61 +396,169 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @forelse($students as $index => $student)
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
-                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <img src="{{ $student->avatar }}" alt="{{ $student->name }}" class="w-8 h-8 rounded-full object-cover">
-                                <span class="text-sm font-bold text-gray-800">{{ $student->name }}</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#d62828] rounded-full" style="width: {{ $student->progress_modul }}%"></div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-600 w-8">{{ $student->progress_modul }}%</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->rata_rata_tugas }}</td>
-                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->nilai_evaluasi }}</td>
-                        <td class="py-4 px-4">
-                            @if($student->status == 'Selesai')
-                            <span class="inline-flex px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
-                            @elseif($student->status == 'Aktif')
-                            <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
-                            @else
-                            <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
-                            @endif
-                        </td>
-                        <td class="py-4 px-4 text-center">
-                            <button @click="openStudentDetail({{ $student->user_id }})" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </button>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="py-8 text-center text-gray-500 text-sm">Belum ada data siswa untuk kelas ini.</td>
-                    </tr>
-                    @endforelse
+                    <!-- DataTables Content -->
                 </tbody>
             </table>
         </div>
         
         <!-- Pagination -->
-        <div class="mt-6 flex justify-end items-center gap-2">
-            <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-sm shadow-sm hover:bg-gray-50 transition">1</button>
-            <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-sm shadow-sm hover:bg-gray-50 transition">2</button>
-            <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 font-bold text-sm shadow-sm hover:bg-gray-50 transition">3</button>
-            <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-[#d62828] text-white transition shadow-sm hover:bg-red-700">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-            </button>
+        <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div id="custom-dt-info" class="text-sm font-semibold text-gray-500 text-center sm:text-left">
+                <!-- DataTables Info -->
+            </div>
+            <div id="custom-dt-pagination" class="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0">
+                <!-- DataTables Pagination Buttons -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Penilaian Ujian -->
+    <div x-show="selectedBatch !== '' && selectedClass !== '' && currentTab === 'ujian'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" style="display: none;" x-cloak>
+        <div class="bg-white border border-gray-100 rounded-[32px] p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Penilaian Ujian Online</h2>
+            
+            @if(empty($selectedClassId))
+                <div class="p-6 bg-red-50 border border-red-100 rounded-2xl text-center">
+                    <p class="text-red-600 font-bold">Silakan pilih Batch dan Kelas terlebih dahulu.</p>
+                </div>
+            @else
+                <div class="mb-8 relative z-20">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Pilih Nama Ujian</label>
+                    <div class="relative w-full max-w-md" x-data="{ open: false }">
+                        <button type="button" @click="open = !open" @click.away="open = false" class="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-[#d62828] flex items-center justify-between p-3.5 font-semibold transition shadow-sm cursor-pointer hover:border-[#d62828]">
+                            <span x-text="selectedOnlineEval || '-- Pilih Ujian --'" :class="selectedOnlineEval ? 'text-gray-800' : 'text-gray-400'"></span>
+                            <svg class="w-5 h-5 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] overflow-hidden" style="display: none;" x-cloak>
+                            <ul class="py-2 max-h-60 overflow-auto custom-scrollbar">
+                                <li>
+                                    <button type="button" @click="selectedOnlineEval = ''; fetchOnlineSubmissions(); open = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition" :class="selectedOnlineEval === '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-500 hover:bg-gray-50'">-- Pilih Ujian --</button>
+                                </li>
+                                <template x-for="eval in onlineEvals" :key="eval">
+                                    <li>
+                                        <button type="button" @click="selectedOnlineEval = eval; fetchOnlineSubmissions(); open = false" class="w-full text-left px-4 py-2.5 text-sm font-bold transition" :class="selectedOnlineEval === eval ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50'" x-text="eval"></button>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div x-show="loadingSubmissions" class="text-center py-10">
+                    <svg class="animate-spin h-8 w-8 text-[#d62828] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <p class="mt-3 text-sm text-gray-500 font-semibold">Memuat jawaban siswa...</p>
+                </div>
+
+                <!-- Submissions List -->
+                <div x-show="!loadingSubmissions && selectedOnlineEval !== ''">
+                    <template x-if="onlineSubmissions.length === 0">
+                        <div class="p-10 bg-gray-50 border border-gray-100 rounded-2xl text-center">
+                            <p class="text-gray-500 font-bold">Belum ada siswa yang mengerjakan ujian ini.</p>
+                        </div>
+                    </template>
+                    
+                    <div class="space-y-6">
+                        <template x-for="sub in onlineSubmissions" :key="sub.id_catatan_evaluasi">
+                            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-200" x-data="{ open: false, get essayAnswers() { return sub.jawaban_parsed ? sub.jawaban_parsed.filter(j => j.tipe === 'essay') : []; } }" :class="open ? 'ring-1 ring-red-100' : ''">
+                                
+                                <!-- Accordion Header -->
+                                <button type="button" @click="open = !open" class="w-full px-6 py-4 bg-white hover:bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition outline-none text-left">
+                                    <div class="flex items-center gap-4 w-full">
+                                        <div class="w-6 h-6 rounded flex items-center justify-center transition-all duration-300 shrink-0" :class="open ? 'rotate-90 bg-red-50 text-[#d62828]' : 'bg-gray-50 text-gray-400'">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center font-black text-sm border border-red-100 shrink-0" x-text="sub.student_name.substring(0,2).toUpperCase()"></div>
+                                            <div>
+                                                <h3 class="font-bold text-[#222222] text-sm" x-text="sub.student_name"></h3>
+                                                <p class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider mt-0.5">Disubmit: <span x-text="new Date(sub.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'})"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="shrink-0 flex items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0 pl-10 sm:pl-0">
+                                        <span class="text-xs font-bold text-gray-500">Skor: <span class="text-lg font-black text-[#d62828] ml-1" x-text="sub.skor"></span></span>
+                                    </div>
+                                </button>
+                                
+                                <!-- Accordion Body -->
+                                <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+                                    <div class="border-t border-gray-100">
+                                        
+                                        <div class="p-6">
+                                            <!-- Skor Tersimpan -->
+                                            <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                                <div class="flex items-center gap-4">
+                                                    <div class="w-12 h-12 bg-red-50 text-[#d62828] rounded-2xl flex items-center justify-center shrink-0">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="text-base font-bold text-gray-800 mb-0.5">Skor Saat Ini</h4>
+                                                        <p class="text-xs text-gray-500 font-medium">Kalkulasi otomatis pilihan ganda atau nilai yang terakhir disimpan.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center sm:text-right w-full sm:w-auto">
+                                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-0.5">Total Poin</span>
+                                                    <span class="text-3xl font-black text-[#d62828]" x-text="sub.skor"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Only Show Essay -->
+                                            <template x-if="essayAnswers.length > 0">
+                                                <div class="mb-2">
+                                                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-5">Jawaban Essay Siswa</h4>
+                                                    <div class="space-y-6">
+                                                        <template x-for="(jwb, idx) in essayAnswers" :key="idx">
+                                                            <div class="pb-6 border-b border-gray-100 last:border-0 last:pb-0">
+                                                                <p class="text-sm font-bold text-gray-800 mb-3 leading-relaxed" x-html="(idx+1) + '. ' + jwb.pertanyaan"></p>
+                                                                <div class="pl-4 border-l-[3px] border-[#d62828] py-1">
+                                                                    <div class="mb-2"><span class="text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider bg-red-50 text-[#d62828]">Essay</span></div>
+                                                                    <p class="text-sm font-medium text-gray-600 leading-relaxed whitespace-pre-wrap" x-text="jwb.jawaban || 'Tidak dijawab'"></p>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            <!-- Message if No Essay -->
+                                            <template x-if="essayAnswers.length === 0">
+                                                <div class="mb-2 bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
+                                                    <div class="w-12 h-12 bg-white text-gray-400 rounded-full flex items-center justify-center shrink-0 mx-auto shadow-sm mb-3">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                                    <h4 class="text-sm font-bold text-gray-800 mb-1">Pilihan Ganda Saja</h4>
+                                                    <p class="text-xs text-gray-500 font-medium max-w-md mx-auto">Ujian ini telah dinilai otomatis secara keseluruhan karena tidak memiliki soal essay. Verifikasi ulang tidak diwajibkan.</p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        
+                                        <!-- Edit Score Form (Footer) -->
+                                        <div class="bg-gray-50 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-5 border-t border-gray-100">
+                                            <div class="w-full sm:w-auto text-center sm:text-left">
+                                                <h4 class="text-sm font-bold text-gray-800">Verifikasi Skor Akhir</h4>
+                                                <p class="text-xs font-semibold text-gray-500 mt-0.5">Berikan penyesuaian bobot nilai essay jika diperlukan.</p>
+                                            </div>
+                                            <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-center sm:justify-end">
+                                                <button type="button" @click="$dispatch('open-delete', { id: sub.id_catatan_evaluasi, type: 'evaluation_online', name: 'Hasil Ujian ' + sub.student_name })" class="text-gray-500 hover:text-red-600 bg-white border border-gray-200 hover:border-red-200 hover:bg-red-50 px-4 py-3 rounded-xl text-sm font-bold transition-colors outline-none shadow-sm flex items-center gap-2" title="Hapus Ujian Siswa">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                    <span class="hidden sm:inline">Hapus</span>
+                                                </button>
+                                                <form @submit.prevent="saveInlineScore(sub.id_catatan_evaluasi, $el)" class="flex items-center gap-3">
+                                                    <input type="hidden" name="tipe_ujian" value="Online">
+                                                    <input type="number" name="skor" :value="sub.skor" min="0" max="100" class="w-20 sm:w-24 bg-white border border-gray-200 text-gray-800 text-lg rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#d62828] block p-2.5 font-black text-center shadow-sm" required>
+                                                    <button type="submit" class="bg-[#d62828] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition shadow-sm whitespace-nowrap">Simpan Nilai</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -537,7 +759,7 @@
             <!-- Evaluation Log -->
             <section>
                 <h4 class="text-sm font-bold text-gray-800 mb-3">Catatan Evaluasi</h4>
-                <button @click="showAddEvaluation = true; evalFormTitle = 'Draf - Evaluasi Baru'; editEvalId = null; document.getElementById('evalForm').reset();" x-show="!showAddEvaluation" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
+                <button @click="showAddEvaluation = true; evalFormTitle = 'Draf - Evaluasi Baru'; editEvalId = null; editEvalTipe = ''; editEvalJawaban = []; document.getElementById('evalForm').reset();" x-show="!showAddEvaluation" class="w-full py-3 bg-[#d62828] text-white rounded-xl text-xs font-bold shadow-sm hover:bg-red-700 transition flex justify-center items-center gap-2 mb-4">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                     Tambah Catatan Evaluasi
                 </button>
@@ -546,23 +768,48 @@
                 <form id="evalForm" action="#" method="POST" @submit.prevent="saveEvaluationLog" x-show="showAddEvaluation" x-transition class="bg-white border border-red-100 rounded-2xl p-5 shadow-sm mb-4" style="display: none;">
                     @csrf
                     <h5 class="text-xs font-bold text-gray-800 mb-4" x-text="evalFormTitle"></h5>
-                    <div class="space-y-1.5 mb-4">
+                    
+                    <!-- Informasi Ujian Online Section (View Only) -->
+                    <div x-show="editEvalTipe && editEvalTipe.toLowerCase() === 'online'" class="mb-5 space-y-4" style="display: none;">
+                        <div class="bg-red-50/50 border border-red-100 rounded-xl p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
+                                    <div class="inline-flex items-center gap-1.5 bg-red-100 text-[#d62828] px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        Telah Dinilai
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Skor Akhir</p>
+                                    <p class="text-3xl font-black text-[#d62828]" x-text="editEvalObj ? editEvalObj.skor : '-'"></p>
+                                </div>
+                                <div class="col-span-2 pt-3 border-t border-red-100/50">
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Disubmit Pada</p>
+                                    <p class="text-sm font-bold text-gray-800" x-text="editEvalObj ? new Date(editEvalObj.created_at).toLocaleString('id-ID', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit'}) : '-'"></p>
+                                </div>
+                                <div class="col-span-2 pt-3 border-t border-red-100/50">
+                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Diperbarui Pada</p>
+                                    <p class="text-sm font-bold text-gray-800" x-text="editEvalObj ? new Date(editEvalObj.updated_at).toLocaleString('id-ID', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit'}) : '-'"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 mb-4" x-show="!editEvalTipe || editEvalTipe.toLowerCase() !== 'online'">
                         <x-input-label>Nama Evaluasi</x-input-label>
-                        <x-text-input type="text" name="nama_evaluasi" placeholder="mis. UTS 2" class="w-full" required />
+                        <x-text-input type="text" name="nama_evaluasi" placeholder="mis. UTS 2" class="w-full" />
                     </div>
                     
-                    <div class="space-y-1.5 mb-4">
-                        <x-input-label>Tipe Ujian</x-input-label>
-                        <x-text-input type="text" name="tipe_ujian" placeholder="mis. Offline" class="w-full" required />
-                    </div>
+                    <input type="hidden" name="tipe_ujian" x-bind:value="editEvalTipe || 'Offline'">
                     
-                    <div class="space-y-1.5 mb-5">
+                    <div class="space-y-1.5 mb-5" x-show="!editEvalTipe || editEvalTipe.toLowerCase() !== 'online'">
                         <x-input-label>Skor</x-input-label>
                         <x-text-input type="number" name="skor" placeholder="1-100" class="w-full" required />
                     </div>
                     <div class="flex gap-2">
-                        <button type="button" @click="showAddEvaluation = false" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-bold transition">Batal</button>
-                        <button type="submit" class="flex-1 py-2.5 bg-[#d62828] hover:bg-red-700 text-white rounded-xl text-xs font-bold shadow-sm transition">Simpan</button>
+                        <button type="button" @click="showAddEvaluation = false" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-bold transition" x-text="(!editEvalTipe || editEvalTipe.toLowerCase() !== 'online') ? 'Batal' : 'Tutup'"></button>
+                        <button type="submit" x-show="!editEvalTipe || editEvalTipe.toLowerCase() !== 'online'" class="flex-1 py-2.5 bg-[#d62828] hover:bg-red-700 text-white rounded-xl text-xs font-bold shadow-sm transition">Simpan</button>
                     </div>
                 </form>
 
@@ -591,8 +838,13 @@
                                     <div class="flex justify-between items-center pt-3 border-t border-gray-50">
                                         <span class="text-[10px] font-semibold text-gray-400" x-text="'Diperbarui: ' + new Date(eval.updated_at).toLocaleDateString()"></span>
                                         <div class="flex gap-4">
-                                            <button type="button" @click="openEditEval(eval)" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                                            <button type="button" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Evaluasi (' + eval.nama_evaluasi + ')'; deleteId = eval.id_catatan_evaluasi; deleteType = 'evaluation'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
+                                            <template x-if="!eval.tipe_ujian || eval.tipe_ujian.toLowerCase() !== 'online'">
+                                                <button type="button" @click="openEditEval(eval)" class="text-[11px] font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
+                                            </template>
+                                            <template x-if="eval.tipe_ujian && eval.tipe_ujian.toLowerCase() === 'online'">
+                                                <button type="button" @click="openEditEval(eval)" class="text-[11px] font-bold text-[#d62828] hover:text-red-700 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg> Lihat</button>
+                                            </template>
+                                            <button type="button" x-show="!eval.tipe_ujian || eval.tipe_ujian.toLowerCase() !== 'online'" @click="showDeleteConfirm = true; deleteTargetName = 'Catatan Evaluasi (' + eval.nama_evaluasi + ')'; deleteId = eval.id_catatan_evaluasi; deleteType = 'evaluation'" class="text-[11px] font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 transition"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</button>
                                         </div>
                                     </div>
                                 </div>
@@ -624,3 +876,136 @@
     </template>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        display: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        let table = null;
+
+        @if($selectedBatchId && $selectedClassId)
+        table = $('#progress-table').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: "{!! route('teacher.progress-report', ['batch_id' => $selectedBatchId, 'class_id' => $selectedClassId]) !!}",
+                data: function (d) {
+                    d.status = $('#dt-status').val() || 'all';
+                    d.search.value = $('#dt-search').val() || ''; 
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4 text-sm font-semibold text-gray-600'); } },
+                { data: 'formatted_id', name: 'users.id', createdCell: function(td) { $(td).addClass('py-4 px-4 text-sm font-semibold text-gray-600'); } },
+                { data: 'name', name: 'users.name', createdCell: function(td) { $(td).addClass('py-4 px-4'); }, render: function(data, type, row) {
+                    return `<div class="flex items-center gap-3">
+                                <img src="${row.avatar_url}" alt="${data}" class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-sm font-bold text-gray-800">${data}</span>
+                            </div>`;
+                }},
+                { data: 'progress_modul', name: 'progress_modul', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4'); }, render: function(data) {
+                    return `<div class="flex items-center gap-3">
+                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#d62828] rounded-full" style="width: ${data}%"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-600 w-8">${data}%</span>
+                            </div>`;
+                }},
+                { data: 'rata_rata_tugas', name: 'rata_rata_tugas', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4 text-sm font-bold text-gray-600'); } },
+                { data: 'nilai_evaluasi', name: 'nilai_evaluasi', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4 text-sm font-bold text-gray-600'); } },
+                { data: 'status_badge', name: 'status_badge', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4'); } },
+                { data: 'action', name: 'action', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('py-4 px-4 text-center'); } }
+            ],
+            dom: '<"w-full overflow-x-auto"t>',
+            drawCallback: function(settings) {
+                var api = this.api();
+                var info = api.page.info();
+                
+                $('#custom-dt-info').html(
+                    'Menampilkan ' + (info.recordsDisplay > 0 ? info.start + 1 : 0) + ' - ' + info.end + ' dari ' + info.recordsDisplay + ' data.'
+                );
+                
+                let paginationHtml = '';
+                let currentPage = info.page;
+                let totalPages = info.pages;
+
+                if (totalPages > 0) {
+                    let prevDisabled = currentPage === 0;
+                    let prevClass = prevDisabled 
+                        ? 'bg-red-50 text-red-300 cursor-not-allowed opacity-70' 
+                        : 'bg-red-50 text-[#d62828] hover:bg-red-100 cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-xl transition shadow-sm ${prevClass}" data-action="previous" ${prevDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>`;
+
+                    let startPage = Math.max(0, currentPage - 1);
+                    let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                    if (currentPage === 0) endPage = Math.min(totalPages - 1, 2);
+                    if (currentPage === totalPages - 1) startPage = Math.max(0, totalPages - 3);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        let activeClass = i === currentPage 
+                            ? 'bg-[#d62828] text-white shadow-sm hover:bg-red-700' 
+                            : 'bg-white border border-gray-200 text-gray-600 font-bold hover:bg-gray-50';
+                            
+                        paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-xl text-sm transition shadow-sm ${activeClass}" data-action="${i}">
+                            ${i + 1}
+                        </button>`;
+                    }
+
+                    let nextDisabled = currentPage === totalPages - 1;
+                    let nextClass = nextDisabled 
+                        ? 'bg-[#d62828]/50 text-white cursor-not-allowed' 
+                        : 'bg-[#d62828] text-white hover:bg-red-700 cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-xl transition shadow-sm ${nextClass}" data-action="next" ${nextDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>`;
+                }
+
+                $('#custom-dt-pagination').html(paginationHtml);
+            }
+        });
+
+        $('#dt-search').on('keyup', function() { table.draw(); });
+        $('#dt-status').on('change', function() { table.draw(); });
+        $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });
+        
+        $('#custom-dt-pagination').on('click', '.dt-paginate-btn', function() {
+            let action = $(this).data('action');
+            if (action !== undefined) {
+                if (action === 'previous') {
+                    table.page('previous').draw('page');
+                } else if (action === 'next') {
+                    table.page('next').draw('page');
+                } else {
+                    table.page(action).draw('page');
+                }
+            }
+        });
+        @endif
+    });
+</script>
+@endpush
