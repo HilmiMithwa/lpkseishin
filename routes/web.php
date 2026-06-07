@@ -212,7 +212,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
             $query->where('category', request('category'));
         }
         
-        $words = $query->paginate(18)->appends(request()->query());
+        $words = $query->paginate(18)->appends(request()->except(['open_first', 'open_last']));
         
         return view('teacher.vocabulary-level', ['level_id' => $id, 'words' => $words]);
     })->name('vocabulary.level');
@@ -225,6 +225,7 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::post('/progress-report/evaluation-log', [ProgressReportController::class, 'storeEvaluationLog'])->name('progress-report.evaluation-log.store');
     Route::put('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'updateEvaluationLog'])->name('progress-report.evaluation-log.update');
     Route::delete('/progress-report/evaluation-log/{id}', [ProgressReportController::class, 'destroyEvaluationLog'])->name('progress-report.evaluation-log.destroy');
+    Route::post('/vocabulary/level/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'storeLevel'])->name('vocabulary.level.store');
     Route::post('/vocabulary/level/{id}/store', [\App\Http\Controllers\Teacher\VocabularyController::class, 'store'])->name('vocabulary.store');
     Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
     Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');

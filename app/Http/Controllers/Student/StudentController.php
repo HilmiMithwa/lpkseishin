@@ -483,7 +483,7 @@ class StudentController extends Controller
         $totalVocab         = Vocabulary::count();
         $masteredPercentage = $totalVocab > 0 ? round(($statMastered / $totalVocab) * 100) : 0;
  
-        $levels = Vocabulary::select('level')->distinct()->orderBy('level')->pluck('level');
+        $levels = \App\Models\VocabularyLevel::orderBy('level')->pluck('level');
  
         $flashcardLevels = $levels->map(function ($level) use ($user) {
             $vocabIds   = Vocabulary::where('level', $level)->pluck('id_vocabulary');
