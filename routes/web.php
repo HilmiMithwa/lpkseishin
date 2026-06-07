@@ -139,6 +139,11 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     Route::get('/students/meetings', [\App\Http\Controllers\Student\MeetingController::class, 'index'])->name('students.meetings.index');
     Route::get('/students/meetings/{id}/join', [\App\Http\Controllers\Student\MeetingController::class, 'join'])->name('students.meetings.join');
+    
+    Route::post('/students/notifications/read', function() {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('students.notifications.read');
 
 });
 
