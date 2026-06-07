@@ -402,6 +402,42 @@
 
 </div>
 
+@if ($errors->any())
+<div x-data="{show: true}" 
+    x-init="setTimeout(() => show = false, 5000)"
+    class="fixed bottom-6 right-6 z-[110] flex flex-col gap-2 pointer-events-none">
+    
+    <div x-show="show" style="display: none;"
+         x-transition:enter="transform ease-out duration-300 transition"
+         x-transition:enter-start="translate-y-4 opacity-0 sm:translate-y-0 sm:translate-x-4"
+         x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 flex items-start p-4 gap-4 border border-red-100">
+         
+         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mt-0.5">
+             <svg class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+             </svg>
+         </div>
+         
+         <div class="flex-1">
+             <p class="text-sm font-bold font-ibm text-gray-900">Gagal Disimpan</p>
+             <ul class="text-xs font-karla text-gray-500 mt-1 list-disc pl-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+             </ul>
+         </div>
+         
+         <button @click="show = false" class="text-gray-400 hover:text-gray-500 transition">
+             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>
+         </button>
+    </div>
+</div>
+@endif
+
 @push('modals')
     {{-- Modal Edit Class --}}
     <div x-data="{ open: false }" 
@@ -536,7 +572,12 @@
 
 @push('modals')
     {{-- Modal Add New Module --}}
-    <div x-data="{ open: false }" 
+    <div x-data="{ 
+            open: {{ $errors->hasAny(['nama_modul', 'teori', 'praktik', 'module_description']) ? 'true' : 'false' }},
+            selectedIcon: {{ old('icon_type', 2) }}, 
+            sequential: {{ old('is_sequential', 0) ? 'true' : 'false' }},
+            isLoading: false
+         }" 
          x-show="open" 
          @open-add-module-modal.window="open = true"
          style="display: none;"
@@ -552,7 +593,7 @@
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
              class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" 
-             @click="open = false"></div>
+             @click="if(!isLoading) open = false"></div>
 
         <!-- Modal panel -->
         <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
@@ -571,13 +612,13 @@
                  </button>
 
                  <!-- Content -->
-                 <div class="p-6 sm:p-8 lg:p-10" x-data="{ selectedIcon: 2, sequential: false }">
+                 <div class="p-6 sm:p-8 lg:p-10">
                      <div class="mb-8">
                          <h3 class="text-xl sm:text-2xl font-bold font-ibm text-gray-900" id="modal-title">Tambah Modul Baru</h3>
                      </div>
 
                      <!-- Form Grid (Single Column) -->
-                     <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6">
+                     <form action="{{ route('teacher.modules.store') }}" method="POST" class="space-y-6" @submit="isLoading = true">
                          @csrf
                          <input type="hidden" name="id_mapel" value="{{ $classData->id_mapel }}">
                          <input type="hidden" name="icon_type" x-model="selectedIcon">
@@ -585,17 +626,26 @@
                          
                          <div class="space-y-1.5">
                              <x-input-label>Judul Modul:</x-input-label>
-                             <x-text-input type="text" name="nama_modul" required placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full" />
+                             <x-text-input type="text" name="nama_modul" value="{{ old('nama_modul') }}" placeholder="cth., Module 2: Vocabulary &amp; Reading (Kotoba &amp; Dokkai)" class="w-full {{ $errors->has('nama_modul') ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '' }}" />
+                             @error('nama_modul')
+                                 <p class="text-xs font-bold text-red-500 mt-1">{{ $message }}</p>
+                             @enderror
                          </div>
 
                          <div class="grid grid-cols-2 gap-4">
                              <div class="space-y-1.5">
                                  <x-input-label>JP Teori:</x-input-label>
-                                 <x-text-input type="number" name="teori" value="0" min="0" required class="w-full" />
+                                 <x-text-input type="number" name="teori" value="{{ old('teori', 0) }}" min="0" class="w-full {{ $errors->has('teori') ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '' }}" />
+                                 @error('teori')
+                                     <p class="text-xs font-bold text-red-500 mt-1">{{ $message }}</p>
+                                 @enderror
                              </div>
                              <div class="space-y-1.5">
                                  <x-input-label>JP Praktik:</x-input-label>
-                                 <x-text-input type="number" name="praktik" value="0" min="0" required class="w-full" />
+                                 <x-text-input type="number" name="praktik" value="{{ old('praktik', 0) }}" min="0" class="w-full {{ $errors->has('praktik') ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '' }}" />
+                                 @error('praktik')
+                                     <p class="text-xs font-bold text-red-500 mt-1">{{ $message }}</p>
+                                 @enderror
                              </div>
                          </div>
 
@@ -627,7 +677,10 @@
 
                          <div class="space-y-1.5">
                              <x-input-label>Deskripsi Modul:</x-input-label>
-                             <textarea name="module_description" rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm"></textarea>
+                             <textarea name="module_description" rows="4" placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border {{ $errors->has('module_description') ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#d62828] focus:ring-[#d62828]' }} outline-none transition font-karla text-sm resize-y min-h-[120px] shadow-sm">{{ old('module_description') }}</textarea>
+                             @error('module_description')
+                                 <p class="text-xs font-bold text-red-500 mt-1">{{ $message }}</p>
+                             @enderror
                          </div>
 
                          <div class="flex items-start justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
@@ -643,11 +696,12 @@
 
                          <!-- Actions -->
                          <div class="mt-4 flex items-center gap-4 pt-6">
-                             <x-outline-button @click="open = false" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
+                             <x-outline-button type="button" @click="open = false" class="w-full sm:w-auto sm:flex-1 text-sm sm:text-base py-3">
                                  Batal
                              </x-outline-button>
-                             <x-primary-button type="submit" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3">
-                                 Buat Modul
+                             <x-primary-button type="submit" x-bind:disabled="isLoading" class="w-full sm:w-auto sm:flex-[2.5] justify-center text-sm sm:text-base py-3 disabled:opacity-70 disabled:cursor-not-allowed">
+                                 <svg x-show="isLoading" class="animate-spin h-4 w-4 text-white mr-2" fill="none" viewBox="0 0 24 24" style="display: none;"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                 <span x-text="isLoading ? 'Menyimpan...' : 'Simpan Modul'"></span>
                              </x-primary-button>
                          </div>
                      </form>
