@@ -192,7 +192,7 @@
 
         <div class="p-4 border-t border-gray-100/50">
             <div class="user-card bg-white border border-gray-100/50 rounded-2xl p-3 flex items-center gap-3 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] mb-3 transition-all duration-300">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                 <div class="sidebar-text overflow-hidden">
                     <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name ?? 'Admin' }}</h4>
                     <p class="text-[10px] text-[#666666] truncate flex items-center gap-1 mt-0.5">
@@ -249,7 +249,7 @@
                     
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn focus:outline-none flex items-center group">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
+                            <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -257,7 +257,7 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
                                     <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                                     <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>
@@ -338,7 +338,7 @@
                     <div class="relative hidden sm:flex items-center pl-3 border-l border-gray-200 dropdown-container">
                         <button class="dropdown-btn flex items-center gap-3 focus:outline-none group">
                             <span class="text-sm font-bold text-[#222222] group-hover:text-[#d62828] transition">{{ Auth::user()->name ?? 'Admin' }}</span>
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
+                            <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -346,7 +346,7 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
                                     <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                                     <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>

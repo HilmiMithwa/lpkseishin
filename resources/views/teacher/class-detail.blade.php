@@ -464,7 +464,7 @@
                                  <div class="space-y-1.5">
                                      <x-input-label>Mentor Sensei:</x-input-label>
                                      <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
-                                         <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
+                                         <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
                                          <span class="text-sm font-bold font-karla text-gray-900">{{ Auth::user()->name }}</span>
                                      </div>
                                  </div>

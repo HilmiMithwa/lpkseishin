@@ -31,7 +31,7 @@
     <!-- Top Banner Card -->
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
         <div class="relative flex-shrink-0 mt-2 sm:mt-0">
-            <img src="{{ $user->profile_photo_path ? (Str::startsWith($user->profile_photo_path, 'http') ? $user->profile_photo_path : asset('storage/' . $user->profile_photo_path)) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&background=f3f4f6&color=d62828&bold=true' }}" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm border-4 border-white">
+            <img src="{{ $user->avatar_url }}" onerror="this.onerror=null; this.src='{{ $user->fallback_avatar_url }}'" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm border-4 border-white">
         </div>
         
         <div class="flex-1 text-center sm:text-left space-y-2 lg:pt-2 w-full">

@@ -51,42 +51,4 @@ class ProfileController extends Controller
 
         return redirect()->route('teacher.profile')->with('success', 'Kata sandi berhasil diperbarui');
     }
-
-    public function updatePhoto(Request $request)
-    {
-        $request->validate([
-            'photo' => ['required', 'image', 'max:2048'],
-        ]);
-
-        $user = Auth::user();
-
-        if ($request->hasFile('photo')) {
-            if ($user->profile_photo_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_photo_path);
-            }
-
-            $path = $request->file('photo')->store('profile-photos', 'public');
-            
-            $user->update([
-                'profile_photo_path' => $path,
-            ]);
-        }
-
-        return back()->with('success', 'Foto profil berhasil diperbarui');
-    }
-
-    public function destroyPhoto(Request $request)
-    {
-        $user = Auth::user();
-
-        if ($user->profile_photo_path) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_photo_path);
-            
-            $user->update([
-                'profile_photo_path' => null,
-            ]);
-        }
-
-        return back()->with('success', 'Foto profil berhasil dihapus');
-    }
 }

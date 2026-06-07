@@ -12,9 +12,8 @@
 
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
         <div class="relative flex-shrink-0 mt-2 sm:mt-0" x-data="{ photoName: null, photoPreview: null }">
-            <form action="{{ route('teacher.profile.photo.update') }}" method="POST" enctype="multipart/form-data" id="photoForm">
+            <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data" id="photoForm">
                 @csrf
-                @method('PATCH')
                 
                 <input type="file" name="photo" id="photo" class="hidden"
                     x-ref="photo"
@@ -29,7 +28,7 @@
                     " />
 
                 <div class="w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-sm border-2 border-gray-100" x-show="! photoPreview">
-                    <img src="{{ Auth::user()->profile_photo_path ? Storage::disk('public')->url(Auth::user()->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=d62828&background=FFDBDB' }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                    <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                 </div>
 
                 <div class="w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-sm border-2 border-gray-100" x-show="photoPreview" style="display: none;">
@@ -44,7 +43,7 @@
             </form>
 
             @if(Auth::user()->profile_photo_path)
-            <form action="{{ route('teacher.profile.photo.destroy') }}" method="POST" class="absolute bottom-1 left-1 z-10">
+            <form action="{{ route('profile.photo.destroy') }}" method="POST" class="absolute bottom-1 left-1 z-10">
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('Hapus foto profil?')" class="w-8 h-8 bg-white border border-gray-100 text-gray-500 rounded-full shadow-sm flex items-center justify-center hover:bg-red-50 hover:text-[#d62828] transition transform focus:outline-none focus:ring-2 focus:ring-red-500/20" title="Hapus Foto">

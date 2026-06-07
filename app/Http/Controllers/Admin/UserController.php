@@ -25,9 +25,10 @@ class UserController extends Controller
             return \Yajra\DataTables\Facades\DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('pengguna', function ($row) {
-                    $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($row->name) . '&background=f3f4f6&color=d62828&bold=true';
+                    $avatar = $row->avatar_url;
+                    $fallback = $row->fallback_avatar_url;
                     return '<div class="flex items-center gap-3">
-                                <img src="' . $avatar . '" class="w-10 h-10 rounded-full object-cover">
+                                <img src="' . $avatar . '" onerror="this.onerror=null; this.src=\'' . $fallback . '\'" class="w-10 h-10 rounded-full object-cover">
                                 <div>
                                     <p class="text-sm font-bold text-slate-800">' . htmlspecialchars($row->name) . '</p>
                                     <p class="text-xs font-medium text-slate-500 mt-0.5">' . htmlspecialchars($row->email) . '</p>

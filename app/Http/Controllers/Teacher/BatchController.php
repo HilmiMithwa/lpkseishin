@@ -53,7 +53,7 @@ class BatchController extends Controller
         $query = DB::table('student_list_batch')
             ->join('users', 'student_list_batch.user_id', '=', 'users.id')
             ->where('student_list_batch.id_batch', $id_batch)
-            ->select('users.id', 'users.name', 'student_list_batch.status', 'student_list_batch.id_studentbatch')
+            ->select('users.id', 'users.name', 'users.profile_photo_path', 'student_list_batch.status', 'student_list_batch.id_studentbatch')
             ->distinct();
 
         // Filter berdasarkan pencarian nama atau ID siswa
@@ -77,6 +77,15 @@ class BatchController extends Controller
                 ->addIndexColumn()
                 ->addColumn('id_siswa', function ($row) {
                     return 'SIS-' . str_pad($row->id, 3, '0', STR_PAD_LEFT);
+                })
+                ->addColumn('avatar_url', function ($row) {
+                    if ($row->profile_photo_path) {
+                        return \Illuminate\Support\Facades\Storage::disk('s3')->url($row->profile_photo_path);
+                    }
+                    return 'https://ui-avatars.com/api/?name=' . urlencode($row->name) . '&background=f3f4f6&color=d62828&bold=true';
+                })
+                ->addColumn('fallback_avatar_url', function ($row) {
+                    return 'https://ui-avatars.com/api/?name=' . urlencode($row->name) . '&background=f3f4f6&color=d62828&bold=true';
                 })
                 ->addColumn('module_progress', function ($row) {
                     return 0;

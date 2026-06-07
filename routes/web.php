@@ -67,6 +67,9 @@ Route::get('/dashboard', function() {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/profile/photo', [\App\Http\Controllers\ProfilePhotoController::class, 'store'])->name('profile.photo.update');
+    Route::delete('/profile/photo', [\App\Http\Controllers\ProfilePhotoController::class, 'destroy'])->name('profile.photo.destroy');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -293,8 +296,6 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::get('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'index'])->name('profile');
     Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
-    Route::delete('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
     Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     Route::post('/notifications/read', function() {
