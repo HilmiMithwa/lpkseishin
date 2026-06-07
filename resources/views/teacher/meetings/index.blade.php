@@ -95,7 +95,9 @@
                             <select name="id_mapel" required class="w-full rounded-xl border-gray-200 focus:border-[#d62828] focus:ring focus:ring-red-200 transition text-sm">
                                 <option value="">-- Pilih Kelas --</option>
                                 @foreach($mapels as $mapel)
-                                    <option value="{{ $mapel->id_mapel }}">{{ $mapel->nama_mapel }}</option>
+                                    <option value="{{ $mapel->id_mapel }}">
+                                        {{ $mapel->batch->nama ?? 'Tanpa Batch' }} - {{ $mapel->nama_mapel }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

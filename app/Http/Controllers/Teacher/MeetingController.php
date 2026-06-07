@@ -17,8 +17,9 @@ class MeetingController extends Controller
     {
         $teacherId = Auth::user()->id;
         
-        // Get all mapels for this teacher
-        $mapels = Mapel::where('id_guru', $teacherId)->get();
+        // Get all mapels through the teacher's batches
+        $teacherBatches = Auth::user()->batches()->pluck('batch.id_batch');
+        $mapels = Mapel::with('batch')->whereIn('id_batch', $teacherBatches)->get();
         $mapelIds = $mapels->pluck('id_mapel');
 
         // Delete ended meetings based on WIB (+7)
@@ -71,8 +72,9 @@ class MeetingController extends Controller
     {
         $meeting = Meeting::findOrFail($id);
         
-        // Ensure this meeting belongs to the teacher's mapel
-        if ($meeting->mapel->id_guru !== Auth::user()->id) {
+        // Ensure this meeting belongs to a mapel in the teacher's batches
+        $teacherBatches = Auth::user()->batches()->pluck('batch.id_batch')->toArray();
+        if (!in_array($meeting->mapel->id_batch, $teacherBatches)) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -84,8 +86,9 @@ class MeetingController extends Controller
     {
         $meeting = Meeting::findOrFail($id);
         
-        // Ensure this meeting belongs to the teacher's mapel
-        if ($meeting->mapel->id_guru !== Auth::user()->id) {
+        // Ensure this meeting belongs to a mapel in the teacher's batches
+        $teacherBatches = Auth::user()->batches()->pluck('batch.id_batch')->toArray();
+        if (!in_array($meeting->mapel->id_batch, $teacherBatches)) {
             abort(403, 'Unauthorized action.');
         }
 
