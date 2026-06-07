@@ -173,4 +173,142 @@ class BahanAjarController extends Controller
 
         return redirect()->route('teacher.modules.show', $id_modul)->with('success', 'Materi berhasil dihapus!');
     }
+    public function edit($id_modul, $id_materi)
+    {
+        $material = BahanAjar::findOrFail($id_materi);
+        $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
+        
+        $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
+        $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
+        $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+
+        $tugas = null;
+        if (strtolower($material->type) === 'practice') {
+            $tugas = \App\Models\Tugas::where('id_modul', $id_modul)->latest('id_tugas')->first();
+        }
+
+        return view('teacher.material-edit', compact('material', 'modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className', 'tugas'));
+    }
+
+    public function update(Request $request, $id_modul, $id_materi)
+    {
+        $material = BahanAjar::findOrFail($id_materi);
+        $modul = Modul::findOrFail($id_modul);
+
+        $rules = [
+            'nama_bahan_ajar' => 'required|string|max:255',
+            'type' => 'required|string|in:theory,practice,video',
+            'video_title' => 'nullable|string|max:255',
+            'video_url' => 'nullable|string',
+            'video_file' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:102400',
+            'focus_skill' => 'nullable|string|max:255',
+            'key_points' => 'nullable|string',
+            'objective' => 'nullable|string',
+            'sensei_note' => 'nullable|string',
+            'bahan_ajar_description' => 'nullable|string',
+            'resource_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar|max:51200',
+        ];
+
+        // For practice tasks
+        if ($request->input('type') === 'practice') {
+            $rules['task_title'] = 'required|string|max:255';
+            $rules['task_description'] = 'required|string';
+            $rules['task_deadline'] = 'required|date';
+            $rules['task_file'] = 'nullable|file|max:51200';
+        }
+
+        $messages = [
+            'nama_bahan_ajar.required' => 'Judul materi wajib diisi.',
+            'bahan_ajar_description.required' => 'Teks / Deskripsi materi dari editor wajib diisi.',
+            'task_title.required' => 'Judul tugas wajib diisi untuk tipe Praktik.',
+            'task_description.required' => 'Deskripsi tugas wajib diisi untuk tipe Praktik.',
+            'task_deadline.required' => 'Batas waktu tugas wajib diisi untuk tipe Praktik.',
+        ];
+
+        $request->validate($rules, $messages);
+
+        $material->nama_bahan_ajar = $request->input('nama_bahan_ajar');
+        $material->type = $request->input('type');
+        $material->bahan_ajar_description = $request->input('bahan_ajar_description') ?: $request->input('task_description');
+        
+        $material->video_title = $request->input('video_title');
+        $material->video_url = $request->input('video_url');
+        
+        if ($request->hasFile('video_file')) {
+            // Delete old if exists
+            if ($material->video_url && str_starts_with($material->video_url, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $material->video_url);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $file = $request->file('video_file');
+            $path = $file->store('materials/videos', 'public');
+            $material->video_url = '/storage/' . $path;
+            $material->video_title = $material->video_title ?: $file->getClientOriginalName();
+        }
+
+        $material->focus_skill = $request->input('focus_skill');
+        $material->key_points = $request->input('key_points');
+        $material->objective = $request->input('objective');
+        $material->sensei_note = $request->input('sensei_note');
+
+        if ($request->hasFile('resource_file')) {
+            if ($material->path_file_dokumen_ajar && str_starts_with($material->path_file_dokumen_ajar, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $material->path_file_dokumen_ajar);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $file = $request->file('resource_file');
+            $path = $file->store('materials/documents', 'public');
+            $material->nama_dokumen_ajar = $file->getClientOriginalName();
+            $material->path_file_dokumen_ajar = '/storage/' . $path;
+            $material->ukuran_file_dokumen_ajar = $file->getSize();
+            $material->unggah_file_dokumen_ajar = now();
+        }
+
+        if ($request->hasFile('task_file')) {
+            if ($material->path_file_dokumen_ajar && str_starts_with($material->path_file_dokumen_ajar, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $material->path_file_dokumen_ajar);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $file = $request->file('task_file');
+            $path = $file->store('materials/tasks', 'public');
+            $material->nama_dokumen_ajar = $file->getClientOriginalName();
+            $material->path_file_dokumen_ajar = '/storage/' . $path;
+            $material->ukuran_file_dokumen_ajar = $file->getSize();
+            $material->unggah_file_dokumen_ajar = now();
+        }
+
+        $material->save();
+
+        if ($request->input('type') === 'practice' && $request->input('task_title')) {
+            $tugas = \App\Models\Tugas::where('id_modul', $id_modul)->latest('id_tugas')->first();
+            if ($tugas) {
+                $tugas->update([
+                    'judul_tugas' => $request->input('task_title'),
+                    'deskripsi_tugas' => $request->input('task_description') ?: 'Tidak ada deskripsi',
+                    'waktu_pengumpulan' => $request->input('task_deadline'),
+                ]);
+            } else {
+                \App\Models\Tugas::create([
+                    'judul_tugas' => $request->input('task_title'),
+                    'deskripsi_tugas' => $request->input('task_description') ?: 'Tidak ada deskripsi',
+                    'waktu_pengumpulan' => $request->input('task_deadline'),
+                    'status_tugas' => 'active',
+                    'id_rps' => $modul->id_rps ?? \App\Models\Rps::first()->id_rps ?? 1,
+                    'id_modul' => $id_modul,
+                ]);
+            }
+        }
+
+        return redirect()->route('teacher.materials.show', [$id_modul, $id_materi])->with('success', 'Materi berhasil diperbarui!');
+    }
 }
