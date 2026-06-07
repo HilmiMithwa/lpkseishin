@@ -18,6 +18,8 @@ class Batch extends Model
         'waktu_berakhir',
         'durasi',
         'jadwal',
+        'jam_mulai',
+        'jam_selesai',
         'status',
         'quota',
     ];

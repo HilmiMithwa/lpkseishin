@@ -47,6 +47,9 @@ class BatchController extends Controller
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'status' => ['required', 'string', 'in:pendaftaran,aktif,selesai'],
             'quota' => ['required', 'integer', 'min:1'],
+            'jadwal' => ['required', 'string'],
+            'jam_mulai' => ['nullable', 'date_format:H:i'],
+            'jam_selesai' => ['nullable', 'date_format:H:i'],
         ]);
 
         // Auto-determine program & level target from name or defaults
@@ -77,7 +80,9 @@ class BatchController extends Controller
             'waktu_mulai' => $validated['start_date'],
             'waktu_berakhir' => $validated['end_date'],
             'durasi' => $duration,
-            'jadwal' => 'Senin - Kamis',
+            'jadwal' => $validated['jadwal'],
+            'jam_mulai' => $validated['jam_mulai'],
+            'jam_selesai' => $validated['jam_selesai'],
             'status' => $validated['status'],
             'quota' => $validated['quota'],
         ]);
@@ -97,6 +102,9 @@ class BatchController extends Controller
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'status' => ['required', 'string', 'in:pendaftaran,aktif,selesai'],
             'quota' => ['required', 'integer', 'min:1'],
+            'jadwal' => ['required', 'string'],
+            'jam_mulai' => ['nullable', 'date_format:H:i'],
+            'jam_selesai' => ['nullable', 'date_format:H:i'],
         ]);
 
         $name = $validated['batch_name'];
@@ -126,6 +134,9 @@ class BatchController extends Controller
             'waktu_mulai' => $validated['start_date'],
             'waktu_berakhir' => $validated['end_date'],
             'durasi' => $duration,
+            'jadwal' => $validated['jadwal'],
+            'jam_mulai' => $validated['jam_mulai'],
+            'jam_selesai' => $validated['jam_selesai'],
             'status' => $validated['status'],
             'quota' => $validated['quota'],
         ]);

@@ -79,7 +79,8 @@
 
                 @if($task->file_path_tugas)
                 <h3 class="text-sm font-bold font-ibm text-gray-900 mt-8 mb-4">Sumber Daya</h3>
-<a href="{{ Storage::url($task->file_path_tugas) }}" target="_blank" class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-red-500 transition-colors group">                    <div class="flex items-center gap-4">
+                <a href="{{ Storage::url($task->file_path_tugas) }}" target="_blank" class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-red-500 transition-colors group">                    
+                    <div class="flex items-center gap-4 min-w-0 ">
                         <div class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-lg text-red-600 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                         </div>
