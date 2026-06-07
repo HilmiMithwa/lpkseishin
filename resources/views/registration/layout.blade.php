@@ -46,9 +46,9 @@
 </head>
 <body class="bg-gray-50 font-karla">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="w-full max-w-2xl">
+        <div class="w-full max-w-2xl print:max-w-none">
             <!-- Header Banner -->
-            <div class="banner-red rounded-3xl p-6 sm:p-8 mb-8 relative">
+            <div class="banner-red rounded-3xl p-6 sm:p-8 mb-8 relative print:hidden">
                 <div class="relative z-10">
                     <h1 class="text-2xl sm:text-3xl font-bold font-ibm text-white mb-2">Pendaftaran Siswa</h1>
                     <p class="text-white/90 text-sm sm:text-base">LPK Seishin - Bergabunglah dengan Kami</p>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Progress Bar -->
-            <div class="mb-8">
+            <div class="mb-8 print:hidden">
                 <div class="flex justify-between items-center mb-6">
                     @for ($i = 1; $i <= 4; $i++)
                         <div class="flex flex-col items-center flex-1">
@@ -80,7 +80,7 @@
             </div>
 
             <!-- Content -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)]">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] print:p-0 print:shadow-none print:bg-transparent">
                 @yield('content')
             </div>
         </div>

@@ -3,7 +3,7 @@
 @section('title', 'Pendaftaran Berhasil - LPK Seishin')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center py-12 px-4">
+<div class="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center py-12 px-4 print:hidden">
     <div class="text-center max-w-xl">
         <!-- Success Icon -->
         <div class="mb-6 flex justify-center">
@@ -85,6 +85,112 @@
                 Cetak Bukti Pendaftaran
             </button>
         </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+        @page { margin: 0; size: A4 portrait; }
+        body { margin: 1cm; -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; }
+        #nprogress { display: none !important; }
+    }
+</style>
+<div class="hidden print:block w-full bg-white font-sans text-gray-800 text-[13px] leading-relaxed">
+    <!-- Header Invoice -->
+    <div class="flex justify-between items-start border-b border-gray-300 pb-6 mb-8 mt-4">
+        <div class="flex items-center">
+            <img src="{{ asset('img/logo.svg') }}" class="h-10 w-auto" alt="Logo LPK Seishin Cakrabuana">
+        </div>
+        <div class="text-right">
+            <h1 class="text-[22px] font-bold text-[#b91c1c] mb-1">LPK Seishin & LKP Edutech</h1>
+            <p class="text-gray-500 text-[12px] max-w-[350px] ml-auto leading-snug">
+                Jl. Raya Jatinangor Komplek Perumahan Janatipark No.Ruko 1C, Cibeusi, Kec. Jatinangor, Kabupaten Sumedang, Jawa Barat 45363<br>
+                seishincakrabuana@gmail.com
+            </p>
+        </div>
+    </div>
+
+    <!-- Info Pendaftar -->
+    <div class="flex justify-between mb-8">
+        <div class="w-1/2 pr-8">
+            <h2 class="font-bold text-[14px] mb-3 text-black">Bill To</h2>
+            <h3 class="font-bold text-[15px] mb-2 text-black">{{ $registration->full_name }}</h3>
+            <p class="text-gray-500 text-[13px] leading-relaxed">
+                Pendidikan Terakhir: {{ $registration->education_level ?? '-' }} - {{ $registration->school_name ?? '-' }}<br>
+                No KTP / NIK: {{ $registration->ktp_number ?? '-' }}<br>
+                WhatsApp: {{ $registration->whatsapp_number }}
+            </p>
+        </div>
+        <div class="w-1/2 pl-8">
+            <table class="w-full text-[13px] text-gray-600">
+                <tr><td class="py-1">Invoice Number:</td><td class="py-1 text-right text-gray-800 font-medium">INV-{{ date('Y') }}-{{ str_pad($registration->id, 4, '0', STR_PAD_LEFT) }}</td></tr>
+                <tr><td class="py-1">Order Number:</td><td class="py-1 text-right text-gray-800 font-medium">REG-{{ str_pad($registration->id, 4, '0', STR_PAD_LEFT) }}</td></tr>
+                <tr><td class="py-1">Invoice Date:</td><td class="py-1 text-right text-gray-800 font-bold">{{ $registration->created_at->format('d M Y') }}</td></tr>
+                <tr><td class="py-1">Due Date:</td><td class="py-1 text-right text-gray-800 font-medium">{{ $registration->created_at->format('d M Y') }}</td></tr>
+                <tr><td class="py-1">Stage:</td><td class="py-1 text-right text-gray-800 font-bold">
+                    @switch($registration->status)
+                        @case('pending') Menunggu Verifikasi @break
+                        @case('verified') Terverifikasi @break
+                        @case('accepted') Diterima @break
+                        @case('rejected') Ditolak @break
+                    @endswitch
+                </td></tr>
+                <tr><td class="py-1 pt-3">Draft:</td><td class="py-1 pt-3 text-right text-gray-800 font-bold">Rp 100.000</td></tr>
+                <tr><td class="py-1">Sisa:</td><td class="py-1 text-right text-gray-800 font-bold">Rp 0</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Rincian -->
+    <div class="mb-8">
+        <table class="w-full text-left border-separate" style="border-spacing: 0;">
+            <thead>
+                <tr class="bg-[#c22d2d] text-white">
+                    <th class="py-2.5 px-4 rounded-l-full font-bold text-[13px] w-1/3">Items</th>
+                    <th class="py-2.5 px-4 font-bold text-[13px] text-center">Quantity</th>
+                    <th class="py-2.5 px-4 font-bold text-[13px] text-center">Price</th>
+                    <th class="py-2.5 px-4 font-bold text-[13px] text-center">Amount</th>
+                    <th class="py-2.5 px-4 font-bold text-[13px] text-center">Tax</th>
+                    <th class="py-2.5 px-4 rounded-r-full font-bold text-[13px] text-right">Discount</th>
+                </tr>
+            </thead>
+            <tbody class="text-[13px]">
+                <tr>
+                    <td class="py-5 px-4 border-b border-gray-200 align-top">
+                        <p class="font-bold text-gray-800 mb-1">Biaya Pendaftaran LPK Seishin</p>
+                        <p class="text-gray-500 text-xs">Administrasi & Seleksi Calon Siswa</p>
+                    </td>
+                    <td class="py-5 px-4 text-center border-b border-gray-200 text-gray-700 align-top">1</td>
+                    <td class="py-5 px-4 text-center border-b border-gray-200 text-gray-700 align-top">Rp 100.000</td>
+                    <td class="py-5 px-4 text-center border-b border-gray-200 text-gray-700 align-top">Rp 100.000</td>
+                    <td class="py-5 px-4 text-center border-b border-gray-200 text-gray-700 align-top">Rp 0</td>
+                    <td class="py-5 px-4 text-right border-b border-gray-200 text-gray-700 align-top">Rp 0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer Summary -->
+    <div class="flex justify-between mb-16">
+        <div class="w-1/2 pr-8">
+            <h4 class="font-bold text-[13px] mb-3 text-gray-800">Notes</h4>
+            <p class="text-gray-400 text-xs mb-4">---</p>
+            <p class="text-gray-500 text-[13px]">Jenis Pembayaran: Transfer / QRIS</p>
+        </div>
+        <div class="w-[35%] pl-8">
+            <table class="w-full text-[13px] text-gray-600">
+                <tr><td class="py-1.5">Subtotal:</td><td class="py-1.5 text-right font-medium text-gray-800">Rp 100.000</td></tr>
+                <tr><td class="py-1.5">Tax:</td><td class="py-1.5 text-right font-medium text-gray-800">Rp 0</td></tr>
+                <tr><td class="py-1.5 pb-3">Discount:</td><td class="py-1.5 pb-3 text-right font-medium text-gray-800">Rp 0</td></tr>
+                <tr class="border-t border-gray-200"><td class="py-3 font-bold text-black">Total:</td><td class="py-3 text-right font-bold text-black">Rp 100.000</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Signatures -->
+    <div class="mt-8">
+        <p class="font-bold text-gray-800 text-[13px] mb-8">Direktur Keuangan dan SDM</p>
+        <p class="text-gray-600 text-[13px]">Yopie Luthvianty, S.Ak., M.M</p>
     </div>
 </div>
 @endsection
