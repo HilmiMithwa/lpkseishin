@@ -30,6 +30,7 @@ class User extends Authenticatable
         'nomor_telepon',
         'tanggal_lahir',
         'profile_photo_path',
+        'level',
     ];
 
     public function role()
