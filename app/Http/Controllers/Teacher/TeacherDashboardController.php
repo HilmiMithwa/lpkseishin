@@ -106,6 +106,8 @@ class TeacherDashboardController extends Controller
                             'lokasi_pertemuan' => $batch->nama,
                             'start_time' => $batch->jam_mulai ?? '08:00:00',
                             'end_time' => $batch->jam_selesai ?? '10:00:00',
+                            'batch_id' => $batch->id_batch,
+                            'batch' => $batch
                         ]);
                     }
                 }
@@ -115,6 +117,22 @@ class TeacherDashboardController extends Controller
         // Sort by start_time
         $todaySchedules = $todaySchedules->sortBy('start_time')->values();
         $todayScheduleCount = $todaySchedules->count();
+
+        // Trigger KelasAkanMulai Notifications
+        foreach ($todaySchedules as $schedule) {
+            $alreadyNotified = $teacher->notifications()
+                ->where('type', 'App\Notifications\KelasAkanMulai')
+                ->whereDate('created_at', \Carbon\Carbon::today())
+                ->get()
+                ->contains(function ($notification) use ($schedule) {
+                    return isset($notification->data['batch_id']) && $notification->data['batch_id'] == $schedule->batch_id;
+                });
+
+            if (!$alreadyNotified) {
+                $timeFormatted = date('H:i', strtotime($schedule->start_time));
+                $teacher->notify(new \App\Notifications\KelasAkanMulai($schedule->batch, "Hari ini ada jadwal kelas {$schedule->lokasi_pertemuan} pada pukul {$timeFormatted}"));
+            }
+        }
 
         $notificationCount = $needReviewCount;
 

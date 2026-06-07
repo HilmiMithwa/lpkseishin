@@ -50,13 +50,34 @@
                         <x-input-label>Durasi (Menit)</x-input-label>
                         <x-text-input type="number" x-model="duration" placeholder="Misal: 120" />
                     </div>
-                    <div class="space-y-1.5">
+                    <div class="space-y-1.5 relative" x-data="{ open: false }">
                         <x-input-label>Tipe</x-input-label>
-                        <select x-model="evalType" class="w-full px-4 py-2.5 rounded-xl bg-white border border-gray-200 focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm cursor-pointer">
-                            <option value="Multiple Choice and Essay">Pilihan Ganda & Esai</option>
-                            <option value="Multiple Choice Only">Pilihan Ganda Saja</option>
-                            <option value="Essay Only">Esai Saja</option>
-                        </select>
+                        <div @click="open = !open" 
+                             class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-bold cursor-pointer flex justify-between items-center transition shadow-sm text-gray-800"
+                             :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                            <span x-text="evalType === 'Multiple Choice and Essay' ? 'Pilihan Ganda & Esai' : (evalType === 'Multiple Choice Only' ? 'Pilihan Ganda Saja' : 'Esai Saja')"></span>
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div x-show="open" @click.outside="open = false" style="display: none;"
+                             class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                            <ul class="py-1">
+                                <li>
+                                    <div @click="evalType = 'Multiple Choice and Essay'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="evalType === 'Multiple Choice and Essay' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                        Pilihan Ganda & Esai
+                                    </div>
+                                </li>
+                                <li>
+                                    <div @click="evalType = 'Multiple Choice Only'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="evalType === 'Multiple Choice Only' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                        Pilihan Ganda Saja
+                                    </div>
+                                </li>
+                                <li>
+                                    <div @click="evalType = 'Essay Only'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="evalType === 'Essay Only' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                        Esai Saja
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

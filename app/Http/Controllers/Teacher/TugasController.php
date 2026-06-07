@@ -231,7 +231,9 @@ class TugasController extends Controller
                 'name' => $sub->user->name,
                 'status' => $sub->status === 'dikirim' ? 'Menunggu Penilaian' : ($sub->status === 'dinilai' ? 'Sudah Dinilai' : 'Belum Dikumpulkan'),
                 'submitted_at' => $sub->submitted_at ? \Carbon\Carbon::parse($sub->submitted_at)->translatedFormat('d M Y, H:i') : '-',
-                'score' => $sub->nilai ?? '-'
+                'score' => $sub->nilai ?? '-',
+                'file_url' => $sub->file_path ? route('submissions.download', $sub->id_pengiriman_tugas) : null,
+                'file_name' => $sub->file_path ? basename($sub->file_path) : null
             ];
         });
 

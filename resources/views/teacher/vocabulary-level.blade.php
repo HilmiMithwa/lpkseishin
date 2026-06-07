@@ -256,7 +256,7 @@
     </div>
 
     {{-- Modal Create Flash Card --}}
-    <div x-data="{ show: false, kanji: '', furigana: '', romaji: '', arti: '', category: '', context_jp: '', context_id: '' }" @open-create.window="show = true" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
+    <div x-data="{ show: false, kanji: '', furigana: '', romaji: '', arti: '', en: '', category: '', context_jp: '', context_id: '' }" @open-create.window="show = true" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-0" x-cloak style="display: none;">
         <div x-show="show" @click.away="show = false" class="bg-[#F5F5F5] sm:bg-white rounded-[32px] w-full max-w-[800px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             <form action="{{ route('teacher.vocabulary.store', $level_id) }}" method="POST" class="flex flex-col h-full overflow-hidden">
                 @csrf
@@ -289,7 +289,7 @@
                                     </div>
                                     <div class="flex justify-between border-t border-[#F4C430]/30 pt-3">
                                         <span class="font-bold text-gray-500">EN</span>
-                                        <span class="font-bold text-[#222222]">-</span>
+                                        <span class="font-bold text-[#222222]" x-text="en || '-'"></span>
                                     </div>
                                     <div class="flex justify-between border-t border-[#F4C430]/30 pt-3">
                                         <span class="font-bold text-gray-500">ID</span>
@@ -317,21 +317,44 @@
                                 <x-input-label>Arti (Indonesia): <span class="text-red-500">*</span></x-input-label>
                                 <x-text-input type="text" name="meaning_id" x-model="arti" required placeholder="Contoh: Belajar" />
                             </div>
+                            <div class="space-y-1.5">
+                                <x-input-label>Arti (Inggris): <span class="text-red-500">*</span></x-input-label>
+                                <x-text-input type="text" name="meaning_en" x-model="en" required placeholder="Contoh: Study" />
+                            </div>
                         </div>
                     </div>
 
                     {{-- Bottom Section: Full Width Inputs --}}
                     <div class="flex flex-col gap-4 mt-2">
-                        <div class="space-y-1.5">
+                        <div class="space-y-1.5 relative" x-data="{ openCat: false }">
                             <x-input-label>Kategori Kata: <span class="text-red-500">*</span></x-input-label>
-                            <div class="relative">
-                                <select name="category" x-model="category" required class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm appearance-none shadow-sm">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="meishi">Kata Benda (Meishi)</option>
-                                    <option value="doushi">Kata Kerja (Doushi)</option>
-                                    <option value="keiyoushi">Kata Sifat (Keiyoushi)</option>
-                                </select>
-                                <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <input type="hidden" name="category" x-model="category" required>
+                            <div @click="openCat = !openCat" 
+                                 class="w-full bg-white border rounded-xl px-4 py-2.5 text-sm font-bold cursor-pointer flex justify-between items-center transition shadow-sm text-gray-800"
+                                 :class="openCat ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                                <span x-text="category === 'meishi' ? 'Kata Benda (Meishi)' : (category === 'doushi' ? 'Kata Kerja (Doushi)' : (category === 'keiyoushi' ? 'Kata Sifat (Keiyoushi)' : 'Pilih Kategori'))"
+                                      :class="category ? 'text-[#222222]' : 'text-gray-400'"></span>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="openCat ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div x-show="openCat" @click.outside="openCat = false" style="display: none;"
+                                 class="absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                <ul class="py-1">
+                                    <li>
+                                        <div @click="category = 'meishi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'meishi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Benda (Meishi)
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div @click="category = 'doushi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'doushi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Kerja (Doushi)
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div @click="category = 'keiyoushi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'keiyoushi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Sifat (Keiyoushi)
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="space-y-1.5">
@@ -355,7 +378,7 @@
     </div>
 
     {{-- Modal Edit Flash Card --}}
-    <div x-data="{ show: false, id: '', kanji: '', furigana: '', romaji: '', arti: '', category: '', context_jp: '', context_id: '' }" 
+    <div x-data="{ show: false, id: '', kanji: '', furigana: '', romaji: '', arti: '', en: '', category: '', context_jp: '', context_id: '' }" 
          @open-edit.window="
             show = true; 
             id = $event.detail.id;
@@ -363,6 +386,7 @@
             furigana = $event.detail.furigana;
             romaji = $event.detail.romaji;
             arti = $event.detail.arti;
+            en = $event.detail.en;
             category = $event.detail.category;
             context_jp = $event.detail.context_jp;
             context_id = $event.detail.context_id;
@@ -401,7 +425,7 @@
                                     </div>
                                     <div class="flex justify-between border-t border-[#F4C430]/30 pt-3">
                                         <span class="font-bold text-gray-500">EN</span>
-                                        <span class="font-bold text-[#222222]">-</span>
+                                        <span class="font-bold text-[#222222]" x-text="en || '-'"></span>
                                     </div>
                                     <div class="flex justify-between border-t border-[#F4C430]/30 pt-3">
                                         <span class="font-bold text-gray-500">ID</span>
@@ -429,21 +453,44 @@
                                 <x-input-label>Arti (Indonesia): <span class="text-red-500">*</span></x-input-label>
                                 <x-text-input type="text" name="meaning_id" x-model="arti" required placeholder="Contoh: Belajar" />
                             </div>
+                            <div class="space-y-1.5">
+                                <x-input-label>Arti (Inggris): <span class="text-red-500">*</span></x-input-label>
+                                <x-text-input type="text" name="meaning_en" x-model="en" required placeholder="Contoh: Study" />
+                            </div>
                         </div>
                     </div>
 
                     {{-- Bottom Section: Full Width Inputs --}}
                     <div class="flex flex-col gap-4 mt-2">
-                        <div class="space-y-1.5">
+                        <div class="space-y-1.5 relative" x-data="{ openCat: false }">
                             <x-input-label>Kategori Kata: <span class="text-red-500">*</span></x-input-label>
-                            <div class="relative">
-                                <select name="category" x-model="category" required class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm appearance-none shadow-sm">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="meishi">Kata Benda (Meishi)</option>
-                                    <option value="doushi">Kata Kerja (Doushi)</option>
-                                    <option value="keiyoushi">Kata Sifat (Keiyoushi)</option>
-                                </select>
-                                <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <input type="hidden" name="category" x-model="category" required>
+                            <div @click="openCat = !openCat" 
+                                 class="w-full bg-white border rounded-xl px-4 py-2.5 text-sm font-bold cursor-pointer flex justify-between items-center transition shadow-sm text-gray-800"
+                                 :class="openCat ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                                <span x-text="category === 'meishi' ? 'Kata Benda (Meishi)' : (category === 'doushi' ? 'Kata Kerja (Doushi)' : (category === 'keiyoushi' ? 'Kata Sifat (Keiyoushi)' : 'Pilih Kategori'))"
+                                      :class="category ? 'text-[#222222]' : 'text-gray-400'"></span>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="openCat ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div x-show="openCat" @click.outside="openCat = false" style="display: none;"
+                                 class="absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                <ul class="py-1">
+                                    <li>
+                                        <div @click="category = 'meishi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'meishi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Benda (Meishi)
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div @click="category = 'doushi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'doushi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Kerja (Doushi)
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div @click="category = 'keiyoushi'; openCat = false;" class="w-full text-left px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors" :class="category === 'keiyoushi' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                            Kata Sifat (Keiyoushi)
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="space-y-1.5">
