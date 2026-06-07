@@ -15,7 +15,9 @@ class TeacherDashboardController extends Controller
     {
         $teacher = Auth::user();
 
-        $teacherSubjects = Mapel::where('id_guru', $teacher->id)
+        $teacherBatches = $teacher->batches()->pluck('batch.id_batch')->toArray();
+
+        $teacherSubjects = Mapel::whereIn('id_batch', $teacherBatches)
             ->with('batch')
             ->withCount([
                 'modul',
@@ -33,8 +35,8 @@ class TeacherDashboardController extends Controller
             ->count('id_user');
 
         $needReviewCount = Pengiriman_Tugas::where('status', 'dikirim')
-            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
-                $q->where('id_guru', $teacher->id);
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacherBatches) {
+                $q->whereIn('id_batch', $teacherBatches);
             })
             ->count();
 
@@ -43,8 +45,8 @@ class TeacherDashboardController extends Controller
                 'user:id,name',
                 'tugas.modul.mapel.batch',
             ])
-            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
-                $q->where('id_guru', $teacher->id);
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacherBatches) {
+                $q->whereIn('id_batch', $teacherBatches);
             })
             ->latest('submitted_at')
             ->take(10)

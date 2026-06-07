@@ -63,15 +63,68 @@ class UserController extends Controller
             ->with('success', 'Data pengguna berhasil disimpan!');
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $studentBatch = \Illuminate\Support\Facades\DB::table('student_list_batch')
+            ->where('user_id', $user->id)
+            ->first();
+        $batches = \App\Models\Batch::all();
+        $guruBatches = $user->batches()->pluck('batch.id_batch')->toArray();
+
+        return view('admin.users.edit', compact('user', 'studentBatch', 'batches', 'guruBatches'));
+    }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
+        if ($request->input('form_type') === 'akademik') {
+            $request->validate([
+                'batch_id' => 'required|exists:batch,id_batch',
+                'register_date' => 'required|date',
+                'status_keaktifan' => 'required|in:Active,Inactive,Completed',
+                'level' => 'required|string|max:50',
+            ]);
+
+            $user->update([
+                'level' => $request->level,
+                'status' => $request->status_keaktifan
+            ]);
+
+            \Illuminate\Support\Facades\DB::table('student_list_batch')->updateOrInsert(
+                ['user_id' => $user->id],
+                [
+                    'id_batch' => $request->batch_id,
+                    'register_date' => $request->register_date,
+                    'status' => $request->status_keaktifan,
+                    'updated_at' => now(),
+                ]
+            );
+
+            return redirect()->route('admin.users', ['role' => 'siswa'])
+                ->with('success', 'Data akademik berhasil disimpan!');
+        }
+
+        if ($request->input('form_type') === 'guru_batch') {
+            $request->validate([
+                'batches' => 'nullable|array',
+                'batches.*' => 'exists:batch,id_batch',
+            ]);
+
+            $selectedBatches = $request->input('batches', []);
+            $user->batches()->sync($selectedBatches);
+
+            return redirect()->route('admin.users', ['role' => 'guru'])
+                ->with('success', 'Batch berhasil ditugaskan!');
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => ['required', 'string', 'max:20'],
             'role' => ['required', 'string', 'in:admin,siswa,guru'],
+            'status' => ['nullable', 'string', 'in:Active,Inactive,Completed'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -85,6 +138,10 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->nomor_telepon = $validated['phone'];
         $user->role_id = $roleId;
+
+        if ($request->has('status')) {
+            $user->status = $validated['status'];
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($validated['password']);

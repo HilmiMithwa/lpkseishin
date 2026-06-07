@@ -31,31 +31,35 @@
     <!-- Top Banner Card -->
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
         <div class="relative flex-shrink-0 mt-2 sm:mt-0">
-            <img src="https://ui-avatars.com/api/?name=Ahmad+Hidayat&background=f3f4f6&color=d62828&bold=true" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm border-4 border-white">
+            <img src="{{ $user->profile_photo_path ? (Str::startsWith($user->profile_photo_path, 'http') ? $user->profile_photo_path : asset('storage/' . $user->profile_photo_path)) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&background=f3f4f6&color=d62828&bold=true' }}" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm border-4 border-white">
         </div>
         
         <div class="flex-1 text-center sm:text-left space-y-2 lg:pt-2 w-full">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                 <div>
-                    <h2 class="text-3xl lg:text-[32px] font-bold text-[#222222] tracking-tight">Ahmad Hidayat</h2>
+                    <h2 class="text-3xl lg:text-[32px] font-bold text-[#222222] tracking-tight">{{ $user->name }}</h2>
                     
                     <div class="text-[15px] font-bold text-[#666666] space-y-1.5 mx-auto sm:mx-0 w-fit sm:w-auto text-left mt-3">
                         <div class="flex items-center">
                             <span class="w-24">ID</span>
                             <span class="w-6 text-center">:</span>
-                            <span class="text-[#666666]">022025005</span>
+                            <span class="text-[#666666]">{{ $user->id }}</span>
                         </div>
                         <div class="flex items-center">
                             <span class="w-24">Batch</span>
                             <span class="w-6 text-center">:</span>
-                            <span class="text-[#444444]">Batch 5</span>
+                            <span class="text-[#444444]">{{ $studentBatch && $batches->where('id_batch', $studentBatch->id_batch)->first() ? $batches->where('id_batch', $studentBatch->id_batch)->first()->nama : '-' }}</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="flex flex-col items-center sm:items-end gap-3 mt-2 sm:mt-0">
                     <span class="bg-[#d62828] text-white text-sm font-bold px-6 py-2.5 rounded-full shadow-sm">
-                        Level: Pra-N5
+                        @if($user->role_id == 2)
+                            Level: {{ $user->level ?? 'Belum ada' }}
+                        @else
+                            Role: {{ $user->role_id == 1 ? 'Admin' : 'Guru' }}
+                        @endif
                     </span>
                 </div>
             </div>
@@ -67,17 +71,27 @@
         <button @click="tab = 'pribadi'" :class="tab === 'pribadi' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
             Informasi Pribadi
         </button>
+        @if($user->role_id == 2)
         <button @click="tab = 'akademik'" :class="tab === 'akademik' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
             Akademik
         </button>
         <button @click="tab = 'pembayaran'" :class="tab === 'pembayaran' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
             Pembayaran
         </button>
+        @endif
+        @if($user->role_id == 3)
+        <button @click="tab = 'guru_batch'" :class="tab === 'guru_batch' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
+            Daftar Batch
+        </button>
+        @endif
     </div>
 
     <!-- Tab Content: Informasi Pribadi -->
     <div x-show="tab === 'pribadi'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-        <form action="#" method="POST" x-data x-on:submit.prevent="setTimeout(() => $dispatch('show-toast', { message: 'Profil berhasil diperbarui!' }), 300)">
+        <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="role" value="{{ $user->role_id == 1 ? 'admin' : ($user->role_id == 3 ? 'guru' : 'siswa') }}">
             <div class="space-y-6">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
@@ -88,19 +102,38 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="name" value="Nama Lengkap:" />
-                                <x-text-input id="name" name="name" type="text" value="Ahmad Hidayat" />
+                                <x-text-input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" />
                             </div>
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="email" value="Email:" />
-                                <x-text-input id="email" name="email" type="email" value="madd.hdyt@gmail.com" />
+                                <x-text-input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" />
                             </div>
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="phone" value="Nomor Telepon:" />
-                                <x-text-input id="phone" name="phone" type="text" value="+62 0831 9210 3301" />
+                                <x-text-input id="phone" name="phone" type="text" value="{{ old('phone', $user->nomor_telepon) }}" />
                             </div>
+                            @if($user->role_id != 2)
+                            <div class="space-y-1.5 text-left">
+                                <x-input-label for="status" value="Status:" />
+                                <div class="relative" x-data="{ open: false, selected: '{{ old('status', $user->status ?? 'Active') }}', options: { 'Active': 'Aktif', 'Inactive': 'Tidak Aktif', 'Completed': 'Selesai' } }" @click.outside="open = false">
+                                    <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-xl p-3 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
+                                        <span x-text="options[selected]"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
+                                        <template x-for="(label, value) in options" :key="value">
+                                            <button type="button" @click="selected = value; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === value ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
+                                                <span x-text="label"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <input type="hidden" name="status" :value="selected">
+                                </div>
+                            </div>
+                            @endif
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="dob" value="Tanggal Lahir:" />
-                                <x-text-input id="dob" name="dob" type="text" value="04 July 2004" />
+                                <x-text-input id="dob" name="dob" type="date" value="{{ old('dob', $user->tanggal_lahir) }}" />
                             </div>
                         </div>
                     </div>
@@ -136,16 +169,12 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="space-y-1.5 text-left">
-                            <x-input-label for="current_password" value="Kata Sandi Saat Ini:" />
-                            <x-text-input id="current_password" name="current_password" type="password" />
-                        </div>
-                        <div class="space-y-1.5 text-left">
                             <x-input-label for="new_password" value="Kata Sandi Baru:" />
-                            <x-text-input id="new_password" name="new_password" type="password" />
+                            <x-text-input id="new_password" name="password" type="password" />
                         </div>
                         <div class="space-y-1.5 text-left">
                             <x-input-label for="confirm_password" value="Konfirmasi Kata Sandi:" />
-                            <x-text-input id="confirm_password" name="confirm_password" type="password" />
+                            <x-text-input id="confirm_password" name="password_confirmation" type="password" />
                         </div>
                     </div>
                 </div>
@@ -164,11 +193,22 @@
         </form>
     </div>
     
+    @if($user->role_id == 2)
     <!-- Tab Content: Akademik -->
     <div x-show="tab === 'akademik'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
-        <form action="#" method="POST" x-data x-on:submit.prevent="setTimeout(() => $dispatch('show-toast', { message: 'Data akademik berhasil diperbarui!' }), 300)">
+        <form action="{{ route('admin.users.update', $user->id) }}" method="POST" x-data="{ 
+            batches: {{ $batches->toJson() }},
+            selectedBatchId: {{ $studentBatch->id_batch ?? 'null' }},
+            get selectedBatch() {
+                return this.batches.find(b => b.id_batch == this.selectedBatchId) || { nama: '-- Pilih Batch --', nama_program: '-', level_target: '-' };
+            }
+        }">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="form_type" value="akademik">
+            <input type="hidden" name="role" value="siswa">
+
             <div class="space-y-6">
-                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                     <!-- Program & Penempatan Card -->
                     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
@@ -177,43 +217,32 @@
                         <div class="space-y-6">
                             <div class="space-y-1.5 text-left">
                                 <label class="block text-[13px] font-bold text-slate-500">Program Penyaluran:</label>
-                                <div class="relative" x-data="{ open: false, selected: 'Tokutei Ginou (SSW)', options: ['Tokutei Ginou (SSW)', 'Magang (Ginou Jisshusei)', 'Engineering'] }" @click.outside="open = false">
-                                    <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-[20px] p-4 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
-                                        <span x-text="selected"></span>
-                                        <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </button>
-                                    <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
-                                        <template x-for="option in options">
-                                            <button type="button" @click="selected = option; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === option ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
-                                                <span x-text="option"></span>
-                                            </button>
-                                        </template>
-                                    </div>
-                                    <input type="hidden" name="program" :value="selected">
+                                <div class="relative">
+                                    <input type="text" x-bind:value="selectedBatch.nama_program" disabled class="w-full bg-gray-50 border border-gray-200 text-slate-500 text-[14.5px] font-medium rounded-[20px] p-4 cursor-not-allowed">
                                 </div>
                             </div>
 
                             <div class="space-y-1.5 text-left">
                                 <label class="block text-[13px] font-bold text-slate-500">Pilih Batch:</label>
-                                <div class="relative" x-data="{ open: false, selected: 'Batch 5', options: ['Batch 5', 'Batch 6', 'Batch 7'] }" @click.outside="open = false">
+                                <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                                     <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-[20px] p-4 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
-                                        <span x-text="selected"></span>
+                                        <span x-text="selectedBatch.nama"></span>
                                         <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
-                                        <template x-for="option in options">
-                                            <button type="button" @click="selected = option; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === option ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
-                                                <span x-text="option"></span>
+                                        <template x-for="b in batches" :key="b.id_batch">
+                                            <button type="button" @click="selectedBatchId = b.id_batch; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selectedBatchId === b.id_batch ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
+                                                <span x-text="b.nama"></span>
                                             </button>
                                         </template>
                                     </div>
-                                    <input type="hidden" name="batch" :value="selected">
+                                    <input type="hidden" name="batch_id" :value="selectedBatchId">
                                 </div>
                             </div>
                             
                             <div class="space-y-1.5 text-left">
                                 <label class="block text-[13px] font-bold text-slate-500">Tanggal Masuk LPK:</label>
-                                <input type="date" value="2026-01-15" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-[20px] p-4 focus:border-[#d62828] focus:ring-[#d62828] focus:ring-1 outline-none transition-shadow">
+                                <input type="date" name="register_date" value="{{ $studentBatch->register_date ?? '' }}" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-[20px] p-4 focus:border-[#d62828] focus:ring-[#d62828] focus:ring-1 outline-none transition-shadow">
                             </div>
                         </div>
                     </div>
@@ -225,24 +254,23 @@
                         <div class="space-y-6">
                             <div class="space-y-1.5 text-left">
                                 <label class="block text-[13px] font-bold text-slate-500">Status Keaktifan:</label>
-                                <div class="relative" x-data="{ open: false, selected: 'Aktif', options: ['Aktif', 'Tidak Aktif'] }" @click.outside="open = false">
-                                    <button type="button" @click="open = !open" :class="selected === 'Aktif' ? 'bg-green-100 text-green-700 focus:ring-green-600/30' : 'bg-rose-100 text-rose-700 focus:ring-rose-600/30'" class="w-full font-bold border-none text-[14.5px] rounded-[20px] p-4 flex justify-between items-center transition-colors focus:ring-2 outline-none">
-                                        <span x-text="selected"></span>
+                                <div class="relative" x-data="{ open: false, selected: '{{ $studentBatch->status ?? 'Active' }}', get selectedLabel() { return this.selected === 'Active' ? 'Aktif' : (this.selected === 'Inactive' ? 'Tidak Aktif' : 'Selesai'); } }" @click.outside="open = false">
+                                    <button type="button" @click="open = !open" :class="selected === 'Active' ? 'bg-green-100 text-green-700 focus:ring-green-600/30' : (selected === 'Inactive' ? 'bg-rose-100 text-rose-700 focus:ring-rose-600/30' : 'bg-blue-100 text-blue-700 focus:ring-blue-600/30')" class="w-full font-bold border-none text-[14.5px] rounded-[20px] p-4 flex justify-between items-center transition-colors focus:ring-2 outline-none">
+                                        <span x-text="selectedLabel"></span>
                                         <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
-                                        <template x-for="option in options">
-                                            <button type="button" @click="selected = option; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === option ? 'text-green-600 font-bold bg-green-50/50' : 'text-slate-600 font-medium'">
-                                                <span x-text="option"></span>
-                                            </button>
-                                        </template>
+                                        <button type="button" @click="selected = 'Active'; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === 'Active' ? 'text-green-600 font-bold bg-green-50/50' : 'text-slate-600 font-medium'">Aktif</button>
+                                        <button type="button" @click="selected = 'Inactive'; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === 'Inactive' ? 'text-rose-600 font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">Tidak Aktif</button>
+                                        <button type="button" @click="selected = 'Completed'; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === 'Completed' ? 'text-blue-600 font-bold bg-blue-50/50' : 'text-slate-600 font-medium'">Selesai</button>
                                     </div>
                                     <input type="hidden" name="status_keaktifan" :value="selected">
                                 </div>
                             </div>
+                            
                             <div class="space-y-1.5 text-left">
-                                <label class="block text-[13px] font-bold text-slate-500">Level:</label>
-                                <div class="relative" x-data="{ open: false, selected: 'Pra-N5', options: ['Pra-N5', 'N5', 'N4'] }" @click.outside="open = false">
+                                <label class="block text-[13px] font-bold text-slate-500">Level Saat Ini:</label>
+                                <div class="relative" x-data="{ open: false, selected: '{{ $user->level ?? 'Pra-N5' }}', options: ['Pra-N5', 'N5', 'N4', 'N3', 'N2', 'N1'] }" @click.outside="open = false">
                                     <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-[20px] p-4 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
                                         <span x-text="selected"></span>
                                         <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -281,6 +309,57 @@
             Riwayat pembayaran siswa akan ditampilkan di sini.
         </div>
     </div>
+    @endif
+
+    @if($user->role_id == 3)
+    <!-- Tab Content: Batch (Guru) -->
+    <div x-show="tab === 'guru_batch'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+        <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="form_type" value="guru_batch">
+            <input type="hidden" name="role" value="guru">
+
+            <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+                <h3 class="text-lg font-bold text-[#222222] mb-6">Batch yang Diampu</h3>
+                
+                <div class="space-y-4">
+                    <div class="border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @forelse($batches as $batch)
+                                <label class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200 cursor-pointer">
+                                    <div class="mt-0.5">
+                                        <input type="checkbox" name="batches[]" value="{{ $batch->id_batch }}" 
+                                            {{ in_array($batch->id_batch, $guruBatches) ? 'checked' : '' }}
+                                            class="w-5 h-5 rounded border-gray-300 text-[#d62828] focus:ring-[#d62828]">
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-bold text-slate-700 text-sm">{{ $batch->nama }}</p>
+                                        <p class="text-xs font-medium text-slate-500 mt-0.5">Program: {{ $batch->nama_program }} | Target: {{ $batch->level_target }}</p>
+                                    </div>
+                                </label>
+                            @empty
+                                <div class="col-span-1 md:col-span-2 text-center py-8 text-slate-500">
+                                    Belum ada batch yang tersedia.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global Action Buttons -->
+                <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-100">
+                    <a href="{{ route('admin.users') }}" class="px-6 py-3 rounded-2xl border border-gray-200 bg-white text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                        Batal
+                    </a>
+                    <button type="submit" class="bg-[#d62828] text-white font-bold text-sm px-6 py-3 rounded-2xl hover:bg-[#b01e1e] transition-colors shadow-sm">
+                        Simpan Penugasan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    @endif
 
 </div>
 @endsection

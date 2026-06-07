@@ -13,11 +13,7 @@ class ProfileController extends Controller
     {
         $teacher = Auth::user();
         
-        $assignedBatches = \App\Models\Batch::whereIn('id_batch', function($query) use ($teacher) {
-            $query->select('id_batch')
-                  ->from('mapel')
-                  ->where('id_guru', $teacher->id);
-        })->get();
+        $assignedBatches = $teacher->batches;
 
         return view('teacher.profile', compact('assignedBatches'));
     }

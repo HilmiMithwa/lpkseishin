@@ -25,7 +25,7 @@ class StudentController extends Controller
         $user = Auth::user();
         // 1. Gabungkan pengambilan relasi guru dan hitung modul dalam satu query
         // Ini akan mengisi variabel $subject->modul_count secara otomatis
-        $subjects = $user->mapels()->with('guru')->withCount('modul')->get();
+        $subjects = $user->mapels()->with('guru')->withCount('modul')->get()->unique('id_mapel');
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
         $enrollment = Transaction::where('id_user', Auth::id())->first();
@@ -358,7 +358,7 @@ class StudentController extends Controller
         $user = Auth::user();
 
         // 1. Dapatkan daftar ID mata pelajaran yang dikontrak oleh siswa aktif
-        $enrolledMapelIds = $user->mapels()->pluck('mapel.id_mapel')->toArray();
+        $enrolledMapelIds = $user->mapels()->pluck('mapel.id_mapel')->unique()->toArray();
 
         // 2. Tarik semua tugas dari hirarki mapel -> modul -> tugas
         $tasks = DB::table('tugas')
@@ -389,7 +389,7 @@ class StudentController extends Controller
         $user = Auth::user();
 
         // Fetch subjects the user is enrolled in
-        $subjects = $user->mapels()->withCount('modul')->get();
+        $subjects = $user->mapels()->withCount('modul')->get()->unique('id_mapel');
 
         // Calculate progress status for each enrolled subject
         foreach ($subjects as $subject) {
