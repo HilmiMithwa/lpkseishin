@@ -4,6 +4,8 @@
 
 @section('content')
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+    searchQuery: '',
+    filterStatus: 'Semua Status',
     selectedBatch: '{{ $selectedBatchName }}',
     selectedClass: '{{ $selectedClassName }}',
     detailOpen: false, 
@@ -239,7 +241,7 @@
         <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
             <div class="relative w-full sm:w-80">
                 <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
+                <input type="text" x-model="searchQuery" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
             </div>
             
             <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Status' }">
@@ -283,7 +285,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @forelse($students as $index => $student)
-                    <tr class="hover:bg-gray-50/50 transition">
+                    <tr x-show="(searchQuery === '' || '{{ strtolower($student->name) }}'.includes(searchQuery.toLowerCase())) && (filterStatus === 'Semua Status' || '{{ $student->status }}' === filterStatus)" class="hover:bg-gray-50/50 transition">
                         <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
                         <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
                         <td class="py-4 px-4">

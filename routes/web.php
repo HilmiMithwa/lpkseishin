@@ -15,11 +15,37 @@ use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
 use App\Http\Controllers\Teacher\ProgressReportController;
 use App\Http\Controllers\Teacher\TugasController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\SubjectDiscussionController;
 
 
 
 Route::get('/', [SesiController::class, 'index']);
+
+// Registration Landing Page
+Route::get('/pendaftaran', function() {
+    return view('registration-landing');
+})->name('registration-landing');
+
+// Registration Routes
+Route::prefix('registration')->name('registration.')->group(function () {
+    Route::get('/step1', [RegistrationController::class, 'step1'])->name('step1');
+    Route::post('/step1', [RegistrationController::class, 'storeStep1'])->name('store-step1');
+    
+    Route::get('/step2', [RegistrationController::class, 'step2'])->name('step2');
+    Route::post('/step2', [RegistrationController::class, 'storeStep2'])->name('store-step2');
+    
+    Route::get('/step3', [RegistrationController::class, 'step3'])->name('step3');
+    Route::post('/step3', [RegistrationController::class, 'storeStep3'])->name('store-step3');
+    
+    Route::get('/step4', [RegistrationController::class, 'step4'])->name('step4');
+    Route::post('/step4', [RegistrationController::class, 'storeStep4'])->name('store-step4');
+    
+    Route::get('/complete', [RegistrationController::class, 'complete'])->name('complete');
+    Route::get('/success/{id}', [RegistrationController::class, 'success'])->name('success');
+    Route::get('/clear', [RegistrationController::class, 'clearSession'])->name('clear');
+});
 
 Route::get('/dashboard', function() {
 
@@ -84,6 +110,13 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::get('/profile', function() {
         return view('admin.profile');
     })->name('profile');
+
+    // Student Registrations
+    Route::get('/registrations', [\App\Http\Controllers\Admin\RegistrationController::class, 'index'])->name('registrations.index');
+    Route::get('/registrations/{id}', [\App\Http\Controllers\Admin\RegistrationController::class, 'show'])->name('registrations.show');
+    Route::post('/registrations/{id}/approve', [\App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('registrations.approve');
+    Route::put('/registrations/{id}/reject', [\App\Http\Controllers\Admin\RegistrationController::class, 'reject'])->name('registrations.reject');
+    Route::delete('/registrations/{id}', [\App\Http\Controllers\Admin\RegistrationController::class, 'destroy'])->name('registrations.destroy');
 });
 
 //Dashboard Siswa
