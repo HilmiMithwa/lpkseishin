@@ -31,11 +31,22 @@ class User extends Authenticatable
         'tanggal_lahir',
         'profile_photo_path',
         'level',
+        'status',
     ];
 
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id', 'role_id');
+    }
+
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_guru', 'id_guru', 'id_batch');
+    }
+
+    public function studentBatches()
+    {
+        return $this->belongsToMany(Batch::class, 'student_list_batch', 'user_id', 'id_batch')->where('student_list_batch.status', 'Active');
     }
 
     /**

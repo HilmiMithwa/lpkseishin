@@ -80,8 +80,8 @@
         </button>
         @endif
         @if($user->role_id == 3)
-        <button @click="tab = 'guru_mapel'" :class="tab === 'guru_mapel' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
-            Mata Pelajaran
+        <button @click="tab = 'guru_batch'" :class="tab === 'guru_batch' ? 'border-[#d62828] text-[#d62828]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap pb-3 font-bold text-[15px] border-b-2 transition-colors -mb-px">
+            Daftar Batch
         </button>
         @endif
     </div>
@@ -112,6 +112,25 @@
                                 <x-input-label for="phone" value="Nomor Telepon:" />
                                 <x-text-input id="phone" name="phone" type="text" value="{{ old('phone', $user->nomor_telepon) }}" />
                             </div>
+                            @if($user->role_id != 2)
+                            <div class="space-y-1.5 text-left">
+                                <x-input-label for="status" value="Status:" />
+                                <div class="relative" x-data="{ open: false, selected: '{{ old('status', $user->status ?? 'Active') }}', options: { 'Active': 'Aktif', 'Inactive': 'Tidak Aktif', 'Completed': 'Selesai' } }" @click.outside="open = false">
+                                    <button type="button" @click="open = !open" class="w-full bg-white border border-gray-200 text-slate-700 text-[14.5px] font-medium rounded-xl p-3 flex justify-between items-center transition-shadow focus:border-[#d62828] outline-none">
+                                        <span x-text="options[selected]"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" x-transition.opacity.duration.200ms class="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 overflow-hidden" style="display: none;">
+                                        <template x-for="(label, value) in options" :key="value">
+                                            <button type="button" @click="selected = value; open = false" class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" :class="selected === value ? 'text-[#d62828] font-bold bg-rose-50/50' : 'text-slate-600 font-medium'">
+                                                <span x-text="label"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <input type="hidden" name="status" :value="selected">
+                                </div>
+                            </div>
+                            @endif
                             <div class="space-y-1.5 text-left">
                                 <x-input-label for="dob" value="Tanggal Lahir:" />
                                 <x-text-input id="dob" name="dob" type="date" value="{{ old('dob', $user->tanggal_lahir) }}" />
@@ -293,53 +312,39 @@
     @endif
 
     @if($user->role_id == 3)
-    <!-- Tab Content: Mata Pelajaran (Guru) -->
-    <div x-show="tab === 'guru_mapel'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+    <!-- Tab Content: Batch (Guru) -->
+    <div x-show="tab === 'guru_batch'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
         <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
-            <input type="hidden" name="form_type" value="guru_mapel">
+            <input type="hidden" name="form_type" value="guru_batch">
             <input type="hidden" name="role" value="guru">
 
             <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-                <h3 class="text-lg font-bold text-[#222222] mb-6">Mata Pelajaran yang Diampu</h3>
+                <h3 class="text-lg font-bold text-[#222222] mb-6">Batch yang Diampu</h3>
                 
                 <div class="space-y-4">
-                    @forelse($mapels->groupBy('id_batch') as $batchId => $batchMapels)
-                        <div class="border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
-                            <div class="bg-gray-50 px-5 py-3 border-b border-gray-100">
-                                <h4 class="font-bold text-slate-700 text-sm">
-                                    {{ $batchMapels->first()->batch->nama ?? 'Batch Tidak Diketahui' }}
-                                    <span class="font-normal text-slate-500 ml-2">({{ $batchMapels->first()->batch->nama_program ?? '-' }})</span>
-                                </h4>
-                            </div>
-                            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                @foreach($batchMapels as $mapel)
-                                    <label class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200 cursor-pointer">
-                                        <div class="mt-0.5">
-                                            <input type="checkbox" name="mapels[]" value="{{ $mapel->id_mapel }}" 
-                                                {{ in_array($mapel->id_mapel, $guruMapels) ? 'checked' : '' }}
-                                                class="w-5 h-5 rounded border-gray-300 text-[#d62828] focus:ring-[#d62828]">
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="font-bold text-slate-700 text-sm">{{ $mapel->nama_mapel }}</p>
-                                            <p class="text-xs font-medium text-slate-500 mt-0.5">Target: {{ $mapel->target }} | JP: {{ $mapel->jp }}</p>
-                                            @if($mapel->id_guru && $mapel->id_guru != $user->id)
-                                                <p class="text-[11px] font-bold text-amber-500 mt-1 flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                                    Saat ini diajar oleh guru lain ({{ $mapel->guru->name ?? 'Guru ID ' . $mapel->id_guru }})
-                                                </p>
-                                            @endif
-                                        </div>
-                                    </label>
-                                @endforeach
-                            </div>
+                    <div class="border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @forelse($batches as $batch)
+                                <label class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200 cursor-pointer">
+                                    <div class="mt-0.5">
+                                        <input type="checkbox" name="batches[]" value="{{ $batch->id_batch }}" 
+                                            {{ in_array($batch->id_batch, $guruBatches) ? 'checked' : '' }}
+                                            class="w-5 h-5 rounded border-gray-300 text-[#d62828] focus:ring-[#d62828]">
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-bold text-slate-700 text-sm">{{ $batch->nama }}</p>
+                                        <p class="text-xs font-medium text-slate-500 mt-0.5">Program: {{ $batch->nama_program }} | Target: {{ $batch->level_target }}</p>
+                                    </div>
+                                </label>
+                            @empty
+                                <div class="col-span-1 md:col-span-2 text-center py-8 text-slate-500">
+                                    Belum ada batch yang tersedia.
+                                </div>
+                            @endforelse
                         </div>
-                    @empty
-                        <div class="text-center py-8 text-slate-500">
-                            Belum ada mata pelajaran yang tersedia.
-                        </div>
-                    @endforelse
+                    </div>
                 </div>
 
                 <!-- Global Action Buttons -->

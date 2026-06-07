@@ -50,6 +50,7 @@ class BatchController extends Controller
             'jadwal' => ['required', 'string'],
             'jam_mulai' => ['nullable', 'date_format:H:i'],
             'jam_selesai' => ['nullable', 'date_format:H:i'],
+            'spp_nominal' => ['nullable', 'integer', 'min:0'],
         ]);
 
         // Auto-determine program & level target from name or defaults
@@ -85,6 +86,7 @@ class BatchController extends Controller
             'jam_selesai' => $validated['jam_selesai'],
             'status' => $validated['status'],
             'quota' => $validated['quota'],
+            'spp_nominal' => $validated['spp_nominal'] ?? 0,
         ]);
 
         return redirect()->route('admin.batches')
@@ -105,6 +107,7 @@ class BatchController extends Controller
             'jadwal' => ['required', 'string'],
             'jam_mulai' => ['nullable', 'date_format:H:i'],
             'jam_selesai' => ['nullable', 'date_format:H:i'],
+            'spp_nominal' => ['nullable', 'integer', 'min:0'],
         ]);
 
         $name = $validated['batch_name'];
@@ -139,6 +142,7 @@ class BatchController extends Controller
             'jam_selesai' => $validated['jam_selesai'],
             'status' => $validated['status'],
             'quota' => $validated['quota'],
+            'spp_nominal' => $validated['spp_nominal'] ?? 0,
         ]);
 
         return redirect()->route('admin.batches')
