@@ -173,6 +173,11 @@
                     <span class="sidebar-text whitespace-nowrap">Manajemen Pembayaran</span>
                 </a>
 
+                <a href="{{ route('admin.bank_accounts') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.bank_accounts', 'admin.bank_accounts.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.bank_accounts', 'admin.bank_accounts.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Rekening Bank</span>
+                </a>
+
                 <a href="{{ route('admin.profile') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs('admin.profile') ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs('admin.profile') ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Profil</span>

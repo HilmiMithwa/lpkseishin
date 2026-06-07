@@ -25,7 +25,7 @@ class StudentController extends Controller
         $user = Auth::user();
         // 1. Gabungkan pengambilan relasi guru dan hitung modul dalam satu query
         // Ini akan mengisi variabel $subject->modul_count secara otomatis
-        $subjects = $user->mapels()->with('guru')->withCount('modul')->get();
+        $subjects = $user->activeMapels()->with('guru')->withCount('modul')->get()->unique('id_mapel');
 
         // 2. Ambil data pendaftaran user yang sedang login untuk banner merah
         $enrollment = Transaction::where('id_user', Auth::id())->first();
@@ -126,7 +126,7 @@ class StudentController extends Controller
         /** @var \App\Models\User $user */
         // 1. Cek apakah user yang login benar-benar terdaftar di mapel ini
         $user = Auth::user();
-        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
+        $isEnrolled = $user->activeMapels()->where('id_mapel', $id_mapel)->exists();
 
         if (!$isEnrolled) {
             // Jika tidak terdaftar, lempar error 403 (Forbidden)
@@ -169,8 +169,47 @@ class StudentController extends Controller
             ->where('id_user', Auth::id())
             ->first();
 
+        // Cari bahan ajar praktik yang terkait dengan tugas ini (di modul yang sama)
+        $material = DB::table('bahan_ajar')
+            ->where('id_modul', $id_modul)
+            ->where('type', 'practice')
+            ->orderBy('id_bahan_ajar', 'desc')
+            ->first();
+
         // 5. Lempar semua data beserta ID parameter untuk form action di Blade
-        return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru'));
+        return view('students.task-detail', compact('task', 'currentModul', 'subject', 'submission', 'id_mapel', 'id_modul', 'id_tugas', 'guru', 'material'));
+    }
+
+    public function downloadTaskAttachment($id_tugas)
+    {
+        $task = DB::table('tugas')->where('id_tugas', $id_tugas)->first();
+        if (!$task || empty($task->file_path_tugas)) {
+            abort(404, 'File lampiran tidak ditemukan');
+        }
+
+        $disk = env('FILESYSTEM_DISK', 'local');
+        
+        if (\Illuminate\Support\Facades\Storage::disk($disk)->exists($task->file_path_tugas)) {
+            if ($disk === 's3') {
+                return redirect(\Illuminate\Support\Facades\Storage::disk('s3')->url($task->file_path_tugas));
+            }
+            return \Illuminate\Support\Facades\Storage::disk($disk)->download($task->file_path_tugas);
+        }
+
+        // The file path in DB is likely prefixed with 'materials/tasks/' inside the public disk
+        // We can just use the public storage path
+        $filePath = storage_path('app/public/' . $task->file_path_tugas);
+
+        if (!file_exists($filePath)) {
+            // Coba periksa apakah path-nya sudah memiliki 'public/' di depannya atau belum
+            $altFilePath = storage_path('app/' . $task->file_path_tugas);
+            if(file_exists($altFilePath)) {
+                return response()->download($altFilePath, basename($task->file_path_tugas));
+            }
+            abort(404, 'File lampiran tidak ditemukan di server');
+        }
+
+        return response()->download($filePath, basename($task->file_path_tugas));
     }
 
     public function saveProgress(Request $request)
@@ -210,39 +249,106 @@ class StudentController extends Controller
 
     public function showEvaluation($id_mapel, $id_modul, $id)
     {
-        // 1. Ambil data mapel asli dari database berdasarkan id_mapel di URL
         $subject = Mapel::findOrFail($id_mapel);
-        
-        // 2. Ambil data modul asli dari database berdasarkan id_modul di URL (Bukan dummy lagi!)
         $currentModul = Modul::findOrFail($id_modul);
 
-        // 3. Buat Dummy Data Informasi Evaluasi (Sambil menunggu tabel evaluasi asli selesai)
+        $evaluationModel = \App\Models\Evaluasi::with('questions')->findOrFail($id);
+
         $evaluation = (object)[
             'id' => $id,
-            'title' => 'Final Competency Test & Mock Interview',
-            'type' => 'Multiple Choice',
-            'duration' => 120, 
-            'total_questions' => 50,
-            'language' => 'Japanese N4',
-            'time_left_seconds' => 15 
+            'title' => $evaluationModel->judul,
+            'type' => $evaluationModel->tipe ?? 'Pilihan Ganda',
+            'duration' => $evaluationModel->durasi_menit, 
+            'total_questions' => $evaluationModel->questions->count(),
+            'language' => $evaluationModel->bahasa ?? 'Bahasa',
+            'time_left_seconds' => $evaluationModel->durasi_menit * 60 
         ];
 
-        // 4. GENERATOR 50 SOAL DUMMY (AUTO-INCREMENT)
         $questions = [];
-        for ($i = 1; $i <= $evaluation->total_questions; $i++) {
+        foreach ($evaluationModel->questions as $index => $q) {
+            $options = [];
+            if(is_array($q->pilihan)) {
+                foreach($q->pilihan as $key => $val) {
+                    if(is_array($val) && isset($val['id']) && isset($val['value'])) {
+                        $options[] = $val;
+                    } else {
+                        // Gunakan key asli (0,1,2,3) agar cocok dengan kunci_jawaban di DB
+                        $options[] = ['id' => (string)$key, 'value' => $val];
+                    }
+                }
+            }
+
             $questions[] = [
-                'number' => $i,
-                'text' => 'Ini adalah simulasi teks soal untuk <b>Pertanyaan Nomor ' . $i . '</b> pada ' . $currentModul->nama_modul . '. Silakan pilih satu jawaban yang menurut Anda paling tepat untuk melanjutkan.',
-                'options' => [
-                    ['id' => 'a', 'value' => 'Pilihan A soal ' . $i],
-                    ['id' => 'b', 'value' => 'Pilihan B soal ' . $i],
-                    ['id' => 'c', 'value' => 'Pilihan C soal ' . $i],
-                    ['id' => 'd', 'value' => 'Pilihan D soal ' . $i]
-                ]
+                'id_soal' => $q->id_soal,
+                'number' => $index + 1,
+                'text' => $q->pertanyaan,
+                'options' => $options
             ];
         }
 
         return view('students.evaluation-detail', compact('subject', 'currentModul', 'evaluation', 'questions'));
+    }
+
+    public function submitEvaluation(Request $request, $id_mapel, $id_modul, $id)
+    {
+        $evaluationModel = \App\Models\Evaluasi::with('questions')->findOrFail($id);
+        
+        $answers = $request->input('answers', []); 
+        
+        $correct = 0;
+        $wrong = 0;
+        $empty = 0;
+        $total_questions = $evaluationModel->questions->count();
+        
+        foreach ($evaluationModel->questions as $q) {
+            $student_answer = $answers[$q->id_soal] ?? null;
+            
+            if ($student_answer === null || $student_answer === '') {
+                $empty++;
+            } else if ((string)$student_answer === (string)$q->kunci_jawaban) {
+                $correct++;
+            } else {
+                $wrong++;
+            }
+        }
+        
+        $score = $total_questions > 0 ? round(($correct / $total_questions) * 100) : 0;
+        
+        $modulName = 'Modul';
+        $modulObj = Modul::find($id_modul);
+        if ($modulObj) {
+            $modulName = $modulObj->nama_modul;
+        }
+
+        $result = (object)[
+            'score' => $score,
+            'total_questions' => $total_questions,
+            'correct' => $correct,
+            'wrong' => $wrong,
+            'empty' => $empty,
+            'title' => $evaluationModel->judul,
+            'module_name' => $modulName,
+            'is_passed' => $score >= 70,
+            'id_mapel' => $id_mapel,
+            'id_modul' => $id_modul
+        ];
+        
+        try {
+            DB::table('catatan_evaluasi')->insert([
+                'id_user' => Auth::id(),
+                'id_mapel' => $id_mapel,
+                'nama_evaluasi' => $evaluationModel->judul,
+                'tipe_ujian' => $evaluationModel->tipe,
+                'skor' => $score,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        } catch (\Exception $e) {
+            // Lanjut tampilkan hasil meskipun insert gagal
+            \Log::warning('Gagal insert catatan_evaluasi: ' . $e->getMessage());
+        }
+
+        return view('students.evaluation-result', compact('result'));
     }
 
     // Fungsi page MY TASKS
@@ -252,7 +358,7 @@ class StudentController extends Controller
         $user = Auth::user();
 
         // 1. Dapatkan daftar ID mata pelajaran yang dikontrak oleh siswa aktif
-        $enrolledMapelIds = $user->mapels()->pluck('mapel.id_mapel')->toArray();
+        $enrolledMapelIds = $user->activeMapels()->pluck('id_mapel')->unique()->toArray();
 
         // 2. Tarik semua tugas dari hirarki mapel -> modul -> tugas
         $tasks = DB::table('tugas')
@@ -283,7 +389,7 @@ class StudentController extends Controller
         $user = Auth::user();
 
         // Fetch subjects the user is enrolled in
-        $subjects = $user->mapels()->withCount('modul')->get();
+        $subjects = $user->activeMapels()->withCount('modul')->get()->unique('id_mapel');
 
         // Calculate progress status for each enrolled subject
         foreach ($subjects as $subject) {

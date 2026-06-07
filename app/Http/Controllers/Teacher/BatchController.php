@@ -14,13 +14,10 @@ class BatchController extends Controller
     // Menampilkan list batch guru
     public function index()
     {
-        $teacherId = Auth::id();
+        $teacher = Auth::user();
         
-        // Find batch IDs where this teacher teaches at least one class
-        $batchIds = Mapel::where('id_guru', $teacherId)->pluck('id_batch')->unique();
-        
-        // Get the actual batches assigned to this teacher
-        $batches = Batch::whereIn('id_batch', $batchIds)->get();
+        // Get the actual batches assigned to this teacher directly from the pivot table
+        $batches = $teacher->batches;
 
         return view('teacher.classes', compact('batches'));
     }
@@ -31,9 +28,8 @@ class BatchController extends Controller
         $batch = Batch::findOrFail($id_batch);
         $teacher = Auth::user();
 
-        // Ambil kelas yang diajar oleh guru ini
+        // Ambil semua kelas dalam batch ini karena guru terhubung ke batch
         $batchClasses = Mapel::where('id_batch', $id_batch)
-            ->where('id_guru', $teacher->id)
             ->withCount('modul')
             ->get();
 
@@ -50,10 +46,8 @@ class BatchController extends Controller
         $batch->total_kelas = $batchClasses->count();
         $batch->status = 'Active';
 
-        // Ambil data Guru/Sensei yang mengajar mata pelajaran di batch ini secara dinamis
-        $senseis = \App\Models\User::whereIn('id', function ($query) use ($id_batch) {
-            $query->select('id_guru')->from('mapel')->where('id_batch', $id_batch);
-        })->get();
+        // Ambil data Guru/Sensei yang terhubung ke batch ini secara dinamis
+        $senseis = $batch->gurus;
 
         // Ambil data siswa yang terdaftar di batch ini
         $query = DB::table('student_list_batch')
@@ -79,7 +73,7 @@ class BatchController extends Controller
         }
 
         if (request()->ajax() || request()->has('draw')) {
-            return datatables()->of($query)
+            return \Yajra\DataTables\Facades\DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('id_siswa', function ($row) {
                     return 'SIS-' . str_pad($row->id, 3, '0', STR_PAD_LEFT);

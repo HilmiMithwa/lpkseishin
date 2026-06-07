@@ -33,7 +33,7 @@ class ModulController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $userId = $user->id;
-        $isEnrolled = $user->mapels()->where('mapel.id_mapel', $id_mapel)->exists();
+        $isEnrolled = $user->activeMapels()->where('id_mapel', $id_mapel)->exists();
 
         if (!$isEnrolled) {
             abort(403, 'NO ACCESS! Kamu belum terdaftar di kelas ini.');
@@ -61,14 +61,16 @@ class ModulController extends Controller
                 ->select('tugas.*', 'pengiriman_tugas.status as submission_status')
                 ->get();
 
-                // Dummy Evaluasi
-                $currentModul->evaluation = (object)[
-                'id' => 1, // ID dummy untuk rute
-                'title' => 'Final Competency Test',
-                'type' => 'Multiple Choice',
-                'date' => date('d M Y'), 
-                'duration' => 120
-            ];
+                // Real Evaluasi
+                $evaluasis = \App\Models\Evaluasi::where('id_modul', $id_modul)->get();
+                foreach($evaluasis as $evaluasi) {
+                    $evaluasi->is_complete = DB::table('catatan_evaluasi')
+                        ->where('id_user', $userId)
+                        ->where('id_mapel', $id_mapel)
+                        ->where('nama_evaluasi', $evaluasi->judul)
+                        ->exists();
+                }
+                $currentModul->evaluasis = $evaluasis;
         } catch (\Exception $e) {
             // Fallback jika terjadi kendala struktural database
             $currentModul->materials = collect([]);

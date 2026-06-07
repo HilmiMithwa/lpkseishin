@@ -181,7 +181,7 @@
                         <p class="text-[10px] text-gray-400 font-semibold mt-0.5 uppercase">{{ $fileType }}</p>
                     </div>
                 </div>
-                <a href="{{ $material->path_file_dokumen_ajar ?? '#' }}" download class="px-3 py-1.5 border border-[#d62828] text-[#d62828] text-[11px] font-bold rounded-xl flex items-center gap-1.5 hover:bg-red-50 transition duration-200 flex-shrink-0">
+                <a href="{{ route('materials.download', $material->id_bahan_ajar) }}" class="px-3 py-1.5 border border-[#d62828] text-[#d62828] text-[11px] font-bold rounded-xl flex items-center gap-1.5 hover:bg-red-50 transition duration-200 flex-shrink-0">
                     <span class="material-symbols-outlined text-2xl select-none">download</span>
                     Unduh
                 </a>

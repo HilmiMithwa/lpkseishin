@@ -12,7 +12,7 @@
         {{-- Left: Title & Breadcrumbs (Spans 3/4) --}}
         <div class="lg:col-span-3">
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('teacher.batch.show', $classData->batch->id_batch ?? 2) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <a href="{{ route('teacher.batch.show', $classData->batch->id_batch ?? '') }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">{{ $classData->nama_mapel }}</h1>
@@ -20,7 +20,7 @@
             <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm font-karla">
                 <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">Kelas Saya</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('teacher.batch.show', $classData->batch->id_batch ?? 2) }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $classData->batch->nama_batch ?? 'Batch 2' }}</a>
+            <a href="{{ route('teacher.batch.show', $classData->batch->id_batch ?? '') }}" class="text-gray-500 hover:text-gray-700 font-medium transition">{{ $classData->batch->nama ?? 'Batch' }}</a>
                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 <span class="text-[#d62828] font-semibold">{{ $classData->nama_mapel }}</span>
             </nav>
@@ -195,7 +195,7 @@
 
                 {{-- Module List --}}
                 <div class="space-y-3">
-                    @forelse($modules as $module)
+                    @forelse($modules as $index => $module)
                     <div x-data="{ isDeleted: false }" x-show="!isDeleted" x-transition.opacity x-on:module-deleted.window="if ($event.detail.id === {{ $module->id_modul }}) isDeleted = true" class="bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-between gap-4">
                         {{-- Left: Icon + Info --}}
                         <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -214,7 +214,7 @@
 
                             {{-- Module Info --}}
                             <div class="min-w-0">
-                                <h4 class="text-sm sm:text-base font-bold font-karla text-gray-900 leading-snug truncate">{{ $module->nama_modul }}</h4>
+                                <h4 class="text-sm sm:text-base font-bold font-karla text-gray-900 leading-snug truncate">Modul {{ $index + 1 }}: {{ $module->nama_modul }}</h4>
                                 <p class="text-[11px] sm:text-xs font-karla font-medium text-gray-500 mt-0.5 truncate">
                                     @if(!empty($module->kode_modul))
                                         {{ $module->kode_modul }} | Teori ({{ $module->jp_teori ?? 0 }} JP) & Praktik ({{ $module->jp_praktik ?? 0 }} JP) {{ $module->note }}
@@ -442,25 +442,20 @@
                      </div>
 
                      <!-- Form Grid -->
-                     <form @submit.prevent="
-                         isLoading = true;
-                         setTimeout(() => {
-                             isLoading = false;
-                             open = false;
-                             $dispatch('show-toast', { message: 'Perubahan kelas berhasil disimpan!' });
-                         }, 800);
-                     " x-data="{ isLoading: false }">
+                     <form action="{{ route('teacher.subjects.update', $classData->id_mapel) }}" method="POST" x-data="{ isLoading: false }" @submit="isLoading = true">
+                         @csrf
+                         @method('PUT')
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                              
                              <!-- Left Column -->
                              <div class="space-y-6">
                                  <div class="space-y-1.5">
                                      <x-input-label>Nama Kelas:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->nama_mapel }}" placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
+                                     <x-text-input type="text" name="nama_mapel" required value="{{ $classData->nama_mapel }}" placeholder="cth., N4 Mastering - Kelas A" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Deskripsi:</x-input-label>
-                                     <textarea required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi_mapel }}</textarea>
+                                     <textarea name="deskripsi_mapel" required placeholder="Tulis deskripsi singkat...." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm resize-y min-h-[120px]">{{ $classData->deskripsi_mapel }}</textarea>
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Mentor Sensei:</x-input-label>
@@ -475,27 +470,47 @@
                              <div class="space-y-6">
                                  <div class="space-y-1.5">
                                      <x-input-label>Target Sertifikasi:</x-input-label>
-                                     <div class="relative">
-                                         <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
-                                             <option value="" disabled>Pilih Target Sertifikasi</option>
-                                             <option value="JLPT N4" {{ $classData->target == 'JLPT N4' ? 'selected' : '' }}>JLPT N4</option>
-                                             <option value="JLPT N5" {{ $classData->target == 'JLPT N5' ? 'selected' : '' }}>JLPT N5</option>
-                                             <option value="JFT-Basic A2" {{ $classData->target == 'JFT-Basic A2' ? 'selected' : '' }}>JFT-Basic A2</option>
-                                         </select>
-                                         <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                     <div x-data="{ open: false, selected: '{{ $classData->target ?? '' }}' }" class="relative">
+                                         <input type="hidden" name="target" x-model="selected" required>
+                                         <div @click="open = !open" 
+                                              class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-karla cursor-pointer flex justify-between items-center transition"
+                                              :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                                             <span class="text-gray-800" x-text="selected ? selected : 'Pilih Target Sertifikasi'"></span>
+                                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                         </div>
+                                         <div x-show="open" @click.outside="open = false" style="display: none;"
+                                              class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                             <ul class="py-1">
+                                                 <li>
+                                                     <div @click="selected = 'JLPT N4'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JLPT N4' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                         JLPT N4
+                                                     </div>
+                                                 </li>
+                                                 <li>
+                                                     <div @click="selected = 'JLPT N5'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JLPT N5' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                         JLPT N5
+                                                     </div>
+                                                 </li>
+                                                 <li>
+                                                     <div @click="selected = 'JFT-Basic A2'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JFT-Basic A2' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                         JFT-Basic A2
+                                                     </div>
+                                                 </li>
+                                             </ul>
+                                         </div>
                                      </div>
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Total Durasi (JP):</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
+                                     <x-text-input type="text" name="jp" required value="{{ $classData->jp }}" placeholder="cth., 264" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Jadwal:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
+                                     <x-text-input type="text" name="jadwal" required value="{{ $classData->jadwal }}" placeholder="cth., Senin - Jumat" class="w-full" />
                                  </div>
                                  <div class="space-y-1.5">
                                      <x-input-label>Nilai Kelulusan Minimum:</x-input-label>
-                                     <x-text-input type="text" required value="{{ $classData->min_score }}" placeholder="cth., 80" class="w-full" />
+                                     <x-text-input type="text" name="min_score" required value="{{ $classData->min_score }}" placeholder="cth., 80" class="w-full" />
                                  </div>
                              </div>
 
@@ -716,6 +731,21 @@
 
     {{-- Global Toast Notification --}}
     <div x-data="{ show: false, message: '' }" 
+         x-init="
+            @if(session('success'))
+                message = '{{ session('success') }}';
+                show = true;
+                setTimeout(() => show = false, 3000);
+            @elseif(request()->query('success') === 'modul_deleted')
+                message = 'Modul berhasil dihapus';
+                show = true;
+                setTimeout(() => show = false, 3000);
+                
+                const url = new URL(window.location);
+                url.searchParams.delete('success');
+                window.history.replaceState({}, '', url);
+            @endif
+         "
          x-on:show-toast.window="
             message = $event.detail.message;
             show = true;

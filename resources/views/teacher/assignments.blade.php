@@ -6,8 +6,20 @@
 <div class="p-4 sm:p-6 lg:p-10" x-data="{ 
     activeTab: 'belum_diperiksa', 
     showCreateModal: false,
+    isEditMode: false,
+    editTaskId: null,
+    
+    taskTitle: '',
+    taskDueDate: '',
+    taskDesc: '',
     selectedBatch: '',
     selectedClass: '',
+    selectedModule: '',
+    
+    showDeleteModal: false,
+    deleteTaskId: null,
+    deleteTaskTitle: '',
+
     batchesData: {{ json_encode($batches) }},
     classesData: {{ json_encode($classes) }},
     modulesData: {{ json_encode($allModules) }},
@@ -18,6 +30,35 @@
     get filteredModules() {
         if (!this.selectedClass) return [];
         return this.modulesData.filter(m => m.id_mapel == this.selectedClass);
+    },
+    openCreateModal() {
+        this.isEditMode = false;
+        this.editTaskId = null;
+        this.taskTitle = '';
+        this.taskDueDate = '';
+        this.taskDesc = '';
+        this.selectedBatch = '';
+        this.selectedClass = '';
+        this.selectedModule = '';
+        this.showCreateModal = true;
+    },
+    openEditModal(id, title, dueDate, desc, batchId, classId, moduleId) {
+        this.isEditMode = true;
+        this.editTaskId = id;
+        this.taskTitle = title;
+        this.taskDueDate = dueDate ? dueDate.replace(' ', 'T').substring(0, 16) : '';
+        this.taskDesc = desc || '';
+        this.selectedBatch = batchId;
+        this.selectedClass = classId;
+        this.$nextTick(() => {
+            this.selectedModule = moduleId;
+        });
+        this.showCreateModal = true;
+    },
+    openDeleteModal(id, title) {
+        this.deleteTaskId = id;
+        this.deleteTaskTitle = title;
+        this.showDeleteModal = true;
     }
 }">
 
@@ -27,7 +68,7 @@
             <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-[#222222] tracking-tight mb-1">Manajemen Tugas</h1>
             <p class="text-sm text-[#666666] font-medium mt-1">Kelola penugasan dan periksa hasil pekerjaan siswa.</p>
         </div>
-        <button @click="showCreateModal = true" class="h-fit inline-flex items-center justify-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-sm whitespace-nowrap self-start sm:self-auto">
+        <button @click="openCreateModal()" class="h-fit inline-flex items-center justify-center gap-2 bg-[#d62828] hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-sm whitespace-nowrap self-start sm:self-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
             Buat Tugas Baru
         </button>
@@ -35,23 +76,96 @@
 
     <!-- Filter Section (Select Batch & Class) -->
     <form method="GET" action="{{ route('teacher.assignments') }}" class="bg-white rounded-[24px] border border-gray-100 p-5 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <div class="space-y-1.5">
+        <!-- Custom Dropdown Batch -->
+        <div class="space-y-1.5" x-data="{ 
+            open: false, 
+            selectOption(val) { 
+                $refs.input.value = val; 
+                $refs.input.form.submit(); 
+            } 
+        }">
             <x-input-label>Pilih Batch</x-input-label>
-            <select name="batch_id" onchange="this.form.submit()" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] transition">
-                <option value="">Semua Batch</option>
-                @foreach($batches as $batch)
-                    <option value="{{ $batch->id_batch }}" {{ $selectedBatchId == $batch->id_batch ? 'selected' : '' }}>{{ $batch->nama }}</option>
-                @endforeach
-            </select>
+            <div class="relative">
+                <input type="hidden" name="batch_id" x-ref="input" value="{{ $selectedBatchId }}">
+                
+                <div @click="open = !open" 
+                     class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-bold text-gray-900 cursor-pointer flex justify-between items-center transition"
+                     :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                    <span>
+                        @if($selectedBatchId)
+                            {{ $batches->firstWhere('id_batch', $selectedBatchId)->nama ?? 'Semua Batch' }}
+                        @else
+                            Semua Batch
+                        @endif
+                    </span>
+                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+
+                <div x-show="open" @click.outside="open = false" style="display: none;"
+                     x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                    <ul class="py-1">
+                        <li>
+                            <div @click="selectOption('')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedBatchId == '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
+                                Semua Batch
+                            </div>
+                        </li>
+                        @foreach($batches as $batch)
+                        <li>
+                            <div @click="selectOption('{{ $batch->id_batch }}')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedBatchId == $batch->id_batch ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
+                                {{ $batch->nama }}
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="space-y-1.5">
+
+        <!-- Custom Dropdown Kelas -->
+        <div class="space-y-1.5" x-data="{ 
+            open: false, 
+            selectOption(val) { 
+                $refs.input.value = val; 
+                $refs.input.form.submit(); 
+            } 
+        }">
             <x-input-label>Pilih Kelas</x-input-label>
-            <select name="mapel_id" onchange="this.form.submit()" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] transition">
-                <option value="">Semua Kelas</option>
-                @foreach($classes as $class)
-                    <option value="{{ $class->id_mapel }}" {{ $selectedMapelId == $class->id_mapel ? 'selected' : '' }}>{{ $class->nama_mapel }}</option>
-                @endforeach
-            </select>
+            <div class="relative">
+                <input type="hidden" name="mapel_id" x-ref="input" value="{{ $selectedMapelId }}">
+                
+                <div @click="open = !open" 
+                     class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-bold text-gray-900 cursor-pointer flex justify-between items-center transition"
+                     :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                    <span>
+                        @if($selectedMapelId)
+                            {{ $classes->firstWhere('id_mapel', $selectedMapelId)->nama_mapel ?? 'Semua Kelas' }}
+                        @else
+                            Semua Kelas
+                        @endif
+                    </span>
+                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+
+                <div x-show="open" @click.outside="open = false" style="display: none;"
+                     x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                    <ul class="py-1">
+                        <li>
+                            <div @click="selectOption('')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedMapelId == '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
+                                Semua Kelas
+                            </div>
+                        </li>
+                        @foreach($classes as $class)
+                        <li>
+                            <div @click="selectOption('{{ $class->id_mapel }}')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedMapelId == $class->id_mapel ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
+                                {{ $class->nama_mapel }}
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
     </form>
 
@@ -150,8 +264,8 @@
             <!-- Modal Header -->
             <div class="px-6 py-5 sm:px-8 sm:py-6 border-b border-gray-100 flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl font-bold font-ibm text-[#222222]">Buat Tugas Baru</h3>
-                    <p class="text-sm text-gray-500 mt-1">Isi detail tugas untuk diunggah ke kelas.</p>
+                    <h3 class="text-xl font-bold font-ibm text-[#222222]" x-text="isEditMode ? 'Edit Tugas' : 'Buat Tugas Baru'"></h3>
+                    <p class="text-sm text-gray-500 mt-1" x-text="isEditMode ? 'Perbarui detail penugasan yang sudah ada.' : 'Isi detail tugas untuk diunggah ke kelas.'"></p>
                 </div>
                 <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-600 transition p-2 hover:bg-gray-100 rounded-full">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -160,72 +274,148 @@
 
             <!-- Modal Body -->
             <div class="px-6 py-6 overflow-y-auto custom-scrollbar flex-1 bg-gray-50/30">
-                <form id="createAssignmentForm" action="{{ route('teacher.assignments.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form id="createAssignmentForm" :action="isEditMode ? '{{ url('/teacher/assignments') }}/' + editTaskId : '{{ route('teacher.assignments.store') }}'" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
+                    <input type="hidden" x-bind:name="isEditMode ? '_method' : ''" x-bind:value="isEditMode ? 'PUT' : ''" :disabled="!isEditMode">
                     
                     <!-- Judul & Tenggat Waktu -->
                     <div class="space-y-5">
                         <div class="space-y-1.5">
                             <x-input-label>Judul Tugas</x-input-label>
-                            <x-text-input type="text" name="judul_tugas" required placeholder="Misal: Menulis Kanji Bab 5" class="w-full" />
+                            <x-text-input type="text" name="judul_tugas" x-model="taskTitle" required placeholder="Misal: Menulis Kanji Bab 5" class="w-full" />
                         </div>
                         <div class="space-y-1.5">
                             <x-input-label>Tenggat Waktu (Due Date)</x-input-label>
-                            <x-text-input type="datetime-local" name="waktu_pengumpulan" required class="w-full" />
+                            <x-text-input type="datetime-local" name="waktu_pengumpulan" x-model="taskDueDate" class="w-full" />
                         </div>
                     </div>
 
                     <!-- Target Kelas -->
-                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5" x-show="!isEditMode">
                         <x-input-label class="mb-3">Terbitkan Untuk Kelas & Modul</x-input-label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <select name="batch_id" x-model="selectedBatch" @change="selectedClass = ''" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors">
-                                    <option value="">Pilih Batch...</option>
-                                    <template x-for="batch in batchesData" :key="batch.id_batch">
-                                        <option :value="batch.id_batch" x-text="batch.nama"></option>
-                                    </template>
-                                </select>
+                                <div x-data="{ open: false }" class="relative">
+                                    <input type="hidden" name="batch_id" x-model="selectedBatch" :required="!isEditMode">
+                                    <div @click="open = !open" 
+                                         class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-semibold cursor-pointer flex justify-between items-center transition"
+                                         :class="open ? 'border-[#d62828] ring-2 ring-red-500/20' : 'border-gray-200 hover:border-[#d62828]'">
+                                        <span class="text-gray-800" x-text="selectedBatch ? batchesData.find(b => b.id_batch == selectedBatch)?.nama : 'Pilih Batch...'"></span>
+                                        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                    <div x-show="open" @click.outside="open = false" style="display: none;"
+                                         class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                        <ul class="py-1">
+                                            <li>
+                                                <div @click="selectedBatch = ''; selectedClass = ''; selectedModule = ''; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedBatch === '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                    Pilih Batch...
+                                                </div>
+                                            </li>
+                                            <template x-for="batch in batchesData" :key="batch.id_batch">
+                                                <li>
+                                                    <div @click="selectedBatch = batch.id_batch; selectedClass = ''; selectedModule = ''; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedBatch == batch.id_batch ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                        <span x-text="batch.nama"></span>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <select name="class_id" x-model="selectedClass" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors" :disabled="selectedBatch === ''" :class="selectedBatch === '' ? 'opacity-70 cursor-not-allowed' : ''">
-                                    <option value="">Pilih Kelas...</option>
-                                    <template x-for="kelas in filteredClasses" :key="kelas.id_mapel">
-                                        <option :value="kelas.id_mapel" x-text="kelas.nama_mapel"></option>
-                                    </template>
-                                </select>
+                                <div x-data="{ open: false }" class="relative">
+                                    <input type="hidden" name="class_id" x-model="selectedClass" :required="!isEditMode">
+                                    <div @click="if(selectedBatch !== '') open = !open" 
+                                         class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-semibold flex justify-between items-center transition"
+                                         :class="selectedBatch === '' ? 'opacity-70 cursor-not-allowed border-gray-200' : (open ? 'border-[#d62828] ring-2 ring-red-500/20 cursor-pointer' : 'border-gray-200 hover:border-[#d62828] cursor-pointer')">
+                                        <span class="text-gray-800" x-text="selectedClass ? filteredClasses.find(c => c.id_mapel == selectedClass)?.nama_mapel : 'Pilih Kelas...'"></span>
+                                        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                    <div x-show="open" @click.outside="open = false" style="display: none;"
+                                         class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                        <ul class="py-1">
+                                            <li>
+                                                <div @click="selectedClass = ''; selectedModule = ''; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedClass === '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                    Pilih Kelas...
+                                                </div>
+                                            </li>
+                                            <template x-for="kelas in filteredClasses" :key="kelas.id_mapel">
+                                                <li>
+                                                    <div @click="selectedClass = kelas.id_mapel; selectedModule = ''; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedClass == kelas.id_mapel ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                        <span x-text="kelas.nama_mapel"></span>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <select name="id_modul" required class="w-full bg-white border border-gray-200 text-gray-800 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#d62828] transition-colors" :disabled="selectedClass === ''" :class="selectedClass === '' ? 'opacity-70 cursor-not-allowed' : ''">
-                                    <option value="">Pilih Modul...</option>
-                                    <template x-for="modul in filteredModules" :key="modul.id_modul">
-                                        <option :value="modul.id_modul" x-text="modul.nama_modul"></option>
-                                    </template>
-                                </select>
+                                <div x-data="{ open: false }" class="relative">
+                                    <input type="hidden" name="id_modul" x-model="selectedModule" :required="!isEditMode">
+                                    <div @click="if(selectedClass !== '') open = !open" 
+                                         class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-semibold flex justify-between items-center transition"
+                                         :class="selectedClass === '' ? 'opacity-70 cursor-not-allowed border-gray-200' : (open ? 'border-[#d62828] ring-2 ring-red-500/20 cursor-pointer' : 'border-gray-200 hover:border-[#d62828] cursor-pointer')">
+                                        <span class="text-gray-800" x-text="selectedModule ? filteredModules.find(m => m.id_modul == selectedModule)?.nama_modul : 'Pilih Modul...'"></span>
+                                        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                    <div x-show="open" @click.outside="open = false" style="display: none;"
+                                         class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                        <ul class="py-1">
+                                            <li>
+                                                <div @click="selectedModule = ''; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedModule === '' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                    Pilih Modul...
+                                                </div>
+                                            </li>
+                                            <template x-for="modul in filteredModules" :key="modul.id_modul">
+                                                <li>
+                                                    <div @click="selectedModule = modul.id_modul; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors" :class="selectedModule == modul.id_modul ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                        <span x-text="modul.nama_modul"></span>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <p class="text-[10px] font-medium text-gray-500 mt-3">Tugas ini akan disematkan ke Modul yang dipilih pada kelas target.</p>
                     </div>
 
+                    <!-- Target Kelas (Read-Only) -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5" x-show="isEditMode" style="display: none;">
+                        <x-input-label class="mb-3">Lokasi Tugas</x-input-label>
+                        <div class="flex items-center gap-2 text-sm font-bold text-gray-700 bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <span x-text="batchesData.find(b => b.id_batch == selectedBatch)?.nama || 'Memuat...'"></span>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <span x-text="classesData.find(c => c.id_mapel == selectedClass)?.nama_mapel || 'Memuat...'"></span>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <span x-text="modulesData.find(m => m.id_modul == selectedModule)?.nama_modul || 'Memuat...'"></span>
+                        </div>
+                        <p class="text-[10px] font-medium text-gray-500 mt-3">Lokasi penugasan tidak dapat diubah setelah diterbitkan.</p>
+                        <input type="hidden" name="id_modul" :value="selectedModule" :disabled="!isEditMode">
+                    </div>
+
                     <!-- Deskripsi -->
                     <div class="space-y-1.5">
                         <x-input-label>Instruksi (Opsional)</x-input-label>
-                        <textarea name="deskripsi_tugas" rows="3" placeholder="Tambahkan instruksi pengerjaan jika ada..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm"></textarea>
+                        <textarea name="deskripsi_tugas" x-model="taskDesc" rows="3" placeholder="Tambahkan instruksi pengerjaan jika ada..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm shadow-sm"></textarea>
                     </div>
 
                     <!-- Upload -->
-                    <div x-data="{ fileName: null, isDragging: false }" class="space-y-1.5">
+                    <div x-data="{ fileName: null, isDragging: false, removeResource: false }" class="space-y-1.5">
                         <x-input-label>Lampiran Soal / Materi (Opsional)</x-input-label>
                         
                         <!-- File Input (Hidden) -->
                         <input type="file" id="assignment_file" name="file_path_tugas" class="hidden" 
-                               @change="fileName = $event.target.files[0] ? $event.target.files[0].name : null">
+                               @change="fileName = $event.target.files[0] ? $event.target.files[0].name : null; removeResource = false">
+                        <input type="hidden" name="remove_resource" :value="removeResource ? '1' : '0'">
                                
                         <!-- Dropzone -->
                         <label for="assignment_file" 
                                @dragover.prevent="isDragging = true" 
                                @dragleave.prevent="isDragging = false"
-                               @drop.prevent="isDragging = false; if($event.dataTransfer.files.length > 0) { document.getElementById('assignment_file').files = $event.dataTransfer.files; fileName = $event.dataTransfer.files[0].name; }"
+                               @drop.prevent="isDragging = false; if($event.dataTransfer.files.length > 0) { document.getElementById('assignment_file').files = $event.dataTransfer.files; fileName = $event.dataTransfer.files[0].name; removeResource = false; }"
                                class="block border-2 border-dashed rounded-2xl p-6 transition-colors cursor-pointer group"
                                :class="isDragging ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white hover:border-red-300'">
                             <!-- State: No File -->
@@ -268,11 +458,33 @@
                 <x-primary-button type="submit" form="createAssignmentForm" x-data="{ loading: false }" @click="loading = true" class="px-5 py-2.5 gap-2 shadow-sm">
                     <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                     <svg x-show="loading" class="w-4 h-4 animate-spin" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span x-text="loading ? 'Menerbitkan...' : 'Terbitkan Tugas'"></span>
+                    <span x-text="loading ? 'Menyimpan...' : (isEditMode ? 'Simpan Perubahan' : 'Terbitkan Tugas')"></span>
                 </x-primary-button>
             </div>
             
         </div>
+        </div>
+    </template>
+
+    <!-- Delete Modal -->
+    <template x-teleport="body">
+        <div x-show="showDeleteModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" x-cloak>
+            <div x-show="showDeleteModal" x-transition.opacity class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" @click="showDeleteModal = false"></div>
+            <div x-show="showDeleteModal" x-transition.scale.95 class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col">
+                <div class="px-6 py-8 text-center flex-1">
+                    <div class="w-16 h-16 bg-red-50 text-[#d62828] rounded-full flex items-center justify-center mx-auto mb-5 border-4 border-red-100/50">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold font-ibm text-gray-900 mb-2">Hapus Tugas?</h3>
+                    <p class="text-sm text-gray-500 font-medium mb-6">Tugas "<span x-text="deleteTaskTitle" class="font-bold text-gray-800"></span>" beserta seluruh data akan dihapus permanen.</p>
+                    <form id="deleteAssignmentForm" :action="'{{ url('/teacher/assignments') }}/' + deleteTaskId" method="POST" class="flex flex-col sm:flex-row gap-3">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" @click="showDeleteModal = false" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition">Batal</button>
+                        <button type="submit" class="flex-1 py-3 bg-[#d62828] hover:bg-red-700 text-white rounded-xl font-bold shadow-sm transition">Ya, Hapus</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </template>
 

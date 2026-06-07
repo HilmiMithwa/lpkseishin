@@ -45,8 +45,9 @@ class VocabularyController extends Controller
             'furigana' => 'required|string|max:255',
             'romaji' => 'required|string|max:255',
             'meaning_id' => 'required|string|max:255',
+            'meaning_en' => 'required|string|max:255',
             'context_jp' => 'required|string',
-            // meaning_en and definition_id are required by db, we'll provide defaults if missing from request
+            // definition_id are required by db, we'll provide defaults if missing from request
         ]);
 
         Vocabulary::create([
@@ -55,7 +56,7 @@ class VocabularyController extends Controller
             'romaji' => $request->romaji,
             'meaning_id' => $request->meaning_id,
             'category' => $request->category,
-            'meaning_en' => $request->meaning_en ?? '-',
+            'meaning_en' => $request->meaning_en,
             'level' => $level_id,
             'definition_id' => $request->definition_id ?? 'Tindakan untuk belajar atau mempelajari sesuatu hal baru.', // Default
             'contextual_usage' => $request->context_jp,
@@ -73,6 +74,7 @@ class VocabularyController extends Controller
             'furigana' => 'required|string|max:255',
             'romaji' => 'required|string|max:255',
             'meaning_id' => 'required|string|max:255',
+            'meaning_en' => 'required|string|max:255',
             'context_jp' => 'required|string',
         ]);
 
@@ -82,7 +84,7 @@ class VocabularyController extends Controller
             'romaji' => $request->romaji,
             'meaning_id' => $request->meaning_id,
             'category' => $request->category,
-            'meaning_en' => $request->meaning_en ?? $vocab->meaning_en,
+            'meaning_en' => $request->meaning_en,
             'definition_id' => $request->definition_id ?? $vocab->definition_id,
             'contextual_usage' => $request->context_jp,
         ]);

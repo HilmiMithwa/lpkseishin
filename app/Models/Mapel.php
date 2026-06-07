@@ -35,7 +35,7 @@ class Mapel extends Model
     }
 
     public function modul() {
-        return $this->hasMany(Modul::class, 'id_mapel', 'id_mapel');
+        return $this->hasMany(Modul::class, 'id_mapel', 'id_mapel')->orderBy('id_modul', 'asc');
     }
 
     public function announcements() {
@@ -47,4 +47,8 @@ class Mapel extends Model
         return $this->hasMany(Enrollment_List::class, 'id_mapel', 'id_mapel');
     }
 
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class, 'id_mapel', 'id_mapel');
+    }
 }

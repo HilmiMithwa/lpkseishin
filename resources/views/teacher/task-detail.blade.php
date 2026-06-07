@@ -4,51 +4,14 @@
 
 @section('content')
 @php
-    $currentModuleId = request()->route('id_modul') ?? 2;
-    $currentTaskId = request()->route('id_tugas') ?? 1;
-    // Dummy Data
-    $batchName = 'Batch 2';
-    $className = 'N4 Mastering';
+    $currentModuleId = $modul->id_modul;
+    $currentTaskId = $task->id_tugas;
+    $batchName = $modul->mapel->batch->nama_batch ?? 'Batch';
+    $className = $modul->mapel->nama_mapel ?? 'Kelas';
     
-    $taskTitle = 'N4 Exercise';
-    $dueDate = '8 Mei 2026, 23:59';
-    $status = 'Active';
-
-    // Submissions Dummy Data
-    $submissions = [
-        (object)[
-            'no' => 1,
-            'id_siswa' => 'SIS-001',
-            'name' => 'Ahmad Hidayat',
-            'status' => 'Belum Dikumpulkan',
-            'submitted_at' => '-',
-            'score' => '-'
-        ],
-        (object)[
-            'no' => 2,
-            'id_siswa' => 'SIS-002',
-            'name' => 'Budi Santoso',
-            'status' => 'Menunggu Penilaian',
-            'submitted_at' => '8 Mei 2026, 14:30',
-            'score' => '-'
-        ],
-        (object)[
-            'no' => 3,
-            'id_siswa' => 'SIS-003',
-            'name' => 'Citra Lestari',
-            'status' => 'Sudah Dinilai',
-            'submitted_at' => '7 Mei 2026, 09:15',
-            'score' => '85'
-        ],
-        (object)[
-            'no' => 4,
-            'id_siswa' => 'SIS-004',
-            'name' => 'Deni Pratama',
-            'status' => 'Sudah Dinilai',
-            'submitted_at' => '7 Mei 2026, 11:20',
-            'score' => '90'
-        ]
-    ];
+    $taskTitle = $task->judul_tugas;
+    $dueDate = $task->waktu_pengumpulan ? \Carbon\Carbon::parse($task->waktu_pengumpulan)->translatedFormat('d M Y, H:i') : '-';
+    $status = $task->status_tugas;
 @endphp
 
 <div class="p-4 sm:p-6 lg:p-10 bg-[#fdfdfc] min-h-screen" x-data="{ showDeleteModal: false, showFilter: false, showReviewPanel: false, reviewData: { id: '', name: '', time: '', score: '' } }">
@@ -57,25 +20,25 @@
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('teacher.modules.show', $currentModuleId ?? 2) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
+                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm flex-shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h1 class="text-2xl sm:text-[28px] lg:text-3xl font-semibold font-ibm text-gray-900 tracking-tight">Detail Tugas</h1>
             </div>
-            <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm font-karla">
+            <nav class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                 <a href="{{ route('teacher.classes') }}" class="text-gray-500 hover:text-gray-700 transition font-medium">Kelas Saya</a>
-                <span class="text-gray-400">›</span>
-                <a href="{{ route('teacher.batch.show', 2) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $batchName }}</a>
-                <span class="text-gray-400">›</span>
-                <a href="{{ route('teacher.subjects.show', 1) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $className }}</a>
-                <span class="text-gray-400">›</span>
-                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">Modul {{ $currentModuleId }}</a>
-                <span class="text-gray-400">›</span>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.batch.show', $batchId) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $batchName }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.subjects.show', $mapelId) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">{{ $className }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <a href="{{ route('teacher.modules.show', $currentModuleId) }}" class="text-gray-500 hover:text-gray-700 transition font-medium">Modul {{ $moduleIndex }}</a>
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 <span class="text-[#d62828] font-bold">{{ $taskTitle }}</span>
             </nav>
         </div>
         <div class="flex items-center gap-3">
-            <a href="#" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 px-5 rounded-xl text-sm transition">
+            <a href="{{ route('teacher.tasks.edit', ['id_modul' => $currentModuleId, 'id_tugas' => $currentTaskId]) }}" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 px-5 rounded-xl text-sm transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 Edit
             </a>
@@ -111,19 +74,19 @@
             <div class="bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 shadow-sm">
                 <h3 class="text-sm font-bold font-ibm text-gray-900 mb-4">Deskripsi Tugas</h3>
                 <div class="prose prose-sm font-karla text-gray-600 prose-p:leading-relaxed prose-a:text-red-500 hover:prose-a:text-red-700 max-w-none">
-                    <p>Latihan ini dirancang untuk menguji pemahaman awal kamu mengenai perubahan dari level N5 ke N4, khususnya pada penguasaan 20 Kanji pertama yang telah dibahas dalam materi "Introduction to N4".</p>
-                    <p>Kamu diharapkan mampu mengidentifikasi cara baca (Onyomi/Kunyomi) serta menggunakan kanji tersebut dalam kalimat sederhana.</p>
+                    {!! nl2br(e($task->deskripsi_tugas)) !!}
                 </div>
 
+                @if($task->file_path_tugas)
                 <h3 class="text-sm font-bold font-ibm text-gray-900 mt-8 mb-4">Sumber Daya</h3>
-                <a href="#" class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-red-300 transition group bg-gray-50/50">
-                    <div class="flex items-center gap-4">
+                <a href="{{ Storage::url($task->file_path_tugas) }}" target="_blank" class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-red-500 transition-colors group">                    
+                    <div class="flex items-center gap-4 min-w-0 ">
                         <div class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-lg text-red-600 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <p class="text-sm font-bold font-karla text-gray-900 truncate group-hover:text-[#d62828] transition">Template_N4_Exercise.pdf</p>
-                            <p class="text-xs font-semibold text-gray-500">PDF &bull; 1.2 MB</p>
+                            <p class="text-sm font-bold font-karla text-gray-900 truncate group-hover:text-[#d62828] transition">{{ basename($task->file_path_tugas) }}</p>
+                            <p class="text-xs font-semibold text-gray-500">Lampiran</p>
                         </div>
                     </div>
                     <div class="text-[#d62828] bg-white border border-red-200 group-hover:bg-red-50 text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition flex-shrink-0 shadow-sm">
@@ -131,6 +94,7 @@
                         <span class="hidden sm:inline">Download</span>
                     </div>
                 </a>
+                @endif
             </div>
         </div>
 
@@ -220,7 +184,7 @@
                                 </td>
                                 <td class="px-6 py-6 sm:py-7 text-right">
                                     @if($sub->status !== 'Belum Dikumpulkan')
-                                    <button @click="reviewData = { id: '{{ $sub->id_siswa }}', name: '{{ $sub->name }}', time: '{{ $sub->submitted_at }}', score: '{{ $sub->score !== '-' ? $sub->score : '' }}' }; showReviewPanel = true" class="inline-flex items-center gap-1 text-xs font-bold text-[#d62828] hover:text-red-800 transition whitespace-nowrap">
+                                    <button @click="reviewData = { id: '{{ $sub->id_siswa }}', name: '{{ $sub->name }}', time: '{{ $sub->submitted_at }}', score: '{{ $sub->score !== '-' ? $sub->score : '' }}', file_url: '{{ $sub->file_url ?? '' }}', file_name: '{{ $sub->file_name ?? '' }}' }; showReviewPanel = true" class="inline-flex items-center gap-1 text-xs font-bold text-[#d62828] hover:text-red-800 transition whitespace-nowrap">
                                         Periksa
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                     </button>
@@ -279,12 +243,12 @@
                 <p class="text-sm text-gray-500 font-karla text-center mb-6">Tugas beserta semua data pengumpulan siswa akan terhapus dan tidak bisa dikembalikan.</p>
                 
                 {{-- Form Delete Backend --}}
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('teacher.tasks.destroy', ['id_modul' => $currentModuleId, 'id_tugas' => $currentTaskId]) }}">
                     @csrf
                     @method('DELETE')
                     <div class="flex gap-3">
                         <button type="button" @click="showDeleteModal = false" class="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold font-karla text-sm hover:bg-gray-50 transition">Batal</button>
-                        <button type="button" @click="window.location.href='{{ route('teacher.modules.show', $currentModuleId) }}'" class="flex-1 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm hover:bg-red-700 transition shadow-sm">Hapus</button>
+                        <button type="submit" class="flex-1 py-3 rounded-xl bg-[#d62828] text-white font-bold font-karla text-sm hover:bg-red-700 transition shadow-sm">Hapus</button>
                     </div>
                 </form>
             </div>
@@ -334,28 +298,35 @@
                     {{-- Submitted File --}}
                     <div>
                         <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">File Pengumpulan</p>
-                        <div class="flex items-center justify-between p-4 bg-white border border-gray-200 hover:border-red-300 rounded-[16px] shadow-sm transition group cursor-pointer">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 flex items-center justify-center bg-red-50 border border-red-100 rounded-xl text-red-500 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <template x-if="reviewData.file_url">
+                            <a :href="reviewData.file_url" target="_blank" class="flex items-center justify-between p-4 bg-white border border-gray-200 hover:border-red-300 rounded-[16px] shadow-sm transition group cursor-pointer">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 flex items-center justify-center bg-red-50 border border-red-100 rounded-xl text-red-500 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <p class="text-[13px] font-bold text-gray-900 truncate mb-0.5" x-text="reviewData.file_name"></p>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Lampiran</p>
+                                    </div>
                                 </div>
-                                <div class="overflow-hidden">
-                                    <p class="text-[13px] font-bold text-gray-900 truncate mb-0.5">Tugas_<span x-text="reviewData.name ? reviewData.name.replace(/\s+/g, '_') : ''"></span>.pdf</p>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">PDF &bull; 2.4 MB</p>
+                                <div class="text-gray-400 group-hover:text-[#d62828] transition p-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 </div>
+                            </a>
+                        </template>
+                        <template x-if="!reviewData.file_url">
+                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-[16px] text-center">
+                                <p class="text-sm text-gray-500 font-semibold">Tidak ada file yang dilampirkan.</p>
                             </div>
-                            <div class="text-gray-400 group-hover:text-[#d62828] transition p-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            </div>
-                        </div>
+                        </template>
                     </div>
 
                     {{-- Grading Form --}}
                     <div>
                         <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">Penilaian</p>
-                        <form action="" method="POST" class="flex flex-col gap-5">
+                        <form action="{{ route('teacher.tasks.grade', ['id_modul' => $currentModuleId, 'id_tugas' => $currentTaskId]) }}" method="POST" class="flex flex-col gap-5">
                             @csrf
-                            {{-- Dummy input for student ID --}}
+                            {{-- ID of the submission (Pengiriman_Tugas) --}}
                             <input type="hidden" name="student_id" :value="reviewData.id">
                             
                             <div class="space-y-1.5">
@@ -367,7 +338,7 @@
                                 <x-input-label>Catatan / Feedback <span class="text-gray-400 font-normal">(Opsional)</span></x-input-label>
                                 <textarea name="feedback" rows="5" placeholder="Tuliskan evaluasi atau masukan untuk siswa..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#d62828] focus:border-[#d62828] transition text-[#222222] font-bold text-sm resize-y shadow-sm"></textarea>
                             </div>
-                        </form>
+                        
                     </div>
 
                 </div>
@@ -375,15 +346,64 @@
                 {{-- Footer / Actions --}}
                 <div class="p-6 border-t border-gray-100 flex-shrink-0 bg-white flex gap-3">
                     <button type="button" @click="showReviewPanel = false" class="flex-1 py-3.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl font-bold font-karla text-sm transition">Batal</button>
-                    <x-primary-button type="button" @click="showReviewPanel = false" class="flex-1 justify-center gap-2 py-3.5">
+                    <x-primary-button type="submit" class="flex-1 justify-center gap-2 py-3.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         Simpan Nilai
                     </x-primary-button>
                 </div>
+                </form>
                 
             </div>
         </div>
+
+    </div>
     </template>
+
+    @push('modals')
+    {{-- Global Toast Notification --}}
+    <div x-data="{ show: false, message: '' }" 
+         x-init="
+            @if(session('success'))
+                message = '{{ session('success') }}';
+                show = true;
+                setTimeout(() => show = false, 3000);
+            @endif
+         "
+         x-on:show-toast.window="
+            message = $event.detail.message;
+            show = true;
+            setTimeout(() => show = false, 3000);
+         "
+         class="fixed bottom-6 right-6 z-[120] flex flex-col gap-2 pointer-events-none">
+        
+        <div x-show="show" style="display: none;"
+             x-transition:enter="transform ease-out duration-300 transition"
+             x-transition:enter-start="translate-y-4 opacity-0 sm:translate-y-0 sm:translate-x-4"
+             x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 flex items-center p-4 gap-4 border border-gray-100">
+             
+             <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
+                 <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                 </svg>
+             </div>
+             
+             <div class="flex-1">
+                 <p class="text-sm font-bold font-ibm text-gray-900" x-text="message"></p>
+                 <p class="text-xs font-karla text-gray-500 mt-0.5">Sistem telah diperbarui.</p>
+             </div>
+             
+             <button @click="show = false" class="text-gray-400 hover:text-gray-500 transition">
+                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                 </svg>
+             </button>
+        </div>
+    </div>
+    @endpush
 
 </div>
 @endsection

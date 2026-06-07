@@ -122,7 +122,7 @@
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Beranda</span>
                 </a>
-                <a href="{{ route('teacher.classes') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                <a href="{{ route('teacher.classes') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*', 'teacher.materials.*', 'teacher.tasks.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.classes', 'teacher.batch.*', 'teacher.subjects.*', 'teacher.modules.*', 'teacher.evaluations.*', 'teacher.materials.*', 'teacher.tasks.*']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Kelas Saya</span>
                 </a>
@@ -137,6 +137,10 @@
                 <a href="{{ route('teacher.progress-report') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.progress-report']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.progress-report']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Laporan Perkembangan</span>
+                </a>
+                <a href="{{ route('teacher.meetings.index') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['teacher.meetings.index']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['teacher.meetings.index']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Video Conference</span>
                 </a>
             </nav>
 
@@ -190,55 +194,65 @@
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full bg-white shadow-sm border border-gray-100 focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">3</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-0.5 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-white">
+                                    {{ auth()->user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
                         </button>
                         
                         <!-- Dropdown Menu -->
-                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-72 sm:w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
+                        <div class="dropdown-menu absolute right-0 top-[calc(100%+0.5rem)] w-80 sm:w-96 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 hidden opacity-0 transform scale-95 transition-all duration-200 origin-top-right z-50 overflow-hidden">
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <h3 class="font-bold text-slate-800">Notifikasi</h3>
-                                <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Baru</span>
+                                <div class="flex items-center gap-2">
+                                    @if(auth()->user()->unreadNotifications->count() > 0)
+                                        <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ auth()->user()->unreadNotifications->count() }} Baru</span>
+                                    @endif
+                                </div>
                             </div>
                             
                             <!-- Notification List -->
                             <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                @forelse(auth()->user()->notifications()->take(5)->get() as $notification)
+                                    <div class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group {{ is_null($notification->read_at) ? 'bg-blue-50/30' : '' }}">
+                                        @if($notification->data['type'] == 'tugas_dikumpulkan')
+                                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                        @elseif($notification->data['type'] == 'kelas_akan_mulai')
+                                            <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                            </div>
+                                        @endif
+                                        <div class="flex-1">
+                                            <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-[#d62828] transition">{{ $notification->data['title'] ?? 'Notifikasi Baru' }}</p>
+                                            <p class="text-[12px] text-slate-500 leading-snug">{{ $notification->data['message'] ?? '' }}</p>
+                                            <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-blue-600 transition">Tugas Baru Ditambahkan</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Modul 3: Pemahaman Dasar Kanji telah dibuka. Silakan cek tugas Anda.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">5 menit yang lalu</p>
+                                @empty
+                                    <div class="p-8 text-center">
+                                        <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                        <p class="text-sm font-medium text-gray-500">Belum ada notifikasi.</p>
                                     </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-green-600 transition">Evaluasi Selesai</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Selamat! Anda telah menyelesaikan evaluasi Modul 2 dengan nilai 90.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">2 jam yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-amber-600 transition">Peringatan Jatuh Tempo</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Tugas Membaca Bab 4 harus dikumpulkan besok pukul 23:59.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">1 hari yang lalu</p>
-                                    </div>
-                                </a>
+                                @endforelse
                             </div>
                             
                             <!-- Footer -->
+                            @if(auth()->user()->unreadNotifications->count() > 0)
                             <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-700 transition">Lihat Semua Notifikasi</a>
+                                <form action="{{ route('teacher.notifications.read') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-[12px] w-full font-bold text-[#d62828] hover:text-red-700 transition">Tandai Semua Sudah Dibaca</button>
+                                </form>
                             </div>
+                            @endif
                         </div>
                     </div>
                     
@@ -309,7 +323,11 @@
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn relative p-2 text-[#444444] hover:text-[#222222] transition rounded-full hover:bg-white shadow-sm focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                            <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">3</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#d62828] text-[8px] font-bold text-white ring-2 ring-[#FFF9F4]">
+                                    {{ auth()->user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -317,47 +335,53 @@
                             <!-- Header -->
                             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <h3 class="font-bold text-slate-800">Notifikasi</h3>
-                                <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Baru</span>
+                                <div class="flex items-center gap-2">
+                                    @if(auth()->user()->unreadNotifications->count() > 0)
+                                        <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ auth()->user()->unreadNotifications->count() }} Baru</span>
+                                    @endif
+                                </div>
                             </div>
                             
                             <!-- Notification List -->
                             <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                @forelse(auth()->user()->notifications()->take(5)->get() as $notification)
+                                    <div class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group {{ is_null($notification->read_at) ? 'bg-blue-50/30' : '' }}">
+                                        @if($notification->data['type'] == 'tugas_dikumpulkan')
+                                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                        @elseif($notification->data['type'] == 'kelas_akan_mulai')
+                                            <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                            </div>
+                                        @endif
+                                        <div class="flex-1">
+                                            <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-[#d62828] transition">{{ $notification->data['title'] ?? 'Notifikasi Baru' }}</p>
+                                            <p class="text-[12px] text-slate-500 leading-snug">{{ $notification->data['message'] ?? '' }}</p>
+                                            <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-blue-600 transition">Tugas Baru Ditambahkan</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Modul 3: Pemahaman Dasar Kanji telah dibuka. Silakan cek tugas Anda.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">5 menit yang lalu</p>
+                                @empty
+                                    <div class="p-8 text-center">
+                                        <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                        <p class="text-sm font-medium text-gray-500">Belum ada notifikasi.</p>
                                     </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 border-b border-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-green-600 transition">Evaluasi Selesai</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Selamat! Anda telah menyelesaikan evaluasi Modul 2 dengan nilai 90.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">2 jam yang lalu</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="flex gap-3 p-4 hover:bg-gray-50 transition group">
-                                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-semibold text-slate-800 mb-0.5 group-hover:text-amber-600 transition">Peringatan Jatuh Tempo</p>
-                                        <p class="text-[12px] text-slate-500 leading-snug">Tugas Membaca Bab 4 harus dikumpulkan besok pukul 23:59.</p>
-                                        <p class="text-[10px] font-medium text-slate-400 mt-1">1 hari yang lalu</p>
-                                    </div>
-                                </a>
+                                @endforelse
                             </div>
                             
                             <!-- Footer -->
+                            @if(auth()->user()->unreadNotifications->count() > 0)
                             <div class="px-4 py-3 border-t border-gray-100 bg-white text-center">
-                                <a href="#" class="text-[12px] font-bold text-[#d62828] hover:text-red-700 transition">Lihat Semua Notifikasi</a>
+                                <form action="{{ route('teacher.notifications.read') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-[12px] w-full font-bold text-[#d62828] hover:text-red-700 transition">Tandai Semua Sudah Dibaca</button>
+                                </form>
                             </div>
+                            @endif
                         </div>
                     </div>
 
@@ -556,11 +580,14 @@
             
             document.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    const target = link.getAttribute('target');
-                    if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank' && !e.ctrlKey && !e.metaKey) {
-                        window.dispatchEvent(new CustomEvent('page-loading'));
-                    }
+                    setTimeout(() => {
+                        if (e.defaultPrevented) return;
+                        const href = link.getAttribute('href');
+                        const target = link.getAttribute('target');
+                        if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                            window.dispatchEvent(new CustomEvent('page-loading'));
+                        }
+                    }, 0);
                 });
             });
 

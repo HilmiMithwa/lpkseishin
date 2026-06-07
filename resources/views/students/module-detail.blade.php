@@ -90,31 +90,46 @@
                         <h3 class="text-xs font-bold text-[#222222] uppercase tracking-wider">Evaluasi</h3>
                     </div>
                     <div class="flex-1 bg-white border border-gray-100 rounded-[24px] p-4 shadow-sm flex flex-col justify-start min-h-[160px]">
-                        @isset($currentModul->evaluation)
-                            <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm gap-3">
+                        @forelse($currentModul->evaluasis ?? [] as $evaluation)
+                            <div class="flex items-center justify-between p-3 bg-white border border-gray-50 rounded-2xl shadow-sm gap-3 mb-3 last:mb-0">
                                 <div class="flex items-center gap-3 min-w-0">
+                                    @if(($evaluation->is_complete ?? false))
+                                        <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#30CD30] flex-shrink-0">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                    @else
                                         <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#d62828] flex-shrink-0">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24">
                                                 <path d="M12 3a9 9 0 0 1 0 18" />
                                                 <path d="M12 21a9 9 0 0 1 0-18" stroke-dasharray="1 6.2" />
                                             </svg>
                                         </div>
+                                    @endif
                                     <div class="min-w-0">
-                                        <p class="text-xs font-bold text-[#222222] truncate">{{ $currentModul->evaluation->title }}</p>
+                                        <p class="text-xs font-bold text-[#222222] truncate">{{ $evaluation->judul }}</p>
                                         <p class="text-[10px] text-[#444444] font-medium truncate">
-                                            {{ $currentModul->evaluation->type ?? 'Ujian' }} • {{ $currentModul->evaluation->date }} • {{ $currentModul->evaluation->duration }} Mnt
+                                            {{ $evaluation->tipe ?? 'Ujian' }} • {{ $evaluation->created_at ? $evaluation->created_at->format('d M Y') : date('d M Y') }} • {{ $evaluation->durasi_menit }} Mnt
                                         </p>
                                     </div>
                                 </div>
-                                <a href="{{ route('evaluations.start', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $currentModul->evaluation->id]) }}" class="bg-[#d62828] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
-                                    Mulai <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
+                                @if(($evaluation->is_complete ?? false))
+                                    <span class="bg-green-100 text-green-700 text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 flex-shrink-0">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                        Selesai
+                                    </span>
+                                @else
+                                    <a href="{{ route('evaluations.start', ['id_mapel' => $subject->id_mapel, 'id_modul' => $currentModul->id_modul, 'id' => $evaluation->id_evaluasi]) }}" class="bg-[#d62828] hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition flex-shrink-0">
+                                        Mulai <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </a>
+                                @endif
                             </div>
-                        @else
+                        @empty
                             <div class="text-center py-6">
-                                <p class="text-xs font-bold text-[#666666]">[Data: modul.evaluation]</p>
+                                <p class="text-xs font-bold text-[#666666]">Belum ada evaluasi</p>
                             </div>
-                        @endisset
+                        @endforelse
                     </div>
                 </div>
 

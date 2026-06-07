@@ -4,92 +4,7 @@
 
 @section('content')
 @php
-    // Dummy Data untuk Design
-    if (!isset($needReviewCount)) $needReviewCount = 12;
-    if (!isset($activeClassesCount)) $activeClassesCount = 1;
-    if (!isset($totalStudentsCount)) $totalStudentsCount = 45;
-    if (!isset($todayScheduleCount)) $todayScheduleCount = 2;
-
-    //if (!isset($teacherSubjects) || (is_countable($teacherSubjects) && count($teacherSubjects) == 0)) {
-    //    $teacherSubjects = [
-    //        (object)[
-    //            'batch' => (object)['nama_batch' => 'Batch 2'],
-    //            'nama_mapel' => 'N4 Mastering',
-    //            'modul_count' => 7,
-    //            'students_count' => 45,
-    //            'id_mapel' => 1
-    //        ],
-    //        (object)[
-    //            'batch' => (object)['nama_batch' => 'Batch 2'],
-    //            'nama_mapel' => 'N5 Mastering',
-    //            'modul_count' => 8,
-    //            'students_count' => 45,
-    //            'id_mapel' => 2
-    //        ]
-    //    ];
-    //}
-
-    if (!isset($todaySchedules) || (is_countable($todaySchedules) && count($todaySchedules) == 0)) {
-        $todaySchedules = [
-            (object)[
-                'batch' => (object)['nama_batch' => '5'],
-                'jam_mulai' => '13.00',
-                'jam_selesai' => '15.00'
-            ],
-            (object)[
-                'batch' => (object)['nama_batch' => '4'],
-                'jam_mulai' => '10.00',
-                'jam_selesai' => '12.00'
-            ]
-        ];
-    }
-
-    if (!isset($pendingTasks)) {
-        $pendingTasks = [
-            (object)[
-                'student' => (object)['name' => 'Roronoa Z'],
-                'batch' => (object)['nama_batch' => 'Batch 4'],
-                'modul' => (object)['nama_modul' => 'N5 Mastering: Latihan Dokkai'],
-                'submitted_at' => \Carbon\Carbon::now()->subMinutes(10),
-                'id_tugas' => 1
-            ],
-            (object)[
-                'student' => (object)['name' => 'Nami'],
-                'batch' => (object)['nama_batch' => 'Batch 3'],
-                'modul' => (object)['nama_modul' => 'Grammar Drill: Verb Conjugations'],
-                'submitted_at' => \Carbon\Carbon::now()->subMinutes(30),
-                'id_tugas' => 2
-            ],
-            (object)[
-                'student' => (object)['name' => 'Sanji'],
-                'batch' => (object)['nama_batch' => 'Batch 5'],
-                'modul' => (object)['nama_modul' => 'Kanji Practice: Intermediate Level'],
-                'submitted_at' => \Carbon\Carbon::now()->subHours(1),
-                'id_tugas' => 3
-            ],
-            (object)[
-                'student' => (object)['name' => 'Usopp'],
-                'batch' => (object)['nama_batch' => 'Batch 2'],
-                'modul' => (object)['nama_modul' => 'Vocabulary Expansion: Food Items'],
-                'submitted_at' => \Carbon\Carbon::now()->subHours(2),
-                'id_tugas' => 4
-            ],
-            (object)[
-                'student' => (object)['name' => 'Tony Tony Chopper'],
-                'batch' => (object)['nama_batch' => 'Batch 1'],
-                'modul' => (object)['nama_modul' => 'Listening Comprehension: Daily Conversations'],
-                'submitted_at' => \Carbon\Carbon::now()->subHours(3),
-                'id_tugas' => 5
-            ],
-            (object)[
-                'student' => (object)['name' => 'Nico Robin'],
-                'batch' => (object)['nama_batch' => 'Batch 4'],
-                'modul' => (object)['nama_modul' => 'Reading Practice: Short Stories'],
-                'submitted_at' => \Carbon\Carbon::now()->subHours(5),
-                'id_tugas' => 6
-            ],
-        ];
-    }
+    // Dummy Data has been removed to ensure real backend data is displayed consistently.
 @endphp
             <div class="p-4 sm:p-6 lg:p-10">
 
@@ -243,14 +158,17 @@
 
                         <div class="space-y-3">
                             @forelse($todaySchedules as $schedule)
-                            <a href="{{ route('teacher.classes') }}" class="block bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-red-100 transition flex items-center gap-4 group">
+                            <a href="{{ isset($schedule->id_mapel) ? route('teacher.subjects.show', $schedule->id_mapel) : '#' }}" class="block bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-red-100 transition flex items-center gap-4 group">
                                 <div class="w-10 sm:w-12 h-10 sm:h-12 border-none shadow-[0_4px_12px_rgba(214,40,40,0.1)] bg-white rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                                     <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
                                 </div>
                                 <div>
                                     <h4 class="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#d62828] transition-colors">
-                                        {{ $schedule->judul_pertemuan ?? ('Mengajar di Kelas ' . ($schedule->batch->nama_batch ?? 'Batch')) }}
+                                        {{ $schedule->judul_pertemuan ?? 'Kelas' }}
                                     </h4>
+                                    <p class="text-xs text-gray-500 font-medium">
+                                        Batch: {{ $schedule->lokasi_pertemuan ?? '-' }}
+                                    </p>
                                     <p class="text-[10px] sm:text-xs text-gray-500 font-semibold mt-1.5 flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         @if(isset($schedule->start_time) && isset($schedule->end_time))

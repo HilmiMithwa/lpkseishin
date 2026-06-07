@@ -30,11 +30,23 @@ class User extends Authenticatable
         'nomor_telepon',
         'tanggal_lahir',
         'profile_photo_path',
+        'level',
+        'status',
     ];
 
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id', 'role_id');
+    }
+
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_guru', 'id_guru', 'id_batch');
+    }
+
+    public function studentBatches()
+    {
+        return $this->belongsToMany(Batch::class, 'student_list_batch', 'user_id', 'id_batch')->where('student_list_batch.status', 'Active');
     }
 
     /**
@@ -69,6 +81,12 @@ class User extends Authenticatable
     public function mapels() 
     {
         return $this->belongsToMany(Mapel::class, 'enrollment_access', 'id_user', 'id_mapel' )->withTimestamps();
+    }
+
+    public function activeMapels()
+    {
+        $activeBatchIds = $this->studentBatches()->pluck('batch.id_batch');
+        return Mapel::whereIn('id_batch', $activeBatchIds);
     }
 
     public function moduls()

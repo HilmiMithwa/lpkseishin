@@ -20,14 +20,13 @@ class ProgressReportController extends Controller
 {
     public function index(Request $request)
     {
-        $teacherId = auth()->id();
+        $teacher = auth()->user();
+        $teacherBatches = $teacher->batches()->pluck('batch.id_batch')->toArray();
         $selectedBatchId = $request->get('batch_id');
         $selectedClassId = $request->get('class_id');
 
         // Get Batches for this teacher
-        $batches = Batch::whereHas('mapel', function ($query) use ($teacherId) {
-            $query->where('id_guru', $teacherId);
-        })->get();
+        $batches = Batch::whereIn('id_batch', $teacherBatches)->get();
 
         $classes = collect();
         $students = collect();
@@ -41,9 +40,7 @@ class ProgressReportController extends Controller
         // If batch is selected, get classes for the selected batch
         if ($selectedBatchId) {
             $selectedBatchName = $batches->where('id_batch', $selectedBatchId)->first()->nama ?? '';
-            $classes = Mapel::where('id_batch', $selectedBatchId)
-                            ->where('id_guru', $teacherId)
-                            ->get();
+            $classes = Mapel::where('id_batch', $selectedBatchId)->get();
         }
 
         // If class is selected, get progress for enrolled students

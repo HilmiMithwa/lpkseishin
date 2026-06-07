@@ -305,14 +305,34 @@
                     <div class="space-y-6">
                         <div class="space-y-1.5">
                             <x-input-label>Target Sertifikasi:</x-input-label>
-                            <div class="relative">
-                                <select name="target" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828] outline-none transition font-karla text-sm appearance-none bg-none pr-10 bg-white">
-                                    <option value="" disabled selected>Pilih Target Sertifikasi</option>
-                                    <option value="JLPT N4">JLPT N4</option>
-                                    <option value="JLPT N5">JLPT N5</option>
-                                    <option value="JFT-Basic A2">JFT-Basic A2</option>
-                                </select>
-                                <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <div x-data="{ open: false, selected: '' }" class="relative">
+                                <input type="hidden" name="target" x-model="selected" required>
+                                <div @click="open = !open" 
+                                     class="w-full bg-white border rounded-xl px-4 py-3 text-sm font-karla cursor-pointer flex justify-between items-center transition"
+                                     :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
+                                    <span class="text-gray-800" x-text="selected ? selected : 'Pilih Target Sertifikasi'"></span>
+                                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180 text-[#d62828]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                <div x-show="open" @click.outside="open = false" style="display: none;"
+                                     class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                    <ul class="py-1">
+                                        <li>
+                                            <div @click="selected = 'JLPT N4'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JLPT N4' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                JLPT N4
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div @click="selected = 'JLPT N5'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JLPT N5' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                JLPT N5
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div @click="selected = 'JFT-Basic A2'; open = false;" class="w-full text-left px-4 py-2.5 text-sm font-karla cursor-pointer transition-colors" :class="selected === 'JFT-Basic A2' ? 'bg-red-50 text-[#d62828] font-bold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]'">
+                                                JFT-Basic A2
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="space-y-1.5">

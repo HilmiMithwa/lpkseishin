@@ -91,12 +91,6 @@
             Masuk
         </x-primary-button>
 
-        <!-- Register Link -->
-        <div class="text-center pt-2">
-            <p class="text-sm text-gray-500">
-                Belum punya akun? 
-                <a href="{{ route('register') }}" class="text-red-600 hover:text-red-700 font-semibold transition-colors">Daftar</a>
-            </p>
-        </div>
+
     </form>
 </x-guest-layout>

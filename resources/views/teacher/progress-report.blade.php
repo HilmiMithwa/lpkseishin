@@ -244,26 +244,25 @@
                 <input type="text" x-model="searchQuery" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
             </div>
             
-            <div class="relative w-full sm:w-48" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false" type="button" class="w-full bg-white border border-gray-200 rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 shadow-sm text-gray-600">
-                    <span x-text="filterStatus"></span>
-                    <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180 text-gray-800' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Status' }">
+                <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[130px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Status' ? 'text-gray-600' : 'text-[#d62828]'">
+                    <span x-text="statusFilter"></span>
+                    <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
                 
-                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="absolute z-[100] w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="display: none;" x-cloak>
+                <div x-show="openFilter" style="display: none;"
+                     class="absolute right-0 z-50 w-full min-w-[130px] mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" 
+                     x-transition:enter="transition ease-out duration-100" 
+                     x-transition:enter-start="opacity-0 -translate-y-2" 
+                     x-transition:enter-end="opacity-100 translate-y-0" 
+                     x-transition:leave="transition ease-in duration-75" 
+                     x-transition:leave-start="opacity-100 translate-y-0" 
+                     x-transition:leave-end="opacity-0 -translate-y-2">
                     <ul class="py-1">
-                        <li>
-                            <button type="button" @click="filterStatus = 'Semua Status'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Semua Status' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Semua Status</button>
-                        </li>
-                        <li>
-                            <button type="button" @click="filterStatus = 'Aktif'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Aktif' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Aktif</button>
-                        </li>
-                        <li>
-                            <button type="button" @click="filterStatus = 'Tidak Aktif'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Tidak Aktif' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Tidak Aktif</button>
-                        </li>
-                        <li>
-                            <button type="button" @click="filterStatus = 'Selesai'; open = false" class="block w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-red-50 hover:text-[#d62828] transition-colors" :class="filterStatus === 'Selesai' ? 'bg-red-50 text-[#d62828]' : 'text-gray-700'">Selesai</button>
-                        </li>
+                        <li><button type="button" @click="statusFilter = 'Status'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-50 text-gray-700" :class="statusFilter === 'Status' ? 'bg-gray-50' : ''">Semua Status</button></li>
+                        <li><button type="button" @click="statusFilter = 'Aktif'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-green-50 text-green-600" :class="statusFilter === 'Aktif' ? 'bg-green-50' : ''">Aktif</button></li>
+                        <li><button type="button" @click="statusFilter = 'Tidak Aktif'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-red-50 text-red-600" :class="statusFilter === 'Tidak Aktif' ? 'bg-red-50' : ''">Tidak Aktif</button></li>
+                        <li><button type="button" @click="statusFilter = 'Selesai'; openFilter = false" class="w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-100 text-gray-800" :class="statusFilter === 'Selesai' ? 'bg-gray-100' : ''">Selesai</button></li>
                     </ul>
                 </div>
             </div>

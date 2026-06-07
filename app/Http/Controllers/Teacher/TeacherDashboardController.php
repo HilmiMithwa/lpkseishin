@@ -15,7 +15,9 @@ class TeacherDashboardController extends Controller
     {
         $teacher = Auth::user();
 
-        $teacherSubjects = Mapel::where('id_guru', $teacher->id)
+        $teacherBatches = $teacher->batches()->pluck('batch.id_batch')->toArray();
+
+        $teacherSubjects = Mapel::whereIn('id_batch', $teacherBatches)
             ->with('batch')
             ->withCount([
                 'modul',
@@ -33,8 +35,8 @@ class TeacherDashboardController extends Controller
             ->count('id_user');
 
         $needReviewCount = Pengiriman_Tugas::where('status', 'dikirim')
-            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
-                $q->where('id_guru', $teacher->id);
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacherBatches) {
+                $q->whereIn('id_batch', $teacherBatches);
             })
             ->count();
 
@@ -43,8 +45,8 @@ class TeacherDashboardController extends Controller
                 'user:id,name',
                 'tugas.modul.mapel.batch',
             ])
-            ->whereHas('tugas.modul.mapel', function ($q) use ($teacher) {
-                $q->where('id_guru', $teacher->id);
+            ->whereHas('tugas.modul.mapel', function ($q) use ($teacherBatches) {
+                $q->whereIn('id_batch', $teacherBatches);
             })
             ->latest('submitted_at')
             ->take(10)
@@ -56,8 +58,83 @@ class TeacherDashboardController extends Controller
             $task->student = $task->user;
         });
 
-        $todaySchedules = Jadwal::where('id_guru', $teacher->id)->get();
+        $indonesianDays = [
+            'Sunday'    => 'Minggu',
+            'Monday'    => 'Senin',
+            'Tuesday'   => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday'  => 'Kamis',
+            'Friday'    => 'Jumat',
+            'Saturday'  => 'Sabtu'
+        ];
+        
+        $todayEnglish = \Carbon\Carbon::now()->format('l');
+        $todayIndonesian = $indonesianDays[$todayEnglish];
+        
+        $daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        
+        $todaySchedules = collect();
+        
+        foreach ($teacherSubjects as $subject) {
+            if ($subject->status === 'Aktif') {
+                $batch = $subject->batch;
+                if ($batch && $batch->jadwal) {
+                    $isToday = false;
+                    $jadwalStr = $batch->jadwal;
+                    
+                    if (str_contains($jadwalStr, '-')) {
+                        $parts = array_map('trim', explode('-', $jadwalStr));
+                        if (count($parts) == 2) {
+                            $startDayIndex = array_search($parts[0], $daysOfWeek);
+                            $endDayIndex = array_search($parts[1], $daysOfWeek);
+                            $todayIndex = array_search($todayIndonesian, $daysOfWeek);
+                            
+                            if ($startDayIndex !== false && $endDayIndex !== false && $todayIndex !== false) {
+                                if ($startDayIndex <= $endDayIndex) {
+                                    $isToday = ($todayIndex >= $startDayIndex && $todayIndex <= $endDayIndex);
+                                } else { 
+                                    $isToday = ($todayIndex >= $startDayIndex || $todayIndex <= $endDayIndex);
+                                }
+                            }
+                        }
+                    } else if (str_contains(strtolower($jadwalStr), strtolower($todayIndonesian))) {
+                        $isToday = true;
+                    }
+                    
+                    if ($isToday) {
+                        $todaySchedules->push((object)[
+                            'id_mapel' => $subject->id_mapel,
+                            'judul_pertemuan' => $subject->nama_mapel,
+                            'lokasi_pertemuan' => $batch->nama,
+                            'start_time' => $batch->jam_mulai ?? '08:00:00',
+                            'end_time' => $batch->jam_selesai ?? '10:00:00',
+                            'batch_id' => $batch->id_batch,
+                            'batch' => $batch
+                        ]);
+                    }
+                }
+            }
+        }
+        
+        // Sort by start_time
+        $todaySchedules = $todaySchedules->sortBy('start_time')->values();
         $todayScheduleCount = $todaySchedules->count();
+
+        // Trigger KelasAkanMulai Notifications
+        foreach ($todaySchedules as $schedule) {
+            $alreadyNotified = $teacher->notifications()
+                ->where('type', 'App\Notifications\KelasAkanMulai')
+                ->whereDate('created_at', \Carbon\Carbon::today())
+                ->get()
+                ->contains(function ($notification) use ($schedule) {
+                    return isset($notification->data['batch_id']) && $notification->data['batch_id'] == $schedule->batch_id;
+                });
+
+            if (!$alreadyNotified) {
+                $timeFormatted = date('H:i', strtotime($schedule->start_time));
+                $teacher->notify(new \App\Notifications\KelasAkanMulai($schedule->batch, "Hari ini ada jadwal kelas {$schedule->lokasi_pertemuan} pada pukul {$timeFormatted}"));
+            }
+        }
 
         $notificationCount = $needReviewCount;
 

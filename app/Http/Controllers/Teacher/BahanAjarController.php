@@ -14,10 +14,14 @@ class BahanAjarController extends Controller
     {
         $modul = Modul::with(['mapel.batch'])->findOrFail($id_modul);
         $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
         $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
         $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
         
-        return view('teacher.material-create', compact('modul', 'currentModuleId', 'batchName', 'className'));
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
+        
+        return view('teacher.material-create', compact('modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className'));
     }
 
     public function store(Request $request, $id_modul)
@@ -116,25 +120,39 @@ class BahanAjarController extends Controller
         $modul = Modul::with('mapel.batch')->findOrFail($id_modul);
         
         $currentModuleId = $modul->id_modul;
+        $mapelId = $modul->id_mapel;
+        $batchId = $modul->mapel->id_batch ?? null;
         $batchName = $modul->mapel->batch->nama ?? 'Unknown Batch';
         $className = $modul->mapel->nama_mapel ?? 'Unknown Class';
+
+        $moduleIndex = Modul::where('id_mapel', $mapelId)->orderBy('id_modul', 'asc')->pluck('id_modul')->search($currentModuleId) + 1;
 
         $tugas = null;
         if (strtolower($material->type) === 'practice') {
             $tugas = \App\Models\Tugas::where('id_modul', $id_modul)->latest('id_tugas')->first();
         }
 
-        return view('teacher.material-detail', compact('material', 'modul', 'currentModuleId', 'batchName', 'className', 'tugas'));
+        return view('teacher.material-detail', compact('material', 'modul', 'currentModuleId', 'mapelId', 'batchId', 'moduleIndex', 'batchName', 'className', 'tugas'));
     }
 
     public function destroy($id_modul, $id_materi)
     {
         $material = BahanAjar::findOrFail($id_materi);
         
-        $disk = env('FILESYSTEM_DISK', 's3');
+        $disk = 'public';
 
-        if ($material->path_file_dokumen_ajar && Storage::disk($disk)->exists($material->path_file_dokumen_ajar)) {
-            Storage::disk($disk)->delete($material->path_file_dokumen_ajar);
+        if ($material->path_file_dokumen_ajar) {
+            $path = str_replace('/storage/', '', $material->path_file_dokumen_ajar);
+            if (Storage::disk($disk)->exists($path)) {
+                Storage::disk($disk)->delete($path);
+            }
+        }
+
+        if ($material->video_url && str_starts_with($material->video_url, '/storage/')) {
+            $path = str_replace('/storage/', '', $material->video_url);
+            if (Storage::disk($disk)->exists($path)) {
+                Storage::disk($disk)->delete($path);
+            }
         }
         
         $material->delete();
