@@ -35,7 +35,9 @@ class PengirimanTugasController extends Controller
         $filePath = null;
         if ($request->hasFile('task_files')) {
             $file = $request->file('task_files')[0];
-            $filePath = Storage::disk($disk)->putFile('submissions', $file);
+            $originalName = $file->getClientOriginalName();
+            $filename = str_replace(' ', '_', $originalName);
+            $filePath = $file->storeAs('submissions', $filename, $disk);
         }
 
         $textContent = $request->input('text_content');
@@ -58,6 +60,14 @@ class PengirimanTugasController extends Controller
             'id_tugas' => $id_tugas,
             'id_user' => Auth::id(),
         ]);
+
+        if ($task && $task->modul && $task->modul->mapel) {
+            $guruId = $task->modul->mapel->id_guru;
+            $guru = \App\Models\User::find($guruId);
+            if ($guru) {
+                $guru->notify(new \App\Notifications\TugasDikumpulkan(Auth::user(), $task));
+            }
+        }
 
         return back()->with('success', 'Tugas berhasil dikumpulkan');
     }
@@ -111,6 +121,6 @@ class PengirimanTugasController extends Controller
             abort(404, 'File tidak ditemukan di server.');
         }
 
-        return Storage::disk($disk)->response($submission->file_path, basename($submission->file_path));
+        return Storage::disk($disk)->download($submission->file_path, basename($submission->file_path));
     }
 }

@@ -184,7 +184,7 @@
                                 </td>
                                 <td class="px-6 py-6 sm:py-7 text-right">
                                     @if($sub->status !== 'Belum Dikumpulkan')
-                                    <button @click="reviewData = { id: '{{ $sub->id_siswa }}', name: '{{ $sub->name }}', time: '{{ $sub->submitted_at }}', score: '{{ $sub->score !== '-' ? $sub->score : '' }}' }; showReviewPanel = true" class="inline-flex items-center gap-1 text-xs font-bold text-[#d62828] hover:text-red-800 transition whitespace-nowrap">
+                                    <button @click="reviewData = { id: '{{ $sub->id_siswa }}', name: '{{ $sub->name }}', time: '{{ $sub->submitted_at }}', score: '{{ $sub->score !== '-' ? $sub->score : '' }}', file_url: '{{ $sub->file_url ?? '' }}', file_name: '{{ $sub->file_name ?? '' }}' }; showReviewPanel = true" class="inline-flex items-center gap-1 text-xs font-bold text-[#d62828] hover:text-red-800 transition whitespace-nowrap">
                                         Periksa
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                     </button>
@@ -298,20 +298,27 @@
                     {{-- Submitted File --}}
                     <div>
                         <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">File Pengumpulan</p>
-                        <div class="flex items-center justify-between p-4 bg-white border border-gray-200 hover:border-red-300 rounded-[16px] shadow-sm transition group cursor-pointer">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 flex items-center justify-center bg-red-50 border border-red-100 rounded-xl text-red-500 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <template x-if="reviewData.file_url">
+                            <a :href="reviewData.file_url" target="_blank" class="flex items-center justify-between p-4 bg-white border border-gray-200 hover:border-red-300 rounded-[16px] shadow-sm transition group cursor-pointer">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 flex items-center justify-center bg-red-50 border border-red-100 rounded-xl text-red-500 flex-shrink-0 group-hover:bg-[#d62828] group-hover:text-white transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <p class="text-[13px] font-bold text-gray-900 truncate mb-0.5" x-text="reviewData.file_name"></p>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Lampiran</p>
+                                    </div>
                                 </div>
-                                <div class="overflow-hidden">
-                                    <p class="text-[13px] font-bold text-gray-900 truncate mb-0.5">Tugas_<span x-text="reviewData.name ? reviewData.name.replace(/\s+/g, '_') : ''"></span>.pdf</p>
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">PDF &bull; 2.4 MB</p>
+                                <div class="text-gray-400 group-hover:text-[#d62828] transition p-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 </div>
+                            </a>
+                        </template>
+                        <template x-if="!reviewData.file_url">
+                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-[16px] text-center">
+                                <p class="text-sm text-gray-500 font-semibold">Tidak ada file yang dilampirkan.</p>
                             </div>
-                            <div class="text-gray-400 group-hover:text-[#d62828] transition p-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            </div>
-                        </div>
+                        </template>
                     </div>
 
                     {{-- Grading Form --}}

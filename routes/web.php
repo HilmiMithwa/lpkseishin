@@ -215,9 +215,6 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::put('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'update'])->name('vocabulary.update');
     Route::delete('/vocabulary/{id}', [\App\Http\Controllers\Teacher\VocabularyController::class, 'destroy'])->name('vocabulary.destroy');
 
-    Route::get('/progress-report', function () {
-        return view('teacher.progress-report');
-    })->name('progress-report');
 
     Route::get('/assignments',[TugasController::class, 'show'])->name('assignments');
     Route::post('/assignments',[TugasController::class, 'createAssignment'])->name('assignments.store');
@@ -232,6 +229,11 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
     Route::patch('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
     Route::delete('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
     Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+    Route::post('/notifications/read', function() {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('notifications.read');
 });
 
 
@@ -243,5 +245,5 @@ require __DIR__.'/auth.php';
 
 // Route to download submission files (authenticated users)
 Route::get('/submissions/{id_pengiriman}/download', [PengirimanTugasController::class, 'download'])
-    ->name('submissions.download')
-    ->middleware('auth');
+    ->middleware('auth')
+    ->name('submissions.download');
