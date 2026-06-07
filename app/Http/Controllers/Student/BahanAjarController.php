@@ -73,20 +73,29 @@ class BahanAjarController extends Controller
 
     public function completeMaterial($id_materi)
     {
-        try {
-            $userId = Auth::id();
-            DB::table('bahan_ajar_progress')->updateOrInsert(
-                [
-                    'id_user' => $userId,
-                    'id_bahan_ajar' => $id_materi
-                ],
-                [
-                    'is_complete' => true,
+        $userId = Auth::id();
+        
+        $exists = DB::table('bahan_ajar_progress')
+            ->where('id_user', $userId)
+            ->where('id_bahan_ajar', $id_materi)
+            ->exists();
+            
+        if ($exists) {
+            DB::table('bahan_ajar_progress')
+                ->where('id_user', $userId)
+                ->where('id_bahan_ajar', $id_materi)
+                ->update([
+                    'is_complete' => 'true',
                     'updated_at' => now()
-                ]
-            );
-        } catch (\Exception $e) {
-
+                ]);
+        } else {
+            DB::table('bahan_ajar_progress')->insert([
+                'id_user' => $userId,
+                'id_bahan_ajar' => $id_materi,
+                'is_complete' => 'true',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
 
         // 3. Kembalikan siswa ke halaman materi semula dengan data yang sudah terupdate

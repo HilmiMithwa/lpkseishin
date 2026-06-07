@@ -143,9 +143,9 @@
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 -translate-y-2" 
                          class="pl-12 pr-4 py-2 space-y-3 sidebar-text" style="display: none;">
-                        <a href="{{ route('admin.users') }}?role=siswa" class="block text-[13.5px] font-medium {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'text-[#d62828] font-bold' : 'text-[#666666] hover:text-[#d62828]' }} transition-colors relative">
-                            <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'bg-[#d62828]' : 'bg-transparent' }}"></span>
-                            Data Siswa
+                        <a href="{{ route('admin.users') }}?role=siswa" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ (request('role') == 'siswa' || request()->routeIs('admin.users.edit')) ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
+                            <span>Data Siswa</span>
                         </a>
                         <a href="{{ route('admin.users') }}?role=guru" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium {{ request('role') == 'guru' ? 'bg-red-50/50 text-[#d62828] font-bold' : 'text-[#666666] hover:bg-gray-50 hover:text-[#d62828]' }} transition-all">
                             <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ request('role') == 'guru' ? 'bg-[#d62828]' : 'bg-gray-300' }}"></span>
@@ -158,6 +158,11 @@
                     </div>
                 </div>
                 
+                <a href="{{ route('admin.registrations.index') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.registrations.index', 'admin.registrations.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.registrations.index', 'admin.registrations.*']) ? 'bold' : 'semibold' }} text-sm transition">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="sidebar-text whitespace-nowrap">Pendaftaran Siswa</span>
+                </a>
+
                 <a href="{{ route('admin.batches') }}" class="nav-link flex items-center gap-3 {{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bg-[#FFDBDB] text-[#d62828]' : 'text-[#444444] hover:bg-gray-50 hover:text-[#222222]' }} px-4 py-3 rounded-xl font-{{ request()->routeIs(['admin.batches', 'admin.batches.*']) ? 'bold' : 'semibold' }} text-sm transition">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     <span class="sidebar-text whitespace-nowrap">Manajemen Batch</span>
@@ -187,7 +192,7 @@
 
         <div class="p-4 border-t border-gray-100/50">
             <div class="user-card bg-white border border-gray-100/50 rounded-2xl p-3 flex items-center gap-3 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] mb-3 transition-all duration-300">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                 <div class="sidebar-text overflow-hidden">
                     <h4 class="font-bold text-[13px] text-[#222222] truncate">{{ Auth::user()->name ?? 'Admin' }}</h4>
                     <p class="text-[10px] text-[#666666] truncate flex items-center gap-1 mt-0.5">
@@ -244,7 +249,7 @@
                     
                     <div class="relative dropdown-container">
                         <button class="dropdown-btn focus:outline-none flex items-center group">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
+                            <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -252,7 +257,7 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
                                     <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                                     <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>
@@ -333,7 +338,7 @@
                     <div class="relative hidden sm:flex items-center pl-3 border-l border-gray-200 dropdown-container">
                         <button class="dropdown-btn flex items-center gap-3 focus:outline-none group">
                             <span class="text-sm font-bold text-[#222222] group-hover:text-[#d62828] transition">{{ Auth::user()->name ?? 'Admin' }}</span>
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
+                            <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-red-500/20 transition">
                         </button>
                         
                         <!-- Dropdown Menu -->
@@ -341,7 +346,7 @@
                             
                             <!-- Profile Header -->
                             <div class="flex items-center gap-3 px-3 pt-2 pb-3 mb-1">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Admin') }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
+                                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-10 h-10 rounded-full border border-gray-100 shadow-sm object-cover flex-shrink-0">
                                 <div class="overflow-hidden">
                                     <p class="text-[15px] font-bold text-slate-800 leading-snug truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                                     <p class="text-[13px] font-medium text-slate-500 mt-0.5 truncate">{{ Auth::user()->email ?? 'admin@lpkseishin.com' }}</p>

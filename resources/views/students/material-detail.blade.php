@@ -23,6 +23,7 @@
         ]
     };
 
+    $isYoutube = false;
     $extractedThumbnail = 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=600';
     $videoUrl = $material->video_url ?? '';
 
@@ -30,6 +31,7 @@
         if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/', $videoUrl, $matches)) {
             $youtubeId = $matches[1];
             $extractedThumbnail = "https://img.youtube.com/vi/{$youtubeId}/maxresdefault.jpg";
+            $isYoutube = true;
         }
     }
 @endphp
@@ -90,6 +92,7 @@
             <div class="lg:col-span-7">
                 <div id="video-frame" class="relative w-full aspect-video rounded-[20px] overflow-hidden bg-gray-900 shadow-sm flex items-center justify-center group">
                     
+                    @if($isYoutube)
                     <div id="video-preview-layer" class="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer" onclick="startOnPageVideo()">
                         <img src="{{ $extractedThumbnail }}" class="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-105 transition duration-300" alt="Video Thumbnail">
                         
@@ -110,15 +113,16 @@
                     </div>
 
                     <div id="video-active-layer" class="absolute inset-0 w-full h-full hidden">
-                        @if(str_contains($material->video_url ?? '', 'youtube.com') || str_contains($material->video_url ?? '', 'youtu.be'))
-                            <iframe id="iframe-player" class="w-full h-full" src="" title="Seishin Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                        @else
-                            <video id="native-player" class="w-full h-full" controls>
-                                <source src="{{ $material->video_url ?? '#' }}" type="video/mp4">
-                                Browser Anda tidak mendukung video player ini.
-                            </video>
-                        @endif
+                        <iframe id="iframe-player" class="w-full h-full" src="" title="Seishin Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
+                    @else
+                    <div id="video-active-layer" class="absolute inset-0 w-full h-full">
+                        <video id="native-player" class="w-full h-full" controls preload="metadata" playsinline>
+                            <source src="{{ $material->video_url ?? '#' }}" type="video/mp4">
+                            Browser Anda tidak mendukung video player ini.
+                        </video>
+                    </div>
+                    @endif
 
                 </div>
             </div>
@@ -181,7 +185,7 @@
                         <p class="text-[10px] text-gray-400 font-semibold mt-0.5 uppercase">{{ $fileType }}</p>
                     </div>
                 </div>
-                <a href="{{ route('materials.download', $material->id_bahan_ajar) }}" class="px-3 py-1.5 border border-[#d62828] text-[#d62828] text-[11px] font-bold rounded-xl flex items-center gap-1.5 hover:bg-red-50 transition duration-200 flex-shrink-0">
+                <a href="{{ route('materials.download', $material->id_bahan_ajar) }}" target="_blank" class="px-3 py-1.5 border border-[#d62828] text-[#d62828] text-[11px] font-bold rounded-xl flex items-center gap-1.5 hover:bg-red-50 transition duration-200 flex-shrink-0">
                     <span class="material-symbols-outlined text-2xl select-none">download</span>
                     Unduh
                 </a>
@@ -257,6 +261,8 @@
         </div>
 
     </div>
+
+
 </div>
 @endsection
 
@@ -268,8 +274,12 @@
         const iframePlayer = document.getElementById('iframe-player');
         const nativePlayer = document.getElementById('native-player');
         
-        previewLayer.classList.add('hidden');
-        activeLayer.classList.remove('hidden');
+        if (previewLayer) {
+            previewLayer.classList.add('hidden');
+        }
+        if (activeLayer) {
+            activeLayer.classList.remove('hidden');
+        }
         
         let rawUrl = "{{ $material->video_url ?? '' }}";
         
@@ -290,4 +300,5 @@
         }
     }
 </script>
+
 @endpush

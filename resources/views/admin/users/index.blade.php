@@ -42,21 +42,21 @@
             </div>
 
             <!-- Search Bar -->
-            <form method="GET" action="{{ route('admin.users') }}" class="relative w-full sm:w-64">
-                <input type="hidden" name="role" value="{{ request('role', 'siswa') }}">
+            <div class="relative w-full sm:w-64">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari pengguna...">
-            </form>
+                <input type="text" id="dt-search" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari pengguna...">
+            </div>
         </div>
 
         <!-- Table -->
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table id="users-table" class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50/50 border-b border-gray-100 text-[11px] uppercase tracking-wider text-slate-500 font-bold">
-                        <th class="px-6 py-4 rounded-tl-xl">Pengguna</th>
+                        <th class="px-6 py-4 rounded-tl-xl w-12 text-center">No</th>
+                        <th class="px-6 py-4">Pengguna</th>
                         <th class="px-6 py-4">Kontak</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4">Bergabung Pada</th>
@@ -64,69 +64,30 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100/70">
-                    @forelse($users as $user)
-                    <tr class="hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-10 h-10 rounded-full object-cover">
-                                <div>
-                                    <p class="text-sm font-bold text-slate-800">{{ $user->name }}</p>
-                                    <p class="text-xs font-medium text-slate-500 mt-0.5">{{ $user->email }}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="text-sm font-semibold text-slate-700">{{ $user->nomor_telepon ?? '-' }}</p>
-                        </td>
-                        <td class="px-6 py-4">
-                            @php
-                                $status = $user->status ?? 'Active';
-                                $bgClass = $status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : ($status === 'Inactive' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100');
-                                $dotClass = $status === 'Active' ? 'bg-emerald-500' : ($status === 'Inactive' ? 'bg-rose-500' : 'bg-blue-500');
-                                $label = $status === 'Active' ? 'Aktif' : ($status === 'Inactive' ? 'Tidak Aktif' : 'Selesai');
-                            @endphp
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold border {{ $bgClass }}">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span> {{ $label }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="text-sm font-semibold text-slate-700">{{ $user->created_at ? $user->created_at->translatedFormat('d M Y') : '-' }}</p>
-                        </td>
-                        <td class="px-6 py-4 text-center" x-data>
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="p-1.5 text-slate-400 hover:text-[#d62828] bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                </a>
-                                <button x-on:click="$dispatch('open-modal', 'delete-user-modal')" class="p-1.5 text-slate-400 hover:text-rose-600 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-slate-500 italic text-sm">
-                            Tidak ada data pengguna.
-                        </td>
-                    </tr>
-                    @endforelse
                 </tbody>
             </table>
         </div>
         
-        <!-- Pagination -->
-        <div class="p-4 border-t border-gray-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between text-sm gap-3 font-semibold">
-            <span class="font-medium text-slate-500">
-                Menampilkan 
-                <span class="font-bold text-slate-800">{{ $users->firstItem() ?? 0 }}</span> 
-                hingga 
-                <span class="font-bold text-slate-800">{{ $users->lastItem() ?? 0 }}</span> 
-                dari 
-                <span class="font-bold text-slate-800">{{ $users->total() }}</span> 
-                pengguna
-            </span>
-            <div class="users-pagination">
-                {{ $users->links() }}
+        <!-- Custom Pagination Footer (Tailwind) -->
+        <div class="px-6 py-4 border-t border-gray-100 bg-white flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium text-gray-600">
+            <div id="custom-dt-info" class="w-full md:w-auto text-center md:text-left">
+                Menampilkan 0 - 0 dari 0 data.
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-6 w-full md:w-auto">
+                <div class="flex items-center gap-2">
+                    <span>Rows per page:</span>
+                    <select id="custom-dt-length" class="py-1.5 pl-3 pr-8 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 focus:outline-none focus:border-[#d62828] focus:ring-1 focus:ring-[#d62828]/20 cursor-pointer">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                
+                <!-- Dynamic Pagination Container -->
+                <div id="custom-dt-pagination" class="flex items-center gap-2">
+                    <!-- Rendered by JS -->
+                </div>
             </div>
         </div>
 
@@ -267,5 +228,107 @@
         <div x-data x-init="$dispatch('show-toast', { message: '{{ session('success') }}' })"></div>
     @endif
     @endpush
+
+    @push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        let table = $('#users-table').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('admin.users') }}",
+                data: function (d) {
+                    d.role = "{{ request('role', 'siswa') }}";
+                    d.search.value = $('#dt-search').val() || '';
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4 text-center font-bold text-slate-700'); } },
+                { data: 'pengguna', name: 'pengguna', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
+                { data: 'kontak', name: 'kontak', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
+                { data: 'status_badge', name: 'status_badge', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
+                { data: 'bergabung', name: 'bergabung', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
+                { data: 'action', name: 'action', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } }
+            ],
+            dom: '<"w-full overflow-x-auto"t>',
+            drawCallback: function(settings) {
+                var api = this.api();
+                var info = api.page.info();
+                
+                $('#custom-dt-info').html(
+                    'Menampilkan ' + (info.recordsDisplay > 0 ? info.start + 1 : 0) + ' - ' + info.end + ' dari ' + info.recordsDisplay + ' data.'
+                );
+                
+                // Custom Pagination rendering
+                let paginationHtml = '';
+                let currentPage = info.page;
+                let totalPages = info.pages;
+
+                if (totalPages > 0) {
+                    // Prev Button
+                    let prevDisabled = currentPage === 0;
+                    let prevClass = prevDisabled 
+                        ? 'bg-red-50 text-red-300 cursor-not-allowed opacity-70' 
+                        : 'bg-red-50 text-[#d62828] hover:bg-red-100 cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] transition ${prevClass}" data-action="previous" ${prevDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>`;
+
+                    // Pages
+                    let startPage = Math.max(0, currentPage - 1);
+                    let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                    if (currentPage === 0) endPage = Math.min(totalPages - 1, 2);
+                    if (currentPage === totalPages - 1) startPage = Math.max(0, totalPages - 3);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        let activeClass = i === currentPage 
+                            ? 'bg-[#d62828] text-white shadow-md shadow-red-500/20 border-transparent' 
+                            : 'bg-white text-gray-600 border border-transparent hover:bg-gray-50';
+                            
+                        paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] text-sm font-semibold transition ${activeClass}" data-action="${i}">
+                            ${i + 1}
+                        </button>`;
+                    }
+
+                    // Next Button
+                    let nextDisabled = currentPage === totalPages - 1;
+                    let nextClass = nextDisabled 
+                        ? 'bg-[#d62828]/50 text-white cursor-not-allowed' 
+                        : 'bg-[#d62828] text-white hover:bg-[#b02121] cursor-pointer';
+                        
+                    paginationHtml += `<button class="dt-paginate-btn w-9 h-9 flex items-center justify-center rounded-[10px] transition ${nextClass}" data-action="next" ${nextDisabled ? 'disabled' : ''}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>`;
+                }
+
+                $('#custom-dt-pagination').html(paginationHtml);
+            }
+        });
+
+        $('#dt-search').on('keyup', function() { table.draw(); });
+        $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });
+        
+        // Dynamic Pagination Click Event
+        $('#custom-dt-pagination').on('click', '.dt-paginate-btn', function() {
+            let action = $(this).data('action');
+            if (action !== undefined) {
+                if (action === 'previous') {
+                    table.page('previous').draw('page');
+                } else if (action === 'next') {
+                    table.page('next').draw('page');
+                } else {
+                    table.page(parseInt(action)).draw('page');
+                }
+            }
+        });
+    });
+</script>
+@endpush
+
 </div>
 @endsection

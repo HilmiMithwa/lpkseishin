@@ -209,10 +209,10 @@
                 </div>
 
                 <div class="pt-6 border-t border-gray-100 flex items-center gap-3">
-                    <button class="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla text-sm rounded-xl transition shadow-lg shadow-red-200">
+                    <a href="{{ route('teacher.materials.edit', [$currentModuleId, $material->id_bahan_ajar]) }}" class="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#d62828] hover:bg-red-700 text-white font-bold font-karla text-sm rounded-xl transition shadow-lg shadow-red-200">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         Edit Materi
-                    </button>
+                    </a>
                     <button x-data @click="$dispatch('open-delete-item-modal', { id: {{ $material->id_bahan_ajar }}, name: '{{ addslashes($material->nama_bahan_ajar) }}', type: 'Materi' })" class="p-3 bg-white border border-red-200 hover:border-red-500 text-red-500 hover:bg-red-50 rounded-xl transition shadow-sm" title="Hapus Materi">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
@@ -221,6 +221,9 @@
         </div>
 
     </div>
+
+
+
 </div>
 
 <style>
@@ -236,7 +239,13 @@
     .quill-content pre { background-color: #f3f4f6; padding: 1em; border-radius: 0.5rem; overflow-x: auto; font-family: monospace; font-size: 0.875em; margin-bottom: 1em; }
     .quill-content strong { font-weight: 700; color: #111; }
     .quill-content em { font-style: italic; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
 </style>
+
+
 @endsection
 
 @push('modals')
@@ -312,3 +321,5 @@
         </div>
     </div>
 @endpush
+
+@endsection

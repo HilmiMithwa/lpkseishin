@@ -3,8 +3,9 @@
 @section('title', 'Laporan Perkembangan - LPK Seishin')
 
 @section('content')
-<div class="p-4 sm:p-6 lg:p-10" @open-delete.window="deleteId = $event.detail.id; deleteType = $event.detail.type; deleteTargetName = $event.detail.name; showDeleteConfirm = true" x-data="{ 
-    currentTab: 'perkembangan',
+<div class="p-4 sm:p-6 lg:p-10" x-data="{ 
+    searchQuery: '',
+    filterStatus: 'Semua Status',
     selectedBatch: '{{ $selectedBatchName }}',
     selectedClass: '{{ $selectedClassName }}',
     detailOpen: false, 
@@ -338,12 +339,17 @@
     <div x-show="selectedBatch !== '' && selectedClass !== '' && currentTab === 'perkembangan'" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" class="bg-white rounded-[32px] shadow-sm border border-gray-100 p-6 lg:p-8" style="display: none;" x-cloak>
         
         <!-- Toolbar -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                <div class="relative w-full sm:w-80">
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" id="dt-search" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
-                </div>
+        <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
+            <div class="relative w-full sm:w-80">
+                <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" x-model="searchQuery" placeholder="Cari Siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 transition">
+            </div>
+            
+            <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Status' }">
+                <button @click="openFilter = !openFilter" @click.away="openFilter = false" type="button" class="w-full sm:w-auto min-w-[130px] bg-white border border-gray-200 hover:border-[#d62828] rounded-full px-5 py-2.5 text-sm font-bold flex items-center justify-between transition shadow-sm" :class="statusFilter === 'Status' ? 'text-gray-600' : 'text-[#d62828]'">
+                    <span x-text="statusFilter"></span>
+                    <svg class="w-4 h-4 ml-3 transition-transform duration-200" :class="openFilter ? 'rotate-180 text-[#d62828]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
                 
                 <div class="relative w-full sm:w-auto" x-data="{ openFilter: false, statusFilter: 'Semua Status' }">
                     <input type="hidden" id="dt-status" value="all">
@@ -396,7 +402,46 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    <!-- DataTables Content -->
+                    @forelse($students as $index => $student)
+                    <tr x-show="(searchQuery === '' || '{{ strtolower($student->name) }}'.includes(searchQuery.toLowerCase())) && (filterStatus === 'Semua Status' || '{{ $student->status }}' === filterStatus)" class="hover:bg-gray-50/50 transition">
+                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $index + 1 }}</td>
+                        <td class="py-4 px-4 text-sm font-semibold text-gray-600">{{ $student->id }}</td>
+                        <td class="py-4 px-4">
+                            <div class="flex items-center gap-3">
+                                <img src="{{ $student->avatar }}" alt="{{ $student->name }}" class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-sm font-bold text-gray-800">{{ $student->name }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-24 h-2 bg-red-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#d62828] rounded-full" style="width: {{ $student->progress_modul }}%"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-600 w-8">{{ $student->progress_modul }}%</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->rata_rata_tugas }}</td>
+                        <td class="py-4 px-4 text-sm font-bold text-gray-600">{{ $student->nilai_evaluasi }}</td>
+                        <td class="py-4 px-4">
+                            @if($student->status == 'Selesai')
+                            <span class="inline-flex px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @elseif($student->status == 'Aktif')
+                            <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @else
+                            <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-lg text-[10px] font-bold tracking-wide uppercase">{{ $student->status }}</span>
+                            @endif
+                        </td>
+                        <td class="py-4 px-4 text-center">
+                            <button @click="openStudentDetail({{ $student->user_id }})" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-[#d62828] hover:border-red-200 hover:bg-red-50 transition shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="py-8 text-center text-gray-500 text-sm">Belum ada data siswa untuk kelas ini.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

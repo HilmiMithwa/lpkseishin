@@ -26,7 +26,7 @@
                 <h3 class="text-xl font-bold font-ibm text-[#222222] leading-tight mb-2">{{ $meeting->judul }}</h3>
                 
                 <div class="flex items-center gap-2 mb-4">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($meeting->mapel->guru->name ?? 'Sensei') }}&background=f3f4f6&color=d62828" class="w-6 h-6 rounded-full">
+                    <img src="{{ $meeting->mapel->guru->avatar_url ?? 'https://ui-avatars.com/api/?name=Sensei&background=f3f4f6&color=d62828' }}" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Sensei&background=f3f4f6&color=d62828'" class="w-6 h-6 rounded-full">
                     <p class="text-[12px] font-bold text-[#444444]">{{ $meeting->mapel->guru->name ?? 'Sensei' }}</p>
                 </div>
 

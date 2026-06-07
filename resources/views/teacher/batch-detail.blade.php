@@ -117,7 +117,7 @@
                         <div class="space-y-2 mt-1">
                             @foreach($senseis as $sensei)
                             <div class="flex items-center gap-2">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($sensei->name) }}&background=f3f4f6&color=d62828&bold=true&size=32" class="w-7 h-7 rounded-full object-cover border border-gray-100" alt="{{ $sensei->name }}">
+                                <img src="{{ $sensei->avatar_url }}" onerror="this.onerror=null; this.src='{{ $sensei->fallback_avatar_url }}'" class="w-7 h-7 rounded-full object-cover border border-gray-100" alt="{{ $sensei->name }}">
                                 <span class="text-sm font-semibold text-gray-800">{{ $sensei->name }}</span>
                             </div>
                             @endforeach
@@ -296,7 +296,7 @@
                         <div class="space-y-1.5">
                             <x-input-label>Mentor Sensei:</x-input-label>
                             <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=f3f4f6&color=d62828&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
+                                <img src="{{ Auth::user()->avatar_url }}" onerror="this.onerror=null; this.src='{{ Auth::user()->fallback_avatar_url }}'" class="w-8 h-8 rounded-full border border-white shadow-sm" alt="Sensei">
                                 <span class="text-sm font-bold font-karla text-gray-900">{{ Auth::user()->name }}</span>
                             </div>
                         </div>
@@ -514,7 +514,7 @@
                 { data: 'id_siswa', name: 'users.id', createdCell: function(td) { $(td).addClass('px-4 py-4 text-sm font-semibold text-gray-700'); } },
                 { data: 'name', name: 'users.name', createdCell: function(td) { $(td).addClass('px-4 py-4'); }, render: function(data, type, row) {
                     return `<div class="flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(data)}&background=f3f4f6&color=d62828&bold=true&size=32" class="w-8 h-8 rounded-full object-cover border border-gray-100 flex-shrink-0" alt="${data}">
+                                <img src="${row.avatar_url}" onerror="this.onerror=null; this.src='${row.fallback_avatar_url}'" class="w-8 h-8 rounded-full object-cover border border-gray-100 flex-shrink-0" alt="${data}">
                                 <span class="text-sm font-semibold text-gray-800 whitespace-nowrap">${data}</span>
                             </div>`;
                 }},
@@ -588,7 +588,13 @@
             }
         });
 
-        $('#dt-search').on('keyup', function() { table.draw(); });
+        let searchTimer;
+        $('#dt-search').on('keyup', function() { 
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                table.draw(); 
+            }, 300); // Debounce delay 300ms
+        });
         $('#dt-status').on('change', function() { table.draw(); });
         
         $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });

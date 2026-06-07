@@ -15,10 +15,37 @@ use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\BatchController;
 use App\Http\Controllers\Teacher\ProgressReportController;
 use App\Http\Controllers\Teacher\TugasController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\SubjectDiscussionController;
 
 
 
 Route::get('/', [SesiController::class, 'index']);
+
+// Registration Landing Page
+Route::get('/pendaftaran', function() {
+    return view('registration-landing');
+})->name('registration-landing');
+
+// Registration Routes
+Route::prefix('registration')->name('registration.')->group(function () {
+    Route::get('/step1', [RegistrationController::class, 'step1'])->name('step1');
+    Route::post('/step1', [RegistrationController::class, 'storeStep1'])->name('store-step1');
+    
+    Route::get('/step2', [RegistrationController::class, 'step2'])->name('step2');
+    Route::post('/step2', [RegistrationController::class, 'storeStep2'])->name('store-step2');
+    
+    Route::get('/step3', [RegistrationController::class, 'step3'])->name('step3');
+    Route::post('/step3', [RegistrationController::class, 'storeStep3'])->name('store-step3');
+    
+    Route::get('/step4', [RegistrationController::class, 'step4'])->name('step4');
+    Route::post('/step4', [RegistrationController::class, 'storeStep4'])->name('store-step4');
+    
+    Route::get('/complete', [RegistrationController::class, 'complete'])->name('complete');
+    Route::get('/success/{id}', [RegistrationController::class, 'success'])->name('success');
+    Route::get('/clear', [RegistrationController::class, 'clearSession'])->name('clear');
+});
 
 Route::get('/dashboard', function() {
 
@@ -40,6 +67,9 @@ Route::get('/dashboard', function() {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/profile/photo', [\App\Http\Controllers\ProfilePhotoController::class, 'store'])->name('profile.photo.update');
+    Route::delete('/profile/photo', [\App\Http\Controllers\ProfilePhotoController::class, 'destroy'])->name('profile.photo.destroy');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -71,9 +101,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
     Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
-    Route::get('/programs', function() {
-        return view('admin.programs.index');
-    })->name('programs');
+    Route::get('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'index'])->name('programs');
+    Route::post('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'store'])->name('programs.store');
+    Route::put('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'update'])->name('programs.update');
+    Route::delete('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'destroy'])->name('programs.destroy');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');
@@ -82,6 +113,13 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::get('/profile', function() {
         return view('admin.profile');
     })->name('profile');
+
+    // Student Registrations
+    Route::get('/registrations', [\App\Http\Controllers\Admin\RegistrationController::class, 'index'])->name('registrations.index');
+    Route::get('/registrations/{id}', [\App\Http\Controllers\Admin\RegistrationController::class, 'show'])->name('registrations.show');
+    Route::post('/registrations/{id}/approve', [\App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('registrations.approve');
+    Route::put('/registrations/{id}/reject', [\App\Http\Controllers\Admin\RegistrationController::class, 'reject'])->name('registrations.reject');
+    Route::delete('/registrations/{id}', [\App\Http\Controllers\Admin\RegistrationController::class, 'destroy'])->name('registrations.destroy');
 });
 
 //Dashboard Siswa
@@ -108,6 +146,11 @@ Route::middleware(['auth', 'checkRole:siswa'])->group(function () {
 
     //mark materi sebagai selesai (update progress)
     Route::post('/students/materials/{id_materi}/complete', [BahanAjarController::class, 'completeMaterial'])->name('materials.complete');
+
+    // Diskusi materi (chat) - Student
+    Route::get('/students/subjects/{id}/discussions', [SubjectDiscussionController::class, 'index'])->name('students.discussions.index');
+    Route::post('/students/subjects/{id}/discussions', [SubjectDiscussionController::class, 'store'])->name('students.discussions.store');
+    Route::get('/students/subjects/{id}/discussions/poll/{lastId}', [SubjectDiscussionController::class, 'poll'])->name('students.discussions.poll');
 
     Route::get('/students/subjects/{id_mapel}/modules/{id_modul}/tasks/{id_tugas}', [StudentController::class, 'showTask'])->name('tasks.show');
 
@@ -178,10 +221,16 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::get('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'show'])->name('materials.show');
 
+    Route::get('/modules/{id_modul}/materials/{id_materi}/edit', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'edit'])->name('materials.edit');
+
     Route::put('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'update'])->name('materials.update');
 
     Route::delete('/modules/{id_modul}/materials/{id_materi}', [\App\Http\Controllers\Teacher\BahanAjarController::class, 'destroy'])->name('materials.destroy');
 
+    // Diskusi materi (chat) - Teacher
+    Route::get('/subjects/{id}/discussions', [SubjectDiscussionController::class, 'index'])->name('teacher.discussions.index');
+    Route::post('/subjects/{id}/discussions', [SubjectDiscussionController::class, 'store'])->name('teacher.discussions.store');
+    Route::get('/subjects/{id}/discussions/poll/{lastId}', [SubjectDiscussionController::class, 'poll'])->name('teacher.discussions.poll');
 
     Route::get('/modules/{id_modul}/evaluations/create', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'create'])->name('evaluations.create');
     Route::post('/modules/{id_modul}/evaluations', [\App\Http\Controllers\Teacher\EvaluasiController::class, 'store'])->name('evaluations.store');
@@ -249,8 +298,6 @@ Route::middleware(['auth', 'checkRole:guru'])->prefix('teacher')->name('teacher.
 
     Route::get('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'index'])->name('profile');
     Route::patch('/profile', [\App\Http\Controllers\Teacher\ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
-    Route::delete('/profile/photo', [\App\Http\Controllers\Teacher\ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
     Route::put('/profile/password', [\App\Http\Controllers\Teacher\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     Route::post('/notifications/read', function() {

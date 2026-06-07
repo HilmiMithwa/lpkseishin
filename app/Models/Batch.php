@@ -39,4 +39,14 @@ class Batch extends Model
     {
         return $this->nama;
     }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class, 'id_program', 'id_program');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'student_list_batch', 'id_batch', 'user_id')->wherePivot('status', 'Active');
+    }
 }

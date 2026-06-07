@@ -173,6 +173,8 @@
                     @endforelse
                 </div>
             </div>
+
+
         </div>
 
         <div class="lg:col-span-4 space-y-8">
@@ -304,7 +306,5 @@
                 </div>
                 @endif
             </div>
-        </div>
-    </div>
-</div>
+
 @endsection

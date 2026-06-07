@@ -14,11 +14,15 @@
     
     <div class="bg-white border border-gray-100 rounded-[32px] p-6 lg:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 relative">
         
-        <div class="relative flex-shrink-0 mt-2 sm:mt-0">
-            <img src="{{ $userData->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($userData->name) . '&background=f3f4f6&color=d62828&bold=true' }}" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm">
-            <button class="absolute top-1 right-1 w-8 h-8 bg-white border border-gray-100 text-[#d62828] rounded-full shadow-sm flex items-center justify-center hover:bg-gray-50 transition transform translate-x-2 -translate-y-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-            </button>
+        <div class="relative flex-shrink-0 mt-2 sm:mt-0 group">
+            <img src="{{ $userData->avatar_url }}" onerror="this.onerror=null; this.src='{{ $userData->fallback_avatar_url }}'" alt="Profile Picture" class="w-28 h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-sm border-4 border-white">
+            <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data" class="absolute top-1 right-1 transform translate-x-1 -translate-y-1">
+                @csrf
+                <label for="photo-upload" class="w-8 h-8 bg-white border border-gray-100 text-[#d62828] rounded-full shadow-sm flex items-center justify-center hover:bg-gray-50 transition cursor-pointer" title="Ubah Foto Profil">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </label>
+                <input id="photo-upload" type="file" name="photo" class="hidden" accept="image/*" onchange="this.form.submit()">
+            </form>
         </div>
 
         <div class="flex-1 text-center sm:text-left space-y-2 lg:pt-2">
