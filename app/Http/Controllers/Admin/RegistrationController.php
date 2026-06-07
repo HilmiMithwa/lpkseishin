@@ -43,7 +43,7 @@ class RegistrationController extends Controller
     public function show($id)
     {
         $registration = StudentRegistration::findOrFail($id);
-        $batches = Batch::where('status', 'active')->get();
+        $batches = Batch::whereIn('status', ['active', 'pendaftaran', 'Active'])->get();
         
         return view('admin.registrations.show', compact('registration', 'batches'));
     }
@@ -63,13 +63,20 @@ class RegistrationController extends Controller
 
         // Generate username dan password
         $baseUsername = Str::slug($registration->full_name);
-        $username = $baseUsername . Str::random(4);
+        $username = $baseUsername;
+        
+        $counter = 1;
+        while (User::where('email', $username . '@lpkseishin.com')->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
         $tempPassword = Str::random(12);
 
         // Buat user baru dengan role siswa (role_id = 2)
         $user = User::create([
             'name' => $registration->full_name,
-            'email' => $username . '@lpkseishin.local',
+            'email' => $username . '@lpkseishin.com',
             'password' => Hash::make($tempPassword),
             'nomor_telepon' => $registration->whatsapp_number,
             'tanggal_lahir' => $registration->birth_date,
@@ -83,6 +90,7 @@ class RegistrationController extends Controller
             'user_id' => $user->id,
             'id_batch' => $validated['id_batch'],
             'status' => 'Active',
+            'register_date' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

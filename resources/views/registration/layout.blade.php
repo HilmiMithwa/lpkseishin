@@ -11,7 +11,16 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+
     <style>
+        .flatpickr-day.selected, .flatpickr-day.selected:hover {
+            background: #d62828 !important;
+            border-color: #d62828 !important;
+        }
         .banner-red {
             background: linear-gradient(90deg, #d62828 0%, #d62828 50%, #8b1a1a 100%);
             position: relative;
@@ -76,5 +85,6 @@
             </div>
         </div>
     </div>
+    @stack('scripts')
 </body>
 </html>

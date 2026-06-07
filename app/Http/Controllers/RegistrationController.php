@@ -69,7 +69,7 @@ class RegistrationController extends Controller
             'gpa' => 'nullable|numeric|min:0|max:4',
             'organization_experience' => 'nullable|string',
             'japanese_ability' => 'required|in:yes,no',
-            'japanese_level' => 'required_if:japanese_ability,yes|in:N1,N2,N3,N4,N5',
+            'japanese_level' => 'required_if:japanese_ability,yes|nullable|in:N1,N2,N3,N4,N5',
         ], [
             'education_level.required' => 'Tingkat pendidikan harus dipilih',
             'school_name.required' => 'Nama sekolah/kampus harus diisi',
@@ -95,11 +95,13 @@ class RegistrationController extends Controller
 
     public function storeStep3(Request $request)
     {
+        $registration = session('registration', []);
+
         $validated = $request->validate([
-            'ktp_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'family_card_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'birth_certificate_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'passport_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'ktp_photo' => isset($registration['ktp_photo']) ? 'nullable|image|mimes:jpeg,png,jpg|max:2048' : 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'family_card_photo' => isset($registration['family_card_photo']) ? 'nullable|image|mimes:jpeg,png,jpg|max:2048' : 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'birth_certificate_photo' => isset($registration['birth_certificate_photo']) ? 'nullable|image|mimes:jpeg,png,jpg|max:2048' : 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'passport_photo' => isset($registration['passport_photo']) ? 'nullable|image|mimes:jpeg,png,jpg|max:2048' : 'required|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'ktp_photo.required' => 'Foto KTP harus diunggah',
             'family_card_photo.required' => 'Foto kartu keluarga harus diunggah',
@@ -114,7 +116,7 @@ class RegistrationController extends Controller
         $files = [];
         foreach (['ktp_photo', 'family_card_photo', 'birth_certificate_photo', 'passport_photo'] as $field) {
             if ($request->hasFile($field)) {
-                $path = $request->file($field)->store('registrations/' . date('Y/m/d'), 'public');
+                $path = $request->file($field)->store('registrations/' . date('Y/m/d'), 's3');
                 $files[$field] = $path;
             }
         }
@@ -134,8 +136,10 @@ class RegistrationController extends Controller
 
     public function storeStep4(Request $request)
     {
+        $registration = session('registration', []);
+
         $validated = $request->validate([
-            'payment_proof' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'payment_proof' => isset($registration['payment_proof']) ? ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'] : ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ], [
             'payment_proof.required' => 'Bukti pembayaran harus diunggah',
             'payment_proof.image' => 'File harus berupa gambar',
@@ -145,7 +149,7 @@ class RegistrationController extends Controller
 
         // Store payment proof
         if ($request->hasFile('payment_proof')) {
-            $path = $request->file('payment_proof')->store('registrations/payments/' . date('Y/m/d'), 'public');
+            $path = $request->file('payment_proof')->store('registrations/payments/' . date('Y/m/d'), 's3');
             $validated['payment_proof'] = $path;
         }
 
