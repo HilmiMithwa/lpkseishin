@@ -71,9 +71,10 @@ Route::middleware(['auth', 'checkRole:admin'])->prefix('admin')->name('admin.')-
     Route::put('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'update'])->name('batches.update');
     Route::delete('/batches/{id}', [\App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('batches.destroy');
 
-    Route::get('/programs', function() {
-        return view('admin.programs.index');
-    })->name('programs');
+    Route::get('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'index'])->name('programs');
+    Route::post('/programs', [\App\Http\Controllers\Admin\ProgramController::class, 'store'])->name('programs.store');
+    Route::put('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'update'])->name('programs.update');
+    Route::delete('/programs/{id}', [\App\Http\Controllers\Admin\ProgramController::class, 'destroy'])->name('programs.destroy');
 
     Route::get('/announcements', function() {
         return view('admin.announcements.index');
