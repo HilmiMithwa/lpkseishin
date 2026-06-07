@@ -16,7 +16,9 @@ class TugasController extends Controller
         $selectedBatchId = $request->input('batch_id');
         $selectedMapelId = $request->input('mapel_id');
 
-        $batches = Batch::all();
+        $teacher = auth()->user();
+        $teacherBatches = $teacher->batches()->pluck('batch.id_batch')->toArray();
+        $batches = Batch::whereIn('id_batch', $teacherBatches)->get();
 
         $query = Tugas::with(['modul.mapel.batch', 'submissions']);
 
@@ -48,10 +50,17 @@ class TugasController extends Controller
             return !empty($task->waktu_pengumpulan) && \Carbon\Carbon::parse($task->waktu_pengumpulan)->lessThan($now);
         })->diff($belumDiperiksa);
 
-        $classes = Mapel::all();
+        $allClasses = Mapel::whereIn('id_batch', $teacherBatches)->get();
+        
+        if ($selectedBatchId) {
+            $filterClasses = $allClasses->where('id_batch', $selectedBatchId);
+        } else {
+            $filterClasses = collect();
+        }
+        
         $allModules = Modul::all();
 
-        return view('teacher.assignments', compact('belumDiperiksa', 'aktifBerjalan', 'selesai', 'batches', 'selectedBatchId', 'selectedMapelId', 'classes', 'allModules'));
+        return view('teacher.assignments', compact('belumDiperiksa', 'aktifBerjalan', 'selesai', 'batches', 'selectedBatchId', 'selectedMapelId', 'filterClasses', 'allClasses', 'allModules'));
     }
 
     public function createAssignment(CreateAssignmentRequest $request) {

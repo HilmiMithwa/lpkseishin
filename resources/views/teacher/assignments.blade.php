@@ -21,7 +21,7 @@
     deleteTaskTitle: '',
 
     batchesData: {{ json_encode($batches) }},
-    classesData: {{ json_encode($classes) }},
+    classesData: {{ json_encode($allClasses) }},
     modulesData: {{ json_encode($allModules) }},
     get filteredClasses() {
         if (!this.selectedBatch) return [];
@@ -75,7 +75,12 @@
     </div>
 
     <!-- Filter Section (Select Batch & Class) -->
-    <form method="GET" action="{{ route('teacher.assignments') }}" class="bg-white rounded-[24px] border border-gray-100 p-5 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+    <form method="GET" action="{{ route('teacher.assignments') }}" x-data="{ isFiltering: false }" @submit="isFiltering = true" class="bg-white rounded-[24px] border border-gray-100 p-5 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 relative">
+        <!-- Loading Overlay -->
+        <div x-show="isFiltering" class="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm rounded-[24px] flex items-center justify-center" style="display: none;">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#d62828]"></div>
+        </div>
+
         <!-- Custom Dropdown Batch -->
         <div class="space-y-1.5" x-data="{ 
             open: false, 
@@ -139,7 +144,7 @@
                      :class="open ? 'border-[#d62828] ring-1 ring-[#d62828]' : 'border-gray-200 hover:border-[#d62828]'">
                     <span>
                         @if($selectedMapelId)
-                            {{ $classes->firstWhere('id_mapel', $selectedMapelId)->nama_mapel ?? 'Semua Kelas' }}
+                            {{ $filterClasses->firstWhere('id_mapel', $selectedMapelId)->nama_mapel ?? 'Semua Kelas' }}
                         @else
                             Semua Kelas
                         @endif
@@ -156,13 +161,17 @@
                                 Semua Kelas
                             </div>
                         </li>
-                        @foreach($classes as $class)
+                        @forelse($filterClasses as $cls)
                         <li>
-                            <div @click="selectOption('{{ $class->id_mapel }}')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedMapelId == $class->id_mapel ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
-                                {{ $class->nama_mapel }}
+                            <div @click="selectOption('{{ $cls->id_mapel }}')" class="w-full text-left px-4 py-2.5 text-sm font-semibold cursor-pointer {{ $selectedMapelId == $cls->id_mapel ? 'bg-red-50 text-[#d62828]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#d62828]' }} transition-colors">
+                                {{ $cls->nama_mapel }}
                             </div>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            <div class="w-full text-left px-4 py-2.5 text-xs text-gray-500 italic">Pilih Batch terlebih dahulu</div>
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
