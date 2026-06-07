@@ -15,6 +15,8 @@ class CatatanEvaluasi extends Model
         'nama_evaluasi',
         'tipe_ujian',
         'skor',
+        'skor_pg',
+        'skor_essay',
     ];
 
     public function user()

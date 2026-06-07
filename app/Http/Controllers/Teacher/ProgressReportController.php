@@ -275,7 +275,33 @@ class ProgressReportController extends Controller
         
         $data = $request->all();
         if (strtolower($log->tipe_ujian) === 'online') {
-            $data = $request->only('skor');
+            if ($request->has('skor_essay')) {
+                $skorEssay = $request->input('skor_essay');
+                $skorPg = $log->skor_pg;
+
+                if (is_null($skorPg)) {
+                    if (!is_null($log->skor_essay)) {
+                        // Reverse calculate PG score if it was already averaged
+                        $skorPg = ($log->skor * 2) - $log->skor_essay;
+                    } else {
+                        // Fallback to skor if it wasn't graded yet (assuming skor = PG)
+                        $skorPg = $log->skor ?? 0;
+                    }
+                    
+                    // Auto fix database
+                    $log->skor_pg = $skorPg;
+                }
+                
+                $skorAkhir = round(($skorPg + $skorEssay) / 2);
+                
+                $data = [
+                    'skor_pg' => $skorPg,
+                    'skor_essay' => $skorEssay,
+                    'skor' => $skorAkhir
+                ];
+            } else {
+                $data = $request->only('skor');
+            }
         }
         
         $log->update($data);
@@ -285,9 +311,6 @@ class ProgressReportController extends Controller
     public function destroyEvaluationLog($id)
     {
         $log = CatatanEvaluasi::findOrFail($id);
-        if (strtolower($log->tipe_ujian) === 'online') {
-            return response()->json(['error' => 'Data ujian online tidak dapat dihapus.'], 403);
-        }
         $log->delete();
         return response()->json(['success' => true]);
     }
