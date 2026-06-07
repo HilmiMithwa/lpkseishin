@@ -4,10 +4,7 @@
   "outputDirectory": "public",
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.8.0",
-      "config": {
-        "maxDuration": 30
-      }
+      "runtime": "vercel-php@0.8.0"
     }
   },
   "routes": [
