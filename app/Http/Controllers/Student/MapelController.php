@@ -69,6 +69,7 @@ class MapelController extends Controller
         $overallProgress = $modul_count > 0 ? round(($completedModulesCount / $modul_count) * 100) : 0;
 
         //Function untuk menghitung progress per modul
+        $previousModuleCompleted = true;
         foreach ($subject->modul as $modul) {
             $modul->total_material = BahanAjar::where('id_modul', $modul->id_modul)->count();
             $modul->completed_material = DB::table('bahan_ajar')
@@ -100,8 +101,17 @@ class MapelController extends Controller
             if ($totalItems > 0) {
                 $modul->progress_percentage = round(($completedItems / $totalItems) * 100);
             } else {
-                $modul->progress_percentage = 100;
+                $modul->progress_percentage = 0;
             }
+
+            // Fitur Akses Berurutan
+            $modul->is_locked = false;
+            if ($modul->is_sequential && !$previousModuleCompleted) {
+                $modul->is_locked = true;
+            }
+            
+            // Simpan status untuk iterasi modul berikutnya
+            $previousModuleCompleted = ($modul->progress_percentage >= 100);
         }
 
 

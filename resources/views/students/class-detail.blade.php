@@ -34,7 +34,7 @@
                     <div class="z-10 text-center xl:text-left">
                         <h1 class="text-2xl sm:text-3xl font-black text-white mb-2">{{ $subject->nama_mapel }}</h1>
                         <p class="text-white/80 text-xs font-medium leading-relaxed">
-                            Program lanjutan dengan fokus praktik persiapan ujian level N4.
+                            {{ $subject->deskripsi_mapel ?? 'Deskripsi kelas belum tersedia.' }}
                         </p>
                     </div>
                 </div>
@@ -125,14 +125,23 @@
                             } else {
                                 $tipeModul = 'materi'; // Default menggunakan icon buku
                             }
+                            
+                            $isLocked = $modul->is_locked ?? false;
+                            $hrefUrl = $isLocked ? '#' : route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]);
+                            $lockedClasses = $isLocked ? 'opacity-60 cursor-not-allowed bg-gray-50/50 grayscale-[50%]' : 'hover:border-red-200 hover:shadow-md cursor-pointer bg-white';
                         @endphp
 
-                        <a href="{{ route('modules.show', ['id_mapel' => $subject->id_mapel, 'id_modul' => $modul->id_modul]) }}" 
-                        class="block bg-white border border-gray-100 p-5 rounded-[24px] shadow-sm hover:border-red-200 hover:shadow-md transition duration-200 cursor-pointer">                                        
+                        <a href="{{ $hrefUrl }}" 
+                        class="block border border-gray-100 p-5 rounded-[24px] shadow-sm transition duration-200 {{ $lockedClasses }}">                                        
                             <div class="flex gap-4 items-start mb-4">
                                 
                                 <div class="w-12 h-12 bg-[#FFDBDB] rounded-2xl flex items-center justify-center text-[#d62828] flex-shrink-0">
-                                    @if($tipeModul === 'intro')
+                                    @if($isLocked)
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+                                    @elseif($tipeModul === 'intro')
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                                             <path d="m5 8 6 6M4 14h14M2 4h12M7 2v2M19 11l3.5 7.5M19 11l-3.5 7.5M16.5 16h5M11 5c0 3.5-2.5 7.5-6 9" />
                                         </svg>
@@ -151,8 +160,11 @@
                                 </div>
                                 
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="text-sm font-bold text-[#222222] leading-snug">
+                                    <h4 class="text-sm font-bold text-[#222222] leading-snug flex items-center gap-2">
                                         {{ $modul->nama_modul }}
+                                        @if($isLocked)
+                                            <span class="bg-gray-200 text-gray-500 text-[9px] font-black px-2 py-0.5 rounded-md tracking-widest uppercase">Terkunci</span>
+                                        @endif
                                     </h4>
                                     <p class="text-[11px] text-[#666666] mt-1 font-semibold tracking-wide">
                                         {{ $modul->kode_modul ?? '-' }} | 
