@@ -252,7 +252,17 @@
                     </div>
                     <div>
                         <label for="spp_nominal" class="block text-[13px] font-bold text-slate-500 mb-2">Nominal SPP (Rp):</label>
-                        <input x-model="spp_nominal" id="spp_nominal" type="number" name="spp_nominal" placeholder="e.g., 500000" class="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-2xl focus:ring-[#d62828] focus:border-[#d62828] p-3.5 transition-shadow placeholder-slate-400">
+                        
+                        <input 
+                            type="text" 
+                            :value="spp_nominal ? spp_nominal.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''"
+                            @input="spp_nominal = $event.target.value.replace(/\D/g, ''); $el.value = spp_nominal ? spp_nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''"
+                            placeholder="e.g., 500.000" 
+                            class="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-2xl focus:ring-[#d62828] focus:border-[#d62828] p-3.5 transition-shadow placeholder-slate-400"
+                        >
+
+                        <input type="hidden" id="spp_nominal" name="spp_nominal" :value="spp_nominal">
+                        
                         @error('spp_nominal')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror

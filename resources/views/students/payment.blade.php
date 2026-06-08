@@ -151,9 +151,23 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
+                        <div x-data="{ amount: '{{ old('amount', '') }}' }">
                             <x-input-label for="amount" value="Nominal Pembayaran (Rp)" />
-                            <x-text-input id="amount" name="amount" type="number" required class="mt-1 block w-full" placeholder="Contoh: 1500000" />
+
+                            <input 
+                                id="amount"
+                                type="text" 
+                                :value="amount ? amount.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''"
+                                @input="amount = $event.target.value.replace(/\D/g, ''); $el.value = amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''"
+                                placeholder="e.g., 500.000" 
+                                class="mt-1 block w-full border-gray-300 focus:border-[#d62828] focus:ring-[#d62828] rounded-md shadow-sm sm:text-sm"
+                            >
+
+                            <input type="hidden" name="amount" :value="amount">
+                            
+                            @error('amount')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <x-input-label for="payment_method" value="Metode" />
