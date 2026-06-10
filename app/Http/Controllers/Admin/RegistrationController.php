@@ -61,6 +61,11 @@ class RegistrationController extends Controller
 
         $registration = StudentRegistration::findOrFail($id);
 
+        $batch = Batch::withCount('students')->findOrFail($validated['id_batch']);
+        if ($batch->students_count >= $batch->quota) {
+            return back()->with('error', 'Gagal memverifikasi: Kuota batch sudah penuh.');
+        }
+
         // Generate username dan password
         $baseUsername = Str::slug($registration->full_name);
         $username = $baseUsername;

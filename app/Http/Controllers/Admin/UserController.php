@@ -22,6 +22,20 @@ class UserController extends Controller
         if ($request->ajax()) {
             $query = User::where('role_id', $roleId);
             
+            if ($roleId == 2) {
+                $query->leftJoin('student_list_batch', function($join) {
+                    $join->on('users.id', '=', 'student_list_batch.user_id')
+                         ->where('student_list_batch.status', 'Active');
+                })->leftJoin('batch', 'student_list_batch.id_batch', '=', 'batch.id_batch')
+                ->select('users.*', 'batch.nama as batch_name');
+
+                if ($request->has('batch_id') && !empty($request->batch_id)) {
+                    $query->where('student_list_batch.id_batch', $request->batch_id);
+                }
+            } else {
+                $query->select('users.*');
+            }
+            
             return \Yajra\DataTables\Facades\DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('pengguna', function ($row) {
@@ -37,6 +51,13 @@ class UserController extends Controller
                 })
                 ->addColumn('kontak', function ($row) {
                     return '<p class="text-sm font-semibold text-slate-700">' . htmlspecialchars($row->nomor_telepon ?? '-') . '</p>';
+                })
+                ->addColumn('batch', function ($row) use ($roleId) {
+                    if ($roleId == 2) {
+                        $batchName = $row->batch_name ? htmlspecialchars($row->batch_name) : '-';
+                        return '<p class="text-sm font-semibold text-slate-700">' . $batchName . '</p>';
+                    }
+                    return '-';
                 })
                 ->addColumn('status_badge', function ($row) {
                     $status = ucfirst(strtolower($row->status ?? 'Active'));
@@ -62,7 +83,7 @@ class UserController extends Controller
                                 </button>
                             </div>';
                 })
-                ->rawColumns(['pengguna', 'kontak', 'status_badge', 'bergabung', 'action'])
+                ->rawColumns(['pengguna', 'kontak', 'batch', 'status_badge', 'bergabung', 'action'])
                 ->make(true);
         }
 
@@ -105,7 +126,7 @@ class UserController extends Controller
         $studentBatch = \Illuminate\Support\Facades\DB::table('student_list_batch')
             ->where('user_id', $user->id)
             ->first();
-        $batches = \App\Models\Batch::all();
+        $batches = \App\Models\Batch::withCount('students')->get();
         $guruBatches = $user->batches()->pluck('batch.id_batch')->toArray();
 
         $payments = collect();
@@ -130,6 +151,17 @@ class UserController extends Controller
                 'status_keaktifan' => 'required|in:Active,Inactive,Completed',
                 'level' => 'required|string|max:50',
             ]);
+
+            $currentBatch = \Illuminate\Support\Facades\DB::table('student_list_batch')
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (!$currentBatch || $currentBatch->id_batch != $request->batch_id) {
+                $batch = \App\Models\Batch::withCount('students')->findOrFail($request->batch_id);
+                if ($batch->students_count >= $batch->quota) {
+                    return back()->with('error', 'Gagal menyimpan: Kuota batch tujuan sudah penuh.');
+                }
+            }
 
             $user->update([
                 'level' => $request->level,

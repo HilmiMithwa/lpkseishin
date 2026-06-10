@@ -22,23 +22,21 @@
     <!-- Table Container -->
     <x-card class="overflow-hidden" padding="none">
         
-        <!-- Toolbar (Tabs & Search) -->
+        <!-- Toolbar (Filters & Search) -->
         <div class="p-5 lg:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             
-            <!-- Tabs -->
-            <div class="flex bg-slate-50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto custom-scrollbar">
-                <a href="?role=siswa" 
-                   class="flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-sm transition-all whitespace-nowrap {{ request('role', 'siswa') == 'siswa' ? 'bg-white text-[#d62828] shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
-                   Siswa
-                </a>
-                <a href="?role=guru" 
-                   class="flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-sm transition-all whitespace-nowrap {{ request('role') == 'guru' ? 'bg-white text-[#d62828] shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
-                   Guru
-                </a>
-                <a href="?role=admin" 
-                   class="flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-sm transition-all whitespace-nowrap {{ request('role') == 'admin' ? 'bg-white text-[#d62828] shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
-                   Admin
-                </a>
+            <!-- Filter Batch -->
+            <div class="w-full sm:w-auto">
+                @if(request('role', 'siswa') == 'siswa')
+                <select id="batch-filter" class="w-full bg-white border border-gray-200 text-slate-700 text-sm font-bold rounded-xl focus:ring-[#d62828] focus:border-[#d62828] p-2.5 transition-shadow">
+                    <option value="">Semua Batch</option>
+                    @foreach(\App\Models\Batch::all() as $batch)
+                        <option value="{{ $batch->id_batch }}">{{ $batch->nama }}</option>
+                    @endforeach
+                </select>
+                @else
+                <div class="hidden sm:block"></div>
+                @endif
             </div>
 
             <!-- Search Bar -->
@@ -46,7 +44,7 @@
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="text" id="dt-search" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari pengguna...">
+                <input type="text" id="dt-search" class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#d62828]/20 focus:border-[#d62828] transition-all sm:text-sm font-medium text-slate-800" placeholder="Cari pengguna...">
             </div>
         </div>
 
@@ -58,6 +56,7 @@
                         <th class="px-6 py-4 rounded-tl-xl w-12 text-center">No</th>
                         <th class="px-6 py-4">Pengguna</th>
                         <th class="px-6 py-4">Kontak</th>
+                        <th id="th-batch" class="px-6 py-4" style="display: none;">Batch</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4">Bergabung Pada</th>
                         <th class="px-6 py-4 text-center rounded-tr-xl">Aksi</th>
@@ -242,6 +241,7 @@
                 url: "{{ route('admin.users') }}",
                 data: function (d) {
                     d.role = "{{ request('role', 'siswa') }}";
+                    d.batch_id = $('#batch-filter').val() || '';
                     d.search.value = $('#dt-search').val() || '';
                 }
             },
@@ -249,6 +249,7 @@
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4 text-center font-bold text-slate-700'); } },
                 { data: 'pengguna', name: 'pengguna', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
                 { data: 'kontak', name: 'kontak', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
+                { data: 'batch', name: 'batch', orderable: false, searchable: false, visible: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
                 { data: 'status_badge', name: 'status_badge', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
                 { data: 'bergabung', name: 'bergabung', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } },
                 { data: 'action', name: 'action', orderable: false, searchable: false, createdCell: function(td) { $(td).addClass('px-6 py-4'); } }
@@ -310,6 +311,20 @@
             }
         });
 
+        // Initialize column visibility
+        toggleBatchColumn("{{ request('role', 'siswa') }}");
+
+        function toggleBatchColumn(role) {
+            if (role === 'siswa') {
+                table.column(3).visible(true); // Index 3 is Batch
+                $('#th-batch').show();
+            } else {
+                table.column(3).visible(false);
+                $('#th-batch').hide();
+            }
+        }
+
+        $('#batch-filter').on('change', function() { table.draw(); });
         $('#dt-search').on('keyup', function() { table.draw(); });
         $('#custom-dt-length').on('change', function() { table.page.len($(this).val()).draw(); });
         

@@ -53,7 +53,7 @@
                     <tr class="bg-slate-50/50 border-b border-gray-100 text-[11px] uppercase tracking-wider text-slate-500 font-bold">
                         <th class="px-6 py-4 rounded-tl-xl">Info Batch</th>
                         <th class="px-6 py-4">Periode</th>
-                        <th class="px-6 py-4">Kuota / Siswa</th>
+                        <th class="px-6 py-4">Siswa / Kuota</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-center rounded-tr-xl">Aksi</th>
                     </tr>

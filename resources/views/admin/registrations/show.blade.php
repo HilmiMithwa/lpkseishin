@@ -208,14 +208,29 @@
                                 selectedName: '-- Pilih Batch --',
                                 batches: [
                                     @foreach($batches as $batch)
-                                        { id: '{{ $batch->id_batch }}', name: '{{ addslashes($batch->nama) }} ({{ addslashes($batch->tingkat ?? 'N/A') }})' }{{ !$loop->last ? ',' : '' }}
+                                        @php
+                                            $studentsCount = \Illuminate\Support\Facades\DB::table('student_list_batch')
+                                                ->where('id_batch', $batch->id_batch)
+                                                ->where('status', 'Active')
+                                                ->count();
+                                            $isFull = $studentsCount >= $batch->quota;
+                                            $sisaSlot = max(0, $batch->quota - $studentsCount);
+                                        @endphp
+                                        { id: '{{ $batch->id_batch }}', name: '{{ addslashes($batch->nama) }} (Sisa slot: {{ $sisaSlot }})', isFull: {{ $isFull ? 'true' : 'false' }} }{{ !$loop->last ? ',' : '' }}
                                     @endforeach
                                 ]
                             }" @click.outside="open = false">
                                 <select name="id_batch" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-[-1]" x-model="selectedValue" required>
                                     <option value="">-- Pilih Batch --</option>
                                     @foreach($batches as $batch)
-                                        <option value="{{ $batch->id_batch }}">{{ $batch->nama }} ({{ $batch->tingkat ?? 'N/A' }})</option>
+                                        @php
+                                            $studentsCountOpt = \Illuminate\Support\Facades\DB::table('student_list_batch')
+                                                ->where('id_batch', $batch->id_batch)
+                                                ->where('status', 'Active')
+                                                ->count();
+                                            $sisaSlotOpt = max(0, $batch->quota - $studentsCountOpt);
+                                        @endphp
+                                        <option value="{{ $batch->id_batch }}">{{ $batch->nama }} (Sisa slot: {{ $sisaSlotOpt }})</option>
                                     @endforeach
                                 </select>
                                 
@@ -233,10 +248,12 @@
                                         -- Pilih Batch --
                                     </button>
                                     <template x-for="batch in batches" :key="batch.id">
-                                        <button type="button" @click="selectedValue = batch.id; selectedName = batch.name; open = false" 
-                                            class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors" 
-                                            :class="selectedValue === batch.id ? 'text-[#d62828] font-bold bg-red-50/50' : 'text-[#222222]'">
+                                        <button type="button" @click="if(!batch.isFull) { selectedValue = batch.id; selectedName = batch.name; open = false }" 
+                                            class="w-full text-left px-4 py-2.5 text-sm transition-colors flex justify-between" 
+                                            :class="batch.isFull ? 'opacity-50 cursor-not-allowed bg-gray-50 text-gray-500' : (selectedValue === batch.id ? 'text-[#d62828] font-bold bg-red-50/50' : 'text-[#222222] hover:bg-gray-50')"
+                                            :disabled="batch.isFull">
                                             <span x-text="batch.name"></span>
+                                            <span x-show="batch.isFull" class="text-xs text-red-500 font-semibold">(Penuh)</span>
                                         </button>
                                     </template>
                                 </div>
@@ -311,6 +328,8 @@
                     <p><span class="font-bold">Tahap:</span> {{ $registration->current_step }}/4</p>
                 </div>
             </div>
+
+            <!-- I -->
             </div>
         </div>
     </div>
